@@ -1,0 +1,238 @@
+---
+title: "How to swap EVM assets across chains"
+description: "Step-by-step guide to moving Wrapped Bitcoin (WBTC) between Ethereum, Arbitrum, and other supported networks using Garden Finance"
+---
+
+# How to Swap WBTC Cross-Chain
+
+Move your Wrapped Bitcoin (WBTC) between different blockchain networks. Garden Finance enables seamless cross-chain transfers without requiring you to unwrap to Bitcoin first.
+
+<Info>
+This guide covers transferring **WBTC between different networks** such as Ethereum to Arbitrum, Arbitrum to Ethereum, or to other supported chains. The process typically completes in under 30 seconds.
+</Info>
+
+## Supported Networks
+
+Garden Finance supports WBTC on multiple networks:
+
+<CardGroup cols={2}>
+  <Card title="Ethereum" icon="ethereum">
+    **Mainnet WBTC**  
+    Most established with highest liquidity  
+    Higher gas fees but maximum DeFi compatibility
+  </Card>
+  <Card title="Arbitrum" icon="triangle">
+    **Layer 2 WBTC**  
+    Lower fees and faster transactions  
+    Growing DeFi ecosystem
+  </Card>
+</CardGroup>
+
+## What You'll Need
+
+<Steps>
+  <Step title="Wallet Requirements">
+    - **EVM Wallet**: MetaMask, Coinbase Wallet, or other EVM-compatible wallet
+    - **Source Network**: WBTC on the blockchain you're moving from
+    - **Destination Network**: Gas tokens for the destination network (if needed)
+  </Step>
+  <Step title="Network Assets">
+    - WBTC tokens on the source network
+    - Gas fees for transaction approval (ETH on Ethereum, ARB on Arbitrum)
+  </Step>
+</Steps>
+
+## Common Cross-Chain Routes
+
+### Ethereum to Arbitrum
+
+Moving WBTC from Ethereum to Arbitrum for lower transaction costs.
+
+<Steps>
+  <Step title="Connect Wallet">
+    1. Visit [Garden Finance](https://app.garden.finance)
+    2. Connect your EVM wallet containing Ethereum WBTC
+    3. Ensure your wallet is connected to Ethereum network
+  </Step>
+
+  <Step title="Configure Cross-Chain Swap">
+    1. **Send Section**: Select **WBTC on Ethereum**
+    2. **Receive Section**: Select **WBTC on Arbitrum**
+    3. Enter the amount you want to transfer
+    4. The interface will show you the receiving address (same as your sending address on different network)
+  </Step>
+
+  <Step title="Review Transfer Details">
+    - **Source**: WBTC on Ethereum
+    - **Destination**: WBTC on Arbitrum  
+    - **Rate**: Should be approximately 1:1 (minus fees)
+    - **Gas Cost**: Ethereum gas fees for approval
+    - **Completion Time**: Usually under 30 seconds
+  </Step>
+
+  <Step title="Execute Transfer">
+    1. Click **Swap** to initiate the transfer
+    2. Approve the WBTC transaction in your wallet
+    3. Pay the Ethereum gas fees
+    4. Monitor progress on the Garden interface
+  </Step>
+
+  <Step title="Verify Receipt">
+    1. Switch your wallet to Arbitrum network
+    2. Check that WBTC appears in your wallet on Arbitrum
+    3. You can now use WBTC in Arbitrum DeFi protocols
+  </Step>
+</Steps>
+
+### Arbitrum to Ethereum
+
+Moving WBTC from Arbitrum back to Ethereum mainnet.
+
+<Steps>
+  <Step title="Setup">
+    1. Connect your wallet to Garden Finance
+    2. Switch your wallet to Arbitrum network
+    3. Ensure you have WBTC on Arbitrum and enough ARB for gas
+  </Step>
+
+  <Step title="Configure Reverse Swap">
+    1. **Send**: WBTC on Arbitrum
+    2. **Receive**: WBTC on Ethereum
+    3. Enter transfer amount
+  </Step>
+
+  <Step title="Complete Transfer">
+    1. Approve the transaction (low Arbitrum gas fees)
+    2. Wait for completion
+    3. Switch wallet to Ethereum to see received WBTC
+  </Step>
+</Steps>
+
+## Why Move WBTC Cross-Chain?
+
+<CardGroup cols={2}>
+  <Card title="Cost Optimization" icon="dollar-sign">
+    **Lower Fees**: Move to Arbitrum for cheaper DeFi transactions  
+    **Batch Operations**: Perform multiple operations on L2 then return to mainnet
+  </Card>
+  <Card title="Ecosystem Access" icon="network-wired">
+    **Different DeFi Protocols**: Access unique opportunities on each network  
+    **Liquidity Arbitrage**: Take advantage of price differences between chains
+  </Card>
+</CardGroup>
+
+## Network Comparison
+
+| Aspect | Ethereum | Arbitrum |
+|--------|----------|----------|
+| **Gas Fees** | High during congestion | Very low |
+| **Transaction Speed** | 12-15 seconds | 1-2 seconds |
+| **DeFi Ecosystem** | Most mature | Growing rapidly |
+| **Security** | Highest (Layer 1) | Inherits Ethereum security |
+| **WBTC Liquidity** | Highest | Good and growing |
+
+## Advanced Strategies
+
+### DeFi Arbitrage
+1. **Monitor Rates**: Watch for rate differences between networks
+2. **Move Capital**: Transfer WBTC to the network with better opportunities
+3. **Execute Strategy**: Participate in farming, lending, or trading
+4. **Return Profits**: Move gains back to preferred network
+
+### Cost Management
+1. **Batch Transactions**: Accumulate transactions on Arbitrum
+2. **Strategic Timing**: Move during low Ethereum gas periods
+3. **Fee Planning**: Consider gas costs in your profit calculations
+
+## Security Considerations
+
+<Info>
+**Same Address**: Your WBTC will appear at the same wallet address on the destination network. Garden's atomic swaps ensure safe cross-chain transfers.
+</Info>
+
+<Warning>
+**Network Verification**: Always verify you're on the correct network before initiating transfers. Sending to wrong networks may result in permanent loss.
+</Warning>
+
+<Note>
+**Gas Requirements**: Ensure you have gas tokens on both source and destination networks for optimal experience.
+</Note>
+
+## Fees and Timing
+
+### Fee Structure
+- **Source Network Gas**: Pay gas on the network you're sending from
+- **Garden Protocol Fee**: Small percentage for the cross-chain service  
+- **No Double Bridge Fees**: Direct cross-chain transfer without multiple bridge hops
+
+### Timing Expectations
+- **Approval**: Immediate wallet confirmation
+- **Processing**: 30 seconds typical completion time
+- **Finality**: Near-instant availability on destination network
+
+## Troubleshooting Common Issues
+
+### Transaction Stuck
+- **Check Network**: Ensure wallet is on correct source network
+- **Gas Price**: Increase gas price if transaction is pending
+- **Cancel & Retry**: Cancel stuck transaction and retry with higher gas
+
+### Wrong Network
+- **Prevention**: Double-check network selection before confirming
+- **Recovery**: If sent to wrong network, contact Garden support immediately
+- **Verification**: Always verify destination network in Garden interface
+
+### Insufficient Balance
+- **Gas Tokens**: Ensure you have ETH (Ethereum) or ARB (Arbitrum) for gas
+- **WBTC Balance**: Verify you have enough WBTC plus a small buffer for precision
+- **Fee Reserve**: Keep some gas tokens for future transactions
+
+## After Your Cross-Chain Transfer
+
+<Steps>
+  <Step title="Verify Receipt">
+    Switch your wallet to the destination network and confirm WBTC arrival
+  </Step>
+  <Step title="Update Portfolio">
+    Your portfolio trackers should reflect the new network location
+  </Step>
+  <Step title="Explore Opportunities">
+    Research DeFi protocols available on your new network
+  </Step>
+</Steps>
+
+## Popular Use Cases
+
+### Moving to Arbitrum
+- **DeFi Farming**: Lower fees for yield farming strategies
+- **Active Trading**: Cheaper transactions for frequent trading
+- **Experimentation**: Test strategies with lower gas costs
+
+### Moving to Ethereum
+- **Blue-Chip DeFi**: Access to most established protocols
+- **Maximum Liquidity**: Largest liquidity pools and trading volume
+- **New Protocol Access**: Many protocols launch on Ethereum first
+
+## Related Guides
+
+<CardGroup cols={3}>
+  <Card title="BTC to WBTC" icon="bitcoin" href="/home/basics/guides/swap/btc-wbtc">
+    Wrap Bitcoin to get WBTC for cross-chain transfers
+  </Card>
+  <Card title="WBTC to BTC" icon="arrows-rotate" href="/home/basics/guides/swap/wbtc-btc">
+    Unwrap WBTC back to native Bitcoin
+  </Card>
+  <Card title="All Swap Guides" icon="list" href="/home/basics/guides/swap/guides">
+    Explore all available swap options
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+- **Discord Support**: Join our [community](https://discord.com/invite/kqMBgeAKAh) for assistance
+- **Technical Issues**: Check our [troubleshooting guide](/developers/troubleshooting)
+- **Documentation**: Review our [developer docs](/developers/overview) for integration details
+
+<Info>
+Cross-chain WBTC transfers open up new DeFi opportunities across different networks. Always verify network compatibility before interacting with new protocols.
+</Info> 

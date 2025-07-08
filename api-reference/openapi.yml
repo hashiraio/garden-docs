@@ -37,6 +37,86 @@ components:
           type: string
           nullable: true
 
+    QuotePriceResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+        result:
+          type: object
+          properties:
+            quotes:
+              type: object
+              properties:
+                strategy_id: "quote-price" 
+          nullable: true
+        error:
+          type: string
+          nullable: true
+    
+    QuoteStrategiesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+        result:
+          type: object
+          properties:
+            strategy_id:
+              $ref: "#/components/schemas/Strategy"
+          nullable: true
+        error:
+          type: string
+          nullable: true
+          
+    CreateOrderRequest:
+      type: object
+      properties:
+        source_chain: { type: string }
+        destination_chain: { type: string }
+        source_asset: { type: string }
+        destination_asset: { type: string }
+        initiator_source_address: { type: string } # optional in case of btc
+        initiator_destination_address: { type: string } #optional in case of btc
+        source_amount: { type: string }
+        destination_amount: { type: string }
+        nonce: { type: string }
+        secret_hash: { type: string} #optional 
+        affiliate_fees: {type: array }
+        additional_data:
+          type: object
+          properties:
+            strategy_id: { type: string }
+            bitcoin_optional_recipient: { type: string }
+
+    AttestedQuoteResponse:
+      type: object
+      properties:
+        source_chain: { type: string }
+        destination_chain: { type: string }
+        source_asset: { type: string }
+        destination_asset: { type: string }
+        initiator_source_address: { type: string }
+        initiator_destination_address: { type: string }
+        source_amount: { type: string }
+        destination_amount: { type: string }
+        fee: { type: string }
+        nonce: { type: string }
+        min_destination_confirmations: { type: integer }
+        timelock: { type: integer }
+        secret_hash: { type: string }
+        additional_data:
+          type: object
+          properties:
+            strategy_id: { type: string }
+            bitcoin_optional_recipient: { type: string }
+            input_token_price : { type: number }
+            output_token_price : { type: number }
+            sig: { type: string }
+            deadline : { type: number , example: 1751282562}
+            
     CreateOrder:
       type: object
       properties:
@@ -62,7 +142,16 @@ components:
         additional_data:
           type: object
           properties:
+            strategy_id: { type: string }
             bitcoin_optional_recipient: { type: string }
+            instant_refund_tx_bytes: { type: string }
+            tx_hash:  { type: string }
+            is_blacklisted : { type: boolean }
+            input_token_price : { type: number }
+            output_token_price : { type: number }
+            sig: { type: string }
+            deadline : { type: number , example: 1751282562}
+            version: { type: string }
 
     SingleSwap:
       type: object
@@ -101,6 +190,32 @@ components:
           $ref: "#/components/schemas/SingleSwap"
         create_order:
           $ref: "#/components/schemas/CreateOrder"
+    
+    MatchedOrderListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchedOrderVerbose'
+        error:
+          type: string
+          nullable: true
+    
+    MatchedOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+        result:
+          $ref: '#/components/schemas/MatchedOrderVerbose'
+        error:
+          type: string
+          nullable: true
 
     PaginatedData:
       type: object
@@ -252,7 +367,7 @@ components:
 paths:
   /quote:
     get:
-      summary: Get attested quote
+      summary: Get quote price 
       tags: [Quote]
       parameters:
         # split this into from_chain+asset, to_chain+asset
@@ -277,7 +392,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/QuotePriceResponse"
 
   # depricated  
   /quote/attested:
@@ -289,14 +404,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrder"
+              $ref: "#/components/schemas/CreateOrderRequest"
       responses:
         "200":
           description: Attested quote created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: object
+                properties:
+                  status: { type: string }
+                  result: 
+                    $ref: "#/components/schemas/AttestedQuoteResponse"
 
   # /solvers/{solver}/strategies paginate
   /quote/strategies:
@@ -337,7 +456,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: array
+                items: 
+                  $ref: '#/components/schemas/MatchedOrderListResponse'
     post:
       summary: Create order
       tags: [Orderbook]
@@ -346,14 +467,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrder"
+              $ref: "#/components/schemas/CreateOrderRequest"
       responses:
         "200":
           description: Order created successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/MatchedOrderResponse"
 
   # /orders/{order_id}
   /orders/id/{id}:
@@ -372,7 +493,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/MatchedOrderResponse"
 
   # /orders/{order_id}/bitcoin
   /orders/id/{id}/bitcoin:
@@ -423,7 +544,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/MatchedOrderResponse"
 
   # /users/{user_id}/orders/count
   /orders/user/{user}/count:
@@ -545,7 +666,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrder"
+              $ref: "#/components/schemas/CreateOrderRequest"
       responses:
         "200":
           description: Order created successfully
@@ -576,7 +697,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [
+                        "Ok",
+                        "Error"
+                    ]
+                    description: "An enum representing the possible outcomes of the endpoint, indicating whether the request was successful."
+                    example: "Ok"
+                  result:
+                      type: array
+                      items :
+                        type: string
+                      "description": "Taproot spend script sighashes for the user to sign."
+                      "example": ["sighash1"]
 
   # PATCH /swaps/bitcoin?action="instant-refund"
   /relayer/instant-refund:
@@ -619,7 +755,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: string
+                example: "Online"
 
   # PATCH /swaps/starknet?action="initiate"
   /starknet-relayer/initiate:
@@ -688,10 +825,3 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-
-
-# PATCH /orders/{order_id}?action="redeem"
-# PATCH /orders/{order_id}?action="initiate"
-# PATCH /orders/{order_id}?action="instant-refund"
-# PATCH /orders/{order_id}?action="refund"
-# GET /orders/{order_id}/bitcoin/instant-refund-hash

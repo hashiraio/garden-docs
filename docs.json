@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Garden Docs",
   "colors": {
     "primary": "#e36492",
     "light": "#f2f7fb",
@@ -12,25 +12,111 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Home",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Fundamentals",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              {
+                "group": "Introduction",
+                "pages": [
+                  "home/fundamentals/introduction/intents",
+                  "home/fundamentals/introduction/atomic-swaps",
+                  "home/fundamentals/introduction/solvers",
+                  "home/fundamentals/introduction/stakers",
+                  "home/fundamentals/introduction/auctions"
+                ]
+              },
+              {
+                "group": "How It Works",
+                "pages": [
+                  "home/fundamentals/how-it-works/intent-flow",
+                  "home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                ]
+              },
+              {
+                "group": "Benefits",
+                "pages": [
+                  "home/fundamentals/benefits/benefits",
+                  "home/fundamentals/benefits/cross-chain-intents",
+                  "home/fundamentals/benefits/free-option-protection",
+                  "home/fundamentals/benefits/better-price",
+                  "home/fundamentals/benefits/no-custody-risk"
+                ]
+              }
             ]
           },
           {
-            "group": "Essentials",
+            "group": "User Guides",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              {
+                "group": "Swap",
+                "pages": [
+                  "home/basics/guides/swap/btc-wbtc",
+                  "home/basics/guides/swap/wbtc-btc",
+                  "home/basics/guides/swap/wbtc-wbtc"
+                ]
+              },
+              "home/basics/guides/stake/stake-seed",
+              "home/garden-brand-guide"
+            ]
+          },
+          {
+            "group": "Governance",
+            "pages": [
+              "home/governance",
+              "home/governance/governance-process",
+              "home/governance/tokenomics",
+              "home/governance/gardener-pass",
+              "home/governance/snapshot"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "developers/overview",
+              "developers/supported-chains",
+              "developers/affiliate-fee",
+              "developers/troubleshooting"
+            ]
+          },
+          {
+            "group": "SDK",
+            "pages": [
+              "developers/sdk/sdk",
+              "developers/sdk/authentication"
+            ]
+          },
+          {
+            "group": "API",
+            "pages": [
+              "developers/api/api"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "developers/core/core",
+              "developers/core/Auth"
+            ]
+          },
+          {
+            "group": "Smart Contracts",
+            "pages": [
+              "developers/contracts/contracts",
+              "developers/contracts/atomic-swap-evm",
+              "developers/contracts/atomic-swap-btc"
+            ]
+          },
+          {
+            "group": "Cookbooks",
+            "pages": [
+              "developers/cookbook/cookbook"
             ]
           }
         ]
@@ -38,6 +124,12 @@
       {
         "tab": "API Reference",
         "groups": [
+          {
+            "group": "Quickstart",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
           {
             "group": "Quote",
             "pages": [
@@ -91,19 +183,19 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "anchor": "GitHub",
+          "href": "https://github.com/gardenfi",
+          "icon": "github"
         },
         {
           "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "href": "https://garden.finance/blog",
           "icon": "newspaper"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://discord.gg/Sahx6QyD",
+          "icon": "discord"
         }
       ]
     }
@@ -128,7 +220,8 @@
   "footer": {
     "socials": {
       "x": "https://x.com/garden_finance",
-      "github": "https://github.com/gardenfi"
+      "github": "https://github.com/gardenfi",
+      "discord": "https://discord.gg/Sahx6QyD"
     }
   }
 }

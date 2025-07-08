@@ -1,0 +1,106 @@
+---
+title: "Smart Contracts"
+description: "Detailed documentation of smart contracts used in the Garden ecosystem"
+---
+
+Atomic swaps enable secure cross-chain transactions using **Hashed Time Lock Contracts (HTLCs)**. These contracts ensure that either both parties complete the swap or both get their funds back - no party can be cheated.
+
+### Universal Concepts
+
+Regardless of the blockchain, all atomic swap implementations share these core methods:
+
+<CardGroup cols={2}>
+  <Card title="Initiate" icon="play">
+    Lock funds in the contract with a secret hash and timelock
+  </Card>
+  <Card title="Redeem" icon="check">
+    Claim funds by revealing the secret that matches the hash
+  </Card>
+  <Card title="Refund" icon="rotate-left">
+    Reclaim funds after the timelock expires
+  </Card>
+  <Card title="Instant Refund" icon="bolt">
+    Cancel the swap with mutual agreement from both parties
+  </Card>
+</CardGroup>
+
+### Security Features
+
+<Steps>
+  <Step title="Universal Compatibility">
+    Any chain that supports Sha256 hashing and Relative TimeLocks can be added to Garden.
+  </Step>
+  <Step title="Timelock Safety">
+    Funds can always be recovered if the counterparty doesn't participate within the specified timeframe.
+  </Step>
+  <Step title="Address Authorization">
+    Only designated parties can claim funds, preventing unauthorized access.
+  </Step>
+  <Step title="Atomic Execution">
+    The swap either completes fully on both chains or fails completely.
+  </Step>
+</Steps>
+
+### Cross-Chain Coordination
+
+The secret revealed when redeeming on one chain can be used to claim funds on the other chain. This creates the atomic property:
+
+1. **Initiator** locks funds on Chain A with secret hash
+2. **Redeemer** locks funds on Chain B with the same secret hash  
+3. **Initiator** redeems on Chain B by revealing the secret
+4. **Redeemer** uses the revealed secret to claim funds on Chain A
+
+<Info>
+Both implementations use the same cryptographic primitives and security model, but differ in their execution environments and technical approaches.
+</Info>
+
+## Implementation-Specific Details
+
+### EVM Implementation
+
+<Card title="Atomic Swap (EVM)" href="/developers/contracts/atomic-swap-evm" icon="ethereum">
+  **Smart Contract Model**: Uses Solidity contracts with state management  
+  **Execution**: Function-based interface with gas-metered execution  
+  **Timelock**: Absolute block numbers for expiry  
+  **Events**: On-chain event logging for state transitions  
+  **Authentication**: Ethereum addresses and ECDSA signatures
+</Card>
+
+**Key Characteristics:**
+- Contract state stored on-chain with enums
+- Function calls modify contract state
+- Events emitted for off-chain monitoring
+- Absolute timelock using block numbers
+- Account-based model
+
+### Bitcoin Implementation
+
+<Card title="Atomic Swap (BTC)" href="/developers/contracts/atomic-swap-btc" icon="bitcoin">
+  **Script Model**: Uses Bitcoin Script with stack-based execution  
+  **Execution**: Transaction-based with OP codes  
+  **Timelock**: Relative time with CheckSequenceVerify  
+  **Monitoring**: Transaction-based state tracking  
+  **Authentication**: X-only pubkeys (Taproot) and Schnorr signatures
+</Card>
+
+**Key Characteristics:**
+- Scripts executed per transaction
+- Stack-based execution model
+- Relative timelock using CSV
+- UTXO-based model
+- No persistent state storage
+
+## Technical Comparison
+
+| Aspect | EVM | Bitcoin |
+|--------|-----|---------|
+| **Execution Model** | Smart contracts | Scripts |
+| **State Management** | On-chain storage | Transaction-based |
+| **Timelock Type** | Absolute (block numbers) | Relative (CSV) |
+| **Authentication** | Ethereum addresses | X-only pubkeys |
+| **Monitoring** | Events | Transaction parsing |
+| **Programming Model** | Function calls | Stack operations |
+
+<Note>
+Despite different technical approaches, both implementations achieve identical security guarantees and atomic properties. The choice between them depends on the specific blockchain being used.
+</Note> 
