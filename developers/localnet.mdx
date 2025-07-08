@@ -1,0 +1,180 @@
+---
+title: "Localnet"
+description: "Local testing environment for Garden SDK development"
+---
+
+Localnet testing is a crucial step in ensuring your Garden SDK integration works as intended before deploying it to a testnet or mainnet. To support your testing, we provide **Merry**, an in-house tool designed for comprehensive cross-chain testing in a local environment.
+
+<img src="/images/merry.png" alt="Merry" width="80" />  
+
+Merry is a CLI tool that leverages Docker to set up a multi-chain testing environment with a single command. It includes:
+
+- **Bitcoin regtest node:** A local Bitcoin testnet environment.
+- **EVM localnet nodes:** Local Ethereum and Arbitrum test environments. Simply add the localnet details to your EVM wallet to detect and interact.
+- **Filler bot:** Simulates the behavior of a live [solver](/home/fundamentals/introduction/solvers) based on predefined strategies.
+- **Orderbook:** Local version of the [order book](/home/fundamentals/introduction/auctions) to test how intents are matched and fulfilled.
+- **Faucet:** Generate unlimited test funds for seamless testing.
+- **Electrum services:** Lightweight wallet support for interacting with Bitcoin network.
+
+Merry eliminates block mining delays, provides a complete environment for multi-chain workflows, and allows developers to test integrations independently of external services. It’s customizable, fast, and supports iterative testing with features like local service replacement. 
+
+## Installation
+
+<Info>
+**Prerequisites**: Ensure Docker is installed and running. Download Docker from [docker.com](https://www.docker.com).
+</Info>
+
+Merry supports arm64 and amd64 architectures. For Windows, use Windows Subsystem for Linux (WSL).
+
+Run these scripts based on your environment.
+
+<CodeGroup>
+
+```bash Linux & MacOS
+# Run the following command to install Merry:
+curl https://get.merry.dev | bash
+```
+
+```bash Windows
+# In a WSL terminal, run sudo dockerd and verify if the docker daemon is running, then:
+curl https://get.merry.dev | bash
+```
+
+</CodeGroup>
+
+Merry stores its configuration and other data in a `.merry` directory on your system.
+
+## Commands
+
+Merry provides a variety of commands to manage your testing environment.
+
+### Start Merry
+
+Start all services with:
+
+```bash
+merry go
+```
+
+<Accordion title="Optional flags">
+- `--bare`: Starts multi-chain services only (Bitcoin and Ethereum nodes with explorers) without Garden services
+- `--headless`: Starts all services without frontend interfaces for server environments
+</Accordion>
+
+### Stop Merry
+
+Stops all running services:
+
+```bash
+merry stop
+```
+
+<Tip>
+Use `--delete` or `-d` to remove data:
+```bash
+merry stop -d
+```
+</Tip>
+
+### List all commands
+
+Display all available commands:
+```bash
+merry --help
+```
+
+### Get logs
+
+Access logs for specific [services](#supported-services):
+```bash
+merry logs -s <service>
+```
+
+Replace `<service>` with the specific service (e.g., filler, orderbook) to view its logs.
+
+```bash
+# Example: Get EVM logs
+merry logs -s evm
+```
+
+### Replace a service with local version
+
+Replace a service with your local development version:
+```bash
+merry replace <service>
+```
+
+<Warning>
+Make sure you're in the directory containing the local service's Dockerfile. You can only replace filler, orderbook, and EVM chain services.
+</Warning>
+
+### Interact with Bitcoin RPC
+
+Run Bitcoin RPC [commands](https://developer.bitcoin.org/reference/rpc/) directly:
+```bash
+merry rpc <method> <params>
+```
+
+Example - get blockchain info:
+```bash
+merry rpc getblockchaininfo
+```
+
+### Fund accounts
+
+Use the faucet to fund Bitcoin or Ethereum addresses for testing:
+```bash
+merry faucet --to <address>
+```
+
+### Update Docker images
+
+Keep your environment up-to-date by pulling the latest Docker images:
+```bash
+merry update
+```
+
+### Generate auto-completion scripts
+
+Generate scripts for your shell (bash, zsh, fish, powershell):
+```bash
+merry completion <shell>
+```
+
+### Get version info
+
+Check the version of Merry installed:
+```bash
+merry version
+```
+
+## Supported services
+
+<Note>
+The following services are available when running Merry. Use these ports to connect your applications and tools.
+</Note>
+
+| Service | Port | Description |
+| --- | --- | --- |
+| **Bitcoin regtest node** | `localhost:18443` & `18444` | Local Bitcoin test network |
+| **Bitcoin esplora frontend** | `localhost:5050` | Bitcoin blockchain explorer UI |
+| **Bitcoin esplora electrs indexer** | `localhost:50000` & `30000` | Bitcoin transaction indexer |
+| **Ethereum localnode** | `localhost:8545` | Local Ethereum test network |
+| **Ethereum otterscan** | `localhost:5100` | Ethereum blockchain explorer |
+| **Arbitrum localnode** | `localhost:8546` | Local Arbitrum test network |
+| **Arbitrum otterscan** | `localhost:5101` | Arbitrum blockchain explorer |
+| **Postgres** | `localhost:5432` | Database for order storage |
+| **Redis** | `localhost:6379` | Cache and session storage |
+| **Orderbook** | `localhost:8080` | Garden orderbook API |
+| **Filler** | - | Background solver simulation |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="SDK Integration" href="/developers/sdk/sdk">
+    Start integrating Garden SDK with your local testing environment
+  </Card>
+  <Card title="API Documentation" href="/api/quickstart">
+    Explore the Garden API endpoints
+  </Card>
+</CardGroup>

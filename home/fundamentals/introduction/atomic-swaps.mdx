@@ -12,7 +12,7 @@ Garden uses **Hash Time Locked Contracts** (HTLCs) to implement atomic swaps. As
 Let's take our case, user gives an intent to swap. The auction house selects a solver for this. After executing the intent, the solver and the user have to settle (swap) their assets.
 
 <Frame>
-  <img src="/home/images/atomic_swap.png" alt="Atomic Swap Process" />
+  <img src="/images/atomic_swap.png" alt="Atomic Swap Process" />
 </Frame>
 
 1. User deposits asset A into a transparent vault on chain A.
@@ -27,7 +27,7 @@ This is what we call a happy flow where everything runs as expected. In the next
 ### 1. Lock Asset A and B happens, but claim asset B doesn't happen
 
 <Frame>
-  <img src="/home/images/fail_s1.png" alt="Failure Scenario 1" />
+  <img src="/images/fail_s1.png" alt="Failure Scenario 1" />
 </Frame>
 
 - **Penalty:** Stakers are slashed 1% of the intent value.
@@ -37,7 +37,7 @@ This is what we call a happy flow where everything runs as expected. In the next
 ### 2. Lock Asset B doesn't happen
 
 <Frame>
-  <img src="/home/images/fail_s2.png" alt="Failure Scenario 2" />
+  <img src="/images/fail_s2.png" alt="Failure Scenario 2" />
 </Frame>
 
 - **Penalty:** Solver and stakers are slashed 0.5% of the intent value.
