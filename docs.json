@@ -8,6 +8,7 @@
     "dark": "#1b1b1d"
   },
   "favicon": "/favicon.svg",
+  "openapi": "api-reference/openapi.yml",
   "navigation": {
     "tabs": [
       {
@@ -38,18 +39,50 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "Quote",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/endpoint/quote/get-quote",
+              "api-reference/endpoint/quote/create-attested",
+              "api-reference/endpoint/quote/get-strategies",
+              "api-reference/endpoint/quote/get-liquidity"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Orderbook",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/endpoint/orderbook/get-orders",
+              "api-reference/endpoint/orderbook/create-order",
+              "api-reference/endpoint/orderbook/get-order-by-id",
+              "api-reference/endpoint/orderbook/add-bitcoin-info",
+              "api-reference/endpoint/orderbook/get-user-orders",
+              "api-reference/endpoint/orderbook/get-user-order-count",
+              "api-reference/endpoint/orderbook/get-volume",
+              "api-reference/endpoint/orderbook/get-fees",
+              "api-reference/endpoint/orderbook/get-solver-committed-funds"
+            ]
+          },
+          {
+            "group": "Relayer",
+            "pages": [
+              "api-reference/endpoint/relayer/initiate",
+              "api-reference/endpoint/relayer/redeem",
+              "api-reference/endpoint/relayer/create-order",
+              "api-reference/endpoint/relayer/instant-refund-hash",
+              "api-reference/endpoint/relayer/instant-refund",
+              "api-reference/endpoint/relayer/health"
+            ]
+          },
+          {
+            "group": "Starknet Relayer",
+            "pages": [
+              "api-reference/endpoint/starknet-relayer/initiate",
+              "api-reference/endpoint/starknet-relayer/redeem"
+            ]
+          },
+          {
+            "group": "Solana Relayer", 
+            "pages": [
+              "api-reference/endpoint/solana-relayer/redeem"
             ]
           }
         ]

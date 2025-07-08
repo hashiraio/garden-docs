@@ -1,0 +1,697 @@
+openapi: 3.1.0
+info:
+  title: Garden API
+  version: 2.0.0
+  description: API specification for various endpoints
+
+tags:
+  - name: Quote
+    description: Endpoints for getting quote and attestations
+  - name: Orderbook
+    description: Endpoints for managing and querying swap orders
+  - name: Relayer
+    description: Endpoints for performing swap transactions (initiate, redeem, create)
+  - name: Starknet Relayer
+    description: Endpoints for performing Starknet swap transactions (initiate, redeem)
+  - name: Solana Relayer
+    description: Endpoints for performing Solana swap transactions (redeem)
+
+servers:
+  - url: https://{environment}.garden.finance
+    variables:
+      environment:
+        default: "api"
+        enum: ["api", "api.testnet"]
+
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+        result:
+          nullable: true
+        error:
+          type: string
+          nullable: true
+
+    CreateOrder:
+      type: object
+      properties:
+        created_at: { type: string }
+        updated_at: { type: string }
+        deleted_at: { type: string, nullable: true }
+        create_id: { type: string }
+        block_number: { type: string }
+        source_chain: { type: string }
+        destination_chain: { type: string }
+        source_asset: { type: string }
+        destination_asset: { type: string }
+        initiator_source_address: { type: string }
+        initiator_destination_address: { type: string }
+        source_amount: { type: string }
+        destination_amount: { type: string }
+        fee: { type: string }
+        nonce: { type: string }
+        min_destination_confirmations: { type: integer }
+        timelock: { type: integer }
+        secret_hash: { type: string }
+        user_id: { type: string }
+        additional_data:
+          type: object
+          properties:
+            bitcoin_optional_recipient: { type: string }
+
+    SingleSwap:
+      type: object
+      properties:
+        created_at: { type: string }
+        updated_at: { type: string }
+        deleted_at: { type: string, nullable: true }
+        swap_id: { type: string }
+        chain: { type: string }
+        asset: { type: string }
+        initiator: { type: string }
+        redeemer: { type: string }
+        timelock: { type: integer }
+        filled_amount: { type: string }
+        amount: { type: string }
+        secret_hash: { type: string }
+        secret: { type: string }
+        initiate_tx_hash: { type: string }
+        redeem_tx_hash: { type: string }
+        refund_tx_hash: { type: string }
+        initiate_block_number: { type: string, nullable: true }
+        redeem_block_number: { type: string, nullable: true }
+        refund_block_number: { type: string, nullable: true }
+        required_confirmations: { type: integer }
+        current_confirmations: { type: integer }
+
+    MatchedOrderVerbose:
+      type: object
+      properties:
+        created_at: { type: string }
+        updated_at: { type: string }
+        deleted_at: { type: string, nullable: true }
+        source_swap:
+          $ref: "#/components/schemas/SingleSwap"
+        destination_swap:
+          $ref: "#/components/schemas/SingleSwap"
+        create_order:
+          $ref: "#/components/schemas/CreateOrder"
+
+    PaginatedData:
+      type: object
+      properties:
+        data:
+          type: array
+          items: {}
+        page: { type: integer }
+        total_pages: { type: integer }
+        total_items: { type: integer }
+        per_page: { type: integer }
+
+    Asset:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: "0x6b6303fAb8eC7232b4f2a7b9fa58E5216F608fcb"
+        token_id:
+          type: string
+          example: "bitcoin"
+        decimals:
+          type: integer
+          example: 8
+
+    Strategy:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "babcct7c"
+        source_chain_address:
+          type: string
+          example: "0x661bA32eb5f86CaB358DDbB7F264b10c5825e2dd"
+        dest_chain_address:
+          type: string
+          example: "0x661bA32eb5f86CaB358DDbB7F264b10c5825e2dd"
+        source_chain:
+          type: string
+          example: "base_sepolia"
+        dest_chain:
+          type: string
+          example: "citrea_testnet"
+        source_asset:
+          $ref: "#/components/schemas/Asset"
+        dest_asset:
+          $ref: "#/components/schemas/Asset"
+        makers:
+          type: array
+          items:
+            type: string
+          example: []
+        min_amount:
+          type: string
+          example: "50000"
+        max_amount:
+          type: string
+          example: "10000000000"
+        min_source_timelock:
+          type: integer
+          example: 3600
+        destination_timelock:
+          type: integer
+          example: 3600
+        min_source_confirmations:
+          type: integer
+          example: 1
+        fee:
+          type: integer
+          example: 30
+        version:
+          type: string
+          example: "v2"
+
+    LiquidityBalance:
+      type: object
+      properties:
+        address:
+          type: string
+          example: "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
+        balance:
+          type: string
+          example: "2005081260295471559422"
+        virtual_balance:
+          type: string
+          example: "2005081260295471559422"
+        readable_balance:
+          type: string
+          example: "2005.08126030"
+        fiat_value:
+          type: string
+          example: "223.5006887196492"
+        role:
+          type: string
+          example: "Relayer"
+
+    LiquidityTokenEntry:
+      type: object
+      properties:
+        token_address:
+          type: string
+          example: "primary"
+        htlc_address:
+          type: string
+          example: "primary"
+        token_name:
+          type: string
+          example: "primary"
+        balances:
+          type: array
+          items:
+            $ref: "#/components/schemas/LiquidityBalance"
+
+    LiquidityResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Ok, Error]
+          example: "Ok"
+        result:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/LiquidityTokenEntry"
+
+    # Added missing schemas for relayer endpoints
+    InitiateRequest:
+      type: object
+      properties:
+        order_id: { type: string }
+        signature: { type: string }
+        perform_on:
+          type: string
+          enum: [Source, Destination]
+      required: [order_id, signature, perform_on]
+
+    RedeemRequest:
+      type: object
+      properties:
+        order_id: { type: string }
+        secret: { type: string }
+        perform_on:
+          type: string
+          enum: [Source, Destination]
+      required: [order_id, secret, perform_on]
+
+paths:
+  /quote:
+    get:
+      summary: Get attested quote
+      tags: [Quote]
+      parameters:
+        # split this into from_chain+asset, to_chain+asset
+        - in: query
+          name: order_pair
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: amount
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: exact_out
+          required: true
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Quote information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # depricated  
+  /quote/attested:
+    post:
+      tags: [Quote]
+      summary: Create attested quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrder"
+      responses:
+        "200":
+          description: Attested quote created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /solvers/{solver}/strategies paginate
+  /quote/strategies:
+    get:
+      tags: [Quote]
+      summary: Get available strategies
+      responses:
+        "200":
+          description: List of available strategies
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Strategy"
+                description: "A map where each key is a strategy_id and the value is the strategy object"
+
+  # /solvers/{solver}/liquidity 
+  /quote/liquidity:
+    get:
+      tags: [Quote]
+      summary: Get liquidity information
+      responses:
+        "200":
+          description: Liquidity information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LiquidityResponse"
+
+  /orders:
+    get:
+      summary: Get all matched orders
+      tags: [Orderbook]
+      responses:
+        "200":
+          description: List of matched orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+    post:
+      summary: Create order
+      tags: [Orderbook]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrder"
+      responses:
+        "200":
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /orders/{order_id}
+  /orders/id/{id}:
+    get:
+      summary: Get matched order by ID
+      tags: [Orderbook]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Matched order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /orders/{order_id}/bitcoin
+  /orders/id/{id}/bitcoin:
+    patch:
+      summary: Add bitcoin info
+      tags: [Orderbook]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bitcoin_optional_recipient: { type: string }
+                instant_refund_tx_bytes: { type: string }
+      responses:
+        "200":
+          description: Bitcoin info added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /users/{user_id}/orders
+  /orders/user/{user}:
+    get:
+      summary: Get all matched orders by user
+      tags: [Orderbook]
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User's matched orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /users/{user_id}/orders/count
+  /orders/user/{user}/count:
+    get:
+      tags: [Orderbook]
+      summary: Get order count for user
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User's order count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /volume
+  /orders/volume:
+    get:
+      summary: Get swap volume
+      tags: [Orderbook]
+      responses:
+        "200":
+          description: Total swap volume
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # /fee
+  /orders/fees:
+    get:
+      summary: Get swap fees
+      tags: [Orderbook]
+      responses:
+        "200":
+          description: Total swap fees
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+  
+  # /solvers/{solver_id}/committed
+  /orders/solver/{solver}/committed-funds:
+    get:
+      summary: Get solver committed funds
+      tags: [Orderbook]
+      parameters:
+        - in: path
+          name: solver
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: chain
+          schema:
+            type: string
+        - in: query
+          name: asset
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Solver's committed funds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /swaps?chain="evm"&action="initiate"
+  /relayer/initiate:
+    post:
+      summary: Initiate Swap
+      tags: [Relayer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InitiateRequest"
+      responses:
+        "200":
+          description: Swap initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /swaps/evm&action="redeem"
+  /relayer/redeem:
+    post:
+      summary: Redeem Swap
+      tags: [Relayer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemRequest"
+      responses:
+        "200":
+          description: Swap redeemed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # deprecated
+  /relayer/create-order:
+    post:
+      summary: Create Order
+      tags: [Relayer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrder"
+      responses:
+        "200":
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # GET /swaps/bitcoin?action="instant-refund"
+  /relayer/instant-refund-hash:
+    post:
+      summary: Create Instant Refund Hash
+      tags: [Relayer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: "The ID of the order for which instant refund tx is to be added."
+                  example: "12345"
+      responses:
+        "200":
+          description: Instant Refund Hash created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /swaps/bitcoin?action="instant-refund"
+  /relayer/instant-refund:
+    post:
+      summary: Create Instant Refund
+      tags: [Relayer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: "The ID of the order, for which the instant refund SACP is being added and updated."
+                  example: "12345"
+                signatures:
+                  type: array
+                  items:
+                    type: string
+                  description: "User's hex encoded schnorr signature for the sighashes received from the instant-refund-hash endpoint in the exact order"
+                  example: ["signature_hex"]
+      responses:
+        "200":
+          description: Instant Refund Hash created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # GET /health
+  /relayer/health:
+    get:
+      summary: Health Check
+      tags: [Relayer]
+      responses:
+        "200":
+          description: Service is online
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /swaps/starknet?action="initiate"
+  /starknet-relayer/initiate:
+    post:
+      tags: [Starknet Relayer]
+      summary: Initiate Starknet swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id: { type: string }
+                signature:
+                  type: array
+                  items:
+                    type: string
+                perform_on:
+                  type: string
+                  enum: [Source, Destination]
+              required: [order_id, signature, perform_on]
+
+      responses:
+        "200":
+          description: Starknet swap initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /orders/{order_id}?action="redeem"
+  /starknet-relayer/redeem:
+    post:
+      tags: [Starknet Relayer]
+      summary: Redeem Starknet swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemRequest"
+      responses:
+        "200":
+          description: Starknet swap redeemed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  # PATCH /swaps/solana?action="redeem"
+  /solana-relayer/redeem:
+    post:
+      tags: [Solana Relayer]
+      summary: Redeem Solana swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemRequest"
+      responses:
+        "200":
+          description: Solana swap redeemed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+
+# PATCH /orders/{order_id}?action="redeem"
+# PATCH /orders/{order_id}?action="initiate"
+# PATCH /orders/{order_id}?action="instant-refund"
+# PATCH /orders/{order_id}?action="refund"
+# GET /orders/{order_id}/bitcoin/instant-refund-hash
