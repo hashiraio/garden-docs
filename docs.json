@@ -89,7 +89,9 @@
             "group": "SDK",
             "pages": [
               "developers/sdk/sdk",
-              "developers/sdk/authentication"
+              "developers/sdk/authentication",
+              "developers/sdk/enumerations",
+              "developers/sdk/interfaces"
             ]
           },
 
