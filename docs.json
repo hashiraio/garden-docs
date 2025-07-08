@@ -97,7 +97,9 @@
             "group": "Core Concepts",
             "pages": [
               "developers/core/core",
-              "developers/core/Auth"
+              "developers/core/auth",
+              "developers/core/order-lifecycle",
+              "developers/core/sessions"
             ]
           },
           {
@@ -130,7 +132,7 @@
           {
             "group": "Quickstart",
             "pages": [
-              "api/introduction"
+              "api/quickstart"
             ]
           },
           {
