@@ -1,0 +1,50 @@
+---
+title: "Getting Started"
+description: "Learn how to use Garden's API to get quotes, submit orders, and track their status. This guide provides a quick overview of the core API endpoints."
+---
+
+<Note>
+    API credentials are required for this guide. If you have not already gone through the [API setup guide](/api-reference/setup), go through those steps now.
+</Note>
+
+<Steps>
+  <Step title="Get Quote">
+    ```bash
+    curl -X 'GET' \
+     'https://api.garden.finance/quote/?order_pair=<source_chain>:<source_asset>::<destination_chain>:<destination_asset>&amount=<amount>&exact_out=<true/false>&affiliate_fee=<affiliate_fee_in_bps>' \
+      -H 'accept: application/json'
+    ```
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
+  </Step>
+  <Step title="Submit Order">
+    ```bash
+        curl -X 'POST' \
+        'https://api.garden.finance/orders/' \
+        -H 'accept: application/json' \
+        -H 'Content-Type: application/json' \
+        -H 'Authorization: Bearer <authorization_token>' \ # in the case of SIWE
+        -H 'api-key: <API-key>' \ # in the case of API keys
+        -d '{
+            "source_chain": "<source_chain>",
+            "source_asset": "<source_asset>",
+            "source_amount": "<source_amount>",
+            "initiator_source_address": "<initiator_source_address>",
+            "destination_chain": "<destination_chain>",
+            "destination_asset": "<destination_asset>",
+            "destination_amount": "<destination_amount>",
+            "initiator_destination_address": "<initiator_destination_address>",
+            "nonce": "<nonce>",
+        }'
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+  </Step>
+  <Step title="Check Order Status">
+    ```bash
+        curl -X 'GET' \
+        'https://api.garden.finance/orders/id/<order_id>
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
+
+    Wait until the `order.destination_swap.redeem_tx_hash` is set
+  </Step>
+</Steps>
