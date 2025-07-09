@@ -134,54 +134,54 @@
           {
             "group": "Quickstart",
             "pages": [
-              "api/quickstart"
+              "api-reference/quickstart"
             ]
           },
           {
             "group": "Quote",
             "pages": [
-              "api/endpoint/quote/get-quote",
-              "api/endpoint/quote/create-attested",
-              "api/endpoint/quote/get-strategies",
-              "api/endpoint/quote/get-liquidity"
+              "api-reference/endpoint/quote/get-quote",
+              "api-reference/endpoint/quote/create-attested",
+              "api-reference/endpoint/quote/get-strategies",
+              "api-reference/endpoint/quote/get-liquidity"
             ]
           },
           {
             "group": "Orderbook",
             "pages": [
-              "api/endpoint/orderbook/get-orders",
-              "api/endpoint/orderbook/create-order",
-              "api/endpoint/orderbook/get-order-by-id",
-              "api/endpoint/orderbook/add-bitcoin-info",
-              "api/endpoint/orderbook/get-user-orders",
-              "api/endpoint/orderbook/get-user-order-count",
-              "api/endpoint/orderbook/get-volume",
-              "api/endpoint/orderbook/get-fees",
-              "api/endpoint/orderbook/get-solver-committed-funds"
+              "api-reference/endpoint/orderbook/get-orders",
+              "api-reference/endpoint/orderbook/create-order",
+              "api-reference/endpoint/orderbook/get-order-by-id",
+              "api-reference/endpoint/orderbook/add-bitcoin-info",
+              "api-reference/endpoint/orderbook/get-user-orders",
+              "api-reference/endpoint/orderbook/get-user-order-count",
+              "api-reference/endpoint/orderbook/get-volume",
+              "api-reference/endpoint/orderbook/get-fees",
+              "api-reference/endpoint/orderbook/get-solver-committed-funds"
             ]
           },
           {
             "group": "Relayer",
             "pages": [
-              "api/endpoint/relayer/initiate",
-              "api/endpoint/relayer/redeem",
-              "api/endpoint/relayer/create-order",
-              "api/endpoint/relayer/instant-refund-hash",
-              "api/endpoint/relayer/instant-refund",
-              "api/endpoint/relayer/health"
+              "api-reference/endpoint/relayer/initiate",
+              "api-reference/endpoint/relayer/redeem",
+              "api-reference/endpoint/relayer/create-order",
+              "api-reference/endpoint/relayer/instant-refund-hash",
+              "api-reference/endpoint/relayer/instant-refund",
+              "api-reference/endpoint/relayer/health"
             ]
           },
           {
             "group": "Starknet Relayer",
             "pages": [
-              "api/endpoint/starknet-relayer/initiate",
-              "api/endpoint/starknet-relayer/redeem"
+              "api-reference/endpoint/starknet-relayer/initiate",
+              "api-reference/endpoint/starknet-relayer/redeem"
             ]
           },
           {
             "group": "Solana Relayer", 
             "pages": [
-              "api/endpoint/solana-relayer/redeem"
+              "api-reference/endpoint/solana-relayer/redeem"
             ]
           }
         ]
