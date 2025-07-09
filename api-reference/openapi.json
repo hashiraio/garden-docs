@@ -33,12 +33,20 @@
       "variables": {
         "environment": {
           "default": "api",
-          "enum": ["api", "api.testnet"]
+          "enum": ["api", "testnet.api"]
         }
       }
     }
   ],
   "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "api-key",
+        "description": "API key for authentication. Use test key: 2b238a99dec34c07114581c69636134b6b04860ca201a6c0d1c0bb01d88307ad"
+      }
+    },
     "schemas": {
       "ApiResponse": {
         "type": "object",
@@ -623,6 +631,11 @@
       "post": {
         "summary": "Create order",
         "tags": ["Orderbook"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
