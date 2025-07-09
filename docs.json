@@ -113,7 +113,7 @@
             ]
           },
           {
-            "group": "Cookbooks",
+            "group": "Cookbook",
             "pages": [
               "developers/cookbook/welcome",
               "developers/cookbook/integrate",
