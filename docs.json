@@ -132,9 +132,9 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "Quickstart",
+            "group": "Get Started",
             "pages": [
-              "api-reference/getting-started"
+              "api-reference/quickstart"
             ]
           },
           {
