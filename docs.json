@@ -220,8 +220,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dev.garden.finance"
+      "label": "Launch app",
+      "href": "https://app.garden.finance"
     }
   },
   "footer": {
