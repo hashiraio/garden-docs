@@ -9,14 +9,14 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
 
 <Steps>
   <Step title="Get Quote">
-    Let's get a quote to trade **BTC** on **Bitcoin Testnet4** to 0.001 **WBTC** on **Ethereum Sepolia**.
+    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
     ```bash wrap
     curl -X 'GET' \
      'https://testnet.api.garden.finance/quote/?order_pair=bitcoin_testnet:primary::ethereum_sepolia:0x88e1032252c712681A3659986F452E910D2134D8&amount=100000&exact_out=true' \
       -H 'accept: application/json'
     ```
     Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
-    ```json wrap
+    ```json Response wrap
     {
         "status":"Ok",
         "result": {
