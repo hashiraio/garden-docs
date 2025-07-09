@@ -37,11 +37,11 @@
               {
                 "group": "Benefits",
                 "pages": [
-                  "home/fundamentals/benefits/benefits",
-                  "home/fundamentals/benefits/cross-chain-intents",
-                  "home/fundamentals/benefits/free-option-protection",
-                  "home/fundamentals/benefits/better-price",
-                  "home/fundamentals/benefits/no-custody-risk"
+                  "home/fundamentals/benefits/overview",
+                  "home/fundamentals/benefits/no-custody-risk",
+                  "home/fundamentals/benefits/broad-chain-coverage",
+                  "home/fundamentals/benefits/better-prices",
+                  "home/fundamentals/benefits/free-option-protection"
                 ]
               }
             ]
