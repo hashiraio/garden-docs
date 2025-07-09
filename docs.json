@@ -179,7 +179,7 @@
             ]
           },
           {
-            "group": "Solana Relayer", 
+            "group": "Solana Relayer",
             "pages": [
               "api-reference/endpoint/solana-relayer/redeem"
             ]
