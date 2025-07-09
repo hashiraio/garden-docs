@@ -1,0 +1,169 @@
+---
+title: "Getting Started"
+description: "Learn how to use Garden's API to get quotes, submit orders, and track their status. This guide provides a quick overview of the core API endpoints."
+---
+
+<Note>
+    This guide uses a test API Key, please reach out to us over [discord](https://discord.gg/dZwSjh9922) for a production key.
+</Note>
+
+<Steps>
+  <Step title="Get Quote">
+    Let's get a quote to trade **BTC** on **Bitcoin Testnet4** to 0.001 **WBTC** on **Ethereum Sepolia**.
+    ```bash wrap
+    curl -X 'GET' \
+     'https://testnet.api.garden.finance/quote/?order_pair=bitcoin_testnet:primary::ethereum_sepolia:0x88e1032252c712681A3659986F452E910D2134D8&amount=100000&exact_out=true' \
+      -H 'accept: application/json'
+    ```
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
+    ```json wrap
+    {
+        "status":"Ok",
+        "result": {
+            "quotes": {
+                "btyrea8d":"100300"
+            },
+            "input_token_price":109398.0,
+            "output_token_price":109398.0
+        }
+    }
+    ```
+  </Step>
+  <Step title="Submit Order">
+    ```bash
+    curl -X 'POST' \
+    'https://testnet.api.garden.finance/orders' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'api-key: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+    -d '{
+        "source_chain": "bitcoin_testnet",
+        "source_asset": "primary",
+        "source_amount": "100300",
+        "destination_chain": "ethereum_sepolia",
+        "destination_asset": "0x88e1032252c712681A3659986F452E910D2134D8",
+        "destination_amount": "100000",
+        "initiator_destination_address": "0xAf0529D8B33936f5bf6a77209D9D34Af5A509C97",
+        "nonce": "69696969696",
+        "additional_data": {
+            "strategy_id": "btyrea8d",
+            "bitcoin_optional_recipient": "tb1quujt7pak90snx7takfxp25welgd3fahe3d6yme"
+        }
+    }'
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+    ```json wrap focus={11,48,63}
+    {
+        "status": "Ok",
+        "result": {
+            "created_at": "2025-07-09T17:04:32.753375757Z",
+            "updated_at": "2025-07-09T17:04:32.753375757Z",
+            "deleted_at": null,
+            "source_swap": {
+                "created_at": "2025-07-09T17:04:32.753375757Z",
+                "updated_at": "2025-07-09T17:04:32.753375757Z",
+                "deleted_at": null,
+                "swap_id": "tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk",
+                "chain": "bitcoin_testnet",
+                "asset": "primary",
+                "initiator": "ccbd0300fdb3be5f80e33c4dbcdf5500a646c92f8ffb670b9d55f01263f0923d",
+                "redeemer": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
+                "timelock": 144,
+                "filled_amount": "0",
+                "amount": "100300",
+                "secret_hash": "0aee2d1f6e6bfa976d405622b04dd307669c06d5005463e9815750d6a72f5eb4",
+                "secret": "",
+                "initiate_tx_hash": "",
+                "redeem_tx_hash": "",
+                "refund_tx_hash": "",
+                "initiate_block_number": "0",
+                "redeem_block_number": "0",
+                "refund_block_number": "0",
+                "required_confirmations": 1,
+                "current_confirmations": 0,
+                "initiate_timestamp": null,
+                "redeem_timestamp": null,
+                "refund_timestamp": null
+            },
+            "destination_swap": {
+                "created_at": "2025-07-09T17:04:32.753375757Z",
+                "updated_at": "2025-07-09T17:04:32.753375757Z",
+                "deleted_at": null,
+                "swap_id": "0f812041bb249a00c90e375fd432f67edc79c39cb936e7a1c1421ff4a83bb8ce",
+                "chain": "ethereum_sepolia",
+                "asset": "0x88e1032252c712681A3659986F452E910D2134D8",
+                "initiator": "0x661bA32eb5f86CaB358DDbB7F264b10c5825e2dd",
+                "redeemer": "0xAf0529D8B33936f5bf6a77209D9D34Af5A509C97",
+                "timelock": 600,
+                "filled_amount": "0",
+                "amount": "100000",
+                "secret_hash": "0aee2d1f6e6bfa976d405622b04dd307669c06d5005463e9815750d6a72f5eb4",
+                "secret": "",
+                "initiate_tx_hash": "",
+                "redeem_tx_hash": "",
+                "refund_tx_hash": "",
+                "initiate_block_number": "0",
+                "redeem_block_number": "0",
+                "refund_block_number": "0",
+                "required_confirmations": 0,
+                "current_confirmations": 0,
+                "initiate_timestamp": null,
+                "redeem_timestamp": null,
+                "refund_timestamp": null
+            },
+            "create_order": {
+                "created_at": "2025-07-09T17:04:32.753375757Z",
+                "updated_at": "2025-07-09T17:04:32.753375757Z",
+                "deleted_at": null,
+                "create_id": "66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f",
+                "block_number": "0",
+                "source_chain": "bitcoin_testnet",
+                "destination_chain": "ethereum_sepolia",
+                "source_asset": "primary",
+                "destination_asset": "0x88e1032252c712681A3659986F452E910D2134D8",
+                "initiator_source_address": "ccbd0300fdb3be5f80e33c4dbcdf5500a646c92f8ffb670b9d55f01263f0923d",
+                "initiator_destination_address": "0xAf0529D8B33936f5bf6a77209D9D34Af5A509C97",
+                "source_amount": "100300",
+                "destination_amount": "100000",
+                "fee": "0.32776180558325022",
+                "nonce": "69696969696",
+                "min_destination_confirmations": 0,
+                "timelock": 144,
+                "secret_hash": "0aee2d1f6e6bfa976d405622b04dd307669c06d5005463e9815750d6a72f5eb4",
+                "user_id": "7decd268",
+                "affiliate_fees": [],
+                "additional_data": {
+                    "strategy_id": "btyrea8d",
+                    "bitcoin_optional_recipient": "tb1quujt7pak90snx7takfxp25welgd3fahe3d6yme",
+                    "input_token_price": 109253.93519441674,
+                    "output_token_price": 109253.93519441674,
+                    "sig": "02c3e43d41a491f6a6f482432132a818aeeafb102a6b850f64575631023d23987c58df78601d75b4b9ec9fb6e72e20d30ffb6c760231f4805aa7692a8333e8e31c",
+                    "deadline": 1752084272,
+                    "is_blacklisted": false,
+                    "integrator": "DocsTesting",
+                    "version": "v2"
+                }
+            }
+        }
+    }
+    ```
+
+    <Note>
+        SwapID on the Bitcoin side is the htlc address [tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk](https://mempool.space/testnet4/address/tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk), let's send 0.001003 testnet BTC to it, you can do this by using our [faucet](https://testnetbtc.com).
+    </Note>
+  </Step>
+  <Step title="Check Order Status">
+      Wait until the `order.destination_swap.redeem_tx_hash` is set
+    ```bash wrap
+    curl -X 'GET' \
+    'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
+  </Step>
+</Steps>
+
+<Check>
+Congratulations! 🎉 You have successfully completed a cross-chain [swap](https://testnet-explorer.garden.finance/order/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f) on Garden. The presence of a `redeem_tx_hash` confirms that your destination assets have been delivered to your specified address.
+</Check>
+
+For any questions or support, join our [community](https://discord.gg/dZwSjh9922).
