@@ -1,0 +1,182 @@
+---
+title: "Quickstart"
+---
+
+## 0. Prerequistes
+
+This guide assumes that you have completed the [Setup](/developers/sdk/nodejs/setup) guide.
+
+## 1. Initialize wallets and providers
+
+<Note>
+    Initialize wallets and providers only for the chains you need.
+</Note>
+
+```js
+import {
+    BitcoinProvider,
+    BitcoinNetwork,
+    BitcoinWallet,
+} from '@catalogfi/wallets';
+import { createWalletClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+import { RpcProvider, Account } from 'starknet';
+
+// Ethereum wallet setup
+const account = privateKeyToAccount(`<YOUR_EVM_PRIVATE_KEY>`);
+const ethereumWalletClient = createWalletClient({
+  account,
+  chain: arbitrumSepolia,
+  transport: http(),
+});
+
+// Starknet wallet setup
+const starknetProvider = new RpcProvider(); // Using default RPC URL
+const starknetWallet = new Account(
+    starknetProvider,
+    <YOUR_STARKNET_ADDRESS>,
+    <YOUR_STARKNET_PRIVATE_KEY>,
+);
+```
+
+## 2. Configure Garden instance
+
+To initialize the Garden instance, you need to create a **digest key**. This is a 32-byte key that serves as a unique identifier, used for generating secrets (preimages for HTLCs). It functions as a Garden account, but it is strictly non-custodial, with no funds ever being associated with it or moved through it.
+
+<Tabs>
+    <Tab title="Using wallets">
+        ```js
+        import { Garden } from '@gardenfi/core';
+        import { Environment, DigestKey } from '@gardenfi/utils';
+
+        const digestKey = DigestKey.from('<YOUR_DIGEST_KEY>');
+
+        const garden = Garden.fromWallets({
+            environment: environment, // `testnet` or `mainnet`
+            digestKey: digestKey.val,
+            wallets: {
+                evm: ethereumWalletClient,
+                starknet: starknetWallet
+            }
+        });
+        ```
+    </Tab>
+    <Tab title="Using smart accounts">
+        ```js
+        import { Garden } from '@gardenfi/core';
+        import { Environment } from '@gardenfi/utils';
+
+        const garden = new Garden({
+            environment: environment, // `testnet` or `mainnet`
+            digestKey: digestKey.val,
+            htlc: {
+                evm: <IEVMHTLC>, // FIXME
+                starknet: <IStarknetHTLC>, // FIXME
+            },
+        });
+        ```
+    </Tab>
+</Tabs>
+
+## 3. Create a swap
+
+```js
+import { Quote, SwapParams } from '@gardenfi/core';
+import { Asset, SupportedAssets } from '@gardenfi/orderbook';
+
+const fromAsset = SupportedAssets.testnet.ethereum_sepolia_WBTC;
+const toAsset = SupportedAssets.testnet.bitcoin_testnet_BTC;
+
+const sendAmount = '1000000'; // 0.01 WBTC
+
+// Helper function to construct an order pair
+const constructOrderpair = (fromAsset: Asset, toAsset: Asset) =>
+  `${fromAsset.chain}:${fromAsset.atomicSwapAddress}::${toAsset.chain}:${toAsset.atomicSwapAddress}`;
+
+const orderPair = constructOrderpair(
+  fromAsset,
+  toAsset
+);
+
+// Get the quote for the send amount and order pair
+const quoteResult = await garden.quote.getQuote(
+  orderPair,
+  Number(sendAmount),
+  false, // Set this to true if you wish to specify the output (receive) amount
+);
+
+if (!quoteResult.ok) {
+  throw new Error(quoteResult.error);
+}
+
+// Choose a quote
+const [_strategyId, quoteAmount] = Object.entries(quoteResult.val.quotes)[0];
+
+const swapParams: SwapParams = {
+  fromAsset,
+  toAsset,
+  sendAmount,
+  receiveAmount: quoteAmount,
+  additionalData: {
+    strategyId: _strategyId,
+    btcAddress?: '<YOUR_BITCOIN_ADDRESS>',
+  },
+};
+
+const swapResult = await garden.swap(swapParams);
+
+if (!swapResult.ok) {
+  throw new Error(swapResult.error);
+}
+
+const order = swapResult.val;
+console.log('✅ Order created:', order.create_order.create_id);
+```
+
+## 4. Initiate the swap
+
+<Tabs>
+    <Tab title="Swapping from Bitcoin">
+        <Note>
+            When swapping from Bitcoin, you must send funds to the deposit address.
+        </Note>
+        ```js
+            const order = swapResult.val;
+            const depositAddress = order.source_swap.swap_id;
+        ```
+    </Tab>
+    <Tab title="Swapping to Bitcoin">
+        <Warning>
+            The first swap requires gas for token approval. Subsequent swaps will be gasless.
+        </Warning>
+        ```js
+        const order = swapResult.val;
+        const initRes = await garden.evmHTLC.initiate(order); // `garden.starknetHTLC` for Starknet
+
+        if (!initRes.ok) {
+            throw new Error(initRes.error);
+        }
+        ```
+    </Tab>
+</Tabs>
+
+## Settle the swap
+
+Garden handles swap settlement automatically. The `execute` function continuously polls for the order status and calls `redeem` when the status becomes redeemable.
+
+```js
+await garden.execute();
+
+// Subscribe to Garden events to track transaction statuses
+garden.on('error', (order, error) => {
+  console.error(
+    `Error occurred for order ID ${order.create_order.create_id}:`,
+    error
+  );
+});
+
+garden.on('success', (order, action, txHash) => {
+  console.log(`${order} ${action} ${txHash}`);
+});
+```

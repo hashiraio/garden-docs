@@ -6,15 +6,19 @@ description: "Learn how to implement affiliate fees to earn revenue from Garden 
 Garden allows partners to charge an affiliate fee for each swap initiated through their SDK or API integration. This fee must be specified when requesting a quote and is charged in addition to protocol and solver fees.
 
 <Info>
-Fees are expressed in basis points (bps), where 1 bps = 0.01%. For example, a 30 bps fee equals 0.3% of the source asset value.
+  Fees are expressed in basis points (bps), where 1 bps = 0.01%. For example, a
+  30 bps fee equals 0.3% of the source asset value.
 </Info>
 
-Affiliates can earn rewards in USDC or cbBTC on [supported chains](/developers/supported-chains). Fees can be sent entirely to a single address in one asset, or split across multiple addresses and assets. 
+Affiliates can earn rewards in USDC or cbBTC on [supported chains](/developers/supported-chains). Fees can be sent entirely to a single address in one asset, or split across multiple addresses and assets.
 
 For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereum address, and 20 bps in cbBTC to a Base address.
 
 <Note>
-The amount of each asset the affiliate will receive is calculated based on prices at the time of the quote and is also stored in the order data. All affiliate fees collected during the week are distributed to the specified addresses at the end of the week.
+  The amount of each asset the affiliate will receive is calculated based on
+  prices at the time of the quote and is also stored in the order data. All
+  affiliate fees collected during the week are distributed to the specified
+  addresses at the end of the week.
 </Note>
 
 ## Implementation using API
@@ -74,12 +78,14 @@ curl -X 'POST' \
 ```
 
 <Note>
-Refer to the [Supported assets](/developers/supported-chains) to find the asset addresses of USDC and cbBTC. Check out the full implementation using API [here](/api-reference/quickstart).
+  Refer to the [Supported assets](/developers/supported-chains) to find the
+  asset addresses of USDC and cbBTC. Check out the full implementation using API
+  [here](/api-reference/quickstart).
 </Note>
 
 ## Implementation using SDK
 
-You can also integrate affiliate fees via the Garden SDK for both **Node.js** and **React** environments. The process involves two steps:  
+You can also integrate affiliate fees via the Garden SDK for both **Node.js** and **React** environments. The process involves two steps:
 
 <Steps>
   <Step title="Request Quote">
@@ -90,11 +96,10 @@ You can also integrate affiliate fees via the Garden SDK for both **Node.js** an
   </Step>
 </Steps>
 
-
 To request a quote with an affiliate fee, include the `affiliateFee` parameter in the `options` object.
 
 <CodeGroup>
-```ts Node.js
+```ts NodeJS
 const orderpair = 'ethereum_sepolia:0x29C9C37D0Fec7E64AFab0f806c8049d9e2f9B0b6::arbitrum_sepolia:0x795Dcb58d1cd4789169D5F938Ea05E17ecEB68cA'
 const amount = 100000
 const isExactOut = false
@@ -104,10 +109,11 @@ const quoteRes = await garden.quote.getQuote(
     amount,
     isExactOut,
     {
-      affiliateFee: 10, // in bps
+        affiliateFee: 10, // in bps
     },
 );
-```
+
+````
 
 ```ts React
 import { SupportedAssets } from "@gardenfi/orderbook";
@@ -118,7 +124,7 @@ const { swapAndInitiate, getQuote } = useGarden();
 const fromAsset = SupportedAssets.testnet.ethereum_sepolia_WBTC;
 const toAsset = SupportedAssets.testnet.arbitrum_sepolia_WBTC;
 const amount = 100000;
-const isExactOut = false; 
+const isExactOut = false;
 
 const quoteRes = await getQuote({
     fromAsset,
@@ -126,10 +132,11 @@ const quoteRes = await getQuote({
     amount,
     isExactOut,
     options: {
-      affiliateFee: 10 // in bps
+        affiliateFee: 10 // in bps
     },
 });
-```
+````
+
 </CodeGroup>
 
 While creating the order using the `swap` function, you can include the `affiliateFee` property to specify the recipient addresses, the fee amounts (in bps), and optionally the assets and chains you want the payout to be in. Garden supports payout in USDC and cbBTC.
@@ -138,26 +145,27 @@ While creating the order using the `swap` function, you can include the `affilia
 ```ts Node.js
 const [_strategyId, quoteAmount] = Object.entries(quoteRes.val.quotes)[0];
 const swapParams: SwapParams = {
-  fromAsset,
-  toAsset,
-  sendAmount,
-  receiveAmount: quoteAmount,
-  additionalData: {
-    strategyId: _strategyId,
-  },
-  affiliateFee:[
-    {
-        address: "<affiliate_address_1>",
-        chain: "<chain_1>",
-        asset: "<asset_1>",
-        fee: 10
+    fromAsset,
+    toAsset,
+    sendAmount,
+    receiveAmount: quoteAmount,
+    additionalData: {
+        strategyId: _strategyId,
     },
-    //... Add more splits as needed
-  ]
+    affiliateFee:[
+        {
+            address: "<affiliate_address_1>",
+            chain: "<chain_1>",
+            asset: "<asset_1>",
+            fee: 10
+        },
+        //... Add more splits as needed
+    ]
 };
 
 const swapResult = await garden.swap(swapParams);
-```
+
+````
 
 ```ts React
 const [_strategyId, quoteAmount] = Object.entries(quoteRes.val.quotes)[0];
@@ -171,17 +179,20 @@ const response = await swapAndInitiate({
     },
     affiliateFee: [
         {
-        address: "<affiliate_address_1>",
-        chain: "<chain_1>",
-        asset: "<asset_1>",
-        fee: 10
-      },
-      //... Add more splits as needed
+            address: "<affiliate_address_1>",
+            chain: "<chain_1>",
+            asset: "<asset_1>",
+            fee: 10
+        },
+        //... Add more splits as needed
     ]
 });
-```
+````
+
 </CodeGroup>
 
 <Note>
-Check out full SDK implementation for [Node.js](/developers/sdk/nodejs/quickstart) or [React](/developers/sdk/react/quickstart) here.
+  Check out full SDK implementation for
+  [Node.js](/developers/sdk/nodejs/quickstart) or
+  [React](/developers/sdk/react/quickstart) here.
 </Note>

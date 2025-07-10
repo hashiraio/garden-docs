@@ -1,0 +1,84 @@
+---
+title: "Setup"
+---
+
+## Core Dependencies
+
+Install the following packages:
+
+<CodeGroup>
+    ```bash npm
+    npm install @gardenfi/core @gardenfi/orderbook @gardenfi/react-hooks @tanstack/react-query wagmi
+    ```    
+    ```bash yarn
+    yarn add @gardenfi/core @gardenfi/orderbook @gardenfi/react-hooks @tanstack/react-query wagmi @starknet-react/core starknet starknetkit
+    ```
+</CodeGroup>
+
+In case your app supports Starknet:
+
+<CodeGroup>
+    ```bash npm
+    npm install @starknet-react/core starknet starknetkit
+    ```
+    ```bash yarn
+    yarn add @starknet-react/core starknet starknetkit
+    ```
+</CodeGroup>
+
+## Required Polyfills
+
+<Tabs>
+  <Tab title="Vite">
+    Install the Vite plugins:
+
+    <CodeGroup>
+        ```bash npm
+        npm install --save-dev vite-plugin-wasm vite-plugin-top-level-await vite-plugin-node-polyfills
+        ```
+        ```bash yarn
+        yarn add --dev vite-plugin-wasm vite-plugin-top-level-await vite-plugin-node-polyfills
+        ```
+    </CodeGroup>
+
+    Update your `vite.config.ts` as follows:
+
+    ```typescript
+    import { defineConfig } from "vite";
+    import wasm from "vite-plugin-wasm";
+    import { nodePolyfills } from "vite-plugin-node-polyfills";
+    import topLevelAwait from "vite-plugin-top-level-await";
+
+    export default defineConfig({
+    plugins: [
+        nodePolyfills(),
+        wasm(),
+        topLevelAwait(),
+        // Other plugins
+    ],
+    // Other settings
+    });
+    ```
+  </Tab>
+  <Tab title="Webpack">
+    In your Webpack config add support for Wasm:
+
+    ```typescript
+    /** @type {import('next').NextConfig} */
+
+    const nextConfig = {
+        webpack: function (config, options) {
+            // Other webpack config options
+            config.experiments = {
+                ...config.experiments,
+                asyncWebAssembly: true,
+            };
+            return config;
+        },
+        // Other settings
+    };
+
+    module.exports = nextConfig;
+    ```
+  </Tab>
+</Tabs>

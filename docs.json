@@ -81,17 +81,27 @@
             "pages": [
               "developers/overview",
               "developers/supported-chains",
-              "developers/affiliate-fee",
-              "developers/troubleshooting"
+              "developers/affiliate-fees"
             ]
           },
           {
             "group": "SDK",
             "pages": [
               "developers/sdk/sdk",
-              "developers/sdk/authentication",
-              "developers/sdk/enumerations",
-              "developers/sdk/interfaces"
+              {
+                "group": "React",
+                "pages": [
+                  "developers/sdk/react/setup",
+                  "developers/sdk/react/quickstart"
+                ]
+              },
+              {
+                "group": "NodeJS",
+                "pages": [
+                  "developers/sdk/nodejs/setup",
+                  "developers/sdk/nodejs/quickstart"
+                ]
+              }
             ]
           },
 
@@ -99,7 +109,6 @@
             "group": "Core Concepts",
             "pages": [
               "developers/core/core",
-              "developers/core/auth",
               "developers/core/order-lifecycle",
               "developers/core/sessions"
             ]
@@ -201,7 +210,7 @@
         },
         {
           "anchor": "Community",
-          "href": "https://discord.gg/Sahx6QyD",
+          "href": "https://discord.gg/dZwSjh9922",
           "icon": "discord"
         }
       ]
@@ -220,7 +229,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Launch app",
+      "label": "Launch App",
       "href": "https://app.garden.finance"
     }
   },
