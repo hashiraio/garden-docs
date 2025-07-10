@@ -180,3 +180,7 @@ garden.on('success', (order, action, txHash) => {
   console.log(`${order} ${action} ${txHash}`);
 });
 ```
+
+<Note>
+    It is important to keep the service running until completion of the swap. If the instance is stopped, restarting it will ensure Garden checks the status of the order and resubmits the redeem if necessary.
+</Note>
