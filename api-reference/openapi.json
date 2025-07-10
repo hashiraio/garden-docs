@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Garden API", 
+    "title": "Garden API",
     "version": "2.0.0",
     "description": "API specification for various endpoints"
   },
@@ -11,7 +11,7 @@
       "description": "Endpoints for getting quote and attestations"
     },
     {
-      "name": "Users", 
+      "name": "Users",
       "description": "Endpoints for getting, creating and modifying user details"
     },
     {
@@ -29,7 +29,10 @@
       "variables": {
         "environment": {
           "default": "api",
-          "enum": ["api", "api.testnet"]
+          "enum": [
+            "api",
+            "api.testnet"
+          ]
         }
       }
     }
@@ -54,12 +57,33 @@
           {
             "type": "string",
             "title": "mainnet",
-            "enum": ["bitcoin", "ethereum", "base", "arbitrum", "bera", "corn", "starknet", "hyperliquid", "solana", "botanix"]
+            "enum": [
+              "bitcoin",
+              "ethereum",
+              "base",
+              "arbitrum",
+              "bera",
+              "corn",
+              "starknet",
+              "hyperliquid",
+              "solana",
+              "botanix"
+            ]
           },
           {
-              "type": "string",
-              "title": "testnet", 
-              "enum": ["bitcoin_testnet", "ethereum_sepolia", "base_sepolia", "arbitrum_sepolia", "starknet_sepolia", "hyperliquid_testnet", "solana_testnet", "monad_testnet", "citrea_testnet"]
+            "type": "string",
+            "title": "testnet",
+            "enum": [
+              "bitcoin_testnet",
+              "ethereum_sepolia",
+              "base_sepolia",
+              "arbitrum_sepolia",
+              "starknet_sepolia",
+              "hyperliquid_testnet",
+              "solana_testnet",
+              "monad_testnet",
+              "citrea_testnet"
+            ]
           }
         ]
       },
@@ -88,13 +112,34 @@
         "oneOf": [
           {
             "type": "string",
-            "title": "mainnet", 
-            "enum": ["cbbtc", "btc", "wbtc", "ibtc", "lbtc", "btcn", "usdc", "seed", "sol"]
+            "title": "mainnet",
+            "enum": [
+              "cbbtc",
+              "btc",
+              "wbtc",
+              "ibtc",
+              "lbtc",
+              "btcn",
+              "usdc",
+              "seed",
+              "sol"
+            ]
           },
           {
             "type": "string",
-            "title": "testnet", 
-            "enum": ["cbbtc", "btc", "wbtc", "ibtc", "lbtc", "btcn", "usdc", "seed", "sol", "usdt"]
+            "title": "testnet",
+            "enum": [
+              "cbbtc",
+              "btc",
+              "wbtc",
+              "ibtc",
+              "lbtc",
+              "btcn",
+              "usdc",
+              "seed",
+              "sol",
+              "usdt"
+            ]
           }
         ]
       },
@@ -135,49 +180,111 @@
       "Account": {
         "type": "object",
         "properties": {
-          "chain": { 
+          "chain": {
             "$ref": "#/components/schemas/Chain"
           },
           "asset": {
             "$ref": "#/components/schemas/Asset"
           },
-          "owner": { "type": "string" },
-          "delegate": { "type": "string"}
+          "owner": {
+            "type": "string"
+          },
+          "delegate": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          }
         }
       },
       "Swap": {
         "type": "object",
         "properties": {
-          "created_at": { "type": "string" },
-          "updated_at": { "type": "string" },
-          "deleted_at": { "type": "string", "nullable": true },
-          "swap_id": { "type": "string" },
-          "chain": { "$ref": "#/components/schemas/Chain" },
-          "asset": { "$ref": "#/components/schemas/Asset" },
-          "initiator": { "type": "string" },
-          "redeemer": { "type": "string" },
-          "timelock": { "type": "integer" },
-          "filled_amount": { "type": "string" },
-          "amount": { "type": "string" },
-          "secret_hash": { "type": "string" },
-          "secret": { "type": "string" },
-          "instant_refund_hash": { "type": "string" },
-          "initiate_tx_hash": { "type": "string" },
-          "redeem_tx_hash": { "type": "string" },
-          "refund_tx_hash": { "type": "string" },
-          "initiate_block_number": { "type": "string", "nullable": true },
-          "redeem_block_number": { "type": "string", "nullable": true },
-          "refund_block_number": { "type": "string", "nullable": true },
-          "required_confirmations": { "type": "integer" },
-          "current_confirmations": { "type": "integer" }
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "deleted_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "swap_id": {
+            "type": "string"
+          },
+          "chain": {
+            "$ref": "#/components/schemas/Chain"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "initiator": {
+            "type": "string"
+          },
+          "redeemer": {
+            "type": "string"
+          },
+          "timelock": {
+            "type": "integer"
+          },
+          "filled_amount": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "secret_hash": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "string"
+          },
+          "instant_refund_hash": {
+            "type": "string"
+          },
+          "initiate_tx_hash": {
+            "type": "string"
+          },
+          "redeem_tx_hash": {
+            "type": "string"
+          },
+          "refund_tx_hash": {
+            "type": "string"
+          },
+          "initiate_block_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "redeem_block_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "refund_block_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "required_confirmations": {
+            "type": "integer"
+          },
+          "current_confirmations": {
+            "type": "integer"
+          }
         }
       },
       "Order": {
         "type": "object",
         "properties": {
-          "created_at": { "type": "string" },
-          "updated_at": { "type": "string" },
-          "deleted_at": { "type": "string", "nullable": true },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "deleted_at": {
+            "type": "string",
+            "nullable": true
+          },
           "source_swap": {
             "$ref": "#/components/schemas/Swap"
           },
@@ -194,7 +301,7 @@
         "properties": {
           "chain": {
             "$ref": "#/components/schemas/ChainVerbose"
-          }, 
+          },
           "address": {
             "type": "string",
             "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
@@ -245,44 +352,84 @@
           }
         }
       },
+      "AffiliateFee": {
+        "type": "object",
+        "requred": [],
+        "properties": {
+          "address": {"type": "string"},
+          "chain": {"$ref": "#/components/schemas/Chain"},
+          "asset": {"$ref": "#/components/schemas/Asset"},
+          "fee": {"type": "number", "example": 0.1 }
+        }
+      },
       "OrderRequest": {
         "type": "object",
         "properties": {
-          "source": { "$ref": "#/components/schemas/Account" },
-          "destination": { "$ref": "#/components/schemas/Account" },
-          "secret_hash": { "type": "string" },
-          "nonce": { "type": "string" },
-          "affiliate_fees": { "type": "array" }
+          "source": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "slippage": {
+            "type": "number",
+            "example": 0.5
+          },
+          "secret_hash": {
+            "type": "string",
+            "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "affiliate_fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffiliateFee"
+            }
+          }
         }
       },
       "InitiateActionRequest": {
         "type": "object",
         "title": "Initiate",
         "properties": {
-          "signature": { "type": "string" }
+          "signature": {
+            "type": "string"
+          }
         },
-        "required": ["signature"]
+        "required": [
+          "signature"
+        ]
       },
       "RedeemActionRequest": {
         "type": "object",
         "title": "Redeem",
         "properties": {
-          "secret": { "type": "string" }
+          "secret": {
+            "type": "string"
+          }
         },
-        "required": ["secret"]
+        "required": [
+          "secret"
+        ]
       },
       "RefundActionRequest": {
-          "type": "object",
-          "title": "Refund",
-          "properties": {}
+        "type": "object",
+        "title": "Refund",
+        "properties": {}
       },
       "InstantRefundActionRequest": {
-          "type": "object",
-          "title": "Instant Refund",
-          "properties": {
-              "signature": { "type": "string" }
-          },
-        "required": ["signature"]
+        "type": "object",
+        "title": "Instant Refund",
+        "properties": {
+          "signature": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signature"
+        ]
       },
       "PaginatedData": {
         "type": "object",
@@ -291,10 +438,18 @@
             "type": "array",
             "items": {}
           },
-          "page": { "type": "integer" },
-          "total_pages": { "type": "integer" },
-          "total_items": { "type": "integer" },
-          "per_page": { "type": "integer" }
+          "page": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "total_items": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          }
         }
       },
       "Response": {
@@ -302,7 +457,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "error": {
             "type": "string",
@@ -310,12 +468,143 @@
           }
         }
       },
+      "BitcoinInitiateRequest": {
+        "type": "object",
+        "required": [
+          "to",
+          "amount"
+        ],
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "EVMTransaction": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "chain_id": {
+            "type": "number"
+          },
+          "data": {
+            "type": "string"
+          },
+          "gas_limit": {
+            "type": "number"
+          },
+          "nonce": {
+            "type": "number"
+          },
+          "max_fee_per_gas": {
+            "type": "number"
+          },
+          "max_priority_fee_per_gas": {
+            "type": "string"
+          }
+        }
+      },
+      "EVMTypedData": {
+        "type": "object",
+        "properties": {
+          "types": {
+            "properties": {
+              "EIP712Domain": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "object",
+            "properties": {
+              "redeemer": {
+                "type": "string"
+              },
+              "timelock": {
+                "type": "number"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "secretHash": {
+                "type": "string"
+              }
+            }
+          },
+          "domain": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "chainId": {
+                "type": "string"
+              },
+              "verifyingContract": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "EVMInitiateRequest": {
+        "type": "object",
+    
+        "required": [
+          "transaction",
+          "typed_data"
+        ],
+        "properties": {
+          "transaction": {
+            "$ref": "#/components/schemas/EVMTransaction"
+          },
+          "typed_data": {
+            "$ref": "#/components/schemas/EVMTypedData"
+          }
+        }  
+      },
+      "InitiateRequest": {
+        "anyOf": [
+          {
+            "title": "btc",
+            "$ref": "#/components/schemas/BitcoinInitiateRequest"
+          },
+          {
+            "title": "evm",
+            "$ref": "#/components/schemas/EVMInitiateRequest"
+          }
+        ]
+      },
       "QuotePriceResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "type": "object",
@@ -340,7 +629,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "type": "string"
@@ -356,7 +648,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "type": "object",
@@ -378,7 +673,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "type": "array",
@@ -397,7 +695,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/Order"
@@ -413,7 +714,10 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["Ok", "Error"]
+            "enum": [
+              "Ok",
+              "Error"
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/Solver"
@@ -426,10 +730,18 @@
       },
       "ActionResponse": {
         "allOf": [
-          {"$ref": "#/components/schemas/Response"},
           {
-            "result": {
-              "type": "string"
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "required": [
+              "result"
+            ],
+            "properties": {
+              "result": {
+                "type": "string"
+              }
             }
           }
         ]
@@ -446,7 +758,9 @@
     "/swaps": {
       "get": {
         "summary": "Get all swaps",
-        "tags": ["Swaps"],
+        "tags": [
+          "Swaps"
+        ],
         "responses": {
           "200": {
             "description": "List of all swaps",
@@ -467,7 +781,9 @@
     "/swaps/{id}": {
       "get": {
         "summary": "Get swap by id",
-        "tags": ["Swaps"],
+        "tags": [
+          "Swaps"
+        ],
         "responses": {
           "200": {
             "description": "Get the swap with the given id",
@@ -483,37 +799,52 @@
       },
       "patch": {
         "summary": "Update swap by doing an action",
-        "tags": ["Swaps"],
+        "tags": [
+          "Swaps"
+        ],
         "parameters": [
-            {
-              "in": "path",
-              "name": "id",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "in": "query",
-              "name": "action",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "enum": ["initiate", "redeem", "refund", "instant-refund"]
-              }
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "initiate",
+                "redeem",
+                "refund",
+                "instant-refund"
+              ]
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                  "anyOf": [
-                      {"$ref": "#/components/schemas/InitiateActionRequest" },
-                      {"$ref": "#/components/schemas/RedeemActionRequest" },
-                      {"$ref": "#/components/schemas/RefundActionRequest" },
-                      {"$ref": "#/components/schemas/InstantRefundActionRequest" }
-                  ]
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/InitiateActionRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/RedeemActionRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/RefundActionRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/InstantRefundActionRequest"
+                  }
+                ]
               }
             }
           }
@@ -535,7 +866,9 @@
     "/swaps/{id}/instant-refund-hash": {
       "get": {
         "summary": "Get instant refund hash for the given swap",
-        "tags": ["Swaps"],
+        "tags": [
+          "Swaps"
+        ],
         "responses": {
           "200": {
             "description": "Get the swap with the given id",
@@ -553,7 +886,9 @@
     "/quote": {
       "get": {
         "summary": "Get quote price",
-        "tags": ["Quote"],
+        "tags": [
+          "Quote"
+        ],
         "parameters": [
           {
             "in": "query",
@@ -621,7 +956,9 @@
     "/health": {
       "get": {
         "summary": "Get Server health",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "responses": {
           "200": {
             "description": "Get Server Health",
@@ -639,7 +976,9 @@
     "/assets": {
       "get": {
         "summary": "Get Assets",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "parameters": [
           {
             "in": "query",
@@ -676,7 +1015,9 @@
     "/fees": {
       "get": {
         "summary": "Get swap fees",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "responses": {
           "200": {
             "description": "Total swap fees",
@@ -694,7 +1035,9 @@
     "/volume": {
       "get": {
         "summary": "Get swap volume",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "responses": {
           "200": {
             "description": "Total swap volume",
@@ -712,7 +1055,9 @@
     "/orders": {
       "get": {
         "summary": "Get all orders",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "responses": {
           "200": {
             "description": "List of orders",
@@ -731,24 +1076,26 @@
       },
       "post": {
         "summary": "Create order",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
+                "$ref": "#/components/schemas/OrderRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Order created successfully",
+            "description": "Once the order is created, the next step is to intiate on the source chain, the response contains all the required information to initiate on the source chain",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MatchedOrderResponse"
+                  "$ref": "#/components/schemas/InitiateRequest"
                 }
               }
             }
@@ -759,7 +1106,9 @@
     "/orders/{order}": {
       "get": {
         "summary": "Get matched order by ID",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -814,7 +1163,9 @@
     "/users/{user}/orders": {
       "get": {
         "summary": "Get all matched orders by user",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -848,7 +1199,9 @@
     },
     "/users/{user}/count": {
       "get": {
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "summary": "Get order count for user",
         "parameters": [
           {
@@ -876,7 +1229,9 @@
     },
     "/solvers/{solver}/liquidity": {
       "get": {
-        "tags": ["Quote"],
+        "tags": [
+          "Quote"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -905,7 +1260,9 @@
     "/solvers/{solver}/committed-funds": {
       "get": {
         "summary": "Get solver committed funds",
-        "tags": ["Orderbook"],
+        "tags": [
+          "Orderbook"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -945,4 +1302,4 @@
       }
     }
   }
-} 
+}
