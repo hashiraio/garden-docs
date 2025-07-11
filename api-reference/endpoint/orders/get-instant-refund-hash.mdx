@@ -3,3 +3,9 @@ title: 'Instant Refund Hash'
 openapi: 'GET /orders/{order}/instant-refund-hash'
 version: 1.0
 --- 
+
+Retrieve the instant refund hash for a specific swap order. This endpoint returns the transaction hash that can be used to immediately refund an order before the atomic swap's timelock expires.
+
+Use this endpoint to:
+- Get the refund transaction hash for immediate cancellation
+- Enable instant order cancellation when price moves beyond slippage

@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://{environment}.garden.finance/v1",
+      "url": "https://{environment}.garden.finance/v2",
       "variables": {
         "environment": {
           "default": "api",
@@ -25,7 +25,7 @@
     "securitySchemes": {
       "garden-app-id": {
         "type": "apiKey",
-        "name": "api-key",
+        "name": "garden-app-id",
         "in": "header",
         "description": "API key for authentication."
       }
@@ -824,7 +824,8 @@
     },
     "/quote": {
       "get": {
-        "summary": "Get quote price",
+        "description": "Get the quote for the given asset pair",
+        "summary": "swap quote",
         "parameters": [
           {
             "in": "query",
@@ -844,18 +845,16 @@
           },
           {
             "in": "query",
-            "name": "amount",
-            "required": true,
+            "name": "from_amount",
             "schema": {
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "exact_out",
-            "required": true,
+            "name": "to_amount",
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           }
         ],

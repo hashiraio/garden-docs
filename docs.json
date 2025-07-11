@@ -142,7 +142,6 @@
           {
             "group": "Get Started",
             "pages": [
-              "api-reference/quickstart",
               "api-reference/getting-started"
             ]
           },
