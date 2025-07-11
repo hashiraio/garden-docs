@@ -27,7 +27,7 @@
         "type": "apiKey",
         "name": "api-key",
         "in": "header",
-        "description": "API key to identify the application"
+        "description": "API key for authentication."
       }
     },
     "schemas": {
@@ -379,7 +379,7 @@
       },
       "AffiliateFee": {
         "type": "object",
-        "requred": [],
+        "required": [],
         "properties": {
           "address": {"type": "string"},
           "asset": {"$ref": "#/components/schemas/AffiliateFeeAsset"},
@@ -789,7 +789,7 @@
     },
     "examples": {
       "OrderPairBTCWBTC": {
-        "summary": "Order pair for Native Bitcoin -> WBTC on Etherum",
+        "summary": "Order pair for BTC -> WBTC on Ethereum",
         "value": "bitcoin:primary::ethereum:0x795dcb58d1cd4789169d5f938ea05e17eceb68ca"
       }
     }
@@ -810,7 +810,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get the swap with the given id",
+            "description": "Swap with the given ID",
             "content": {
               "application/json": {
                 "schema": {
@@ -875,11 +875,11 @@
     },
     "/health": {
       "get": {
-        "summary": "Get Server health",
+        "summary": "Get server health.",
         "security": [],
         "responses": {
           "200": {
-            "description": "Get Server Health",
+            "description": "Empty object.",
             "content": {
               "application/json": {
                 "schema": {
@@ -889,7 +889,7 @@
             }
           },
           "500": {
-            "description": "Server Down",
+            "description": "Server error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -903,10 +903,10 @@
     },
     "/chains": {
       "get": {
-        "summary": "Get all thes supported chains and assets",
+        "summary": "Get all the supported chains and assets.",
         "responses": {
           "200": {
-            "description": "Get assets",
+            "description": "Object with supported chains and assets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -923,7 +923,7 @@
     },
     "/assets": {
       "get": {
-        "summary": "Get all the supported assets on the given chain",
+        "summary": "Get all the supported assets on the given chain.",
         "parameters": [
           {
             "in": "query",
@@ -935,7 +935,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Array of Assets",
+            "description": "List of assets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -952,10 +952,10 @@
     },
     "/fees": {
       "get": {
-        "summary": "Get swap fees",
+        "summary": "Get swap fees.",
         "responses": {
           "200": {
-            "description": "Total swap fees",
+            "description": "Total swap fees.",
             "content": {
               "application/json": {
                 "schema": {
@@ -969,10 +969,10 @@
     },
     "/volume": {
       "get": {
-        "summary": "Get swap volume",
+        "summary": "Get swap volume.",
         "responses": {
           "200": {
-            "description": "Total swap volume",
+            "description": "Total swap volume.",
             "content": {
               "application/json": {
                 "schema": {
@@ -986,10 +986,10 @@
     },
     "/orders": {
       "get": {
-        "summary": "Get all orders",
+        "summary": "Get all orders.",
         "responses": {
           "200": {
-            "description": "List of orders",
+            "description": "List of orders.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1004,7 +1004,7 @@
         }
       },
       "post": {
-        "summary": "Create order",
+        "summary": "Create order.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1017,7 +1017,7 @@
         },
         "responses": {
           "200": {
-            "description": "Once the order is created, the next step is to intiate on the source chain, the response contains all the required information to initiate on the source chain",
+            "description": "Object with required information to initiate order on source chain.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1031,7 +1031,7 @@
     },
     "/orders/{order}": {
       "get": {
-        "summary": "Get matched order by ID",
+        "summary": "Get matched order by ID.",
         "parameters": [
           {
             "in": "path",
@@ -1044,7 +1044,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Matched order details",
+            "description": "Object with order details.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1056,7 +1056,7 @@
         }
       },
       "patch": {
-        "summary": "Update swap by doing an action",
+        "summary": "Update swap by doing an action.",
         "tags": [
           "Swaps"
         ],
@@ -1109,7 +1109,7 @@
         },
         "responses": {
           "200": {
-            "description": "Order created successfully",
+            "description": "Executed action successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1123,7 +1123,7 @@
     },
     "/solvers/{solver}": {
       "get": {
-        "summary": "Get solver details",
+        "summary": "Get solver details.",
         "parameters": [
           {
             "in": "path",
@@ -1136,7 +1136,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Solver's response",
+            "description": "Object with solver response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1150,7 +1150,7 @@
     },
     "/users/{user}/orders": {
       "get": {
-        "summary": "Get all matched orders by user",
+        "summary": "Get all matched orders by user.",
         "parameters": [
           {
             "in": "path",
@@ -1184,7 +1184,7 @@
     },
     "/users/{user}/count": {
       "get": {
-        "summary": "Get order count for user",
+        "summary": "Get order count for user.",
         "parameters": [
           {
             "in": "path",
@@ -1197,7 +1197,7 @@
         ],
         "responses": {
           "200": {
-            "description": "User's order count",
+            "description": "User's order count.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1221,10 +1221,10 @@
             }
           }
         ],
-        "summary": "Get liquidity information",
+        "summary": "Get liquidity information.",
         "responses": {
           "200": {
-            "description": "Liquidity information",
+            "description": "Liquidity information.",
             "content": {
               "application/json": {
                 "schema": {
