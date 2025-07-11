@@ -12,10 +12,6 @@
         "environment": {
           "default": "api",
           "enum": ["api", "testnet.api"]
-          "enum": [
-            "api",
-            "testnet.api"
-          ]
         }
       }
     }
