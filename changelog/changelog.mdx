@@ -1,0 +1,111 @@
+---
+title: "Changelog"
+description: "Product updates and announcements"
+---
+<Update label="May 9, 2025" description="SDK v2.1.7">
+  * Update script file
+  * add unichain support
+</Update>
+
+<Update label="May 9, 2025" description="SDK v2.1.6">
+  * fix/clear unnecessary api calls in react-hooks
+</Update>
+
+<Update label="May 8, 2025" description="SDK v2.1.5">
+  ## Package versions
+    ```ts
+    "@gardenfi/core": "2.1.5",
+    "@gardenfi/orderbook": "2.1.4",
+    "@gardenfi/react-hooks": "2.1.5",
+    "@gardenfi/utils": "2.1.3",
+    ```
+    ## What's new
+    ### Affiliate fee support
+
+    Integrators can now specify affiliate fees when swapping.
+    You can pass an array of affiliate addresses and their fee shares in bips. Quotes are provided after subtracting the total affiliate fees.
+
+    **Example usage:** 
+
+    **Quote:**
+    ```ts
+    const quote = await garden.quote.getQuoteFromAssets(
+    SupportedAssets.testnet.arbitrum_sepolia_WBTC,
+    SupportedAssets.testnet.bitcoin_testnet_BTC,
+    100000,
+    false,
+    {
+        affiliateFee: 30, // fee in bips
+    },
+    );
+    console.log('Quote :', quote.val);
+    ```
+    **Swap:**
+    When swapping, provide an array of affiliate fee objects with their address and fee share:
+    ```ts
+    const order: SwapParams = {
+    toAsset: SupportedAssets.testnet.arbitrum_sepolia_WBTC,
+    fromAsset: SupportedAssets.testnet.bitcoin_testnet_BTC,
+    sendAmount: '100000',
+    receiveAmount: '99400',
+    affiliateFee: [
+        {
+        fee: 30,  // fee share in bips
+        address: '0x004Cc75ACF4132Fc08cB6a252E767804F303F729',
+        },
+        // More affiliates can be added here
+    ],
+    additionalData: {
+        strategyId: 'aa1dbtyr',
+    },
+    };
+    ```
+
+    ### New Quote Function: `getQuoteFromAssets`
+    Added a new function in the quote instance: `getQuoteFromAssets`.
+    This function lets you get quotes by passing assets directly, instead of using an order pair.
+</Update>
+
+<Update label="May 8, 2025" description="SDK v2.1.4">
+    ## Package versions
+    ```ts
+    "@gardenfi/core": "2.1.4",
+    "@gardenfi/orderbook": "2.1.3",
+    "@gardenfi/react-hooks": "2.1.4",
+    "@gardenfi/utils": "2.1.3",
+    ```
+    ## What's new 
+    ### Starknet Support Added
+
+    Starknet is now supported in the Garden SDK.
+    You can seamlessly integrate Starknet wallets or HTLCs with your Garden instance.
+
+    **Example usage:**
+    ```ts
+    import { RpcProvider, Account } from 'starknet';
+
+    const snProvider = new RpcProvider({
+      nodeUrl: STARKNET_CONFIG[Network.TESTNET].nodeUrl,
+    });
+    const starknetWallet = new Account(
+      snProvider,
+      STARKNET_ADDRESS,
+      STARKNET_PRIVATE_KEY,
+      '1',
+      '0x3',
+    );
+
+    const garden = Garden.fromWallets({
+      environment: Environment.TESTNET,
+      digestKey: DIGEST_KEY,
+      wallets: {
+        evm: evmWallet,
+        starknet: starknetWallet,
+      },
+    });
+    ```
+    ## Fixes
+    ### Switch Network Support in Node Environment
+
+    Previously swith network was only supported in browser environment. Now fixed it to support node env too.
+</Update>
