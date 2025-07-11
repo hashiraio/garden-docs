@@ -217,6 +217,10 @@
           "owner": {
             "type": "string"
           },
+          "delegate": {
+            "type": "string",
+            "nullable": true
+          },
           "amount": {
             "type": "string"
           }
@@ -504,10 +508,14 @@
       "BitcoinInitiateRequest": {
         "type": "object",
         "required": [
+          "order_id",
           "to",
           "amount"
         ],
         "properties": {
+          "order_id": {
+            "type": "string"
+          },
           "to": {
             "type": "string"
           },
@@ -594,12 +602,14 @@
       },
       "EVMInitiateRequest": {
         "type": "object",
-    
         "required": [
           "transaction",
           "typed_data"
         ],
         "properties": {
+          "order_id": {
+            "type": "string"
+          },
           "transaction": {
             "$ref": "#/components/schemas/EVMTransaction"
           },
@@ -611,21 +621,12 @@
       "SolanaInitiateRequest": {
         "type": "object",
         "properties": {
-          "method": {
-            "type": "string", 
-            "enum": ["initiate"]
+          "order_id": {
+            "type": "string"
           },
-          "args": {
-            "type": "object",
-            "properties": {
-              "amount": { "type": "string", "example": "100000000" },
-              "expiresIn": { "type": "number", "example": 3600 },
-              "redeemer": { "type": "string" },
-              "secretHash": { "type": "string", "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173" }
-            }
-          },
-          "programId": { "type": "string" },
-          "idl": { "type": "object" }
+          "versioned_tx": {
+            "type": "string"
+          }
         }
       },
       "InitiateRequest": {

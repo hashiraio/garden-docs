@@ -9,32 +9,14 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
 
 <Tabs>
   <Tab title="from bitcoin">
-    
 <Steps>
   <Step title="Get Quote">
     Let's get a quote to trade BTC on **Bitcoin Testnet4** to 0.001 WBTC on **Ethereum Sepolia**.
-    
     ```bash wrap
     curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
     -H 'accept: application/json'
     ```
-
     Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
-    
-    
-    ```bash from evm wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    ```bash from solana wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    ```bash from starknet wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    </CodeGroup>
   </Step>
   <Step title="Submit Order">
     ```bash
@@ -132,27 +114,12 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
   <Tab title="from evm">
     <Steps>
   <Step title="Get Quote">
-    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
-    
-    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
-    <CodeGroup>
-    ```bash from bitcoin wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    ```bash from evm wrap
+    Let's get a quote to trade WBTC on **Ethereum Sepolia** to 0.001 BTC on **Bitcoin Testnet4**.
+    ```bash wrap
     curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
     -H 'accept: application/json'
     ```
-    ```bash from solana wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    ```bash from starknet wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    </CodeGroup>
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
   </Step>
   <Step title="Submit Order">
     ```bash
@@ -250,27 +217,12 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
   <Tab title="from solana">
     <Steps>
   <Step title="Get Quote">
-    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
-    
-    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
-    <CodeGroup>
-    ```bash from bitcoin wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    ```bash from evm wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
+    Let's get a quote to trade SOL on **Solana Testnet** to 0.001 BTC on **Bitcoin Testnet4**.
     ```bash from solana wrap
     curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
     -H 'accept: application/json'
     ```
-    ```bash from starknet wrap
-    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-    -H 'accept: application/json'
-    ```
-    </CodeGroup>
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
   </Step>
   <Step title="Submit Order">
     ```bash
