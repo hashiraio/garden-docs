@@ -129,9 +129,9 @@ title: "Quickstart"
 
                 return (
                     <ConnectionProvider endpoint={rpcEndpoint}>
-                    <WalletProvider wallets={[]} autoConnect>
-                        {children}
-                    </WalletProvider>
+                        <WalletProvider wallets={[]} autoConnect>
+                            { children }
+                        </WalletProvider>
                     </ConnectionProvider>
                 );
             };
@@ -224,10 +224,8 @@ title: "Quickstart"
         }
         ```
     </Step>
-
 </Steps>
 
 <Note>
-  To include affiliate fees in your swap flow, refer to the implementation
-  [here](/developers/affiliate-fees#react).
+  To include affiliate fees in your swap flow, refer to the implementation [here](/developers/affiliate-fees#react).
 </Note>
