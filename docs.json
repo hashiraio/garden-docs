@@ -86,7 +86,7 @@
           {
             "group": "SDK",
             "pages": [
-              "developers/sdk/sdk",
+              "developers/sdk/overview",
               {
                 "group": "React",
                 "pages": [
