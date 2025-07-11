@@ -43,6 +43,8 @@ export const getExplorerUrl = (chain, address) => {
     return "/developers/contracts/atomic-swap-btc";
   } else if (chain.includes("starknet")){
     return CHAIN_EXPLORERS[chain] + "contract/" + address + "#overview";
+  } else if(chain.includes("solana")){
+    return CHAIN_EXPLORERS[chain] + "address/" + "2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF" + (chain.includes("testnet") ? "?cluster=devnet" : "");
   } else {
     return CHAIN_EXPLORERS[chain] + "address/" + address + "#code";
   }
