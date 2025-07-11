@@ -1,13 +1,13 @@
 ---
-title: "Affiliate Fees"
-description: "Learn how to implement affiliate fees to earn revenue from Garden swaps through your integration"
+title: 'Affiliate Fees'
+description: 'Learn how to implement affiliate fees to earn revenue from Garden swaps through your integration'
 ---
 
 Garden allows partners to charge an affiliate fee for each swap initiated through their SDK or API integration. This fee must be specified when requesting a quote and is charged in addition to protocol and solver fees.
 
 <Info>
-  Fees are expressed in basis points (bps), where 1 bps = 0.01%. For example, a
-  30 bps fee equals 0.3% of the source asset value.
+  Fees are expressed in basis points (bps), where 1 bps = 0.01%. For example, a 30 bps fee equals
+  0.3% of the source asset value.
 </Info>
 
 Affiliates can earn rewards in USDC or cbBTC on [supported chains](/developers/supported-chains). Fees can be sent entirely to a single address in one asset, or split across multiple addresses and assets.
@@ -15,10 +15,9 @@ Affiliates can earn rewards in USDC or cbBTC on [supported chains](/developers/s
 For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereum address, and 20 bps in cbBTC to a Base address.
 
 <Note>
-  The amount of each asset the affiliate will receive is calculated based on
-  prices at the time of the quote and is also stored in the order data. All
-  affiliate fees collected during the week are distributed to the specified
-  addresses at the end of the week.
+  The amount of each asset the affiliate will receive is calculated based on prices at the time of
+  the quote and is also stored in the order data. All affiliate fees collected during the week are
+  distributed to the specified addresses at the end of the week.
 </Note>
 
 ## Implementation
@@ -90,8 +89,8 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
             <Step title="Request Quote">
                 Requesting a quote with the affiliate fee applied
             </Step>
-            <Step title="Attest and Submit">
-                Attesting the quote and submitting the order
+            <Step title="Create Order">
+                Submitting the order using the selected quote
             </Step>
         </Steps>
 
@@ -184,8 +183,10 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
             ```
         </CodeGroup>
     </Tab>
+
 </Tabs>
 
 <Note>
-  Check out the full SDK implementation for [React](/developers/sdk/react/quickstart) or [NodeJS](/developers/sdk/nodejs/quickstart) here.
+  Check out the full SDK implementation for [React](/developers/sdk/react/quickstart) or
+  [NodeJS](/developers/sdk/nodejs/quickstart) here.
 </Note>
