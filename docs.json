@@ -8,7 +8,7 @@
     "dark": "#1b1b1d"
   },
   "favicon": "/favicon.svg",
-  "openapi": "api/openapi.json",
+  "openapi": "api-reference/openapi.json",
   "navigation": {
     "tabs": [
       {
@@ -37,11 +37,11 @@
               {
                 "group": "Benefits",
                 "pages": [
-                  "home/fundamentals/benefits/benefits",
-                  "home/fundamentals/benefits/cross-chain-intents",
-                  "home/fundamentals/benefits/free-option-protection",
-                  "home/fundamentals/benefits/better-price",
-                  "home/fundamentals/benefits/no-custody-risk"
+                  "home/fundamentals/benefits/overview",
+                  "home/fundamentals/benefits/no-custody-risk",
+                  "home/fundamentals/benefits/broad-chain-coverage",
+                  "home/fundamentals/benefits/better-prices",
+                  "home/fundamentals/benefits/free-option-protection"
                 ]
               }
             ]
@@ -113,7 +113,7 @@
             ]
           },
           {
-            "group": "Cookbooks",
+            "group": "Cookbook",
             "pages": [
               "developers/cookbook/welcome",
               "developers/cookbook/integrate",
@@ -132,7 +132,7 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "Quickstart",
+            "group": "Get Started",
             "pages": [
               "api-reference/quickstart",
               "api-reference/getting-started"
@@ -188,20 +188,20 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hello@garden.finance"
+        "href": "https://discord.gg/dZwSjh9922"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dev.garden.finance"
+      "label": "Launch app",
+      "href": "https://app.garden.finance"
     }
   },
   "footer": {
     "socials": {
       "x": "https://x.com/garden_finance",
       "github": "https://github.com/gardenfi",
-      "discord": "https://discord.gg/Sahx6QyD"
+      "discord": "https://discord.gg/dZwSjh9922"
     }
   }
 }
