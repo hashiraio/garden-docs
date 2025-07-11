@@ -20,6 +20,7 @@
               {
                 "group": "Introduction",
                 "pages": [
+                  "index",
                   "home/fundamentals/introduction/intents",
                   "home/fundamentals/introduction/atomic-swaps",
                   "home/fundamentals/introduction/solvers",
