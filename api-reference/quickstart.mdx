@@ -11,191 +11,440 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
     <Tab title="From Bitcoin">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade BTC on **Bitcoin Testnet4** to 0.001 WBTC on **Ethereum Sepolia**.
+                Let's get a quote to trade 0.0005 BTC on **Bitcoin Testnet4** to WBTC on **Base Sepolia**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
-                -H 'accept: application/json'
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=bitcoin_testnet:btc&to=base_sepolia:wbtc&from_amount=50000' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
                 ```bash
-                curl --location 'https://api.garden.finance/v1/orders' \
-                    --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
+                curl --location 'http://testnet.api.garden.finance/v2/orders' \
+                    --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                     --header 'Content-Type: application/json' \
                     --data '{
                         "source": {
-                            "chain": "ethereum:wbtc",
-                            "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                            "asset": "bitcoin_testnet:btc",
+                            "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd"
                             "amount": "50000"
                         },
                         "destination": {
-                            "chain": "bitcoin:btc",
-                            "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
+                            "asset": "base_sepolia:wbtc",
+                            "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729"
                             "amount": "49850"
                         }
-                }'
+                    }'
                 ```
-                ```bash wrap
+                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
+                ```bash Response expandable wrap
                 {
-                    "to": "",
-                    "amount": ""
+                    "status": "Ok",
+                    "result": {
+                        "order_id": "f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121",
+                        "to": "tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp",
+                        "amount": "50000"
+                    }
                 }
                 ```
+                <Note>
+                    Send 0.0005 BTC to tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp, you can use out [faucet](https://testnetbtc.com)
+                </Note>
             </Step>
             <Step title="Check Order Status">
                 Wait until the `order.destination_swap.redeem_tx_hash` is set
                 ```bash wrap
                 curl -X 'GET' \
-                'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+                'http://testnet.api.garden.finance/v2/orders/id/f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
             </Step>
         </Steps>
     </Tab>
     <Tab title="From EVM">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade WBTC on **Ethereum Sepolia** to 0.001 BTC on **Bitcoin Testnet4**.
+                Let's get a quote to trade 0.0005 WBTC on **Ethereum Sepolia** to BTC on **Bitcoin Testnet4**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
-                -H 'accept: application/json'
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=ethereum_sepolia:wbtc&to=bitcoin_testnet:btc&from_amount=50000' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
                 ```bash
-                curl --location 'https://api.garden.finance/v1/orders' \
-                    --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                        "source": {
-                            "chain": "ethereum:wbtc",
-                            "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
-                            "amount": "50000"
-                        },
-                        "destination": {
-                            "chain": "bitcoin:btc",
-                            "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
-                            "amount": "49850"
-                        }
-                }'
+                curl --location 'http://testnet.api.garden.finance/v2/orders' \
+                        --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                        --header 'Content-Type: application/json' \
+                        --data '{
+                            "source": {
+                                "asset": "ethereum_sepolia:wbtc",
+                                "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                                "amount": "50000"
+                            },
+                            "destination": {
+                                "asset": "bitcoin_testnet:btc",
+                                "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                                "amount": "49850"
+                            }
+                        }'
                 ```
-                ```bash wrap
+                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
+                ```bash Response expandable wrap 
                 {
-                    "transaction": {
-                        "to": "<redeemer>",
-                        "value": "0",
-                        "chain_id": 0,
-                        "data": "0x00000",
-                        "gas_limit": 1000000
-                    },
-                    "typed_data": {
-                        "types": {
-                            "EIP712Domain": [
-                                { "name": "", "type": "" },
-                                
-                            ]
+                    "status": "Ok",
+                    "result": {
+                        "order_id": "646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d",
+                        "transaction": {
+                            "to": "0x88e1032252c712681a3659986f452e910d2134d8",
+                            "value": "0x0",
+                            "data": "0x97ffc7ae000000000000000000000000661ba32eb5f86cab358ddbb7f264b10c5825e2dd0000000000000000000000000000000000000000000000000000000000001c20000000000000000000000000000000000000000000000000000000000000c35061d22856ce12bc3693df0cd4967d404400449f61810080c52638fd805b379723",
+                            "gas_limit": "0x493e0",
+                            "chain_id": 11155111
+                        },
+                        "typed_data": {
+                            "domain": {
+                                "name": "HTLC",
+                                "version": "2",
+                                "chainId": "0xaa36a7",
+                                "verifyingContract": "0x88e1032252c712681a3659986f452e910d2134d8"
+                            },
+                            "primaryType": "Initiate",
+                            "types": {
+                                "EIP712Domain": [
+                                    {
+                                        "name": "name",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "name": "version",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "name": "chainId",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "name": "verifyingContract",
+                                        "type": "address"
+                                    }
+                                ],
+                                "Initiate": [
+                                    {
+                                        "name": "redeemer",
+                                        "type": "address"
+                                    },
+                                    {
+                                        "name": "timelock",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "name": "amount",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "name": "secretHash",
+                                        "type": "bytes32"
+                                    }
+                                ]
+                            },
+                            "message": {
+                                "redeemer": "0x661ba32eb5f86cab358ddbb7f264b10c5825e2dd",
+                                "timelock": "0x1c20",
+                                "amount": "0xc350",
+                                "secretHash": "0x61d22856ce12bc3693df0cd4967d404400449f61810080c52638fd805b379723"
+                            }
                         }
-                    },
+                    }
                 }
                 ```
+                <Tabs>
+                    <Tab title="Normal">
+                        <Note>
+                        Call `sendTransaction(response.result.transaction)` to initiate the swap.
+                            ```typescript
+                            await window.ethereum.request({
+                                method: 'eth_sendTransaction', 
+                                params: [response.result.transaction]
+                            });
+                            ```
+                        </Note>
+                    </Tab>
+                    <Tab title="Gasless">
+                        <Note>
+                            Call `signTypedDataV4(response.result.typed_data)` to sign the typed data, then call PATCH /orders/{order}?action="initiate" with the signature to initiate the swap.
+
+                            ```typescript
+                            // Sign the typed data
+                            const signature = await window.ethereum.request({
+                                method: 'eth_signTypedData_v4',
+                                params: [userAddress, JSON.stringify(response.result.typed_data)]
+                            });
+
+                            // Initiate the swap with the signature
+                            await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ signature })
+                            });
+                            ```
+                        </Note>
+
+                    </Tab>
+                </Tabs>
             </Step>
             <Step title="Check Order Status">
                 Wait until the `order.destination_swap.redeem_tx_hash` is set
-                ```bash wrap
+                 ```bash wrap
                 curl -X 'GET' \
-                'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+                'http://testnet.api.garden.finance/v2/orders/id/646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
             </Step>
         </Steps>
     </Tab>
     <Tab title="From Solana">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade SOL on **Solana Testnet** to 0.001 BTC on **Bitcoin Testnet4**.
-                ```bash from solana wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
-                -H 'accept: application/json'
+                Let's get a quote to trade 0.354608265 SOL on **Solana Testnet** to BTC on **Bitcoin Testnet4**.
+                ```bash wrap
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=solana_testnet:sol&to=bitcoin_testnet:btc&from_amount=354608265' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
                 ```bash
-                curl --location 'https://api.garden.finance/v1/orders' \
-                    --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                        "source": {
-                            "chain": "ethereum:wbtc",
-                            "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
-                            "amount": "50000"
-                        },
-                        "destination": {
-                            "chain": "bitcoin:btc",
-                            "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
-                            "amount": "49850"
-                        }
-                }'
+                curl --location 'http://testnet.api.garden.finance/v2/orders' \
+                        --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                        --header 'Content-Type: application/json' \
+                        --data '{
+                            "source": {
+                                "asset": "solana_testnet:sol",
+                                "owner": "YH4btvqb4JBWSEJh22MuA231ekpJ5JqbBXQY1apJtKH",
+                                "amount": "354608265"
+                            },
+                            "destination": {
+                                "asset": "bitcoin_testnet:btc",
+                                "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                                "amount": "49850"
+                            }
+                        }'
                 ```
-                ```bash wrap
+                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
+                ```bash Response wrap
                 {
-                    "method": "initiate",
-                    "args": {
-                        "amount": "100000000",
-                        "expiresIn": 3600,
-                        "redeemer": "<RedeemerPublicKey>",
-                        "secretHash": "0x00"
-                    },
-                    "programId": "GardenProgramPubkey",
-                    "idl": {}
+                    "status": "Ok",
+                    "result": {
+                        "order_id": "dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3",
+                        "versioned_tx": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100020408032aa331a727d64421581d1ec2ea7cdde7ac7bb04a7ab7bb5e7f4ea5992f088df52173853db57069928d3dc78a4248d83fa5f2d20c5ce110fe5030ff14ed9f000000000000000000000000000000000000000000000000000000000000000017b7828ca6c4f06b51139a60254f81fe1249c8e2b122febf32ca81322b9f1e8ef39c52ce23e7860515cf568e3d148773ea7f1b9628097e64f844c22b328364c501030301000258053f7b71994b940e89e4221500000000c04b03000000000044070018cffb963a80cb5bf8974e0d64934c614d26340d947ddf3b762a014cac8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7"
+                    }
                 }
                 ```
+                <Note>
+                Sign and send the `versioned_tx` using your Solana wallet to initiate the swap.
+
+                ```javascript
+                // Convert hex versioned transaction to buffer
+                const buffer = Buffer.from(response.result.versioned_tx, 'hex');
+                
+                // Create VersionedTransaction from buffer
+                const transaction = VersionedTransaction.deserialize(buffer);
+                
+                // Sign and send using your wallet
+                const signature = await wallet.signAndSendTransaction(transaction);
+                ```
+                </Note>
             </Step>
             <Step title="Check Order Status">
                 Wait until the `order.destination_swap.redeem_tx_hash` is set
-                ```bash wrap
+                 ```bash wrap
                 curl -X 'GET' \
-                'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+                'http://testnet.api.garden.finance/v2/orders/id/dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
             </Step>
         </Steps>
     </Tab>
     <Tab title="From Starknet">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade WBTC on **Starknet Sepolia** to 0.001 BTC on **Bitcoin Testnet4**.
+                Let's get a quote to trade 0.0005 WBTC on **Starknet Sepolia** to BTC on **Bitcoin Testnet4**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&to_amount=100000'
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=starknet_sepolia:wbtc&to=bitcoin_testnet:btc&from_amount=50000' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
                 ```bash
-                curl --location 'https://api.garden.finance/v1/orders' \
-                    --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                        "source": {
-                            "chain": "ethereum:wbtc",
-                            "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
-                            "amount": "50000"
-                        },
-                        "destination": {
-                            "chain": "bitcoin:btc",
-                            "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
-                            "amount": "49850"
-                        }
-                }'
+                curl --location 'http://testnet.api.garden.finance/v2/orders' \
+                        --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                        --header 'Content-Type: application/json' \
+                        --data '{
+                            "source": {
+                                "asset": "starknet_sepolia:wbtc",
+                                "owner": "0x00609190b1348bcc06da44d58c79709495c11a5a6f0b9e154e1209f2a17dd933",
+                                "amount": "50000"
+                            },
+                            "destination": {
+                                "asset": "bitcoin_testnet:btc",
+                                "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                                "amount": "49850"
+                            }
+                        }'
                 ```
-                ```bash wrap
+                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
+                ```bash Response expandable wrap
                 {
-                    "to": "",
-                    "amount": ""
+                    "status": "Ok",
+                    "result": {
+                        "order_id": "08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372",
+                        "typed_data": {
+                            "domain": {
+                                "chainId": "SN_SEPOLIA",
+                                "name": "HTLC",
+                                "revision": "1",
+                                "version": "1"
+                            },
+                            "message": {
+                                "amount": {
+                                    "high": "0x0",
+                                    "low": "0xc350"
+                                },
+                                "redeemer": "3419807808164513772718725483164424774502669183354591566218616648407888577029",
+                                "secretHash": [
+                                    3887207343,
+                                    2041436155,
+                                    1951867791,
+                                    3328046620,
+                                    3034489147,
+                                    987985137,
+                                    3049690424,
+                                    3858545034
+                                ],
+                                "timelock": "2880"
+                            },
+                            "primaryType": "Initiate",
+                            "types": {
+                                "Initiate": [
+                                    {
+                                        "name": "redeemer",
+                                        "type": "ContractAddress"
+                                    },
+                                    {
+                                        "name": "amount",
+                                        "type": "u256"
+                                    },
+                                    {
+                                        "name": "timelock",
+                                        "type": "u128"
+                                    },
+                                    {
+                                        "name": "secretHash",
+                                        "type": "u128*"
+                                    }
+                                ],
+                                "StarknetDomain": [
+                                    {
+                                        "name": "name",
+                                        "type": "shortstring"
+                                    },
+                                    {
+                                        "name": "version",
+                                        "type": "shortstring"
+                                    },
+                                    {
+                                        "name": "chainId",
+                                        "type": "shortstring"
+                                    },
+                                    {
+                                        "name": "revision",
+                                        "type": "shortstring"
+                                    }
+                                ]
+                            }
+                        },
+                        "transaction": {
+                            "calldata": [
+                                "0x78f8ae98fe78b5df9d3755b5910864c028d5249b4af685eb45687b1b76a4205",
+                                "0xb40",
+                                "0xc350",
+                                "0x0",
+                                "0xe7b213af",
+                                "0x79add7fb",
+                                "0x7457238f",
+                                "0xc65df61c",
+                                "0xb4dea13b",
+                                "0x3ae374f1",
+                                "0xb5c69538",
+                                "0xe5fcb98a"
+                            ],
+                            "selector": "0x2aed25fcd0101fcece997d93f9d0643dfa3fbd4118cae16bf7d6cd533577c28",
+                            "to": "0x6579d255314109429a4477d89629bc2b94f529ae01979c2f8014f9246482603"
+                        }
+                    }
                 }
                 ```
+                
+                <Tabs>
+                    <Tab title="Normal">
+                        <Note>
+                        Execute the transaction using `response.result.transaction` to initiate the swap.
+
+                        ```typescript
+                        await account.execute([{
+                            contractAddress: response.result.transaction.to,
+                            entrypoint: response.result.transaction.selector,
+                            calldata: response.result.transaction.calldata
+                        }]);
+                        ```
+                        </Note>
+                    </Tab>
+                    <Tab title="Gasless">
+                        <Note>
+                            Sign the typed data using `response.result.typed_data`, then call PATCH /orders/{order}?action="initiate" with the signature to initiate the swap.
+
+                            ```typescript
+                            // Sign the typed data
+                            const signature = await account.signMessage(response.result.typed_data);
+
+                            // Initiate the swap with the signature
+                            await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ signature })
+                            });
+                            ```
+                        </Note>
+                    </Tab>
+                </Tabs>
             </Step>
             <Step title="Check Order Status">
                 Wait until the `order.destination_swap.redeem_tx_hash` is set
                 ```bash wrap
                 curl -X 'GET' \
-                'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+                'http://testnet.api.garden.finance/v2/orders/id/08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'                
                 ```
+                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
             </Step>
         </Steps>
     </Tab>
