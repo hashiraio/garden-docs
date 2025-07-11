@@ -232,13 +232,6 @@
           "created_at": {
             "type": "string"
           },
-          "updated_at": {
-            "type": "string"
-          },
-          "deleted_at": {
-            "type": "string",
-            "nullable": true
-          },
           "swap_id": {
             "type": "string"
           },
@@ -254,11 +247,17 @@
           "redeemer": {
             "type": "string"
           },
+          "delegate": {
+            "type": "string"
+          },
           "timelock": {
             "type": "integer"
           },
           "filled_amount": {
             "type": "string"
+          },
+          "asset_price": {
+            "type": "integer"
           },
           "amount": {
             "type": "string"
@@ -269,7 +268,7 @@
           "secret": {
             "type": "string"
           },
-          "instant_refund_hash": {
+          "instant_refund_tx": {
             "type": "string"
           },
           "initiate_tx_hash": {
@@ -298,21 +297,29 @@
           },
           "current_confirmations": {
             "type": "integer"
+          },
+          "initiate_timestamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "redeem_timestamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "refund_timestamp": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
       "Order": {
         "type": "object",
         "properties": {
+          "order_id": {
+            "type": "string"
+          },
           "created_at": {
             "type": "string"
-          },
-          "updated_at": {
-            "type": "string"
-          },
-          "deleted_at": {
-            "type": "string",
-            "nullable": true
           },
           "source_swap": {
             "$ref": "#/components/schemas/Swap"
@@ -320,8 +327,24 @@
           "destination_swap": {
             "$ref": "#/components/schemas/Swap"
           },
-          "create_order": {
-            "$ref": "#/components/schemas/OrderRequest"
+          "slippage": {
+            "type": "number",
+            "example": 0.5
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "affiliate_fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffiliateFee"
+            }
+          },
+          "integrator": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
           }
         }
       },
@@ -618,6 +641,19 @@
           }
         }  
       },
+      "StarknetTransaction": {
+        "type": "object",
+        "properties": {
+          "calldata": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "selector": { "type": "string", "example": "0x2aed25fcd0101fcece997d93f9d0643dfa3fbd4118cae16bf7d6cd533577c28" },
+          "to": { "type": "string", "example": "0x2448040b22b27f5a814756e67da005701e525658b162d4f0343d2e011bc6dad" }
+        }
+      },
+      "StarknetTypedData": {
+      },
       "SolanaInitiateRequest": {
         "type": "object",
         "properties": {
@@ -684,31 +720,6 @@
           }
         }
       },
-      "QuoteStrategiesResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "Ok",
-              "Error"
-            ]
-          },
-          "result": {
-            "type": "object",
-            "properties": {
-              "strategy_id": {
-                "$ref": "#/components/schemas/Strategy"
-              }
-            },
-            "nullable": true
-          },
-          "error": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "OrdersResponse": {
         "type": "object",
         "properties": {
@@ -732,42 +743,22 @@
         }
       },
       "OrderResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "Ok",
-              "Error"
-            ]
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
           },
-          "result": {
-            "$ref": "#/components/schemas/Order"
-          },
-          "error": {
-            "type": "string",
-            "nullable": true
+          {
+            "type": "object",
+            "required": [
+              "result"
+            ],
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
           }
-        }
-      },
-      "SolverResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "Ok",
-              "Error"
-            ]
-          },
-          "result": {
-            "$ref": "#/components/schemas/Solver"
-          },
-          "error": {
-            "type": "string",
-            "nullable": true
-          }
-        }
+        ]
       },
       "ActionResponse": {
         "allOf": [
@@ -786,12 +777,6 @@
             }
           }
         ]
-      }
-    },
-    "examples": {
-      "OrderPairBTCWBTC": {
-        "summary": "Order pair for BTC -> WBTC on Ethereum",
-        "value": "bitcoin:primary::ethereum:0x795dcb58d1cd4789169d5f938ea05e17eceb68ca"
       }
     }
   },
@@ -1048,7 +1033,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Order"
+                  "$ref": "#/components/schemas/OrderResponse"
                 }
               }
             }
