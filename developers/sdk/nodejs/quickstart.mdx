@@ -23,9 +23,9 @@ title: "Quickstart"
         import { RpcProvider, Account } from 'starknet';
 
         // Ethereum wallet setup
-        const account = privateKeyToAccount(`<YOUR_EVM_PRIVATE_KEY>`);
+        const ethereumAccount = privateKeyToAccount('<YOUR_EVM_PRIVATE_KEY>');
         const ethereumWalletClient = createWalletClient({
-        account,
+        ethereumAccount,
         chain: arbitrumSepolia,
         transport: http(),
         });
@@ -34,16 +34,16 @@ title: "Quickstart"
         const starknetProvider = new RpcProvider(); // Using default RPC URL
         const starknetWallet = new Account(
             starknetProvider,
-            <YOUR_STARKNET_ADDRESS>,
-            <YOUR_STARKNET_PRIVATE_KEY>,
+            '<YOUR_STARKNET_ADDRESS>',
+            '<YOUR_STARKNET_PRIVATE_KEY>',
         );
 
         // Solana wallet setup
-        const privateKeyBytes = new Uint8Array(<PRIVATE_KEY_BYTES>);
-        const user = web3.Keypair.fromSecretKey(privateKeyBytes);
-        const connection = new web3.Connection(RPC_URL, { commitment: 'confirmed' });
-        const userWallet = new anchor.Wallet(user);
-        const solanaProvider = new anchor.AnchorProvider(connection, userWallet);
+        const solanaPrivKeyBytes = new Uint8Array('<YOUR_SOLANA_PRIVATE_KEY_BYTES>');
+        const solanaUser = web3.Keypair.fromSecretKey(solanaPrivKeyBytes);
+        const solanaConnection = new web3.Connection(RPC_URL, { commitment: 'confirmed' });
+        const solanaWallet = new anchor.Wallet(solanaUser);
+        const solanaProvider = new anchor.AnchorProvider(solanaConnection, solanaWallet);
         ```
     </Step>
     <Step title="Configure Garden instance">
@@ -52,7 +52,7 @@ title: "Quickstart"
         </Tip>
 
         <Tabs>
-            <Tab title="Using wallets">
+            <Tab title="Default wallet clients">
                 ```js
                 import { Garden } from '@gardenfi/core';
                 import { Environment, DigestKey } from '@gardenfi/utils';
@@ -70,12 +70,9 @@ title: "Quickstart"
                 });
                 ```
             </Tab>
-            <Tab title="Custom setup">
+            <Tab title="Custom client configuration">
                 <Note>
-                    You can initialize the Garden instance with your own HTLC implementations instead of using Wagmi or StarknetKit or Anchor. Check out the
-                    [IEVMHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/evm/htlc.types.ts)
-                    [IStarknetHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/starknet/starknetHTLC.types.ts) and
-                    [ISolanaHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/solana/htlc/ISolanaHTLC.ts) interfaces for more details.
+                    You can initialize the Garden instance with your own HTLC client implementations. Check out the [IEVMHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/evm/htlc.types.ts), [IStarknetHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/starknet/starknetHTLC.types.ts), and [ISolanaHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/solana/htlc/ISolanaHTLC.ts) interfaces for more details.
                 </Note>
 
                 ```js
@@ -184,7 +181,7 @@ title: "Quickstart"
 
         // Subscribe to Garden events to track transaction statuses
         garden.on('error', (order, error) => {
-            console.error(`Error occurred for order ID ${order.create_order.create_id}:`,error);
+            console.error(`Error occurred for order ID ${order.create_order.create_id}:`, error);
         });
 
         garden.on('success', (order, action, txHash) => {
