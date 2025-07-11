@@ -2,16 +2,513 @@
 id: supported-chains
 title: Supported Chains and Assets
 ---
+Garden uses the following contracts to perform swaps on respective chains:
 
-import {mainnetSupportedAssetsConfig, testnetSupportedAssetsConfig, SupportedAssets, AssetRow} from "/snippets/supported-assets.jsx";
-
-Garden uses the following contracts to perform swaps on respective chains in the mainnet environment:
 <Tabs>
     <Tab title="Mainnet">
-        <SupportedAssets supportedAssetsConfig={mainnetSupportedAssetsConfig}/>
+        <table>
+            <thead>
+                <tr>
+                <th>Chain</th>
+                <th colspan="4">Asset HTLCs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/arbitrum.svg" width="20" alt="Arbitrum" />
+                        </Frame>
+                        <strong>Arbitrum</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://arbiscan.io/address/0x6b6303fab8ec7232b4f2a7b9fa58e5216f608fcb#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                            </Frame>
+                            <span>WBTC</span>
+                            </a>
+                            <a
+                            href="https://arbiscan.io/address/0xeae7721d779276eb0f5837e2fe260118724a2ba4#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/usdc.svg" width="20" alt="USDC" />
+                            </Frame>
+                            <span>USDC</span>
+                            </a>
+                            <a
+                            href="https://arbiscan.io/address/0xdc74a45e86dedf1ff7c6dac77e0c2f082f9e4f72#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/iBTC.png" width="20" alt="iBTC" />
+                            </Frame>
+                            <span>iBTC</span>
+                            </a>    
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/base.svg" width="20" alt="Base" />
+                        </Frame>
+                        <strong>Base</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://basescan.io/address/0xeae7721d779276eb0f5837e2fe260118724a2ba4#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/cbbtc.svg" width="20" alt="cbBTC" />
+                            </Frame>
+                            <span>cbBTC</span>
+                            </a>
+                            <a
+                            href="https://basescan.io/address/0xd8a6e3fca403d79b6ad6216b60527f51cc967d39#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/usdc.svg" width="20" alt="USDC" />
+                            </Frame>
+                            <span>USDC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/bera.svg" width="20" alt="Bera" />
+                        </Frame>
+                        <strong>Bera</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://berascan.com/address/0x39f3294352208905fc6ebf033954E6c6455CdB4C#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/LBTC.svg" width="20" alt="LBTC" />
+                            </Frame>
+                            <span>LBTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/BotanixIcon.jpg" width="20" alt="Botanix" />
+                        </Frame>
+                        <strong>Botanix</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://uniscan.xyz/address/0xD8a6E3FCA403d79b6AD6216b60527F51cc967D39"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/BotanixBTC.png" width="20" alt="WBTC" />
+                            </Frame>
+                            <span>WBTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/btc.svg" width="20" alt="Bitcoin" />
+                        </Frame>
+                        <strong>Bitcoin</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="/developers/contracts/atomic-swap-btc"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/chains/btc.svg" width="20" alt="BTC" />
+                            </Frame>
+                            <span>BTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/corn.svg" width="20" alt="Corn" />
+                        </Frame>
+                        <strong>Corn</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://cornscan.io/address/0xeaE7721d779276eb0f5837e2fE260118724a2Ba4"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/bitcorn.svg" width="20" alt="BTCN" />
+                            </Frame>
+                            <span>BTCN</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/ethereum.svg" width="20" alt="Ethereum" />
+                        </Frame>
+                        <strong>Ethereum</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://etherscan.io/address/0x795dcb58d1cd4789169d5f938ea05e17eceb68ca#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                            </Frame>
+                            <span>WBTC</span>
+                            </a>
+                            <a
+                            href="https://etherscan.io/address/0xd8a6e3fca403d79b6ad6216b60527f51cc967d39#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/usdc.svg" width="20" alt="USDC" />
+                            </Frame>
+                            <span>USDC</span>
+                            </a>
+                            <a
+                            href="https://etherscan.io/address/0xeae7721d779276eb0f5837e2fe260118724a2ba4#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/cbbtc.svg" width="20" alt="cbBTC" />
+                            </Frame>
+                            <span>cbBTC</span>
+                            </a>
+                            <a
+                            href="https://etherscan.io/address/0xDC74a45e86DEdf1fF7c6dac77e0c2F082f9E4F72#code"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/iBTC.png" width="20" alt="iBTC" />
+                            </Frame>
+                            <span>iBTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/hyperliquid.svg" width="20" alt="HyperEVM" />
+                        </Frame>
+                        <strong>HyperEVM</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://hyperscan.gas.zip/address/0x39f3294352208905fc6ebf033954E6c6455CdB4C?tab=contract"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/chains/btc.svg" width="20" alt="uBTC" />
+                            </Frame>
+                            <span>uBTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/solana.png" width="20" alt="Solana" />
+                        </Frame>
+                        <strong>Solana</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://explorer.solana.com/address/2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/chains/solana.png" width="20" alt="SOL" />
+                            </Frame>
+                            <span>SOL</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/starknet.svg" width="20" alt="Starknet" />
+                        </Frame>
+                        <strong>Starknet</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://starkscan.co/contract/0x07defd8eb3b770005ab1ca5f89ad31f98fb5bc3c52deaeafd130be3b49f967b4#overview"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                            </Frame>
+                            <span>WBTC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="flex items-center gap-2">
+                        <Frame>
+                            <img src="/images/chains/unichain.svg" width="20" alt="Unichain" />
+                        </Frame>
+                        <strong>Unichain</strong>
+                    </td>
+                    <td colspan="4">
+                        <div class="flex gap-4">
+                            <a
+                            href="https://uniscan.xyz/address/0xD8a6E3FCA403d79b6AD6216b60527F51cc967D39"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                            </Frame>
+                            <span>WBTC</span>
+                            </a>
+                            <a
+                            href="https://uniscan.xyz/address/0x795Dcb58d1cd4789169D5F938Ea05E17ecEB68cA"
+                            class="border-none flex items-center gap-1"
+                            >
+                            <Frame>
+                                <img src="/images/assets/usdc.svg" width="20" alt="USDC" />
+                            </Frame>
+                            <span>USDC</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </Tab>
     <Tab title="Testnet">
-        <SupportedAssets supportedAssetsConfig={testnetSupportedAssetsConfig}/>
+        <table>
+            <thead>
+                <tr>
+                <th>Chain</th>
+                <th colspan="4">Asset HTLCs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/arbitrum.svg" width="20" alt="Arbitrum Sepolia" />
+                    </Frame>
+                    <strong>Arbitrum Sepolia</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://sepolia.arbiscan.io/address/0x1cd0bBd55fD66B4C5F7dfE434eFD009C09e628d1" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                        </Frame>
+                        <span>WBTC</span>
+                    </a>
+                    <a href="https://sepolia.arbiscan.io/address/0xD5FeDb4ceCB0F1D32788a190d9EB47D94D23eE4e" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/seed.svg" width="20" alt="SEED" />
+                        </Frame>
+                        <span>SEED</span>
+                    </a>
+                    <a href="https://sepolia.arbiscan.io/address/0xDfe6D9363EE96152D39391009a6723819D9E25EB" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/iBTC.png" width="20" alt="iBTC" />
+                        </Frame>
+                        <span>iBTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/base.svg" width="20" alt="Base Sepolia" />
+                    </Frame>
+                    <strong>Base Sepolia</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://sepolia.basescan.org/address/0x00ab86f54F436CfE15253845F139955ae0C00bAf" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                        </Frame>
+                        <span>WBTC</span>
+                    </a>
+                    <a href="https://sepolia.basescan.org/address/0xB391CA6D0A76CD2A927bC314856E8a374a225CFc" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/usdt.svg" width="20" alt="USDT" />
+                        </Frame>
+                        <span>USDT</span>
+                    </a>
+                    <a href="https://sepolia.basescan.org/address/0xBCdAD29aC77E5bb27FD528Ab0045AF630259FE4f" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/iBTC.png" width="20" alt="iBTC" />
+                        </Frame>
+                        <span>iBTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/btc.svg" width="20" alt="Bitcoin Testnet" />
+                    </Frame>
+                    <strong>Bitcoin Testnet</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="/developers/contracts/atomic-swap-btc" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/chains/btc.svg" width="20" alt="BTC" />
+                        </Frame>
+                        <span>BTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/citrea.svg" width="20" alt="Citrea Testnet" />
+                    </Frame>
+                    <strong>Citrea Testnet</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://explorer.testnet.citrea.xyz/address/0xaD9d14CA82d9BF97fFf745fFC7d48172A1c0969E?tab=contract" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/wbtc.svg" width="20" alt="WCBTC" />
+                        </Frame>
+                        <span>WCBTC</span>
+                    </a>
+                    <a href="https://explorer.testnet.citrea.xyz/address/0x6218FA00f47a61aCD8B46D6f1b15c4D730F803F2?tab=contract" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/chains/btc.svg" width="20" alt="cBTC" />
+                        </Frame>
+                        <span>cBTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/monad.svg" width="20" alt="Monad Testnet" />
+                    </Frame>
+                    <strong>Monad Testnet</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://testnet.monadexplorer.com/address/0x1dC94FdcAd8Aee13cfd34Db8a26d26E31572805c?tab=Contract" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/cbbtc.svg" width="20" alt="cbBTC" />
+                        </Frame>
+                        <span>cbBTC</span>
+                    </a>
+                    <a href="https://testnet.monadexplorer.com/address/0xE99D8A21d4F2ad2f90c279c869311503f9e25867?tab=Contract" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/usdc.svg" width="20" alt="USDC" />
+                        </Frame>
+                        <span>USDC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/ethereum.svg" width="20" alt="Sepolia" />
+                    </Frame>
+                    <strong>Sepolia</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://sepolia.etherscan.io/address/0x3C6a17b8cD92976D1D91E491c93c98cd81998265" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                        </Frame>
+                        <span>WBTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/solana.png" width="20" alt="Solana Testnet" />
+                    </Frame>
+                    <strong>Solana Testnet</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://explorer.solana.com/address/2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF?cluster=devnet" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/chains/solana.png" width="20" alt="SOL" />
+                        </Frame>
+                        <span>SOL</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+
+                <tr>
+                <td class="flex items-center gap-2">
+                    <Frame>
+                    <img src="/images/chains/starknet.svg" width="20" alt="Starknet Sepolia" />
+                    </Frame>
+                    <strong>Starknet Sepolia</strong>
+                </td>
+                <td colspan="4">
+                    <div class="flex gap-4">
+                    <a href="https://sepolia.starkscan.co/contract/0x06579d255314109429a4477d89629bc2b94f529ae01979c2f8014f9246482603" class="border-none flex items-center gap-1">
+                        <Frame>
+                        <img src="/images/assets/wbtc.svg" width="20" alt="WBTC" />
+                        </Frame>
+                        <span>WBTC</span>
+                    </a>
+                    </div>
+                </td>
+                </tr>
+            </tbody>
+        </table>
     </Tab>
 </Tabs>
 
