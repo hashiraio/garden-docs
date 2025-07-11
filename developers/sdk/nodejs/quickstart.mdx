@@ -11,7 +11,7 @@ title: "Quickstart"
             Initialize wallets and providers only for the chains you need.
         </Tip>
 
-        ```js
+        ```ts
         import {
             BitcoinProvider,
             BitcoinNetwork,
@@ -23,9 +23,9 @@ title: "Quickstart"
         import { RpcProvider, Account } from 'starknet';
 
         // Ethereum wallet setup
-        const account = privateKeyToAccount(`<YOUR_EVM_PRIVATE_KEY>`);
+        const ethereumAccount = privateKeyToAccount('<YOUR_EVM_PRIVATE_KEY>');
         const ethereumWalletClient = createWalletClient({
-        account,
+        ethereumAccount,
         chain: arbitrumSepolia,
         transport: http(),
         });
@@ -34,9 +34,16 @@ title: "Quickstart"
         const starknetProvider = new RpcProvider(); // Using default RPC URL
         const starknetWallet = new Account(
             starknetProvider,
-            <YOUR_STARKNET_ADDRESS>,
-            <YOUR_STARKNET_PRIVATE_KEY>,
+            '<YOUR_STARKNET_ADDRESS>',
+            '<YOUR_STARKNET_PRIVATE_KEY>',
         );
+
+        // Solana wallet setup
+        const solanaPrivKeyBytes = new Uint8Array('<YOUR_SOLANA_PRIVATE_KEY_BYTES>');
+        const solanaUser = web3.Keypair.fromSecretKey(solanaPrivKeyBytes);
+        const solanaConnection = new web3.Connection(RPC_URL, { commitment: 'confirmed' });
+        const solanaWallet = new anchor.Wallet(solanaUser);
+        const solanaProvider = new anchor.AnchorProvider(solanaConnection, solanaWallet);
         ```
     </Step>
     <Step title="Configure Garden instance">
@@ -45,7 +52,7 @@ title: "Quickstart"
         </Tip>
 
         <Tabs>
-            <Tab title="Using wallets">
+            <Tab title="Default wallet clients">
                 ```js
                 import { Garden } from '@gardenfi/core';
                 import { Environment, DigestKey } from '@gardenfi/utils';
@@ -57,12 +64,17 @@ title: "Quickstart"
                     digestKey: digestKey.val,
                     wallets: {
                         evm: ethereumWalletClient,
-                        starknet: starknetWallet
+                        starknet: starknetWallet,
+                        solana: solanaProvider,
                     }
                 });
                 ```
             </Tab>
-            <Tab title="Using smart accounts">
+            <Tab title="Custom client configuration">
+                <Note>
+                    You can initialize the Garden instance with your own HTLC client implementations. Check out the [IEVMHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/evm/htlc.types.ts), [IStarknetHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/starknet/starknetHTLC.types.ts), and [ISolanaHTLC](https://github.com/gardenfi/garden.js/blob/main/packages/core/src/lib/solana/htlc/ISolanaHTLC.ts) interfaces for more details.
+                </Note>
+
                 ```js
                 import { Garden } from '@gardenfi/core';
                 import { Environment } from '@gardenfi/utils';
@@ -71,8 +83,9 @@ title: "Quickstart"
                     environment: environment, // `testnet` or `mainnet`
                     digestKey: digestKey.val,
                     htlc: {
-                        evm: <IEVMHTLC>, // FIXME
-                        starknet: <IStarknetHTLC>, // FIXME
+                        evm: <IEVMHTLC>,
+                        starknet: <IStarknetHTLC>,
+                        solana: <ISolanaHTLC>,
                     },
                 });
                 ```
@@ -91,43 +104,43 @@ title: "Quickstart"
 
         // Helper function to construct an order pair
         const constructOrderpair = (fromAsset: Asset, toAsset: Asset) =>
-        `${fromAsset.chain}:${fromAsset.atomicSwapAddress}::${toAsset.chain}:${toAsset.atomicSwapAddress}`;
+            `${fromAsset.chain}:${fromAsset.atomicSwapAddress}::${toAsset.chain}:${toAsset.atomicSwapAddress}`;
 
         const orderPair = constructOrderpair(
-        fromAsset,
-        toAsset
+            fromAsset,
+            toAsset,
         );
 
         // Get the quote for the send amount and order pair
         const quoteResult = await garden.quote.getQuote(
-        orderPair,
-        Number(sendAmount),
-        false, // Set this to true if you wish to specify the output (receive) amount
+            orderPair,
+            Number(sendAmount),
+            false, // Set this to true if you wish to specify the output (receive) amount
         );
 
         if (!quoteResult.ok) {
-        throw new Error(quoteResult.error);
+            throw new Error(quoteResult.error);
         }
 
         // Choose a quote
         const [_strategyId, quoteAmount] = Object.entries(quoteResult.val.quotes)[0];
 
         const swapParams: SwapParams = {
-        fromAsset,
-        toAsset,
-        sendAmount,
-        receiveAmount: quoteAmount,
-        additionalData: {
-            strategyId: _strategyId,
-            btcAddress?: '<YOUR_BITCOIN_ADDRESS>',
-        },
+            fromAsset,
+            toAsset,
+            sendAmount,
+            receiveAmount: quoteAmount,
+            additionalData: {
+                strategyId: _strategyId,
+                btcAddress?: '<YOUR_BITCOIN_ADDRESS>',
+            },
         };
 
         // Create the swap
         const swapResult = await garden.swap(swapParams);
 
         if (!swapResult.ok) {
-        throw new Error(swapResult.error);
+            throw new Error(swapResult.error);
         }
 
         const order = swapResult.val;
@@ -168,14 +181,11 @@ title: "Quickstart"
 
         // Subscribe to Garden events to track transaction statuses
         garden.on('error', (order, error) => {
-        console.error(
-            `Error occurred for order ID ${order.create_order.create_id}:`,
-            error
-        );
+            console.error(`Error occurred for order ID ${order.create_order.create_id}:`, error);
         });
 
         garden.on('success', (order, action, txHash) => {
-        console.log(`${order} ${action} ${txHash}`);
+            console.log(`${order} ${action} ${txHash}`);
         });
         ```
 
@@ -183,4 +193,5 @@ title: "Quickstart"
             It is important to keep the service running until completion of the swap. If the instance is stopped, restarting it will ensure Garden checks the status of the order and resubmits the redeem if necessary.
         </Note>
     </Step>
+
 </Steps>
