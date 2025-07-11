@@ -8,9 +8,9 @@ This guide assumes that you have completed the [Setup](/developers/sdk/nodejs/se
 
 ## 1. Initialize wallets and providers
 
-<Note>
+<Tip>
     Initialize wallets and providers only for the chains you need.
-</Note>
+</Tip>
 
 ```js
 import {
@@ -42,7 +42,9 @@ const starknetWallet = new Account(
 
 ## 2. Configure Garden instance
 
-To initialize the Garden instance, you need to create a **digest key**. This is a 32-byte key that serves as a unique identifier, used for generating secrets (preimages for HTLCs). It functions as a Garden account, but it is strictly non-custodial, with no funds ever being associated with it or moved through it.
+<Tip>
+    A digest key is a 32-byte key that serves as a unique identifier, used for generating secrets (preimages for HTLCs). It functions as a Garden account, but it is strictly non-custodial, with no funds ever being associated with it or moved through it.
+</Tip>
 
 <Tabs>
     <Tab title="Using wallets">
@@ -124,6 +126,7 @@ const swapParams: SwapParams = {
   },
 };
 
+// Create the swap
 const swapResult = await garden.swap(swapParams);
 
 if (!swapResult.ok) {
@@ -137,15 +140,6 @@ console.log('✅ Order created:', order.create_order.create_id);
 ## 4. Initiate the swap
 
 <Tabs>
-    <Tab title="Swapping from Bitcoin">
-        <Note>
-            When swapping from Bitcoin, you must send funds to the deposit address.
-        </Note>
-        ```js
-            const order = swapResult.val;
-            const depositAddress = order.source_swap.swap_id;
-        ```
-    </Tab>
     <Tab title="Swapping to Bitcoin">
         <Warning>
             The first swap requires gas for token approval. Subsequent swaps will be gasless.
@@ -157,6 +151,15 @@ console.log('✅ Order created:', order.create_order.create_id);
         if (!initRes.ok) {
             throw new Error(initRes.error);
         }
+        ```
+    </Tab>
+    <Tab title="Swapping from Bitcoin">
+        <Tip>
+            When swapping from Bitcoin, you must send funds to the deposit address.
+        </Tip>
+        ```js
+            const order = swapResult.val;
+            const depositAddress = order.source_swap.swap_id;
         ```
     </Tab>
 </Tabs>
