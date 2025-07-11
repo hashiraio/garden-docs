@@ -3,15 +3,16 @@ id: supported-chains
 title: Supported Chains and Assets
 ---
 
-import {mainnetSupportedAssetsConfig, testnetSupportedAssetsConfig, SupportedAssets, AssetRow} from "/snippets/supported-assets.jsx";
+import {SupportedAssets, AssetRow, MAINNET_ASSETS_URL, TESTNET_ASSETS_URL, getAssets, trimAssetName, getExplorerUrl, CHAIN_EXPLORERS, titilize} from "/snippets/supported-assets.jsx";
 
-Garden uses the following contracts to perform swaps on respective chains in the mainnet environment:
+Garden uses the following contracts to perform swaps on respective chains:
+
 <Tabs>
     <Tab title="Mainnet">
-        <SupportedAssets supportedAssetsConfig={mainnetSupportedAssetsConfig}/>
+        <SupportedAssets key={MAINNET_ASSETS_URL} url={MAINNET_ASSETS_URL}/>
     </Tab>
     <Tab title="Testnet">
-        <SupportedAssets supportedAssetsConfig={testnetSupportedAssetsConfig}/>
+        <SupportedAssets key={TESTNET_ASSETS_URL} url={TESTNET_ASSETS_URL}/>
     </Tab>
 </Tabs>
 
