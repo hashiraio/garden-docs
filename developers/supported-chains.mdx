@@ -5,14 +5,16 @@ title: Supported Chains and Assets
 
 import {mainnetSupportedAssetsConfig, testnetSupportedAssetsConfig, SupportedAssets, AssetRow} from "/snippets/supported-assets.jsx";
 
-## Mainnet
-
 Garden uses the following contracts to perform swaps on respective chains in the mainnet environment:
+<Tabs>
+    <Tab title="Mainnet">
+        <SupportedAssets supportedAssetsConfig={mainnetSupportedAssetsConfig}/>
+    </Tab>
+    <Tab title="Testnet">
+        <SupportedAssets supportedAssetsConfig={testnetSupportedAssetsConfig}/>
+    </Tab>
+</Tabs>
 
-<SupportedAssets supportedAssetsConfig={mainnetSupportedAssetsConfig}/>
-
-## Testnet
-
-Garden uses the following contracts to perform swaps on respective chains in the testnet environment:
-
-<SupportedAssets supportedAssetsConfig={testnetSupportedAssetsConfig}/>
+<Tip>
+    If you would like to see a chain or asset that isn't listed here, reach out to us in the [Townhall](https://discord.gg/dZwSjh9922).
+</Tip>
