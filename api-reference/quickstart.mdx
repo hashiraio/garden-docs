@@ -4,27 +4,26 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
 ---
 
 <Note>
-    This guide uses a test API Key, please reach out to us over [discord](https://discord.gg/dZwSjh9922) for a production key.
+    This guide uses a test API key. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/dZwSjh9922).
 </Note>
 
 <Steps>
   <Step title="Get Quote">
-    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
+    Let's get a quote to trade 0.001 <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
     ```bash wrap
     curl -X 'GET' \
-     'https://testnet.api.garden.finance/quote/?order_pair=bitcoin_testnet:primary::ethereum_sepolia:0x88e1032252c712681A3659986F452E910D2134D8&amount=100000&exact_out=true' \
+     'https://testnet.api.garden.finance/quote/?order_pair=bitcoin_testnet:primary::ethereum_sepolia:0x88e1032252c712681A3659986F452E910D2134D8&amount=100000&exact_out=false' \
       -H 'accept: application/json'
     ```
-    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
     ```json Response wrap
     {
-        "status":"Ok",
+        "status": "Ok",
         "result": {
             "quotes": {
-                "btyrea8d":"100300"
+                "btyrea8d": "99700"
             },
-            "input_token_price":109398.0,
-            "output_token_price":109398.0
+            "input_token_price": 110946.9,
+            "output_token_price": 110946.9
         }
     }
     ```
@@ -39,7 +38,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
     -d '{
         "source_chain": "bitcoin_testnet",
         "source_asset": "primary",
-        "source_amount": "100300",
+        "source_amount": "99700",
         "destination_chain": "ethereum_sepolia",
         "destination_asset": "0x88e1032252c712681A3659986F452E910D2134D8",
         "destination_amount": "100000",
@@ -51,7 +50,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
         }
     }'
     ```
-    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
     ```json Response wrap focus={11,48,63} expandable
     {
         "status": "Ok",
@@ -158,7 +156,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
     curl -X 'GET' \
     'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
     ```
-    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
   </Step>
 </Steps>
 

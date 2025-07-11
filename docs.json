@@ -7,7 +7,7 @@
     "light": "#f2f7fb",
     "dark": "#1b1b1d"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "openapi": "api-reference/openapi.json",
   "navigation": {
     "tabs": [
@@ -57,8 +57,7 @@
                   "home/basics/guides/swap/wbtc-wbtc"
                 ]
               },
-              "home/basics/guides/stake/stake-seed",
-              "home/garden-brand-guide"
+              "home/basics/guides/stake/stake-seed"
             ]
           },
           {
@@ -81,17 +80,27 @@
             "pages": [
               "developers/overview",
               "developers/supported-chains",
-              "developers/affiliate-fee",
-              "developers/troubleshooting"
+              "developers/affiliate-fees"
             ]
           },
           {
             "group": "SDK",
             "pages": [
-              "developers/sdk/sdk",
-              "developers/sdk/authentication",
-              "developers/sdk/enumerations",
-              "developers/sdk/interfaces"
+              "developers/sdk/overview",
+              {
+                "group": "React",
+                "pages": [
+                  "developers/sdk/react/setup",
+                  "developers/sdk/react/quickstart"
+                ]
+              },
+              {
+                "group": "NodeJS",
+                "pages": [
+                  "developers/sdk/nodejs/setup",
+                  "developers/sdk/nodejs/quickstart"
+                ]
+              }
             ]
           },
 
@@ -99,7 +108,6 @@
             "group": "Core Concepts",
             "pages": [
               "developers/core/core",
-              "developers/core/auth",
               "developers/core/order-lifecycle",
               "developers/core/sessions"
             ]
@@ -180,7 +188,7 @@
         },
         {
           "anchor": "Community",
-          "href": "https://discord.gg/Sahx6QyD",
+          "href": "https://discord.gg/dZwSjh9922",
           "icon": "discord"
         }
       ]
@@ -199,7 +207,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Launch app",
+      "label": "Launch App",
       "href": "https://app.garden.finance"
     }
   },

@@ -295,7 +295,7 @@ export const SupportedAssets = ({ supportedAssetsConfig }) => {
       <thead>
         <tr>
           <th>Chain</th>
-          <th colSpan="4">Tokens</th>
+          <th colSpan="4">Asset HTLCs</th>
         </tr>
       </thead>
       <tbody>
