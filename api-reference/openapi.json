@@ -5,24 +5,6 @@
     "version": "2.0.0",
     "description": "API specification for various endpoints"
   },
-  "tags": [
-    {
-      "name": "Quotes",
-      "description": "Endpoints for getting quote and attestations"
-    },
-    {
-      "name": "Users",
-      "description": "Endpoints for getting, creating and modifying user details"
-    },
-    {
-      "name": "Orders",
-      "description": "Endpoints for getting, creating and modifying order details"
-    },
-    {
-      "name": "Swaps",
-      "description": "Endpoints for getting, creating and modifying swap details"
-    }
-  ],
   "servers": [
     {
       "url": "https://{environment}.garden.finance/v1",
@@ -87,6 +69,20 @@
           }
         ]
       },
+      "ChainWithAssets": {
+        "allOf": [
+          {"$ref": "#/components/schemas/ChainVerbose"},
+          {
+            "type": "object",
+            "properties": {
+              "assets": {
+                "type": "array",
+                "items": {"$ref": "#/components/schemas/AssetVerbose"}
+              }
+            }
+          }
+        ]
+      },
       "ChainVerbose": {
         "type": "object",
         "title": "Chain Information",
@@ -108,37 +104,75 @@
           }
         }
       },
-      "Asset": {
+      "AffiliateFeeAsset": {
         "oneOf": [
           {
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "cbbtc",
-              "btc",
-              "wbtc",
-              "ibtc",
-              "lbtc",
-              "btcn",
-              "usdc",
-              "seed",
-              "sol"
+              "ethereum:cbbtc",
+              "ethereum:usdc",
+              "ethereum:seed",
+              "arbitrum:usdc",
+              "base:cbbtc",
+              "base:usdc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "cbbtc",
-              "btc",
-              "wbtc",
-              "ibtc",
-              "lbtc",
-              "btcn",
-              "usdc",
-              "seed",
-              "sol",
-              "usdt"
+              "ethereum_sepolia:wbtc",
+              "ethereum_sepolia:usdc"
+            ]
+          }
+        ]
+      },
+      "Asset": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "enum": [
+              "bitcoin:btc",
+              "ethereum:cbbtc",
+              "ethereum:wbtc",
+              "ethereum:usdc",
+              "ethereum:seed",
+              "ethereum:ibtc",
+              "arbitrum:wbtc",
+              "arbitrum:usdc",
+              "arbitrum:ibtc",
+              "base:cbbtc",
+              "base:usdc",
+              "bera:lbtc",
+              "starknet:wbtc",
+              "hyperevm:ubtc",
+              "corn:btcn",
+              "unichain:wbtc",
+              "unichain:usdc",
+              "botanix:btc",
+              "solana:sol"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "enum": [
+              "bitcoin_testnet:btc",
+              "ethereum_sepolia:wbtc",
+              "arbitrum_sepolia:wbtc",
+              "arbitrum_sepolia:seed",
+              "arbitrum_sepolia:ibtc",
+              "base_sepolia:wbtc",
+              "base_sepolia:usdt",
+              "base_sepolia:ibtc",
+              "monad_testnet:cbbtc",
+              "monad_testnet:usdc",
+              "starknet_sepolia:wbtc",
+              "citrea_testnet:wcbtc",
+              "citrea_testnet:cbtc",
+              "solana_testnet:sol"
             ]
           }
         ]
@@ -160,7 +194,7 @@
             "type": "string",
             "nullable": true
           },
-          "onchain_id": {
+          "token": {
             "type": "string",
             "description": "if this is null, then the asset is considered the gas token",
             "nullable": true
@@ -180,16 +214,10 @@
       "Account": {
         "type": "object",
         "properties": {
-          "chain": {
-            "$ref": "#/components/schemas/Chain"
-          },
           "asset": {
             "$ref": "#/components/schemas/Asset"
           },
           "owner": {
-            "type": "string"
-          },
-          "delegate": {
             "type": "string"
           },
           "amount": {
@@ -300,7 +328,7 @@
         "type": "object",
         "properties": {
           "chain": {
-            "$ref": "#/components/schemas/ChainVerbose"
+            "$ref": "#/components/schemas/Chain"
           },
           "address": {
             "type": "string",
@@ -308,11 +336,11 @@
           }
         }
       },
-      "Balance": {
+      "Liquidity": {
         "type": "object",
         "properties": {
           "asset": {
-            "$ref": "#/components/schemas/AssetVerbose"
+            "$ref": "#/components/schemas/Asset"
           },
           "balance": {
             "type": "string",
@@ -344,10 +372,10 @@
               "$ref": "#/components/schemas/Address"
             }
           },
-          "balances": {
+          "liquidity": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Balance"
+              "$ref": "#/components/schemas/Liquidity"
             }
           }
         }
@@ -357,13 +385,13 @@
         "requred": [],
         "properties": {
           "address": {"type": "string"},
-          "chain": {"$ref": "#/components/schemas/Chain"},
-          "asset": {"$ref": "#/components/schemas/Asset"},
+          "asset": {"$ref": "#/components/schemas/AffiliateFeeAsset"},
           "fee": {"type": "number", "example": 0.1 }
         }
       },
       "OrderRequest": {
         "type": "object",
+        "required": ["source", "destination"],
         "properties": {
           "source": {
             "$ref": "#/components/schemas/Account"
@@ -500,15 +528,6 @@
           },
           "gas_limit": {
             "type": "number"
-          },
-          "nonce": {
-            "type": "number"
-          },
-          "max_fee_per_gas": {
-            "type": "number"
-          },
-          "max_priority_fee_per_gas": {
-            "type": "string"
           }
         }
       },
@@ -584,44 +603,60 @@
           }
         }  
       },
+      "SolanaInitiateRequest": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string", 
+            "enum": ["initiate"]
+          },
+          "args": {
+            "type": "object",
+            "properties": {
+              "amount": { "type": "string", "example": "100000000" },
+              "expiresIn": { "type": "number", "example": 3600 },
+              "redeemer": { "type": "string" },
+              "secretHash": { "type": "string", "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173" }
+            }
+          },
+          "programId": { "type": "string" },
+          "idl": { "type": "object" }
+        }
+      },
       "InitiateRequest": {
         "anyOf": [
           {
-            "title": "btc",
+            "title": "bitcoin",
             "$ref": "#/components/schemas/BitcoinInitiateRequest"
           },
           {
             "title": "evm",
             "$ref": "#/components/schemas/EVMInitiateRequest"
+          },
+          {
+            "title": "starknet",
+            "$ref": "#/components/schemas/EVMTypedData"
+          },
+          {
+            "title": "solana",
+            "$ref": "#/components/schemas/SolanaInitiateRequest"
           }
         ]
       },
-      "QuotePriceResponse": {
+      "QuoteAsset": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "Ok",
-              "Error"
-            ]
-          },
-          "result": {
-            "type": "object",
-            "properties": {
-              "quotes": {
-                "type": "object",
-                "properties": {
-                  "strategy_id": "quote-price"
-                }
-              }
-            },
-            "nullable": true
-          },
-          "error": {
-            "type": "string",
-            "nullable": true
-          }
+          "asset": { "$ref": "#/components/schemas/Asset" },
+          "amount": { "type": "string", "example": "1000000" },
+          "display": { "type": "string", "example": 0.01 },
+          "value": { "type": "string", "example": "100" }
+        }
+      },
+      "Quote": {
+        "type": "object",
+        "properties": {
+          "source": { "$ref": "#/components/schemas/QuoteAsset" },
+          "destination": { "$ref": "#/components/schemas/QuoteAsset" }
         }
       },
       "InstantRefundHashResponse": {
@@ -755,21 +790,103 @@
     }
   },
   "paths": {
-    "/swaps": {
+    "/orders/{order}/instant-refund-hash": {
       "get": {
-        "summary": "Get all swaps",
-        "tags": [
-          "Swaps"
+        "summary": "Get instant refund hash for the given swap",
+        "responses": {
+          "200": {
+            "description": "Get the swap with the given id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstantRefundHashResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quote": {
+      "get": {
+        "summary": "Get quote price",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            }
+          },
+          {
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exact_out",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "List of all swaps",
+            "description": "Quote information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Get Server health",
+        "responses": {
+          "200": {
+            "description": "Get Server Health",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chains": {
+      "get": {
+        "summary": "Get all thes supported chains and assets",
+        "responses": {
+          "200": {
+            "description": "Get assets",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Swap"
+                    "$ref": "#/components/schemas/ChainWithAssets"
                   }
                 }
               }
@@ -778,19 +895,134 @@
         }
       }
     },
-    "/swaps/{id}": {
+    "/assets": {
       "get": {
-        "summary": "Get swap by id",
-        "tags": [
-          "Swaps"
+        "summary": "Get all the supported assets on the given chain",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "Get the swap with the given id",
+            "description": "Array of Assets",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Swap"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssetVerbose"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fees": {
+      "get": {
+        "summary": "Get swap fees",
+        "responses": {
+          "200": {
+            "description": "Total swap fees",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/volume": {
+      "get": {
+        "summary": "Get swap volume",
+        "responses": {
+          "200": {
+            "description": "Total swap volume",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "Get all orders",
+        "responses": {
+          "200": {
+            "description": "List of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Once the order is created, the next step is to intiate on the source chain, the response contains all the required information to initiate on the source chain",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitiateRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{order}": {
+      "get": {
+        "summary": "Get matched order by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matched order details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
                 }
               }
             }
@@ -855,277 +1087,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MatchedOrderResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/swaps/{id}/instant-refund-hash": {
-      "get": {
-        "summary": "Get instant refund hash for the given swap",
-        "tags": [
-          "Swaps"
-        ],
-        "responses": {
-          "200": {
-            "description": "Get the swap with the given id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InstantRefundHashResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/quote": {
-      "get": {
-        "summary": "Get quote price",
-        "tags": [
-          "Quote"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "from_chain",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Chain"
-            }
-          },
-          {
-            "in": "query",
-            "name": "from_asset",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Asset"
-            }
-          },
-          {
-            "in": "query",
-            "name": "to_chain",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Chain"
-            }
-          },
-          {
-            "in": "query",
-            "name": "to_asset",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Asset"
-            }
-          },
-          {
-            "in": "query",
-            "name": "amount",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "exact_out",
-            "required": true,
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Quote information",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuotePriceResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/health": {
-      "get": {
-        "summary": "Get Server health",
-        "tags": [
-          "Orderbook"
-        ],
-        "responses": {
-          "200": {
-            "description": "Get Server Health",
-            "content": {
-              "application/json": {
-                "schema": {
                   "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/assets": {
-      "get": {
-        "summary": "Get Assets",
-        "tags": [
-          "Orderbook"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "from_chain",
-            "schema": {
-              "$ref": "#/components/schemas/Chain"
-            }
-          },
-          {
-            "in": "query",
-            "name": "from_asset",
-            "schema": {
-              "$ref": "#/components/schemas/Asset"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get assets",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AssetVerbose"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/fees": {
-      "get": {
-        "summary": "Get swap fees",
-        "tags": [
-          "Orderbook"
-        ],
-        "responses": {
-          "200": {
-            "description": "Total swap fees",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/volume": {
-      "get": {
-        "summary": "Get swap volume",
-        "tags": [
-          "Orderbook"
-        ],
-        "responses": {
-          "200": {
-            "description": "Total swap volume",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/orders": {
-      "get": {
-        "summary": "Get all orders",
-        "tags": [
-          "Orderbook"
-        ],
-        "responses": {
-          "200": {
-            "description": "List of orders",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MatchedOrderResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create order",
-        "tags": [
-          "Orderbook"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrderRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Once the order is created, the next step is to intiate on the source chain, the response contains all the required information to initiate on the source chain",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InitiateRequest"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/orders/{order}": {
-      "get": {
-        "summary": "Get matched order by ID",
-        "tags": [
-          "Orderbook"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "order",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Matched order details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MatchedOrderResponse"
                 }
               }
             }
@@ -1163,9 +1125,6 @@
     "/users/{user}/orders": {
       "get": {
         "summary": "Get all matched orders by user",
-        "tags": [
-          "Orderbook"
-        ],
         "parameters": [
           {
             "in": "path",
@@ -1189,7 +1148,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MatchedOrderResponse"
+                  "$ref": "#/components/schemas/OrdersResponse"
                 }
               }
             }
@@ -1199,9 +1158,6 @@
     },
     "/users/{user}/count": {
       "get": {
-        "tags": [
-          "Orderbook"
-        ],
         "summary": "Get order count for user",
         "parameters": [
           {
@@ -1229,9 +1185,6 @@
     },
     "/solvers/{solver}/liquidity": {
       "get": {
-        "tags": [
-          "Quote"
-        ],
         "parameters": [
           {
             "in": "path",
@@ -1249,51 +1202,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LiquidityResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/solvers/{solver}/committed-funds": {
-      "get": {
-        "summary": "Get solver committed funds",
-        "tags": [
-          "Orderbook"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "solver",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "chain",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "asset",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Solver's committed funds",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Liquidity"
+                  }
                 }
               }
             }

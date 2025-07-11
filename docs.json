@@ -141,45 +141,20 @@
           {
             "group": "Global",
             "pages": [
-              "api-reference/endpoint/get-quote",
               "api-reference/endpoint/get-health",
+              "api-reference/endpoint/get-chains",
               "api-reference/endpoint/get-assets",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
-            ]
-          },
-          {
-            "group": "Users",
-            "pages": [
-              "api-reference/endpoint/users/get-users",
-              "api-reference/endpoint/users/create-user",
-              "api-reference/endpoint/users/get-user-by-id",
-              "api-reference/endpoint/users/get-orders-by-user",
-              "api-reference/endpoint/users/get-order-count-by-user"
-            ]
-          },
-          {
-            "group": "Solvers",
-            "pages": [
-              "api-reference/endpoint/solvers/get-solver"
+              "api-reference/endpoint/get-quote"              
             ]
           },
           {
             "group": "Orders",
             "pages": [
+              "api-reference/endpoint/orders/get-order-by-id",
               "api-reference/endpoint/orders/get-orders",
               "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-swaps-by-order-id"
-            ]
-          },
-          {
-            "group": "Swaps",
-            "pages": [
-              "api-reference/endpoint/swaps/get",
-              "api-reference/endpoint/swaps/get-by-id",
-              "api-reference/endpoint/swaps/get-instant-refund-hash",
-              "api-reference/endpoint/swaps/patch"
+              "api-reference/endpoint/orders/get-instant-refund-hash",
+              "api-reference/endpoint/orders/patch"
             ]
           }
         ]
