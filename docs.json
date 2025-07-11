@@ -7,7 +7,7 @@
     "light": "#f2f7fb",
     "dark": "#1b1b1d"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "openapi": "api-reference/openapi.json",
   "navigation": {
     "tabs": [
