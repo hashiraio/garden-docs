@@ -193,7 +193,7 @@
           },
           "token": {
             "type": "string",
-            "description": "if this is null, then the asset is considered the gas token",
+            "description": "If null, the asset is considered the gas token.",
             "nullable": true
           },
           "decimals": {
@@ -797,7 +797,7 @@
   "paths": {
     "/orders/{order}/instant-refund-hash": {
       "get": {
-        "summary": "Get instant refund hash for the given swap",
+        "summary": "Get instant refund hash for the given swap.",
         "parameters": [
           {
             "in": "path",
@@ -810,7 +810,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Swap with the given ID",
+            "description": "Swap with the given ID.",
             "content": {
               "application/json": {
                 "schema": {
@@ -824,8 +824,8 @@
     },
     "/quote": {
       "get": {
-        "description": "Get the quote for the given asset pair",
-        "summary": "swap quote",
+        "description": "Get quote for the given asset pair.",
+        "summary": "Get swap quote.",
         "parameters": [
           {
             "in": "query",
@@ -860,7 +860,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Quote information",
+            "description": "Quote information.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1169,7 +1169,7 @@
         ],
         "responses": {
           "200": {
-            "description": "User's matched orders",
+            "description": "User's matched orders.",
             "content": {
               "application/json": {
                 "schema": {
