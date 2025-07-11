@@ -13,7 +13,7 @@
           "default": "api",
           "enum": [
             "api",
-            "api.testnet"
+            "testnet.api"
           ]
         }
       }
@@ -28,7 +28,7 @@
     "securitySchemes": {
       "garden-app-id": {
         "type": "apiKey",
-        "name": "garden-app-id",
+        "name": "api-key",
         "in": "header",
         "description": "API key to identify the application"
       }
@@ -496,6 +496,14 @@
           }
         }
       },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
       "BitcoinInitiateRequest": {
         "type": "object",
         "required": [
@@ -793,6 +801,16 @@
     "/orders/{order}/instant-refund-hash": {
       "get": {
         "summary": "Get instant refund hash for the given swap",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the swap with the given id",
@@ -861,13 +879,24 @@
     "/health": {
       "get": {
         "summary": "Get Server health",
+        "security": [],
         "responses": {
           "200": {
             "description": "Get Server Health",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Down",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }

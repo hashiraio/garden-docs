@@ -1,50 +1,425 @@
 ---
-title: "Getting Started"
+title: "Quickstart"
 description: "Learn how to use Garden's API to get quotes, submit orders, and track their status. This guide provides a quick overview of the core API endpoints."
 ---
 
 <Note>
-    API credentials are required for this guide. If you have not already gone through the [API setup guide](/api-reference/setup), go through those steps now.
+    This guide uses a test API Key, please reach out to us over [discord](https://discord.gg/dZwSjh9922) for a production key.
 </Note>
 
+<Tabs>
+  <Tab title="from bitcoin">
+    
 <Steps>
   <Step title="Get Quote">
-    ```bash
-    curl -X 'GET' \
-     'https://api.garden.finance/quote/?order_pair=<source_chain>:<source_asset>::<destination_chain>:<destination_asset>&amount=<amount>&exact_out=<true/false>&affiliate_fee=<affiliate_fee_in_bps>' \
-      -H 'accept: application/json'
+    Let's get a quote to trade BTC on **Bitcoin Testnet4** to 0.001 WBTC on **Ethereum Sepolia**.
+    
+    ```bash wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
     ```
+
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
+    
+    
+    ```bash from evm wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from solana wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from starknet wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Submit Order">
+    ```bash
+    curl --location 'https://api.garden.finance/v1/orders' \
+        --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "source": {
+                "chain": "ethereum:wbtc",
+                "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                "amount": "50000"
+            },
+            "destination": {
+                "chain": "bitcoin:btc",
+                "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
+                "amount": "49850"
+            }
+    }'
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+
+     <CodeGroup>
+    ```bash from bitcoin wrap
+    {
+        "to": "",
+        "amount": ""
+    }
+    ```
+    ```bash from evm wrap
+    {
+        "transaction": {
+            "to": "<redeemer>",
+            "value": "0",
+            "chain_id": 0,
+            "data": "0x00000",
+            "gas_limit": 1000000
+        },
+        "typed_data": {
+            "types": {
+                "EIP712Domain": [
+                    { "name": "", "type": "" },
+                    
+                ]
+            }
+        },
+    }
+    ```
+    ```bash from solana wrap
+    {
+        "method": "initiate",
+        "args": {
+            "amount": "100000000",
+            "expiresIn": 3600,
+            "redeemer": "<RedeemerPublicKey>",
+            "secretHash": "0x00"
+        },
+        "programId": "GardenProgramPubkey",
+        "idl": {}
+    }
+    ```
+    ```bash from starknet wrap
+    {
+      "domain": {
+        name: "HTLC",
+        version: "1",
+        chainId: 1441,
+        revision: 1,
+      },
+      primaryType: "Initiate",
+      types: "INITIATE_TYPE",
+      message: {
+        redeemer: "<redeemer>",
+        amount: "10000000",
+        timelock: 100000,
+        secretHash: "0x0000",
+      },
+    }
+    ```
+    </CodeGroup>
+
+    <Note>
+        SwapID on the Bitcoin side is the htlc address [tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk](https://mempool.space/testnet4/address/tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk), let's send 0.001003 testnet BTC to it, you can do this by using our [faucet](https://testnetbtc.com).
+    </Note>
+  </Step>
+  <Step title="Check Order Status">
+      Wait until the `order.destination_swap.redeem_tx_hash` is set
+    ```bash wrap
+    curl -X 'GET' \
+    'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
+  </Step>
+</Steps>
+  </Tab>
+  <Tab title="from evm">
+    <Steps>
+  <Step title="Get Quote">
+    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
+    
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
+    <CodeGroup>
+    ```bash from bitcoin wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from evm wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from solana wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from starknet wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Submit Order">
+    ```bash
+    curl --location 'https://api.garden.finance/v1/orders' \
+        --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "source": {
+                "chain": "ethereum:wbtc",
+                "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                "amount": "50000"
+            },
+            "destination": {
+                "chain": "bitcoin:btc",
+                "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
+                "amount": "49850"
+            }
+    }'
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+
+     <CodeGroup>
+    ```bash from bitcoin wrap
+    {
+        "to": "",
+        "amount": ""
+    }
+    ```
+    ```bash from evm wrap
+    {
+        "transaction": {
+            "to": "<redeemer>",
+            "value": "0",
+            "chain_id": 0,
+            "data": "0x00000",
+            "gas_limit": 1000000
+        },
+        "typed_data": {
+            "types": {
+                "EIP712Domain": [
+                    { "name": "", "type": "" },
+                    
+                ]
+            }
+        },
+    }
+    ```
+    ```bash from solana wrap
+    {
+        "method": "initiate",
+        "args": {
+            "amount": "100000000",
+            "expiresIn": 3600,
+            "redeemer": "<RedeemerPublicKey>",
+            "secretHash": "0x00"
+        },
+        "programId": "GardenProgramPubkey",
+        "idl": {}
+    }
+    ```
+    ```bash from starknet wrap
+    {
+      "domain": {
+        name: "HTLC",
+        version: "1",
+        chainId: 1441,
+        revision: 1,
+      },
+      primaryType: "Initiate",
+      types: "INITIATE_TYPE",
+      message: {
+        redeemer: "<redeemer>",
+        amount: "10000000",
+        timelock: 100000,
+        secretHash: "0x0000",
+      },
+    }
+    ```
+    </CodeGroup>
+
+    <Note>
+        SwapID on the Bitcoin side is the htlc address [tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk](https://mempool.space/testnet4/address/tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk), let's send 0.001003 testnet BTC to it, you can do this by using our [faucet](https://testnetbtc.com).
+    </Note>
+  </Step>
+  <Step title="Check Order Status">
+      Wait until the `order.destination_swap.redeem_tx_hash` is set
+    ```bash wrap
+    curl -X 'GET' \
+    'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
+  </Step>
+</Steps>
+  </Tab>
+  <Tab title="from solana">
+    <Steps>
+  <Step title="Get Quote">
+    Let's get a quote to trade <img src="/images/assets/bitcoin.svg" width="20" style={{display: 'inline'}} /> on **Bitcoin Testnet4** to 0.001 <img src="/images/assets/wbtc.svg" width="20" style={{display: 'inline'}} /> on **Ethereum Sepolia**.
+    
+    Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
+    <CodeGroup>
+    ```bash from bitcoin wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=bitcoin:btc&to=ethereum:wbtc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from evm wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=ethereum:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from solana wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=solana:sol&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    ```bash from starknet wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&amount=100000&exact_out=true' \
+    -H 'accept: application/json'
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Submit Order">
+    ```bash
+    curl --location 'https://api.garden.finance/v1/orders' \
+        --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "source": {
+                "chain": "ethereum:wbtc",
+                "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                "amount": "50000"
+            },
+            "destination": {
+                "chain": "bitcoin:btc",
+                "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
+                "amount": "49850"
+            }
+    }'
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+
+     <CodeGroup>
+    ```bash from bitcoin wrap
+    {
+        "to": "",
+        "amount": ""
+    }
+    ```
+    ```bash from evm wrap
+    {
+        "transaction": {
+            "to": "<redeemer>",
+            "value": "0",
+            "chain_id": 0,
+            "data": "0x00000",
+            "gas_limit": 1000000
+        },
+        "typed_data": {
+            "types": {
+                "EIP712Domain": [
+                    { "name": "", "type": "" },
+                    
+                ]
+            }
+        },
+    }
+    ```
+    ```bash from solana wrap
+    {
+        "method": "initiate",
+        "args": {
+            "amount": "100000000",
+            "expiresIn": 3600,
+            "redeemer": "<RedeemerPublicKey>",
+            "secretHash": "0x00"
+        },
+        "programId": "GardenProgramPubkey",
+        "idl": {}
+    }
+    ```
+    ```bash from starknet wrap
+    {
+      "domain": {
+        name: "HTLC",
+        version: "1",
+        chainId: 1441,
+        revision: 1,
+      },
+      primaryType: "Initiate",
+      types: "INITIATE_TYPE",
+      message: {
+        redeemer: "<redeemer>",
+        amount: "10000000",
+        timelock: 100000,
+        secretHash: "0x0000",
+      },
+    }
+    ```
+    </CodeGroup>
+
+    <Note>
+        SwapID on the Bitcoin side is the htlc address [tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk](https://mempool.space/testnet4/address/tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk), let's send 0.001003 testnet BTC to it, you can do this by using our [faucet](https://testnetbtc.com).
+    </Note>
+  </Step>
+  <Step title="Check Order Status">
+      Wait until the `order.destination_swap.redeem_tx_hash` is set
+    ```bash wrap
+    curl -X 'GET' \
+    'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
+    ```
+    Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
+  </Step>
+</Steps>
+  </Tab>
+  <Tab title="from starknet">
+    <Steps>
+  <Step title="Get Quote">
+    Let's get a quote to trade WBTC on **Starknet Sepolia** to 0.001 BTC on **Bitcoin Testnet4**.
+    
+    ```bash wrap
+    curl -X 'GET' 'https://testnet.api.garden.finance/quote?from=starknet:wbtc&to=bitcoin:btc&to_amount=100000'
+    ```
+
     Try it out [here](/api-reference/endpoint/quote/get-quote?playground=open)
   </Step>
   <Step title="Submit Order">
     ```bash
-        curl -X 'POST' \
-        'https://api.garden.finance/orders/' \
-        -H 'accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -H 'Authorization: Bearer <authorization_token>' \ # in the case of SIWE
-        -H 'api-key: <API-key>' \ # in the case of API keys
-        -d '{
-            "source_chain": "<source_chain>",
-            "source_asset": "<source_asset>",
-            "source_amount": "<source_amount>",
-            "initiator_source_address": "<initiator_source_address>",
-            "destination_chain": "<destination_chain>",
-            "destination_asset": "<destination_asset>",
-            "destination_amount": "<destination_amount>",
-            "initiator_destination_address": "<initiator_destination_address>",
-            "nonce": "<nonce>",
-        }'
+    curl --location 'https://api.garden.finance/v1/orders' \
+        --header 'api-key: 963ebcf89e26bd7d41c9adef039dd167584c371fb24f11f8adf1df0c7de3340f' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "source": {
+                "chain": "ethereum:wbtc",
+                "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                "amount": "50000"
+            },
+            "destination": {
+                "chain": "bitcoin:btc",
+                "owner": "bc1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3s9tp6jz",
+                "amount": "49850"
+            }
+    }'
     ```
     Try it out [here](/api-reference/endpoint/orderbook/create-order?playground=open)
+
+    ```bash wrap
+    {
+        "to": "",
+        "amount": ""
+    }
+    ```
+    <Note>
+        SwapID on the Bitcoin side is the htlc address [tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk](https://mempool.space/testnet4/address/tb1pzzza3ny8rxat2h8sf4dd3r6020guf4dhxfkpnnhal80tktxadqyql0gfsk), let's send 0.001003 testnet BTC to it, you can do this by using our [faucet](https://testnetbtc.com).
+    </Note>
   </Step>
   <Step title="Check Order Status">
-    ```bash
-        curl -X 'GET' \
-        'https://api.garden.finance/orders/id/<order_id>
+      Wait until the `order.destination_swap.redeem_tx_hash` is set
+    ```bash wrap
+    curl -X 'GET' \
+    'https://api.garden.finance/orders/id/66b781d8a2aa42d66f8670346bef55c16bf262819d8b59a32b8cf0968d07dc9f
     ```
     Try it out [here](/api-reference/endpoint/orderbook/get-order-by-id?playground=open)
-
-    Wait until the `order.destination_swap.redeem_tx_hash` is set
   </Step>
 </Steps>
+  </Tab>
+</Tabs>
+
+<Check>
+Congratulations! 🎉 You have successfully completed a cross-chain swap.
+</Check>
+
+For any questions or support, join our [community](https://discord.gg/dZwSjh9922).
