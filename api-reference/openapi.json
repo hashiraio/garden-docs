@@ -37,31 +37,31 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "bitcoin",
-              "ethereum",
-              "base",
               "arbitrum",
+              "base",
               "bera",
+              "bitcoin",
+              "botanix",
               "corn",
-              "starknet",
+              "ethereum",
               "hyperliquid",
               "solana",
-              "botanix"
+              "starknet"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "bitcoin_testnet",
-              "ethereum_sepolia",
-              "base_sepolia",
               "arbitrum_sepolia",
-              "starknet_sepolia",
+              "base_sepolia",
+              "bitcoin_testnet",
+              "citrea_testnet",
+              "ethereum_sepolia",
               "hyperliquid_testnet",
-              "solana_testnet",
               "monad_testnet",
-              "citrea_testnet"
+              "solana_testnet",
+              "starknet_sepolia"
             ]
           }
         ]
@@ -107,12 +107,12 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "ethereum:cbbtc",
-              "ethereum:usdc",
-              "ethereum:seed",
               "arbitrum:usdc",
               "base:cbbtc",
-              "base:usdc"
+              "base:usdc",
+              "ethereum:cbbtc",
+              "ethereum:seed",
+              "ethereum:usdc"
             ]
           },
           {
@@ -131,45 +131,45 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
+              "arbitrum:ibtc",
+              "arbitrum:usdc",
+              "arbitrum:wbtc",
+              "base:cbbtc",
+              "bera:lbtc",
+              "base:usdc",
               "bitcoin:btc",
+              "botanix:btc",
+              "corn:btcn",
               "ethereum:cbbtc",
               "ethereum:wbtc",
-              "ethereum:usdc",
-              "ethereum:seed",
               "ethereum:ibtc",
-              "arbitrum:wbtc",
-              "arbitrum:usdc",
-              "arbitrum:ibtc",
-              "base:cbbtc",
-              "base:usdc",
-              "bera:lbtc",
-              "starknet:wbtc",
+              "ethereum:seed",
+              "ethereum:usdc",
               "hyperevm:ubtc",
-              "corn:btcn",
-              "unichain:wbtc",
+              "solana:sol",
+              "starknet:wbtc",
               "unichain:usdc",
-              "botanix:btc",
-              "solana:sol"
+              "unichain:wbtc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "bitcoin_testnet:btc",
-              "ethereum_sepolia:wbtc",
-              "arbitrum_sepolia:wbtc",
               "arbitrum_sepolia:seed",
               "arbitrum_sepolia:ibtc",
+              "arbitrum_sepolia:wbtc",
               "base_sepolia:wbtc",
               "base_sepolia:usdt",
               "base_sepolia:ibtc",
+              "bitcoin_testnet:btc",
+              "citrea_testnet:cbtc",
+              "citrea_testnet:wcbtc",
+              "ethereum_sepolia:wbtc",
               "monad_testnet:cbbtc",
               "monad_testnet:usdc",
-              "starknet_sepolia:wbtc",
-              "citrea_testnet:wcbtc",
-              "citrea_testnet:cbtc",
-              "solana_testnet:sol"
+              "solana_testnet:sol",
+              "starknet_sepolia:wbtc"
             ]
           }
         ]
