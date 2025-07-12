@@ -9,6 +9,14 @@
   },
   "favicon": "/favicon.png",
   "openapi": "api-reference/openapi.json",
+  "contextual": {
+   "options": [
+     "copy",
+     "view",
+     "chatgpt",
+     "claude"
+   ]
+  },
   "navigation": {
     "tabs": [
       {
