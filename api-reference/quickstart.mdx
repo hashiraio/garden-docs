@@ -17,7 +17,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
                 ```bash
@@ -37,7 +36,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                         }
                     }'
                 ```
-                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
                 ```bash Response expandable wrap
                 {
                     "status": "Ok",
@@ -49,19 +47,18 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 }
                 ```
                 <Note>
-                    Send 0.0005 BTC to tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp, you can use our [faucet](https://testnetbtc.com)
+                    Send 0.0005 BTC to `tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp`. You can use our [faucet](https://testnetbtc.com) on testnet.
                 </Note>
             </Step>
             <Step title="Check Order Status">
-                Get the order by id to check the status of the swap.
+                Get the order by ID to check the status of the swap.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
-                ```bash Response expandable focus={46}
+                ```bash Response expandable
                 {
                     "status": "Ok",
                     "result": {
@@ -125,7 +122,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
-                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
+                <Note>
+                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+                </Note>
             </Step>
         </Steps>
     </Tab>
@@ -138,9 +137,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
+                First create the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -158,7 +157,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
                 ```bash Response expandable wrap 
                 {
                     "status": "Ok",
@@ -227,52 +225,45 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
+                Then deposit the funds:
                 <Tabs>
-                    <Tab title="Normal">
-                        <Note>
-                        Call `sendTransaction(response.result.transaction)` to initiate the swap.
-                            ```typescript
-                            await window.ethereum.request({
-                                method: 'eth_sendTransaction', 
-                                params: [response.result.transaction]
-                            });
-                            ```
-                        </Note>
+                    <Tab title="Submit transaction">
+                        ```typescript
+                        await window.ethereum.request({
+                            method: 'eth_sendTransaction', 
+                            params: [response.result.transaction]
+                        });
+                        ```
                     </Tab>
-                    <Tab title="Gasless">
-                        <Note>
-                            Call `signTypedDataV4(response.result.typed_data)` to sign the typed data, then call PATCH /orders/{order}?action="initiate" with the signature to initiate the swap.
+                    <Tab title="Gasless submission">
+                        ```typescript
+                        // Sign typed data.
+                        const signature = await window.ethereum.request({
+                            method: 'eth_signTypedData_v4',
+                            params: [userAddress, JSON.stringify(response.result.typed_data)]
+                        });
 
-                            ```typescript
-                            // Sign the typed data
-                            const signature = await window.ethereum.request({
-                                method: 'eth_signTypedData_v4',
-                                params: [userAddress, JSON.stringify(response.result.typed_data)]
-                            });
-
-                            // Initiate the swap with the signature
-                            await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
-                                method: 'PATCH',
-                                headers: {
-                                    'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ signature })
-                            });
-                            ```
-                        </Note>
+                        // Initiate the swap with the signature.
+                        await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                            method: 'PATCH',
+                            headers: {
+                                'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ signature })
+                        });
+                        ```
                     </Tab>
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by id to check the status of the swap.
+                Get the order by ID to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
                 ```bash Response expandable focus={45}
                 {
                     "status": "Ok",
@@ -337,7 +328,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
 }
                 ```
-                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
+                <Note>
+                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+                </Note>
             </Step>
         </Steps>
     </Tab>
@@ -350,9 +343,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
+                First create the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -370,7 +363,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
                 ```bash Response wrap
                 {
                     "status": "Ok",
@@ -380,30 +372,24 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
-                <Note>
-                Sign and send the `versioned_tx` using your Solana wallet to initiate the swap.
-
+                Then deposit the funds:
                 ```javascript
-                // Convert hex versioned transaction to buffer
+                // Convert transaction object from response.
                 const buffer = Buffer.from(response.result.versioned_tx, 'hex');
-                
-                // Create VersionedTransaction from buffer
                 const transaction = VersionedTransaction.deserialize(buffer);
                 
-                // Sign and send using your wallet
+                // Sign and send using your wallet.
                 const signature = await wallet.signAndSendTransaction(transaction);
                 ```
-                </Note>
             </Step>
             <Step title="Check Order Status">
-                Get the order by id to check the status of the swap.
+                Get the order by ID to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
                 ```bash Response expandable focus={45}
                 {
                     "status": "Ok",
@@ -468,7 +454,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
-                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
+                <Note>
+                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+                </Note>
             </Step>
         </Steps>
     </Tab>
@@ -481,9 +469,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/get-quote?playground=true)
             </Step>
             <Step title="Submit Order">
+                First create the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -501,7 +489,6 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                Try it out [here](/api-reference/endpoint/orders/create-order?playground=true)
                 ```bash Response expandable wrap
                 {
                     "status": "Ok",
@@ -593,12 +580,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
-                
+                Then deposit the funds:
                 <Tabs>
-                    <Tab title="Normal">
-                        <Note>
-                        Execute the transaction using `response.result.transaction` to initiate the swap.
-
+                    <Tab title="Submit transaction">
                         ```typescript
                         await account.execute([{
                             contractAddress: response.result.transaction.to,
@@ -606,39 +590,33 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             calldata: response.result.transaction.calldata
                         }]);
                         ```
-                        </Note>
                     </Tab>
-                    <Tab title="Gasless">
-                        <Note>
-                            Sign the typed data using `response.result.typed_data`, then call PATCH /orders/{order}?action="initiate" with the signature to initiate the swap.
+                    <Tab title="Gasless submission">
+                        ```typescript
+                        // Sign typed data.
+                        const signature = await account.signMessage(response.result.typed_data);
 
-                            ```typescript
-                            // Sign the typed data
-                            const signature = await account.signMessage(response.result.typed_data);
-
-                            // Initiate the swap with the signature
-                            await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
-                                method: 'PATCH',
-                                headers: {
-                                    'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ signature })
-                            });
-                            ```
-                        </Note>
+                        // Initiate the swap with the signature.
+                        await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                            method: 'PATCH',
+                            headers: {
+                                'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ signature })
+                        });
+                        ```
                     </Tab>
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by id to check the status of the swap.
+                Get the order by ID to check the status of the swap.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
                 ```bash Response expandable focus={45}
                 {
                     "status": "Ok",
@@ -703,7 +681,9 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                     }
                 }
                 ```
-                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
+                <Note>
+                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+                </Note>
             </Step>
         </Steps>
     </Tab>
