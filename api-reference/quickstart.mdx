@@ -4,7 +4,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
 ---
 
 <Note>
-    This guide uses a test API key. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/dZwSjh9922).
+    This guide uses a testing app ID. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/dZwSjh9922).
 </Note>
 
 <Tabs>
@@ -17,8 +17,31 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
+                ```json Response expandable
+                {
+                    "status": "Ok",
+                    "result": [
+                        {
+                        "source": {
+                            "asset": "bitcoin_testnet:btc",
+                            "amount": "50000",
+                            "display": "0.00050000",
+                            "value": "58.8200"
+                        },
+                        "destination": {
+                            "asset": "base_sepolia:wbtc",
+                            "amount": "49850",
+                            "display": "0.00049850",
+                            "value": "58.6435"
+                        },
+                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635"
+                        }
+                    ]
+                }
+                ```
             </Step>
             <Step title="Submit Order">
+                Once a quote is received, we can submit the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                     --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -36,7 +59,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                         }
                     }'
                 ```
-                ```bash Response expandable wrap
+                ```json Response expandable wrap
                 {
                     "status": "Ok",
                     "result": {
@@ -58,7 +81,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```bash Response expandable
+                ```json Response expandable
                 {
                     "status": "Ok",
                     "result": {
@@ -137,9 +160,31 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
+                ```json Response expandable
+                {
+                    "status": "Ok",
+                    "result": [
+                        {
+                        "source": {
+                            "asset": "ethereum_sepolia:wbtc",
+                            "amount": "50000",
+                            "display": "0.00050000",
+                            "value": "58.8700"
+                        },
+                        "destination": {
+                            "asset": "bitcoin_testnet:btc",
+                            "amount": "49850",
+                            "display": "0.00049850",
+                            "value": "58.6933"
+                        },
+                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635"
+                        }
+                    ]
+                }
+                ```
             </Step>
             <Step title="Submit Order">
-                First create the order:
+                Once a quote is received, we can submit the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -157,7 +202,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                ```bash Response expandable wrap 
+                ```json Response expandable wrap 
                 {
                     "status": "Ok",
                     "result": {
@@ -264,7 +309,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```bash Response expandable focus={45}
+                ```json Response expandable focus={45}
                 {
                     "status": "Ok",
                     "result": {
@@ -345,7 +390,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 ```
             </Step>
             <Step title="Submit Order">
-                First create the order:
+                Once a quote is received, we can submit the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -363,7 +408,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                ```bash Response wrap
+                ```json Response wrap
                 {
                     "status": "Ok",
                     "result": {
@@ -390,7 +435,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```bash Response expandable focus={45}
+                ```json Response expandable focus={45}
                 {
                     "status": "Ok",
                     "result": {
@@ -469,9 +514,31 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
+                ```json Response expandable
+                {
+                    "status": "Ok",
+                    "result": [
+                        {
+                        "source": {
+                            "asset": "starknet_sepolia:wbtc",
+                            "amount": "50000",
+                            "display": "0.00050000",
+                            "value": "58.8800"
+                        },
+                        "destination": {
+                            "asset": "bitcoin_testnet:btc",
+                            "amount": "49850",
+                            "display": "0.00049850",
+                            "value": "58.7033"
+                        },
+                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635"
+                        }
+                    ]
+                }
+                ```
             </Step>
             <Step title="Submit Order">
-                First create the order:
+                Once a quote is received, we can submit the order:
                 ```bash
                 curl --location 'http://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -489,7 +556,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             }
                         }'
                 ```
-                ```bash Response expandable wrap
+                ```json Response expandable wrap
                 {
                     "status": "Ok",
                     "result": {
@@ -617,7 +684,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```bash Response expandable focus={45}
+                ```json Response expandable focus={45}
                 {
                     "status": "Ok",
                     "result": {
