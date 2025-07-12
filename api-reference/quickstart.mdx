@@ -53,14 +53,79 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 </Note>
             </Step>
             <Step title="Check Order Status">
-                Wait until the `order.destination_swap.redeem_tx_hash` is set
+                Get the order by id to check the status of the swap.
                 ```bash wrap
                 curl -X 'GET' \
-                'http://testnet.api.garden.finance/v2/orders/id/f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121' \
+                'https://testnet.api.garden.finance/v2/orders/f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
                 Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
+                ```bash Response expandable focus={46}
+                {
+                    "status": "Ok",
+                    "result": {
+                        "created_at": "2025-07-09T04:38:18.632122Z",
+                        "source_swap": {
+                            "created_at": "2025-07-09T04:38:18.632122Z",
+                            "swap_id": "tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp",
+                            "chain": "bitcoin_testnet",
+                            "asset": "bitcoin_testnet:btc",
+                            "initiator": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                            "redeemer": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
+                            "delegate": "8f716d079bd4a6cb5c47a24cd22c352ffb50089e4461043cfe3b1f0f9082eec8",
+                            "timelock": 144,
+                            "filled_amount": "500000",
+                            "asset_price": 108468.0,
+                            "amount": "500000",
+                            "secret_hash": "3c4522983261f81e2e679346bbda5dddd8b4ea0367dd4073f73f13320d9dee62",
+                            "secret": "8cb8a02d5592b0b1556978e1d778b7eff2c23519b8aa65970fa6ac3daa33fb40",
+                            "instant_refund_tx": "020000000001013a18563d08a2b7d596488a96065466f52a82c221b981492b1f35b999401de1660000000000ffffffff0120a1070000000000225120a847e3c1d09e9e4af217cbe8c51f600802131ac9b1b8a7727493b4de60fc9ca3044107583b76a92f651f9bb3a34189cd1b81b7f98f99d1ebc71ba313e72c441a96270707d0fda5cacb0b1de2daacae318fa8c44b35881dc0ffd92764c8e1ce0a7bef834107583b76a92f651f9bb3a34189cd1b81b7f98f99d1ebc71ba313e72c441a96270707d0fda5cacb0b1de2daacae318fa8c44b35881dc0ffd92764c8e1ce0a7bef8346208f716d079bd4a6cb5c47a24cd22c352ffb50089e4461043cfe3b1f0f9082eec8ac20460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6ba529c61c02160e11a135f94e536a5b222e5d09fd9db1be5f5f5e753920290c0410cf388f09023174326647e3e2f5e7b7023a678341cd85556bfe7f539cdd369fd2ab1729114a7bc658045926f1b2c0e0e70292c66bda90ddbbee9e2ba771a4e0a57054bbc00000000",
+                            "initiate_tx_hash": "66e11d4099b9351f2b4981b921c2822af5665406968a4896d5b7a2083d56183a:90249",
+                            "redeem_tx_hash": "7820a77ecd05f4182a0a5595e8364e221bdb1a440507d53bf20c5f658ae3cd67",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "90249",
+                            "redeem_block_number": "90259",
+                            "refund_block_number": "0",
+                            "required_confirmations": 1,
+                            "current_confirmations": 1,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "destination_swap": {
+                            "created_at": "2025-07-09T04:38:18.632122Z",
+                            "swap_id": "3ab702b4db8f9b54f56d4ceeab7811ee02447785605a2c5b8df7dcc071efed91",
+                            "chain": "base_sepolia",
+                            "asset": "base_sepolia:wbtc",
+                            "initiator": "0x661bA32eb5f86CaB358DDbB7F264b10c5825e2dd",
+                            "redeemer": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                            "timelock": 3600,
+                            "filled_amount": "498500",
+                            "asset_price": 108468.0,
+                            "amount": "498500",
+                            "secret_hash": "3c4522983261f81e2e679346bbda5dddd8b4ea0367dd4073f73f13320d9dee62",
+                            "secret": "8cb8a02d5592b0b1556978e1d778b7eff2c23519b8aa65970fa6ac3daa33fb40",
+                            "initiate_tx_hash": "0xfb354436bbd8bd57760d82bfb441442e796e60aa7f8cd9e0978aa94a73eab2b8",
+                            "redeem_tx_hash": "0x7b3d81b0caddadbb35a9cf717b5f23b2ceddfa7a1a5251b2dbee723247cffdd6",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "28133930",
+                            "redeem_block_number": "28133933",
+                            "refund_block_number": "0",
+                            "required_confirmations": 0,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": "2025-07-09T04:42:28Z",
+                            "redeem_timestamp": "2025-07-09T04:42:34Z",
+                            "refund_timestamp": null
+                        },
+                        "nonce": "1751978328975",
+                        "order_id": "f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121",
+                        "affiliate_fees": [],
+                        "version": "v2"
+                    }
+                }
+                ```
+                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
             </Step>
         </Steps>
     </Tab>
@@ -196,19 +261,83 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             });
                             ```
                         </Note>
-
                     </Tab>
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Wait until the `order.destination_swap.redeem_tx_hash` is set
+                Get the order by id to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
-                'http://testnet.api.garden.finance/v2/orders/id/646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d' \
+                'https://testnet.api.garden.finance/v2/orders/646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
                 Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
+                ```bash Response expandable focus={45}
+                {
+                    "status": "Ok",
+                    "result": {
+                        "created_at": "2025-07-11T14:48:19.354306Z",
+                        "source_swap": {
+                            "created_at": "2025-07-11T14:48:19.354306Z",
+                            "swap_id": "30facc712b6eaa7a2453dba968da223d180322f224285db2820a8cdd7125147a",
+                            "chain": "ethereum_sepolia",
+                            "asset": "ethereum_sepolia:wbtc",
+                            "initiator": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                            "redeemer": "0x661bA32eb5f86CaB358DDbB7F264b10c5825e2dd",
+                            "timelock": 7200,
+                            "filled_amount": "0",
+                            "asset_price": 118000.0,
+                            "amount": "50000",
+                            "secret_hash": "61d22856ce12bc3693df0cd4967d404400449f61810080c52638fd805b379723",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 1,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "destination_swap": {
+                            "created_at": "2025-07-11T14:48:19.354306Z",
+                            "swap_id": "tb1p57lque52sgj9juntnwz7s0sgpapwmh0tzck3n9lz0sw2h3nnfx4qk924vj",
+                            "chain": "bitcoin_testnet",
+                            "asset": "bitcoin_testnet:btc",
+                            "initiator": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
+                            "redeemer": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                            "delegate": "bc182774238a970984da3727d8acdc8c93c23f85167afd7d58db73ef9e81b9b0",
+                            "timelock": 12,
+                            "filled_amount": "0",
+                            "asset_price": 118000.0,
+                            "amount": "49850",
+                            "secret_hash": "61d22856ce12bc3693df0cd4967d404400449f61810080c52638fd805b379723",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 0,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "nonce": "6010738665599915909",
+                        "order_id": "646eabe9fd9e7612ac712d54d899cf3f1847251927184fbc22d80f2a9a55987d",
+                        "affiliate_fees": [],
+                        "integrator": "test_integrator",
+                        "version": "v1"
+                    }
+}
+                ```
+                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
             </Step>
         </Steps>
     </Tab>
@@ -267,14 +396,79 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 </Note>
             </Step>
             <Step title="Check Order Status">
-                Wait until the `order.destination_swap.redeem_tx_hash` is set
+                Get the order by id to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
-                'http://testnet.api.garden.finance/v2/orders/id/dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3' \
+                'https://testnet.api.garden.finance/v2/orders/dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
                 Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
+                ```bash Response expandable focus={45}
+                {
+                    "status": "Ok",
+                    "result": {
+                        "created_at": "2025-07-11T15:04:00.482486Z",
+                        "source_swap": {
+                            "created_at": "2025-07-11T15:04:00.482486Z",
+                            "swap_id": "1d432a32c6f6ce6f63369c70a11510f3238509eaffaca90ebf5f99f7341b33a7",
+                            "chain": "solana_testnet",
+                            "asset": "solana_testnet:sol",
+                            "initiator": "YH4btvqb4JBWSEJh22MuA231ekpJ5JqbBXQY1apJtKH",
+                            "redeemer": "5aYv3mxzXupjUa6Yyi23Yn3n1kbgGEDfrJ6uBDq6VwQo",
+                            "timelock": 216000,
+                            "filled_amount": "0",
+                            "asset_price": 166.76,
+                            "amount": "354608265",
+                            "secret_hash": "8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 1,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "destination_swap": {
+                            "created_at": "2025-07-11T15:04:00.482486Z",
+                            "swap_id": "tb1pdpjayzxgx4c9p6vz92rzztc0dw5hxydym5zmxwzmfequenh0zs8qyl7s69",
+                            "chain": "bitcoin_testnet",
+                            "asset": "bitcoin_testnet:btc",
+                            "initiator": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
+                            "redeemer": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                            "delegate": "24ad278f4ba845174fb42c3ef1a34ff1e8fc75a0f9123fb475ae481f7a76fe7a",
+                            "timelock": 12,
+                            "filled_amount": "0",
+                            "asset_price": 166.76,
+                            "amount": "49850",
+                            "secret_hash": "8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 0,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "nonce": "17712695946749904671",
+                        "order_id": "dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3",
+                        "affiliate_fees": [],
+                        "integrator": "test_integrator",
+                        "version": "v1"
+                    }
+                }
+                ```
+                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
             </Step>
         </Steps>
     </Tab>
@@ -437,14 +631,79 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Wait until the `order.destination_swap.redeem_tx_hash` is set
+                Get the order by id to check the status of the swap.
                 ```bash wrap
                 curl -X 'GET' \
-                'http://testnet.api.garden.finance/v2/orders/id/08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372' \
+                'https://testnet.api.garden.finance/v2/orders/08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
                 Try it out [here](/api-reference/endpoint/orders/get-order-by-id?playground=true)
+                ```bash Response expandable focus={45}
+                {
+                    "status": "Ok",
+                    "result": {
+                        "created_at": "2025-07-11T14:46:01.293643Z",
+                        "source_swap": {
+                            "created_at": "2025-07-11T14:46:01.293643Z",
+                            "swap_id": "61ea20c8abf2a327035c2bc1170b3d32a13b271f14ad5a3739f995ce9a54ebf",
+                            "chain": "starknet_sepolia",
+                            "asset": "starknet_sepolia:wbtc",
+                            "initiator": "0x00609190b1348bcc06da44d58c79709495c11a5a6f0b9e154e1209f2a17dd933",
+                            "redeemer": "0x078f8ae98fe78b5df9d3755b5910864c028d5249b4af685eb45687b1b76a4205",
+                            "timelock": 2880,
+                            "filled_amount": "0",
+                            "asset_price": 118000.0,
+                            "amount": "50000",
+                            "secret_hash": "e7b213af79add7fb7457238fc65df61cb4dea13b3ae374f1b5c69538e5fcb98a",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 1,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "destination_swap": {
+                            "created_at": "2025-07-11T14:46:01.293643Z",
+                            "swap_id": "tb1psllge60w4dtm9lkwhflyznay60775nl3k06s2rl6r96d99kv7ccqaxtq7h",
+                            "chain": "bitcoin_testnet",
+                            "asset": "bitcoin_testnet:btc",
+                            "initiator": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
+                            "redeemer": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                            "delegate": "60e484adb39f5dc2af267c160c92afcbc1dd93e9c4c745316b8f55c8e0d664fc",
+                            "timelock": 12,
+                            "filled_amount": "0",
+                            "asset_price": 118000.0,
+                            "amount": "49850",
+                            "secret_hash": "e7b213af79add7fb7457238fc65df61cb4dea13b3ae374f1b5c69538e5fcb98a",
+                            "secret": "",
+                            "initiate_tx_hash": "",
+                            "redeem_tx_hash": "",
+                            "refund_tx_hash": "",
+                            "initiate_block_number": "0",
+                            "redeem_block_number": "0",
+                            "refund_block_number": "0",
+                            "required_confirmations": 0,
+                            "current_confirmations": 0,
+                            "initiate_timestamp": null,
+                            "redeem_timestamp": null,
+                            "refund_timestamp": null
+                        },
+                        "nonce": "2212051334241171111",
+                        "order_id": "08322ec7359a2fc8ef0918e0c0ada7943e22d87bd0c4632e9576de26f646b372",
+                        "affiliate_fees": [],
+                        "integrator": "test_integrator",
+                        "version": "v1"
+                    }
+                }
+                ```
+                The swap is complete once the `order.destination_swap.redeem_tx_hash` is set
             </Step>
         </Steps>
     </Tab>

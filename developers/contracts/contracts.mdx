@@ -11,16 +11,16 @@ Regardless of the blockchain, all atomic swap implementations share these core m
 
 <CardGroup cols={2}>
   <Card title="Initiate" icon="play">
-    Lock funds in the contract with a secret hash and timelock
+    Start the cross-chain swap by depositing funds into the HTLC on the source chain.
   </Card>
   <Card title="Redeem" icon="check">
-    Claim funds by revealing the secret that matches the hash
+    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
   </Card>
   <Card title="Refund" icon="rotate-left">
-    Reclaim funds after the timelock expires
+    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
   </Card>
   <Card title="Instant Refund" icon="bolt">
-    Cancel the swap with mutual agreement from both parties
+    Cancel the swap and get an instant refund on the source chain during the settlement window.
   </Card>
 </CardGroup>
 

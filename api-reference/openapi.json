@@ -483,12 +483,14 @@
           "signature"
         ]
       },
-      "PaginatedData": {
+      "PaginatedOrders": {
         "type": "object",
         "properties": {
           "data": {
             "type": "array",
-            "items": {}
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            }
           },
           "page": {
             "type": "integer"
@@ -913,10 +915,7 @@
             "type": "object",
             "properties": {
               "result": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Order"
-                }
+                "$ref": "#/components/schemas/PaginatedOrders"
               }
             }
           }
