@@ -89,7 +89,8 @@
             "pages": [
               "developers/overview",
               "developers/supported-chains",
-              "developers/affiliate-fees"
+              "developers/affiliate-fees",
+              "developers/route-policy"
             ]
           },
           {
@@ -156,7 +157,8 @@
             "group": "Global",
             "pages": [
               "api-reference/endpoint/get-chains",
-              "api-reference/endpoint/get-assets"
+              "api-reference/endpoint/get-assets",
+              "api-reference/endpoint/get-policy"
             ]
           },
           {
