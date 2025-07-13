@@ -25,8 +25,8 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
 
         ```shell
         curl -X 'GET' \
-        'https://testnet.api.garden.finance/quote/?order_pair=<order_pair>&from_amount=<amount>&affiliate_fee=30' \
-        -H 'accept: application/json'
+            'https://testnet.api.garden.finance/v2/quote?from=bitcoin_testnet:btc&to=base_sepolia:wbtc&from_amount=100000&affiliate_fee=30' \
+            -H 'accept: application/json'
         ```
 
         In this example, we've added a 30 bps affiliate fee.
@@ -35,49 +35,28 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
 
         Here's a sample create order request:
 
-        ```shell
-        curl -X 'POST' \
-        'https://testnet.api.garden.finance/relayer/create-order' \
-        -H 'accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -d '{
-            "source_chain": "<source_chain>",
-            "destination_chain": "<destination_chain>",
-            "source_asset": "<source_asset>",
-            "destination_asset": "<destination_asset>",
-            "initiator_source_address": "<initiator_source_address>",
-            "initiator_destination_address": "<initiator_destination_address>",
-            "source_amount": "<source_amount>",
-            "destination_amount": "<destination_amount>",
-            "fee": "<fee>",
-            "nonce": "<nonce>",
-            "min_destination_confirmations": "<min_destination_confirmations>",
-            "timelock": "<timelock>",
-            "secret_hash": null,
-            "affiliate_fees": [
-            {
-                "address": "<affiliate_address_1>",
-                "chain": "<chain_1>",
-                "asset": "<asset_1>",
-                "fee": <affiliate_fee_1>
-            },
-            {
-                "address": "<affiliate_address_2>",
-                "chain": "<chain_2>",
-                "asset": "<asset_2>",
-                "fee": <affiliate_fee_2>
-            }
-            ],
-            "additional_data": {
-            "strategy_id": "<strategy_id>",
-            "bitcoin_optional_recipient": "<user_bitcoin_address>"
-            }
-        }'
+        ```shell highlight={15-19}
+        curl --location 'http://testnet.api.garden.finance/v2/orders' \
+            --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+            --header 'Content-Type: application/json' \
+            --data '{
+                "source": {
+                    "asset": "bitcoin_testnet:btc",
+                    "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
+                    "amount": "50000"
+                },
+                "destination": {
+                    "asset": "base_sepolia:wbtc",
+                    "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                    "amount": "49850"
+                },
+                "affiliate_fees": [{
+                    "asset": "base_sepolia:wbtc",
+                    "address": "0x7A3d05c70581bD345fe117c06e45f9669205384f",
+                    "fee": 30
+                }]
+            }'
         ```
-
-        <Note>
-            Refer to the [Supported assets](/developers/supported-chains) to find the asset addresses of USDC and cbBTC. Check out the full implementation using API [here](/api-reference/quickstart).
-        </Note>
     </Tab>
     <Tab title="Using SDK">
         This process involves two steps:
@@ -111,7 +90,7 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
                 amount,
                 isExactOut,
                 options: {
-                    affiliateFee: 10 // in bps
+                    affiliateFee: 30 // in bps
                 },
             });
             ```
@@ -125,7 +104,7 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
                 amount,
                 isExactOut,
                 {
-                    affiliateFee: 10, // in bps
+                    affiliateFee: 30, // in bps
                 },
             );
             ```
@@ -147,9 +126,8 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
                 affiliateFee: [
                     {
                         address: "<affiliate_address_1>",
-                        chain: "<chain_1>",
                         asset: "<asset_1>",
-                        fee: 10
+                        fee: 30
                     },
                     // Add more splits as needed
                 ]
@@ -170,7 +148,7 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
                         address: "<affiliate_address_1>",
                         chain: "<chain_1>",
                         asset: "<asset_1>",
-                        fee: 10
+                        fee: 30
                     },
                     // Add more splits as needed
                 ]

@@ -410,7 +410,7 @@
         "properties": {
           "address": {"type": "string"},
           "asset": {"$ref": "#/components/schemas/AffiliateFeeAsset"},
-          "fee": {"type": "number", "example": 0.1 }
+          "fee": {"type": "integer", "description": "In BIPS (base index points) 100 bips = 1%", "example": 10 }
         }
       },
       "OrderRequest": {
@@ -425,7 +425,8 @@
           },
           "slippage": {
             "type": "number",
-            "example": 0.5
+            "description": "In BIPS (base index points) 100 bips = 1%",
+            "example": 50
           },
           "secret_hash": {
             "type": "string",
