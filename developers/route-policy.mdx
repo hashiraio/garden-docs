@@ -1,6 +1,6 @@
 ---
 title: "Route Policy System"
-description: "Learn how to use the route policy system to validate asset trading pairs locally and reduce API dependencies"
+description: "Validate asset trading pairs locally and reduce API dependencies"
 ---
 
 ## Overview
@@ -8,120 +8,50 @@ description: "Learn how to use the route policy system to validate asset trading
 The route policy system provides a lightweight way to determine which asset pairs can be traded without requiring individual API calls for each route validation. Instead of fetching all possible routes from the server, you can download a compact policy configuration and compute valid routes locally.
 
 <Tip>
-This approach significantly reduces API calls and enables real-time route validation in your application UI.
+    This approach significantly reduces API calls and enables real-time route validation in your application.
 </Tip>
 
 ## How it works
 
 Route policies use a priority-based validation system with four key components:
 
-1. **Isolation Groups** (Highest Priority) - Assets that can ONLY trade with each other
-2. **Whitelist Overrides** - Explicit exceptions that bypass other restrictions  
-3. **Blacklist Pairs** - Forbidden trading pairs with wildcard support
-4. **Default Policy** - Fallback behavior for unconfigured routes
-
-### Priority Order
-
-When validating a route, the system checks in this order:
+1. **Isolation Groups** (Highest Priority): Assets that can ONLY trade with each other.
+2. **Whitelist Overrides**: Explicit exceptions that bypass other restrictions.
+3. **Blacklist Pairs**: Forbidden trading pairs with wildcard support.
+4. **Default Policy**: Fallback behavior for unconfigured routes.
 
 <Steps>
-<Step title="Isolation Groups">
-If either asset is in an isolation group, the route is only valid if both assets are in the same isolation group.
+    <Step title="Isolation Groups">
+    If either asset is in an isolation group, the route is only valid if both assets are in the same isolation group.
 
-```typescript
-// Example: SEED tokens can only trade with other SEED tokens
-"ethereum:SEED <-> arbitrum:SEED"
-```
-</Step>
+    ```typescript
+    // Example: SEED tokens can only trade with other SEED tokens
+    "ethereum:SEED <-> arbitrum:SEED"
+    ```
+    </Step>
 
-<Step title="Whitelist Overrides">
-Explicit exceptions that allow routes regardless of other restrictions.
+    <Step title="Whitelist Overrides">
+    Explicit exceptions that allow routes regardless of other restrictions.
 
-```typescript
-// Example: Allow specific emergency routes
-"bitcoin:BTC -> ethereum:WBTC"
-```
-</Step>
+    ```typescript
+    // Example: Allow specific emergency routes
+    "bitcoin:BTC -> ethereum:WBTC"
+    ```
+    </Step>
 
-<Step title="Blacklist Pairs">
-Forbidden routes that override the default policy.
+    <Step title="Blacklist Pairs">
+    Forbidden routes that override the default policy.
 
-```typescript
-// Example: Prevent direct BTC to wrapped BTC trades
-"bitcoin:BTC -> *:WBTC"
-```
-</Step>
+    ```typescript
+    // Example: Prevent direct BTC to wrapped BTC trades
+    "bitcoin:BTC -> *:WBTC"
+    ```
+    </Step>
 
-<Step title="Default Policy">
-Applied when no other rules match - either "open" (allow) or "closed" (deny).
-</Step>
+    <Step title="Default Policy">
+    Applied when no other rules match — either "open" (allow) or "closed" (deny).
+    </Step>
 </Steps>
-
-## API Reference
-
-### Get Route Policy
-
-<RequestExample>
-```bash cURL
-curl -X GET 'https://{environment}.garden.finance/v2/policy' \
-  -H 'garden-app-id: {api-key}' \
-  -H 'accept: application/json'
-```
-</RequestExample>
-
-<ResponseExample>
-```json Response
-{
-  "status": "Ok",
-  "result": {
-    "default": "open",
-    "isolation_groups": [
-      "ethereum:SEED <-> arbitrum:SEED"
-    ],
-    "blacklist_pairs": [
-      "bitcoin:BTC -> starknet:*"
-    ],
-    "whitelist_overrides": [
-      "ethereum:WBTC -> bitcoin:BTC"
-    ]
-  }
-}
-```
-</ResponseExample>
-
-### Schema
-
-<ResponseField name="status" type="string" required>
-Response status - either "Ok" or "Error"
-</ResponseField>
-
-<ResponseField name="result" type="object" required>
-The route policy configuration object
-
-<Expandable title="Policy Configuration">
-<ResponseField name="default" type="string" required>
-Default policy for unconfigured routes. Either "open" (allow) or "closed" (deny).
-</ResponseField>
-
-<ResponseField name="isolation_groups" type="array">
-Array of isolation group rules. Assets in isolation groups can only trade with other assets in the same group.
-
-Format: `"fromAsset <-> toAsset"` or `"chain:asset <-> chain:asset"`
-</ResponseField>
-
-<ResponseField name="blacklist_pairs" type="array">
-Array of forbidden trading pairs. Supports wildcard patterns.
-
-Format: `"fromAsset -> toAsset"` with wildcards like `"bitcoin:BTC -> *:WBTC"`
-</ResponseField>
-
-<ResponseField name="whitelist_overrides" type="array">
-Array of explicitly allowed routes that bypass other restrictions.
-
-Format: `"fromAsset -> toAsset"` with optional wildcard support
-</ResponseField>
-</Expandable>
-</ResponseField>
 
 ## Local Route Matrix Generation
 
@@ -937,71 +867,34 @@ async def example():
 
 ## Integration Guide
 
-<Steps>
-<Step title="Install and Setup">
-Initialize the RouteValidator with your API configuration:
-
 ```typescript
 import { RouteValidator, buildRouteMatrix } from './RouteValidator';
 
+// Initialize the RouteValidator with your API configuration.
 const validator = new RouteValidator(
   'https://testnet.api.garden.finance/v2',
   'your-api-key'
 );
-```
-</Step>
 
-<Step title="Load Policy">
-Fetch the policy configuration from the API:
-
-```typescript
+//Fetch the policy configuration from the API.
 try {
   await validator.loadPolicy();
-  console.log('Policy loaded successfully');
 } catch (error) {
-  console.error('Failed to load policy:', error);
+  throw new Error('Failed to load policy:', error);
 }
 ```
 
-<Warning>
-Always handle policy loading errors gracefully. You may want to implement retry logic or fallback to server-side validation.
-</Warning>
-</Step>
-
-<Step title="Validate Routes">
 Use the validator to check if specific routes are allowed:
-
 ```typescript
-// Check individual routes
+// Check individual routes.
 const isValid = validator.isValidRoute('ethereum:SEED', 'arbitrum:SEED');
 
-// Get all valid destinations for a source asset
+// Get all valid destinations for a source asset.
 const destinations = validator.getValidDestinations('bitcoin:BTC', allAssets);
 
-// Generate complete route matrix for UI
+// Generate complete route matrix for UI.
 const routeMatrix = buildRouteMatrix(allAssets, validator);
 ```
-</Step>
-
-<Step title="Handle Updates">
-Implement policy refresh logic for your application:
-
-```typescript
-// Refresh policy periodically or on user action
-async function refreshPolicy() {
-  try {
-    await validator.loadPolicy();
-    console.log('Policy refreshed');
-  } catch (error) {
-    console.error('Policy refresh failed:', error);
-  }
-}
-
-// Refresh every 5 minutes
-setInterval(refreshPolicy, 5 * 60 * 1000);
-```
-</Step>
-</Steps>
 
 ## Wildcard Patterns
 
@@ -1012,10 +905,10 @@ The system supports wildcard patterns for flexible policy configuration:
 Match all assets on a specific chain:
 
 ```typescript
-// Block all routes from Bitcoin to any Starknet asset
+// Block all routes from Bitcoin to any Starknet asset.
 "bitcoin:BTC -> starknet:*"
 
-// Allow any Ethereum asset to trade with Bitcoin
+// Allow any Ethereum asset to trade with Bitcoin.
 "ethereum:* -> bitcoin:BTC"
 ```
 </Accordion>
@@ -1024,10 +917,10 @@ Match all assets on a specific chain:
 Match specific assets across all chains:
 
 ```typescript
-// Block all WBTC variants from trading with native BTC
+// Block all WBTC variants from trading with native BTC.
 "*:WBTC -> bitcoin:BTC"
 
-// Allow all USDC variants to trade with each other
+// Allow all USDC variants to trade with each other.
 "*:USDC -> *:USDC"
 ```
 </Accordion>
@@ -1036,7 +929,7 @@ Match specific assets across all chains:
 Match any asset (use with caution):
 
 ```typescript
-// Allow any asset to trade with Ethereum WETH
+// Allow any asset to trade with Ethereum WETH.
 "* -> ethereum:WETH"
 ```
 </Accordion>
@@ -1044,14 +937,5 @@ Match any asset (use with caution):
 
 ## Best Practices
 
-<Tip>
-**Cache Policy Data**: Store the policy configuration locally and refresh it periodically rather than fetching it on every route validation.
-</Tip>
-
-<Warning>
-**Handle Policy Updates**: Implement proper error handling and refresh the policy when a get quote or create order fails, with an unsupported trading pair.
-</Warning>
-
-<Info>
-**Performance**: The local validation is significantly faster than API calls, making it ideal for real-time UI updates and user experience optimization.
-</Info>
+1. **Store the policy configuration locally** and refresh it periodically rather than fetching it on every route validation.
+2. **Implement proper error handling** and refresh the policy when a get quote or create order fails due to an unsupported pair.
