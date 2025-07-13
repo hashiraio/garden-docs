@@ -956,6 +956,57 @@
             }
           }
         ]
+      },
+      "RoutePolicy": {
+        "type": "object",
+        "title": "Route Policy Configuration",
+        "properties": {
+          "default": {
+            "type": "string",
+            "enum": ["open", "closed"],
+            "default": "open",
+            "description": "Default policy for routes not covered by specific rules"
+          },
+          "isolation_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["ethereum:SEED <-> arbitrum:SEED"],
+            "description": "Assets in an isolation group can ONLY trade with other assets in the same group"
+          },
+          "blacklist_pairs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["bitcoin:BTC -> starknet:*", "*:USDC -> bitcoin:*"],
+            "description": "Explicitly forbidden trading pairs using pattern matching"
+          },
+          "whitelist_overrides": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["ethereum:USDC -> bitcoin:BTC"],
+            "description": "Explicit overrides that bypass other restrictions"
+          }
+        }
+      },
+      "PolicyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/RoutePolicy"
+              }
+            }
+          }
+        ]
       }
     }
   },
@@ -1386,6 +1437,37 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/Liquidity"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/policy": {
+      "get": {
+        "summary": "Get route policy configuration.",
+        "description": "Returns policy rules that clients can use to determine valid swap routes locally. Includes isolation groups, blacklists, and whitelists.",
+        "responses": {
+          "200": {
+            "description": "Route policy configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyResponse"
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": {
+                    "default": "open",
+                    "isolation_groups": [
+                      "ethereum:SEED <-> arbitrum:SEED"
+                    ],
+                    "blacklist_pairs": [
+                      "bitcoin:BTC -> starknet:*"
+                    ],
+                    "whitelist_overrides": []
                   }
                 }
               }

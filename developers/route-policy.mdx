@@ -1,0 +1,1057 @@
+---
+title: "Route Policy System"
+description: "Learn how to use the route policy system to validate asset trading pairs locally and reduce API dependencies"
+---
+
+## Overview
+
+The route policy system provides a lightweight way to determine which asset pairs can be traded without requiring individual API calls for each route validation. Instead of fetching all possible routes from the server, you can download a compact policy configuration and compute valid routes locally.
+
+<Tip>
+This approach significantly reduces API calls and enables real-time route validation in your application UI.
+</Tip>
+
+## How it works
+
+Route policies use a priority-based validation system with four key components:
+
+1. **Isolation Groups** (Highest Priority) - Assets that can ONLY trade with each other
+2. **Whitelist Overrides** - Explicit exceptions that bypass other restrictions  
+3. **Blacklist Pairs** - Forbidden trading pairs with wildcard support
+4. **Default Policy** - Fallback behavior for unconfigured routes
+
+### Priority Order
+
+When validating a route, the system checks in this order:
+
+<Steps>
+<Step title="Isolation Groups">
+If either asset is in an isolation group, the route is only valid if both assets are in the same isolation group.
+
+```typescript
+// Example: SEED tokens can only trade with other SEED tokens
+"ethereum:SEED <-> arbitrum:SEED"
+```
+</Step>
+
+<Step title="Whitelist Overrides">
+Explicit exceptions that allow routes regardless of other restrictions.
+
+```typescript
+// Example: Allow specific emergency routes
+"bitcoin:BTC -> ethereum:WBTC"
+```
+</Step>
+
+<Step title="Blacklist Pairs">
+Forbidden routes that override the default policy.
+
+```typescript
+// Example: Prevent direct BTC to wrapped BTC trades
+"bitcoin:BTC -> *:WBTC"
+```
+</Step>
+
+<Step title="Default Policy">
+Applied when no other rules match - either "open" (allow) or "closed" (deny).
+</Step>
+</Steps>
+
+## API Reference
+
+### Get Route Policy
+
+<RequestExample>
+```bash cURL
+curl -X GET 'https://{environment}.garden.finance/v2/policy' \
+  -H 'garden-app-id: {api-key}' \
+  -H 'accept: application/json'
+```
+</RequestExample>
+
+<ResponseExample>
+```json Response
+{
+  "status": "Ok",
+  "result": {
+    "default": "open",
+    "isolation_groups": [
+      "ethereum:SEED <-> arbitrum:SEED"
+    ],
+    "blacklist_pairs": [
+      "bitcoin:BTC -> starknet:*"
+    ],
+    "whitelist_overrides": [
+      "ethereum:WBTC -> bitcoin:BTC"
+    ]
+  }
+}
+```
+</ResponseExample>
+
+### Schema
+
+<ResponseField name="status" type="string" required>
+Response status - either "Ok" or "Error"
+</ResponseField>
+
+<ResponseField name="result" type="object" required>
+The route policy configuration object
+
+<Expandable title="Policy Configuration">
+<ResponseField name="default" type="string" required>
+Default policy for unconfigured routes. Either "open" (allow) or "closed" (deny).
+</ResponseField>
+
+<ResponseField name="isolation_groups" type="array">
+Array of isolation group rules. Assets in isolation groups can only trade with other assets in the same group.
+
+Format: `"fromAsset <-> toAsset"` or `"chain:asset <-> chain:asset"`
+</ResponseField>
+
+<ResponseField name="blacklist_pairs" type="array">
+Array of forbidden trading pairs. Supports wildcard patterns.
+
+Format: `"fromAsset -> toAsset"` with wildcards like `"bitcoin:BTC -> *:WBTC"`
+</ResponseField>
+
+<ResponseField name="whitelist_overrides" type="array">
+Array of explicitly allowed routes that bypass other restrictions.
+
+Format: `"fromAsset -> toAsset"` with optional wildcard support
+</ResponseField>
+</Expandable>
+</ResponseField>
+
+## Local Route Matrix Generation
+
+Here's a complete script to route matrix generation for local route validation:
+
+<CodeGroup>
+```typescript TypeScript expandable
+// Types for the policy configuration
+interface RoutePolicy {
+  default: 'open' | 'closed';
+  isolation_groups: string[];
+  blacklist_pairs: string[];
+  whitelist_overrides: string[];
+}
+
+interface PolicyResponse {
+  status: 'Ok' | 'Error';
+  result: RoutePolicy;
+  error?: string;
+}
+
+// Asset identifier type
+type AssetId = string; // e.g., "ethereum:SEED", "bitcoin:BTC"
+
+class RouteValidator {
+  private policy: RoutePolicy | null = null;
+
+  constructor(private apiBaseUrl: string, private apiKey: string) {}
+
+  // Fetch policy from the API
+  async loadPolicy(): Promise<void> {
+    try {
+      const response = await fetch(`${this.apiBaseUrl}/policy`, {
+        headers: {
+          'garden-app-id': this.apiKey,
+          'accept': 'application/json'
+        }
+      });
+
+      const data: PolicyResponse = await response.json();
+      
+      if (data.status === 'Ok') {
+        this.policy = data.result;
+      } else {
+        throw new Error(`API Error: ${data.error}`);
+      }
+    } catch (error) {
+      throw new Error(`Failed to load policy: ${error}`);
+    }
+  }
+
+  // Check if a route is valid based on the policy
+  isValidRoute(fromAsset: AssetId, toAsset: AssetId): boolean {
+    if (!this.policy) {
+      throw new Error('Policy not loaded. Call loadPolicy() first.');
+    }
+
+    // Can't swap to the same asset
+    if (fromAsset === toAsset) {
+      return false;
+    }
+
+    // Check isolation groups first (highest priority)
+    if (this.isInIsolationGroup(fromAsset, toAsset)) {
+      return this.isValidIsolationGroup(fromAsset, toAsset);
+    }
+
+    // Check whitelist overrides (bypass other restrictions)
+    if (this.isWhitelistOverride(fromAsset, toAsset)) {
+      return true;
+    }
+
+    // Check blacklist pairs
+    if (this.isBlacklisted(fromAsset, toAsset)) {
+      return false;
+    }
+
+    // Apply default policy
+    return this.policy.default === 'open';
+  }
+
+  // Get all valid destination assets for a given source asset
+  getValidDestinations(fromAsset: AssetId, allAssets: AssetId[]): AssetId[] {
+    return allAssets.filter(toAsset => this.isValidRoute(fromAsset, toAsset));
+  }
+
+  // Get all possible routes from a list of assets
+  getAllValidRoutes(assets: AssetId[]): Array<{ from: AssetId; to: AssetId }> {
+    const routes: Array<{ from: AssetId; to: AssetId }> = [];
+    
+    for (const fromAsset of assets) {
+      for (const toAsset of assets) {
+        if (this.isValidRoute(fromAsset, toAsset)) {
+          routes.push({ from: fromAsset, to: toAsset });
+        }
+      }
+    }
+    
+    return routes;
+  }
+
+  // Private helper methods
+  private isInIsolationGroup(fromAsset: AssetId, toAsset: AssetId): boolean {
+    return this.policy!.isolation_groups.some(group => {
+      const assets = this.parseIsolationGroup(group);
+      return assets.includes(fromAsset) || assets.includes(toAsset);
+    });
+  }
+
+  private isValidIsolationGroup(fromAsset: AssetId, toAsset: AssetId): boolean {
+    return this.policy!.isolation_groups.some(group => {
+      const assets = this.parseIsolationGroup(group);
+      return assets.includes(fromAsset) && assets.includes(toAsset);
+    });
+  }
+
+  private isWhitelistOverride(fromAsset: AssetId, toAsset: AssetId): boolean {
+    return this.policy!.whitelist_overrides.some(override => 
+      this.matchesPattern(fromAsset, toAsset, override)
+    );
+  }
+
+  private isBlacklisted(fromAsset: AssetId, toAsset: AssetId): boolean {
+    return this.policy!.blacklist_pairs.some(blacklist => 
+      this.matchesPattern(fromAsset, toAsset, blacklist)
+    );
+  }
+
+  private parseIsolationGroup(group: string): AssetId[] {
+    // Parse "ethereum:SEED <-> arbitrum:SEED" format
+    const assets = group.split('<->').map(asset => asset.trim());
+    return assets;
+  }
+
+  private matchesPattern(fromAsset: AssetId, toAsset: AssetId, pattern: string): boolean {
+    const [fromPattern, toPattern] = pattern.split('->').map(p => p.trim());
+    
+    return this.matchesAssetPattern(fromAsset, fromPattern) && 
+           this.matchesAssetPattern(toAsset, toPattern);
+  }
+
+  private matchesAssetPattern(asset: AssetId, pattern: string): boolean {
+    // Handle wildcard patterns
+    if (pattern === '*') return true;
+    
+    if (pattern.includes('*')) {
+      // Handle patterns like "starknet:*" or "*:USDC"
+      if (pattern.endsWith(':*')) {
+        const chainPattern = pattern.slice(0, -2);
+        return asset.startsWith(chainPattern + ':');
+      }
+      if (pattern.startsWith('*:')) {
+        const symbolPattern = pattern.slice(2);
+        return asset.endsWith(':' + symbolPattern);
+      }
+    }
+    
+    // Exact match
+    return asset === pattern;
+  }
+}
+
+// Helper function to build route matrix for UI
+function buildRouteMatrix(assets: AssetId[], validator: RouteValidator): Record<AssetId, AssetId[]> {
+  const matrix: Record<AssetId, AssetId[]> = {};
+  
+  for (const fromAsset of assets) {
+    matrix[fromAsset] = validator.getValidDestinations(fromAsset, assets);
+  }
+  
+  return matrix;
+}
+
+// Export for use in your application
+export { RouteValidator, buildRouteMatrix, type RoutePolicy, type AssetId };
+```
+
+```rust Rust expandable
+use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
+use reqwest;
+use anyhow::{Result, Error};
+
+// Types for the policy configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RoutePolicy {
+    pub default: String, // "open" or "closed"
+    pub isolation_groups: Vec<String>,
+    pub blacklist_pairs: Vec<String>,
+    pub whitelist_overrides: Vec<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PolicyResponse {
+    pub status: String,
+    pub result: RoutePolicy,
+    pub error: Option<String>,
+}
+
+pub type AssetId = String;
+
+pub struct RouteValidator {
+    api_base_url: String,
+    api_key: String,
+    policy: Option<RoutePolicy>,
+}
+
+impl RouteValidator {
+    pub fn new(api_base_url: String, api_key: String) -> Self {
+        RouteValidator {
+            api_base_url,
+            api_key,
+            policy: None,
+        }
+    }
+
+    // Fetch policy from the API
+    pub async fn load_policy(&mut self) -> Result<()> {
+        let client = reqwest::Client::new();
+        let url = format!("{}/policy", self.api_base_url);
+        
+        let response = client
+            .get(&url)
+            .header("garden-app-id", &self.api_key)
+            .header("accept", "application/json")
+            .send()
+            .await?;
+
+        let data: PolicyResponse = response.json().await?;
+        
+        if data.status == "Ok" {
+            self.policy = Some(data.result);
+            Ok(())
+        } else {
+            Err(Error::msg(format!("API Error: {:?}", data.error)))
+        }
+    }
+
+    // Check if a route is valid based on the policy
+    pub fn is_valid_route(&self, from_asset: &AssetId, to_asset: &AssetId) -> Result<bool> {
+        let policy = self.policy.as_ref()
+            .ok_or_else(|| Error::msg("Policy not loaded. Call load_policy() first."))?;
+
+        // Can't swap to the same asset
+        if from_asset == to_asset {
+            return Ok(false);
+        }
+
+        // Check isolation groups first (highest priority)
+        if self.is_in_isolation_group(from_asset, to_asset, policy) {
+            return Ok(self.is_valid_isolation_group(from_asset, to_asset, policy));
+        }
+
+        // Check whitelist overrides (bypass other restrictions)
+        if self.is_whitelist_override(from_asset, to_asset, policy) {
+            return Ok(true);
+        }
+
+        // Check blacklist pairs
+        if self.is_blacklisted(from_asset, to_asset, policy) {
+            return Ok(false);
+        }
+
+        // Apply default policy
+        Ok(policy.default == "open")
+    }
+
+    // Get all valid destination assets for a given source asset
+    pub fn get_valid_destinations(&self, from_asset: &AssetId, all_assets: &[AssetId]) -> Result<Vec<AssetId>> {
+        let mut valid_destinations = Vec::new();
+        
+        for to_asset in all_assets {
+            if self.is_valid_route(from_asset, to_asset)? {
+                valid_destinations.push(to_asset.clone());
+            }
+        }
+        
+        Ok(valid_destinations)
+    }
+
+    // Get all possible routes from a list of assets
+    pub fn get_all_valid_routes(&self, assets: &[AssetId]) -> Result<Vec<(AssetId, AssetId)>> {
+        let mut routes = Vec::new();
+        
+        for from_asset in assets {
+            for to_asset in assets {
+                if self.is_valid_route(from_asset, to_asset)? {
+                    routes.push((from_asset.clone(), to_asset.clone()));
+                }
+            }
+        }
+        
+        Ok(routes)
+    }
+
+    // Private helper methods
+    fn is_in_isolation_group(&self, from_asset: &AssetId, to_asset: &AssetId, policy: &RoutePolicy) -> bool {
+        policy.isolation_groups.iter().any(|group| {
+            let assets = self.parse_isolation_group(group);
+            assets.contains(from_asset) || assets.contains(to_asset)
+        })
+    }
+
+    fn is_valid_isolation_group(&self, from_asset: &AssetId, to_asset: &AssetId, policy: &RoutePolicy) -> bool {
+        policy.isolation_groups.iter().any(|group| {
+            let assets = self.parse_isolation_group(group);
+            assets.contains(from_asset) && assets.contains(to_asset)
+        })
+    }
+
+    fn is_whitelist_override(&self, from_asset: &AssetId, to_asset: &AssetId, policy: &RoutePolicy) -> bool {
+        policy.whitelist_overrides.iter().any(|override_pattern| {
+            self.matches_pattern(from_asset, to_asset, override_pattern)
+        })
+    }
+
+    fn is_blacklisted(&self, from_asset: &AssetId, to_asset: &AssetId, policy: &RoutePolicy) -> bool {
+        policy.blacklist_pairs.iter().any(|blacklist_pattern| {
+            self.matches_pattern(from_asset, to_asset, blacklist_pattern)
+        })
+    }
+
+    fn parse_isolation_group(&self, group: &str) -> Vec<AssetId> {
+        group.split("<->")
+            .map(|asset| asset.trim().to_string())
+            .collect()
+    }
+
+    fn matches_pattern(&self, from_asset: &AssetId, to_asset: &AssetId, pattern: &str) -> bool {
+        let parts: Vec<&str> = pattern.split("->").map(|p| p.trim()).collect();
+        if parts.len() != 2 {
+            return false;
+        }
+        
+        self.matches_asset_pattern(from_asset, parts[0]) && 
+        self.matches_asset_pattern(to_asset, parts[1])
+    }
+
+    fn matches_asset_pattern(&self, asset: &AssetId, pattern: &str) -> bool {
+        // Handle wildcard patterns
+        if pattern == "*" {
+            return true;
+        }
+        
+        if pattern.contains('*') {
+            // Handle patterns like "starknet:*" or "*:USDC"
+            if pattern.ends_with(":*") {
+                let chain_pattern = &pattern[..pattern.len() - 2];
+                return asset.starts_with(&format!("{}:", chain_pattern));
+            }
+            if pattern.starts_with("*:") {
+                let symbol_pattern = &pattern[2..];
+                return asset.ends_with(&format!(":{}", symbol_pattern));
+            }
+        }
+        
+        // Exact match
+        asset == pattern
+    }
+}
+
+// Helper function to build route matrix for UI
+pub fn build_route_matrix(assets: &[AssetId], validator: &RouteValidator) -> Result<HashMap<AssetId, Vec<AssetId>>> {
+    let mut matrix = HashMap::new();
+    
+    for from_asset in assets {
+        let destinations = validator.get_valid_destinations(from_asset, assets)?;
+        matrix.insert(from_asset.clone(), destinations);
+    }
+    
+    Ok(matrix)
+}
+```
+
+```go Golang expandable
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "strings"
+    "errors"
+)
+
+// Types for the policy configuration
+type RoutePolicy struct {
+    Default           string   `json:"default"`
+    IsolationGroups   []string `json:"isolation_groups"`
+    BlacklistPairs    []string `json:"blacklist_pairs"`
+    WhitelistOverrides []string `json:"whitelist_overrides"`
+}
+
+type PolicyResponse struct {
+    Status string      `json:"status"`
+    Result RoutePolicy `json:"result"`
+    Error  *string     `json:"error,omitempty"`
+}
+
+type AssetId string
+
+type RouteValidator struct {
+    apiBaseURL string
+    apiKey     string
+    policy     *RoutePolicy
+}
+
+func NewRouteValidator(apiBaseURL, apiKey string) *RouteValidator {
+    return &RouteValidator{
+        apiBaseURL: apiBaseURL,
+        apiKey:     apiKey,
+        policy:     nil,
+    }
+}
+
+// Fetch policy from the API
+func (rv *RouteValidator) LoadPolicy() error {
+    client := &http.Client{}
+    url := fmt.Sprintf("%s/policy", rv.apiBaseURL)
+    
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        return err
+    }
+    
+    req.Header.Set("garden-app-id", rv.apiKey)
+    req.Header.Set("accept", "application/json")
+    
+    resp, err := client.Do(req)
+    if err != nil {
+        return err
+    }
+    defer resp.Body.Close()
+    
+    var data PolicyResponse
+    if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+        return err
+    }
+    
+    if data.Status == "Ok" {
+        rv.policy = &data.Result
+        return nil
+    }
+    
+    errorMsg := "Unknown error"
+    if data.Error != nil {
+        errorMsg = *data.Error
+    }
+    return fmt.Errorf("API Error: %s", errorMsg)
+}
+
+// Check if a route is valid based on the policy
+func (rv *RouteValidator) IsValidRoute(fromAsset, toAsset AssetId) (bool, error) {
+    if rv.policy == nil {
+        return false, errors.New("policy not loaded. Call LoadPolicy() first")
+    }
+    
+    // Can't swap to the same asset
+    if fromAsset == toAsset {
+        return false, nil
+    }
+    
+    // Check isolation groups first (highest priority)
+    if rv.isInIsolationGroup(fromAsset, toAsset) {
+        return rv.isValidIsolationGroup(fromAsset, toAsset), nil
+    }
+    
+    // Check whitelist overrides (bypass other restrictions)
+    if rv.isWhitelistOverride(fromAsset, toAsset) {
+        return true, nil
+    }
+    
+    // Check blacklist pairs
+    if rv.isBlacklisted(fromAsset, toAsset) {
+        return false, nil
+    }
+    
+    // Apply default policy
+    return rv.policy.Default == "open", nil
+}
+
+// Get all valid destination assets for a given source asset
+func (rv *RouteValidator) GetValidDestinations(fromAsset AssetId, allAssets []AssetId) ([]AssetId, error) {
+    var validDestinations []AssetId
+    
+    for _, toAsset := range allAssets {
+        if valid, err := rv.IsValidRoute(fromAsset, toAsset); err != nil {
+            return nil, err
+        } else if valid {
+            validDestinations = append(validDestinations, toAsset)
+        }
+    }
+    
+    return validDestinations, nil
+}
+
+// Get all possible routes from a list of assets
+func (rv *RouteValidator) GetAllValidRoutes(assets []AssetId) ([]struct{From, To AssetId}, error) {
+    var routes []struct{From, To AssetId}
+    
+    for _, fromAsset := range assets {
+        for _, toAsset := range assets {
+            if valid, err := rv.IsValidRoute(fromAsset, toAsset); err != nil {
+                return nil, err
+            } else if valid {
+                routes = append(routes, struct{From, To AssetId}{From: fromAsset, To: toAsset})
+            }
+        }
+    }
+    
+    return routes, nil
+}
+
+// Private helper methods
+func (rv *RouteValidator) isInIsolationGroup(fromAsset, toAsset AssetId) bool {
+    for _, group := range rv.policy.IsolationGroups {
+        assets := rv.parseIsolationGroup(group)
+        if rv.contains(assets, fromAsset) || rv.contains(assets, toAsset) {
+            return true
+        }
+    }
+    return false
+}
+
+func (rv *RouteValidator) isValidIsolationGroup(fromAsset, toAsset AssetId) bool {
+    for _, group := range rv.policy.IsolationGroups {
+        assets := rv.parseIsolationGroup(group)
+        if rv.contains(assets, fromAsset) && rv.contains(assets, toAsset) {
+            return true
+        }
+    }
+    return false
+}
+
+func (rv *RouteValidator) isWhitelistOverride(fromAsset, toAsset AssetId) bool {
+    for _, override := range rv.policy.WhitelistOverrides {
+        if rv.matchesPattern(fromAsset, toAsset, override) {
+            return true
+        }
+    }
+    return false
+}
+
+func (rv *RouteValidator) isBlacklisted(fromAsset, toAsset AssetId) bool {
+    for _, blacklist := range rv.policy.BlacklistPairs {
+        if rv.matchesPattern(fromAsset, toAsset, blacklist) {
+            return true
+        }
+    }
+    return false
+}
+
+func (rv *RouteValidator) parseIsolationGroup(group string) []AssetId {
+    parts := strings.Split(group, "<->")
+    var assets []AssetId
+    for _, part := range parts {
+        assets = append(assets, AssetId(strings.TrimSpace(part)))
+    }
+    return assets
+}
+
+func (rv *RouteValidator) matchesPattern(fromAsset, toAsset AssetId, pattern string) bool {
+    parts := strings.Split(pattern, "->")
+    if len(parts) != 2 {
+        return false
+    }
+    
+    fromPattern := strings.TrimSpace(parts[0])
+    toPattern := strings.TrimSpace(parts[1])
+    
+    return rv.matchesAssetPattern(fromAsset, fromPattern) && 
+           rv.matchesAssetPattern(toAsset, toPattern)
+}
+
+func (rv *RouteValidator) matchesAssetPattern(asset AssetId, pattern string) bool {
+    // Handle wildcard patterns
+    if pattern == "*" {
+        return true
+    }
+    
+    if strings.Contains(pattern, "*") {
+        // Handle patterns like "starknet:*" or "*:USDC"
+        if strings.HasSuffix(pattern, ":*") {
+            chainPattern := pattern[:len(pattern)-2]
+            return strings.HasPrefix(string(asset), chainPattern+":")
+        }
+        if strings.HasPrefix(pattern, "*:") {
+            symbolPattern := pattern[2:]
+            return strings.HasSuffix(string(asset), ":"+symbolPattern)
+        }
+    }
+    
+    // Exact match
+    return string(asset) == pattern
+}
+
+func (rv *RouteValidator) contains(slice []AssetId, item AssetId) bool {
+    for _, s := range slice {
+        if s == item {
+            return true
+        }
+    }
+    return false
+}
+
+// Helper function to build route matrix for UI
+func BuildRouteMatrix(assets []AssetId, validator *RouteValidator) (map[AssetId][]AssetId, error) {
+    matrix := make(map[AssetId][]AssetId)
+    
+    for _, fromAsset := range assets {
+        destinations, err := validator.GetValidDestinations(fromAsset, assets)
+        if err != nil {
+            return nil, err
+        }
+        matrix[fromAsset] = destinations
+    }
+    
+    return matrix, nil
+}
+```
+
+```python Python expandable
+import requests
+from typing import List, Dict, Optional, Tuple
+from dataclasses import dataclass
+import json
+
+# Types for the policy configuration
+@dataclass
+class RoutePolicy:
+    default: str  # "open" or "closed"
+    isolation_groups: List[str]
+    blacklist_pairs: List[str]
+    whitelist_overrides: List[str]
+
+@dataclass
+class PolicyResponse:
+    status: str
+    result: RoutePolicy
+    error: Optional[str] = None
+
+AssetId = str
+
+class RouteValidator:
+    def __init__(self, api_base_url: str, api_key: str):
+        self.api_base_url = api_base_url
+        self.api_key = api_key
+        self.policy: Optional[RoutePolicy] = None
+
+    async def load_policy(self) -> None:
+        """Fetch policy from the API"""
+        try:
+            headers = {
+                'garden-app-id': self.api_key,
+                'accept': 'application/json'
+            }
+            
+            response = requests.get(f"{self.api_base_url}/policy", headers=headers)
+            response.raise_for_status()
+            
+            data = response.json()
+            
+            if data['status'] == 'Ok':
+                result = data['result']
+                self.policy = RoutePolicy(
+                    default=result['default'],
+                    isolation_groups=result['isolation_groups'],
+                    blacklist_pairs=result['blacklist_pairs'],
+                    whitelist_overrides=result['whitelist_overrides']
+                )
+            else:
+                raise Exception(f"API Error: {data.get('error', 'Unknown error')}")
+                
+        except Exception as e:
+            raise Exception(f"Failed to load policy: {e}")
+
+    def is_valid_route(self, from_asset: AssetId, to_asset: AssetId) -> bool:
+        """Check if a route is valid based on the policy"""
+        if self.policy is None:
+            raise Exception("Policy not loaded. Call load_policy() first.")
+
+        # Can't swap to the same asset
+        if from_asset == to_asset:
+            return False
+
+        # Check isolation groups first (highest priority)
+        if self._is_in_isolation_group(from_asset, to_asset):
+            return self._is_valid_isolation_group(from_asset, to_asset)
+
+        # Check whitelist overrides (bypass other restrictions)
+        if self._is_whitelist_override(from_asset, to_asset):
+            return True
+
+        # Check blacklist pairs
+        if self._is_blacklisted(from_asset, to_asset):
+            return False
+
+        # Apply default policy
+        return self.policy.default == 'open'
+
+    def get_valid_destinations(self, from_asset: AssetId, all_assets: List[AssetId]) -> List[AssetId]:
+        """Get all valid destination assets for a given source asset"""
+        return [to_asset for to_asset in all_assets if self.is_valid_route(from_asset, to_asset)]
+
+    def get_all_valid_routes(self, assets: List[AssetId]) -> List[Tuple[AssetId, AssetId]]:
+        """Get all possible routes from a list of assets"""
+        routes = []
+        
+        for from_asset in assets:
+            for to_asset in assets:
+                if self.is_valid_route(from_asset, to_asset):
+                    routes.append((from_asset, to_asset))
+        
+        return routes
+
+    # Private helper methods
+    def _is_in_isolation_group(self, from_asset: AssetId, to_asset: AssetId) -> bool:
+        for group in self.policy.isolation_groups:
+            assets = self._parse_isolation_group(group)
+            if from_asset in assets or to_asset in assets:
+                return True
+        return False
+
+    def _is_valid_isolation_group(self, from_asset: AssetId, to_asset: AssetId) -> bool:
+        for group in self.policy.isolation_groups:
+            assets = self._parse_isolation_group(group)
+            if from_asset in assets and to_asset in assets:
+                return True
+        return False
+
+    def _is_whitelist_override(self, from_asset: AssetId, to_asset: AssetId) -> bool:
+        return any(self._matches_pattern(from_asset, to_asset, override) 
+                  for override in self.policy.whitelist_overrides)
+
+    def _is_blacklisted(self, from_asset: AssetId, to_asset: AssetId) -> bool:
+        return any(self._matches_pattern(from_asset, to_asset, blacklist) 
+                  for blacklist in self.policy.blacklist_pairs)
+
+    def _parse_isolation_group(self, group: str) -> List[AssetId]:
+        """Parse 'ethereum:SEED <-> arbitrum:SEED' format"""
+        return [asset.strip() for asset in group.split('<->')]
+
+    def _matches_pattern(self, from_asset: AssetId, to_asset: AssetId, pattern: str) -> bool:
+        parts = [p.strip() for p in pattern.split('->')]
+        if len(parts) != 2:
+            return False
+        
+        from_pattern, to_pattern = parts
+        return (self._matches_asset_pattern(from_asset, from_pattern) and 
+                self._matches_asset_pattern(to_asset, to_pattern))
+
+    def _matches_asset_pattern(self, asset: AssetId, pattern: str) -> bool:
+        """Handle wildcard patterns"""
+        if pattern == '*':
+            return True
+        
+        if '*' in pattern:
+            # Handle patterns like "starknet:*" or "*:USDC"
+            if pattern.endswith(':*'):
+                chain_pattern = pattern[:-2]
+                return asset.startswith(chain_pattern + ':')
+            if pattern.startswith('*:'):
+                symbol_pattern = pattern[2:]
+                return asset.endswith(':' + symbol_pattern)
+        
+        # Exact match
+        return asset == pattern
+
+# Helper function to build route matrix for UI
+def build_route_matrix(assets: List[AssetId], validator: RouteValidator) -> Dict[AssetId, List[AssetId]]:
+    """Build route matrix for UI components"""
+    matrix = {}
+    
+    for from_asset in assets:
+        matrix[from_asset] = validator.get_valid_destinations(from_asset, assets)
+    
+    return matrix
+
+# Usage example
+async def example():
+    validator = RouteValidator('https://testnet.api.garden.finance/v2', 'your-api-key')
+    
+    try:
+        # Load policy from API
+        await validator.load_policy()
+        
+        # Example assets
+        assets = [
+            'ethereum:SEED',
+            'arbitrum:SEED', 
+            'bitcoin:BTC',
+            'ethereum:WBTC',
+            'starknet:WBTC'
+        ]
+        
+        # Check specific routes
+        print('ethereum:SEED -> arbitrum:SEED:', validator.is_valid_route('ethereum:SEED', 'arbitrum:SEED'))
+        print('ethereum:SEED -> bitcoin:BTC:', validator.is_valid_route('ethereum:SEED', 'bitcoin:BTC'))
+        print('bitcoin:BTC -> starknet:WBTC:', validator.is_valid_route('bitcoin:BTC', 'starknet:WBTC'))
+        
+        # Get all valid destinations from ethereum:SEED
+        valid_destinations = validator.get_valid_destinations('ethereum:SEED', assets)
+        print('Valid destinations from ethereum:SEED:', valid_destinations)
+        
+        # Get all valid routes
+        all_routes = validator.get_all_valid_routes(assets)
+        print('All valid routes:', all_routes)
+        
+    except Exception as error:
+        print('Error:', error)
+```
+</CodeGroup>
+
+## Integration Guide
+
+<Steps>
+<Step title="Install and Setup">
+Initialize the RouteValidator with your API configuration:
+
+```typescript
+import { RouteValidator, buildRouteMatrix } from './RouteValidator';
+
+const validator = new RouteValidator(
+  'https://testnet.api.garden.finance/v2',
+  'your-api-key'
+);
+```
+</Step>
+
+<Step title="Load Policy">
+Fetch the policy configuration from the API:
+
+```typescript
+try {
+  await validator.loadPolicy();
+  console.log('Policy loaded successfully');
+} catch (error) {
+  console.error('Failed to load policy:', error);
+}
+```
+
+<Warning>
+Always handle policy loading errors gracefully. You may want to implement retry logic or fallback to server-side validation.
+</Warning>
+</Step>
+
+<Step title="Validate Routes">
+Use the validator to check if specific routes are allowed:
+
+```typescript
+// Check individual routes
+const isValid = validator.isValidRoute('ethereum:SEED', 'arbitrum:SEED');
+
+// Get all valid destinations for a source asset
+const destinations = validator.getValidDestinations('bitcoin:BTC', allAssets);
+
+// Generate complete route matrix for UI
+const routeMatrix = buildRouteMatrix(allAssets, validator);
+```
+</Step>
+
+<Step title="Handle Updates">
+Implement policy refresh logic for your application:
+
+```typescript
+// Refresh policy periodically or on user action
+async function refreshPolicy() {
+  try {
+    await validator.loadPolicy();
+    console.log('Policy refreshed');
+  } catch (error) {
+    console.error('Policy refresh failed:', error);
+  }
+}
+
+// Refresh every 5 minutes
+setInterval(refreshPolicy, 5 * 60 * 1000);
+```
+</Step>
+</Steps>
+
+## Wildcard Patterns
+
+The system supports wildcard patterns for flexible policy configuration:
+
+<AccordionGroup>
+<Accordion title="Chain-level wildcards">
+Match all assets on a specific chain:
+
+```typescript
+// Block all routes from Bitcoin to any Starknet asset
+"bitcoin:BTC -> starknet:*"
+
+// Allow any Ethereum asset to trade with Bitcoin
+"ethereum:* -> bitcoin:BTC"
+```
+</Accordion>
+
+<Accordion title="Asset-level wildcards">
+Match specific assets across all chains:
+
+```typescript
+// Block all WBTC variants from trading with native BTC
+"*:WBTC -> bitcoin:BTC"
+
+// Allow all USDC variants to trade with each other
+"*:USDC -> *:USDC"
+```
+</Accordion>
+
+<Accordion title="Universal wildcards">
+Match any asset (use with caution):
+
+```typescript
+// Allow any asset to trade with Ethereum WETH
+"* -> ethereum:WETH"
+```
+</Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Tip>
+**Cache Policy Data**: Store the policy configuration locally and refresh it periodically rather than fetching it on every route validation.
+</Tip>
+
+<Warning>
+**Handle Policy Updates**: Implement proper error handling and refresh the policy when a get quote or create order fails, with an unsupported trading pair.
+</Warning>
+
+<Info>
+**Performance**: The local validation is significantly faster than API calls, making it ideal for real-time UI updates and user experience optimization.
+</Info>
