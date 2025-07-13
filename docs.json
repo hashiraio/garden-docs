@@ -158,13 +158,13 @@
             "group": "Global",
             "pages": [
               "api-reference/endpoint/get-chains",
-              "api-reference/endpoint/get-assets",
-              "api-reference/endpoint/get-quote"              
+              "api-reference/endpoint/get-assets"
             ]
           },
           {
             "group": "Orders",
             "pages": [
+              "api-reference/endpoint/get-quote",
               "api-reference/endpoint/orders/get-order-by-id",
               "api-reference/endpoint/orders/get-orders",
               "api-reference/endpoint/orders/create-order",

@@ -388,6 +388,28 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
+                ```json Response expandable
+                {
+                    "status": "Ok",
+                    "result": [
+                        {
+                        "source": {
+                            "asset": "solana_testnet:sol",
+                            "amount": "354608265",
+                            "display": "0.35460826",
+                            "value": "57.1238"
+                        },
+                        "destination": {
+                            "asset": "bitcoin_testnet:btc",
+                            "amount": "48515",
+                            "display": "0.00048515",
+                            "value": "56.9524"
+                        },
+                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635"
+                        }
+                    ]
+                }
+                ```
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
@@ -404,7 +426,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             "destination": {
                                 "asset": "bitcoin_testnet:btc",
                                 "owner": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
-                                "amount": "49850"
+                                "amount": "48515"
                             }
                         }'
                 ```
@@ -412,8 +434,8 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 {
                     "status": "Ok",
                     "result": {
-                        "order_id": "dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3",
-                        "versioned_tx": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100020408032aa331a727d64421581d1ec2ea7cdde7ac7bb04a7ab7bb5e7f4ea5992f088df52173853db57069928d3dc78a4248d83fa5f2d20c5ce110fe5030ff14ed9f000000000000000000000000000000000000000000000000000000000000000017b7828ca6c4f06b51139a60254f81fe1249c8e2b122febf32ca81322b9f1e8ef39c52ce23e7860515cf568e3d148773ea7f1b9628097e64f844c22b328364c501030301000258053f7b71994b940e89e4221500000000c04b03000000000044070018cffb963a80cb5bf8974e0d64934c614d26340d947ddf3b762a014cac8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7"
+                        "order_id": "ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb",
+                        "versioned_tx": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100020408032aa331a727d64421581d1ec2ea7cdde7ac7bb04a7ab7bb5e7f4ea5992f08b30c777cae9e6cbeb9830b8b0cd529b6e1f3667ae0c1c21071cb64bba2c7763e000000000000000000000000000000000000000000000000000000000000000017b7828ca6c4f06b51139a60254f81fe1249c8e2b122febf32ca81322b9f1e8ed3c02412b5458cdb8b14d42d4a61166f85f0f4e4d536c8a9f111a4de7e86b77801030301000258053f7b71994b940e89e4221500000000c04b03000000000044070018cffb963a80cb5bf8974e0d64934c614d26340d947ddf3b762a014cacb8841dc97c588ab9e1b94f62627b97d54f8c1048b28c26749d413032e9d66c4e"
                     }
                 }
                 ```
@@ -431,7 +453,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 Get the order by ID to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
-                'https://testnet.api.garden.finance/v2/orders/dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3' \
+                'https://testnet.api.garden.finance/v2/orders/ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
@@ -439,19 +461,19 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 {
                     "status": "Ok",
                     "result": {
-                        "created_at": "2025-07-11T15:04:00.482486Z",
+                        "created_at": "2025-07-13T01:35:18.538262Z",
                         "source_swap": {
-                            "created_at": "2025-07-11T15:04:00.482486Z",
-                            "swap_id": "1d432a32c6f6ce6f63369c70a11510f3238509eaffaca90ebf5f99f7341b33a7",
+                            "created_at": "2025-07-13T01:35:18.538262Z",
+                            "swap_id": "4629969e622608f634a4be4116f80be482ef987bccf30ef9900eb3e0f242eb77",
                             "chain": "solana_testnet",
                             "asset": "solana_testnet:sol",
                             "initiator": "YH4btvqb4JBWSEJh22MuA231ekpJ5JqbBXQY1apJtKH",
                             "redeemer": "5aYv3mxzXupjUa6Yyi23Yn3n1kbgGEDfrJ6uBDq6VwQo",
                             "timelock": 216000,
                             "filled_amount": "0",
-                            "asset_price": 166.76,
+                            "asset_price": 161.11,
                             "amount": "354608265",
-                            "secret_hash": "8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7",
+                            "secret_hash": "b8841dc97c588ab9e1b94f62627b97d54f8c1048b28c26749d413032e9d66c4e",
                             "secret": "",
                             "initiate_tx_hash": "",
                             "redeem_tx_hash": "",
@@ -466,18 +488,18 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             "refund_timestamp": null
                         },
                         "destination_swap": {
-                            "created_at": "2025-07-11T15:04:00.482486Z",
-                            "swap_id": "tb1pdpjayzxgx4c9p6vz92rzztc0dw5hxydym5zmxwzmfequenh0zs8qyl7s69",
+                            "created_at": "2025-07-13T01:35:18.538262Z",
+                            "swap_id": "tb1pydwnxvdwfhs674py5z7wfst9nvm2t92s9lpfs6l7v4e0tsfxx64shepc0x",
                             "chain": "bitcoin_testnet",
                             "asset": "bitcoin_testnet:btc",
                             "initiator": "460f2e8ff81fc4e0a8e6ce7796704e3829e3e3eedb8db9390bdc51f4f04cf0a6",
                             "redeemer": "tb1p4pr78swsn60y4ushe05v28mqpqppxxkfkxu2wun5jw6duc8unj3sjrh4gd",
-                            "delegate": "24ad278f4ba845174fb42c3ef1a34ff1e8fc75a0f9123fb475ae481f7a76fe7a",
+                            "delegate": "be7d111dca1cc2b967d1d1a20bf05c2cd5050307b072dd8bfccdf8cd52fddae7",
                             "timelock": 12,
                             "filled_amount": "0",
-                            "asset_price": 166.76,
-                            "amount": "49850",
-                            "secret_hash": "8f4496f0477e05038c0437ac28fc6bc1f7cd2c135d82e38ef9071c59f876c8f7",
+                            "asset_price": 161.11,
+                            "amount": "48515",
+                            "secret_hash": "b8841dc97c588ab9e1b94f62627b97d54f8c1048b28c26749d413032e9d66c4e",
                             "secret": "",
                             "initiate_tx_hash": "",
                             "redeem_tx_hash": "",
@@ -491,10 +513,10 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                             "redeem_timestamp": null,
                             "refund_timestamp": null
                         },
-                        "nonce": "17712695946749904671",
-                        "order_id": "dbf0f3037b720e3e07316481a07e29262200d185def0bfb8c834ccbe973b9ce3",
+                        "nonce": "18331192702570975643",
+                        "order_id": "ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb",
                         "affiliate_fees": [],
-                        "integrator": "test_integrator",
+                        "integrator": "DocsTesting",
                         "version": "v1"
                     }
                 }
@@ -512,7 +534,7 @@ description: "Learn how to use Garden's API to get quotes, submit orders, and tr
                 ```bash wrap
                 curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=starknet_sepolia:wbtc&to=bitcoin_testnet:btc&from_amount=50000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable
                 {

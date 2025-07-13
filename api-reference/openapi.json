@@ -27,7 +27,7 @@
         "type": "apiKey",
         "name": "garden-app-id",
         "in": "header",
-        "description": "If you do not yet have an APP ID, please follow these [steps](/api-reference/setup)."
+        "description": "If you do not yet have an app ID, please follow these [steps](/api-reference/setup)."
       }
     },
     "schemas": {
