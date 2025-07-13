@@ -130,11 +130,10 @@
             ]
           },
           {
-            "group": "Cookbook",
+            "group": "Developer Guides",
             "pages": [
-              "developers/cookbook/welcome",
-              "developers/cookbook/integrate",
-              "developers/cookbook/bridge"
+              "developers/guides/cookbook",
+              "developers/guides/sdk"
             ]
           },
           {

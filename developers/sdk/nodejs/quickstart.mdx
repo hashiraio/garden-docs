@@ -60,7 +60,7 @@ title: "Quickstart"
                 const digestKey = DigestKey.from('<YOUR_DIGEST_KEY>');
 
                 const garden = Garden.fromWallets({
-                    environment: environment, // `testnet` or `mainnet`
+                    environment: Environment.TESTNET,
                     digestKey: digestKey.val,
                     wallets: {
                         evm: ethereumWalletClient,
@@ -80,7 +80,7 @@ title: "Quickstart"
                 import { Environment } from '@gardenfi/utils';
 
                 const garden = new Garden({
-                    environment: environment, // `testnet` or `mainnet`
+                    environment: Environment.TESTNET,
                     digestKey: digestKey.val,
                     htlc: {
                         evm: <IEVMHTLC>,

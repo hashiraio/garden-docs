@@ -3,13 +3,11 @@ title: "Order Lifecycle"
 description: "Understanding the various states an order can go through during the swap process"
 ---
 
-Understanding the lifecycle of an order is critical for developers integrating with Garden protocol. This page outlines the various states an order (or [intent](/home/fundamentals/introduction/intents)) can go through during the swap process, helping you manage integration logic effectively. For a high-level explanation of the order flow, refer to the [intent flow](/home/fundamentals/how-it-works/intent-flow).
-
-An order's lifecycle starts when a user creates an intent to swap assets and continues through matching, execution, and final settlement. Each stage is tracked programmatically using the `OrderStatus` and `SwapStatus` enums. To track the current status of an order, refer to [SDK documentation](/developers/sdk/sdk) for SDK implementations or [API Reference](/api-reference/quickstart) for API-based integrations.
+This page outlines the various states an order can go through during the swap process, helping you manage integration logic effectively.
 
 ## Order states
 
-The tables below classify all the order statuses, providing descriptions and the corresponding actions. The **Actions** column is particularly useful for API integrators, detailing the steps they need to implement for each state. For SDK implementations, these actions are already handled, so the information serves as a reference to understand the underlying process.
+The tables below classify all the order statuses, providing descriptions and the corresponding actions.
 
 ### Order creation and matching
 
@@ -40,7 +38,7 @@ The tables below classify all the order statuses, providing descriptions and the
 
 | Status | Description | Action |
 |--------|-------------|--------|
-| **`CounterPartySwapExpired`** | The solver's [HTLC](/home/fundamentals/introduction/atomic-swaps) has expired. | The user must wait for their HTLC to expire to claim a refund. |
+| **`CounterPartySwapExpired`** | The solver's HTLC has expired. | The user must wait for their HTLC to expire to claim a refund. |
 | **`Expired`** | The user's HTLC has expired. | The user has to refund their funds. |
 | **`RefundDetected`** | The user's refund transaction is detected on-chain but not confirmed. | -- |
 | **`Refunded`** | The user's refund is confirmed, and they have reclaimed their funds. | -- |
@@ -61,25 +59,6 @@ Each swap (user or solver side) transitions through the following states:
 | **`Refunded`** | Refund transaction is confirmed. |
 | **`Expired`** | The swap expired, and a refund is required. |
 
-## Status flow diagram
-
 <Note>
 The order progresses through these states sequentially, with some states allowing for parallel execution between user and solver actions.
 </Note>
-
-Understanding these states is crucial for:
-- **Error handling**: Knowing when to retry operations or escalate issues
-- **User experience**: Providing accurate status updates to users
-- **Integration logic**: Implementing appropriate actions based on current state
-- **Debugging**: Identifying where issues occur in the swap process
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="SDK Integration" href="/developers/sdk/sdk">
-    Learn how to integrate with Garden using the SDK
-  </Card>
-  <Card title="API Integration" href="/developers/cookbook/integrate">
-    Integrate directly with Garden APIs
-  </Card>
-</CardGroup>
