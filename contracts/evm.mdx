@@ -1,5 +1,5 @@
 ---
-title: "EVMgoit"
+title: "EVM"
 description: "Implement atomic swaps on EVM-compatible blockchains using smart contracts"
 ---
 
@@ -26,10 +26,12 @@ Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap function
 
 ### Initiate
 
-The initiate function creates a new HTLC by locking ERC20 tokens in the contract. EVM provides three flexible initiation methods:
+The initiate function creates a new HTLC by locking tokens in the contract. EVM provides different implementations for ERC20 tokens vs native ETH:
 
 **Basic Initiation:**
-```solidity
+
+<CodeGroup>
+```solidity ERC20
 function initiate(
     address redeemer,
     uint256 timelock,
@@ -38,8 +40,20 @@ function initiate(
 ) external
 ```
 
+```solidity Native ETH
+function initiate(
+    address payable redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash
+) external payable
+```
+</CodeGroup>
+
 **Initiation on Behalf:**
-```solidity
+
+<CodeGroup>
+```solidity ERC20
 function initiateOnBehalf(
     address initiator,
     address redeemer,
@@ -49,7 +63,19 @@ function initiateOnBehalf(
 ) external
 ```
 
-**Signature-Based Initiation:**
+```solidity Native ETH
+function initiateOnBehalf(
+    address payable initiator,
+    address payable redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash
+) external payable
+```
+</CodeGroup>
+
+**Signature-Based Initiation (ERC20 only):**
+
 ```solidity
 function initiateWithSignature(
     address initiator,
@@ -69,12 +95,21 @@ Uses EIP712 signatures for off-chain authorization, enabling gasless transaction
 
 The redeem function allows the redeemer to claim the locked tokens by providing the secret that hashes to the stored secret hash.
 
-```solidity
+<CodeGroup>
+```solidity ERC20
 function redeem(
     bytes32 orderID,
     bytes calldata secret
 ) external
 ```
+
+```solidity Native ETH
+function redeem(
+    bytes32 orderID,
+    bytes calldata secret
+) external
+```
+</CodeGroup>
 
 <Info>
 The secret must hash to the exact value stored during initiation using SHA-256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
@@ -84,9 +119,15 @@ The secret must hash to the exact value stored during initiation using SHA-256. 
 
 The refund function allows the initiator to reclaim their tokens after the timelock has expired and the redeemer has not claimed the funds.
 
-```solidity
+<CodeGroup>
+```solidity ERC20
 function refund(bytes32 orderID) external
 ```
+
+```solidity Native ETH
+function refund(bytes32 orderID) external
+```
+</CodeGroup>
 
 <Note>
 Uses absolute block numbers for timelock, which provides predictable settlement windows based on consistent block production times.
@@ -96,12 +137,21 @@ Uses absolute block numbers for timelock, which provides predictable settlement 
 
 The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires using EIP712 signatures.
 
-```solidity
+<CodeGroup>
+```solidity ERC20
 function instantRefund(
     bytes32 orderID,
     bytes calldata signature
 ) external
 ```
+
+```solidity Native ETH
+function instantRefund(
+    bytes32 orderID,
+    bytes calldata signature
+) external
+```
+</CodeGroup>
 
 <Warning>
 Requires the redeemer's EIP712 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
@@ -109,26 +159,87 @@ Requires the redeemer's EIP712 signature to prevent unauthorized instant refunds
 
 ## EVM-Specific Features
 
-### State Management
+### Order State Management
 
-The contract tracks each swap's state through an enumeration - a feature not available in Bitcoin scripts:
+Both contracts use a struct to store swap state with different address types for native vs ERC20 handling:
+
+<CodeGroup>
+```solidity ERC20
+struct Order {
+    address initiator;
+    address redeemer;
+    uint256 initiatedAt;
+    uint256 timelock;
+    uint256 amount;
+    uint256 fulfilledAt;
+}
+```
+
+```solidity Native ETH
+struct Order {
+    address payable initiator;
+    address payable redeemer;
+    uint256 initiatedAt;
+    uint256 timelock;
+    uint256 amount;
+    uint256 fulfilledAt;
+}
+```
+</CodeGroup>
+
+### Token Handling Differences
+
+**ERC20 Implementation:**
+- Uses SafeERC20 for secure token transfers
+- Requires token approval before initiation
+- Transfers tokens via `transferFrom` and `transfer`
+
+**Native ETH Implementation:**
+- Uses `payable` functions and `msg.value`
+- Direct ETH transfers via `.transfer()`
+- No approval required
+
+<Tip>
+The native ETH version simplifies the user experience by eliminating the need for token approvals, while the ERC20 version provides compatibility with all standard tokens.
+</Tip>
+
+### EIP712 Signature Support
+
+Both contracts implement EIP712 for secure off-chain message signing:
 
 ```solidity
-enum SwapState {
-    INVALID,    // Swap doesn't exist
-    OPEN,       // Funds locked, awaiting redemption
-    REDEEMED,   // Secret revealed, funds claimed
-    REFUNDED    // Timelock expired, funds returned
+bytes32 private constant _REFUND_TYPEHASH = keccak256("Refund(bytes32 orderId)");
+
+function instantRefundDigest(bytes32 orderID) public view returns (bytes32) {
+    return _hashTypedDataV4(keccak256(abi.encode(_REFUND_TYPEHASH, orderID)));
 }
 ```
 
 ### Event Logging
 
-The contract emits events for each state transition to enable efficient off-chain monitoring:
+Both contracts emit identical events for each state transition to enable efficient off-chain monitoring:
 
 ```solidity
-event SwapInitiated(bytes32 indexed swapId, address indexed initiator, address indexed redeemer);
-event SwapRedeemed(bytes32 indexed swapId, bytes32 secret);
-event SwapRefunded(bytes32 indexed swapId);
-event SwapInstantRefunded(bytes32 indexed swapId);
+event Initiated(bytes32 indexed orderID);
+event Redeemed(bytes32 indexed orderID, bytes secret);
+event Refunded(bytes32 indexed orderID);
 ```
+
+### Order ID Generation
+
+Unique order identifiers are generated using SHA-256 hashing with chain-specific parameters:
+
+```solidity
+bytes32 orderID = sha256(abi.encode(
+    block.chainid, 
+    secretHash, 
+    initiator, 
+    redeemer, 
+    timelock, 
+    amount
+));
+```
+
+<Check>
+Chain ID inclusion prevents cross-chain replay attacks, while the parameter combination ensures each order is uniquely identifiable across the network.
+</Check>
