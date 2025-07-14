@@ -1,0 +1,48 @@
+---
+title: "End-to-End Onchain Swaps"
+description: ""
+---
+
+## Destination Object
+
+The destination object contains all the necessary information for completing the cross-chain swap on the destination chain.
+
+<ResponseField name="destination" type="object" required>
+  Details about the destination side of the swap.
+
+  <Expandable title="Destination properties">
+    <ResponseField name="chainId" type="string" required>
+      Identifier of the destination blockchain network.
+    </ResponseField>
+
+    <ResponseField name="assetId" type="string" required>
+      Identifier of the asset to be received on the destination chain.
+    </ResponseField>
+
+    <ResponseField name="address" type="string" required>
+      Recipient address on the destination chain that will receive the swapped funds.
+    </ResponseField>
+
+    <ResponseField name="amount" type="float" required>
+      Amount of the destination asset to be received, in the smallest unit of the asset.
+    </ResponseField>
+
+    <ResponseField name="htlcDetails" type="object">
+      Source chain HTLC information needed for destination chain redemption.
+
+      <Expandable title="HTLC details">
+        <ResponseField name="secretHash" type="string" required>
+          SHA256 hash of the secret used to lock the funds in the source chain HTLC.
+        </ResponseField>
+
+        <ResponseField name="timelock" type="integer" required>
+          Timelock period in blocks/slots after which funds can be refunded.
+        </ResponseField>
+
+        <ResponseField name="initiatorAddress" type="string" required>
+          Address of the initiator on the source chain.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>

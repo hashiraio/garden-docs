@@ -1,0 +1,176 @@
+---
+title: "Solana"
+description: "Implement atomic swaps on Solana using Anchor programs and PDAs"
+---
+
+## Contract Architecture
+
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Solana. The program manages the lifecycle of a swap through four main operations using Program Derived Addresses (PDAs) for state management:
+
+<CardGroup cols={2}>
+  <Card title="Initiate" icon="play" href="#initiate">
+      Start the cross-chain swap by depositing funds into the HTLC on the source chain.
+  </Card>
+  <Card title="Redeem" icon="check" href="#redeem">
+    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
+  </Card>
+  <Card title="Refund" icon="rotate-left" href="#refund">
+    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
+  </Card>
+  <Card title="Instant Refund" icon="bolt" href="#instant-refund">
+    Cancel the swap and get an instant refund on the source chain during the settlement window.
+  </Card>
+</CardGroup>
+
+## Core Functions
+
+### Initiate
+
+The initiate function creates a new HTLC by transferring SOL to a PDA vault. It requires:
+
+- **Secret Hash**: SHA256 hash of a preimage known only to the initiator
+- **Timelock**: Number of slots after which refund is possible (1 slot ≈ 400ms)
+- **Redeemer**: Public key authorized to claim the funds
+- **Amount**: Quantity of native SOL in lamports (1 SOL = 1,000,000,000 lamports)
+
+```rust
+pub fn initiate(
+    ctx: Context<Initiate>,
+    amount_lamports: u64,
+    expires_in_slots: u64,
+    redeemer: Pubkey,
+    secret_hash: [u8; 32],
+) -> Result<()>
+```
+
+<Note>
+Uses PDAs as deterministic vaults, ensuring each swap with the same initiator and secret hash is unique and prevents replay attacks.
+</Note>
+
+### Redeem
+
+The redeem function allows the redeemer to claim the locked SOL by providing the secret that hashes to the stored secret hash.
+
+```rust
+pub fn redeem(
+    ctx: Context<Redeem>, 
+    secret: [u8; 32]
+) -> Result<()>
+```
+
+<Info>
+The secret must hash to the exact value stored during initiation. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
+</Info>
+
+### Refund
+
+The refund function allows the initiator to reclaim their SOL after the timelock has expired and the redeemer has not claimed the funds.
+
+```rust
+pub fn refund(ctx: Context<Refund>) -> Result<()>
+```
+
+<Note>
+Uses slot-based timing which provides more granular control than Bitcoin's block-based system. Each slot represents approximately 400ms.
+</Note>
+
+### Instant Refund
+
+The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires.
+
+```rust
+pub fn instant_refund(ctx: Context<InstantRefund>) -> Result<()>
+```
+
+<Warning>
+Requires the redeemer's signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
+</Warning>
+
+## Solana-Specific Features
+
+### PDA State Management
+
+The program uses a PDA (Program Derived Address) to store swap state, derived from deterministic seeds:
+
+```rust
+#[account]
+#[derive(InitSpace)]
+pub struct SwapAccount {
+    amount_lamports: u64,    // SOL amount in base units
+    expiry_slot: u64,        // Absolute slot for expiry
+    initiator: Pubkey,       // Initiator's public key
+    redeemer: Pubkey,        // Redeemer's public key  
+    secret_hash: [u8; 32],   // SHA256 hash of secret
+}
+```
+
+### Account Constraints
+
+Anchor provides compile-time account validation and runtime constraints:
+
+```rust
+#[account(
+    init,
+    payer = initiator,
+    seeds = [b"swap_account", initiator.key().as_ref(), &secret_hash],
+    bump,
+    space = ANCHOR_DISCRIMINATOR + SwapAccount::INIT_SPACE,
+)]
+pub swap_account: Account<'info, SwapAccount>,
+```
+
+<Tip>
+The seed structure ensures that each swap is uniquely identified by the initiator and secret hash, preventing duplicate swaps until completion.
+</Tip>
+
+### Event Logging
+
+The program emits events for each state transition to enable efficient off-chain monitoring:
+
+```rust
+#[event]
+pub struct Initiated {
+    pub swap_amount: u64,
+    pub expires_in_slots: u64,
+    pub initiator: Pubkey,
+    pub redeemer: Pubkey,
+    pub secret_hash: [u8; 32],
+}
+
+#[event]
+pub struct Redeemed {
+    pub initiator: Pubkey,
+    pub secret: [u8; 32],
+}
+```
+
+### Rent Management
+
+Solana's rent system is automatically handled through Anchor's `close` attribute:
+
+```rust
+#[account(mut, close = initiator)]
+pub swap_account: Account<'info, SwapAccount>,
+```
+
+<Check>
+When a swap completes (redeem/refund), the PDA is closed and rent is automatically refunded to the initiator, ensuring no SOL is permanently locked.
+</Check>
+
+### Error Handling
+
+Custom error types provide clear feedback for failed operations:
+
+```rust
+#[error_code]
+pub enum SwapError {
+    #[msg("The provided initiator is not the original initiator of this swap")]
+    InvalidInitiator,
+    #[msg("The provided redeemer is not the original redeemer of this swap")]  
+    InvalidRedeemer,
+    #[msg("The provided secret does not correspond to the secret hash of this swap")]
+    InvalidSecret,
+    #[msg("Attempt to perform a refund before expiry time")]
+    RefundBeforeExpiry,
+}
+``` 

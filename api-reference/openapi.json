@@ -1,5 +1,8 @@
 {
   "openapi": "3.1.0",
+  "x-mcp": {
+    "enabled": true
+  },
   "info": {
     "title": "Garden API",
     "version": "2.0.0",
@@ -401,7 +404,8 @@
             "items": {
               "$ref": "#/components/schemas/Liquidity"
             }
-          }
+          }, 
+          "policy": { "$ref": "#/components/schemas/RoutePolicy" }
         }
       },
       "AffiliateFee": {
@@ -823,6 +827,13 @@
           "destination": { "$ref": "#/components/schemas/QuoteAsset" }
         }
       },
+      "SolverLiquidity": {
+        "type": "object",
+        "properties": {
+          "solver_id": { "type": "string" },
+          "liquidity": { "type": "array", "items": { "$ref": "#/components/schemas/Liquidity" } } 
+        }
+      },
       "CreateOrderResponse": {
         "allOf": [
           {
@@ -851,6 +862,39 @@
                 "items": {
                   "$ref": "#/components/schemas/Quote"
                 }
+              }
+            }
+          }
+        ]
+      },
+      "LiquidityResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Liquidity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ResponseString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "string"
               }
             }
           }
@@ -1160,6 +1204,23 @@
         }
       }
     },
+    "/liquidity": {
+      "get": {
+        "summary": "Get all the available liquidity.",
+        "responses": {
+          "200": {
+            "description": "Array of solver-wise liquidity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiquidityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/fees": {
       "get": {
         "summary": "Get swap fees.",
@@ -1169,7 +1230,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/ResponseString"
                 }
               }
             }
@@ -1186,7 +1247,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/ResponseString"
                 }
               }
             }

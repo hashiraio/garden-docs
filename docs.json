@@ -119,20 +119,11 @@
               }
             ]
           },
-
           {
             "group": "Core Concepts",
             "pages": [
               "developers/core/order-lifecycle",
               "developers/core/sessions"
-            ]
-          },
-          {
-            "group": "Smart Contracts",
-            "pages": [
-              "developers/contracts/contracts",
-              "developers/contracts/atomic-swap-evm",
-              "developers/contracts/atomic-swap-btc"
             ]
           },
           {
@@ -151,6 +142,26 @@
         ]
       },
       {
+        "tab": "Smart Contracts",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "contracts/get-started"
+            ]
+          },
+          {
+            "group": "HTLC",
+            "pages": [
+              "contracts/bitcoin", 
+              "contracts/evm",
+              "contracts/solana",
+              "contracts/starknet"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "API Reference",
         "groups": [
           {
@@ -164,7 +175,10 @@
             "pages": [
               "api-reference/endpoint/get-chains",
               "api-reference/endpoint/get-assets",
-              "api-reference/endpoint/get-policy"
+              "api-reference/endpoint/get-policy",
+              "api-reference/endpoint/get-liquidity",
+              "api-reference/endpoint/get-volume",
+              "api-reference/endpoint/get-fees"
             ]
           },
           {
@@ -229,6 +243,42 @@
       "x": "https://x.com/garden_finance",
       "github": "https://github.com/gardenfi",
       "discord": "https://discord.gg/dZwSjh9922"
-    }
+    },
+    "links": [
+      {
+        "header": "Application",
+        "items": [
+          {
+            "label": "Swap",
+            "href": "https://app.garden.finance/swap"
+          },
+          {
+            "label": "Stake",
+            "href": "https://app.garden.finance/stake"
+          }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          {
+            "label": "Blog",
+            "href": "https://garden.finance/blog"
+          },
+          {
+            "label": "Docs",
+            "href": "https://docs.garden.finance"
+          },
+          {
+            "label": "Audits",
+            "href": "https://github.com/catalogfi/audits"
+          },
+          {
+            "label": "Media Kit",
+            "href": "https://docs.garden.finance/home/guides/brand"
+          }
+        ]
+      }
+    ]
   }
 }

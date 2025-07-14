@@ -6,34 +6,34 @@ description: "Product updates and announcements"
 <Update label="July 11, 2025" description="v2.0.0" tags={["API"]}>
   ## API Architecture Overhaul
   
-  - Unified Server Structure: Migrated from microservice-based endpoints to unified API at https://{environment}.garden.finance/v2
-  - Simplified Authentication: Replaced Bearer JWT authentication with garden-app-id header authentication
+    - Unified Server Structure: Migrated from microservice-based endpoints to unified API at https://\{environment\}.garden.finance/v2
+    - Simplified Authentication: Replaced Bearer JWT authentication with garden-app-id header authentication
 
-    ## New Endpoints
+  ## New Endpoints
     
-  - Route Policy API: Added /policy endpoint for client-side route validation and reduced API dependencies
-  - Liquidity: Introduced /liquidity endpoint for real-time liquidity information
+    - Route Policy API: Added /policy endpoint for client-side route validation and reduced API dependencies
+    - Liquidity: Introduced /liquidity endpoint for real-time liquidity information
 
-    ## Consolidated API Structure
+  ## Consolidated API Structure
     
-  - Quote Service: Unified quote functionality under /quote endpoint
-  - Order Management: Streamlined order operations with /orders and /orders/{order} endpoints
-  - Chain & Asset Info: Simplified chain and asset queries with /chains and /assets endpoints
-  - System Health: Added /health endpoint for service monitoring
-  - Analytics: Integrated /fees and /volume endpoints for swap metrics
+    - Quote Service: Unified quote functionality under /quote endpoint
+    - Order Management: Streamlined order operations with /orders and /orders/{order} endpoints
+    - Chain & Asset Info: Simplified chain and asset queries with /chains and /assets endpoints
+    - System Health: Added /health endpoint for service monitoring
+    - Analytics: Integrated /fees and /volume endpoints for swap metrics
 
-    ## Breaking Changes
+  ## Breaking Changes
     
-  - Authentication Method: Must use garden-app-id header instead of Bearer tokens
-  - Server URLs: Update base URL to use environment variable format
-  - Response Schemas: Enhanced type definitions and validation rules
-  - Endpoint Paths: Some endpoints have been reorganized for consistency
+    - Authentication Method: Must use garden-app-id header instead of Bearer tokens
+    - Server URLs: Update base URL to use environment variable format
+    - Response Schemas: Enhanced type definitions and validation rules
+    - Endpoint Paths: Some endpoints have been reorganized for consistency
 
-    ## Developer Experience Improvements
+  ## Developer Experience Improvements
 
-  - Better Documentation: Enhanced OpenAPI specification with detailed descriptions and examples
-  - Type Safety: Improved schema definitions for better SDK generation
-  - Error Handling: Standardized error response formats across all endpoints
+    - Better Documentation: Enhanced OpenAPI specification with detailed descriptions and examples
+    - Type Safety: Improved schema definitions for better SDK generation
+    - Error Handling: Standardized error response formats across all endpoints
 </Update>
 
 <Update label="July 10, 2025" description="v2.2.0" tags={["SDK"]}>

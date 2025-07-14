@@ -1,5 +1,5 @@
 ---
-title: "Atomic Swap (BTC)"
+title: "Bitcoin"
 description: "Implement atomic swaps on Bitcoin using scripts for initiate, redeem, refund, and instant refund operations"
 ---
 
@@ -7,41 +7,24 @@ description: "Implement atomic swaps on Bitcoin using scripts for initiate, rede
 The article assumes that the reader has knowledge of taproot in bitcoin and does not cover the construction of transactions.
 </Note>
 
-### Bitcoin-Specific Advantages
-
-<CardGroup cols={2}>
-  <Card title="Privacy & Efficiency" icon="shield">
-    **X-only pubkeys**: Better privacy and smaller transaction sizes  
-    **Taproot scripts**: More efficient execution and enhanced privacy  
-    **Schnorr signatures**: Smaller signatures and batch verification
-  </Card>
-  <Card title="Flexible Timelock" icon="clock">
-    **Relative timelock**: More flexible than absolute block numbers  
-    **CSV**: Measured from UTXO creation, not global block height  
-    **Better coordination**: Easier to coordinate between chains
-  </Card>
-</CardGroup>
-
 ## HTLC Script Architecture
 
 Instead of contract functions, Bitcoin implements atomic swap logic through **scripts** that are executed when UTXOs are spent. Let's explore the four core operations:
 
 <CardGroup cols={2}>
   <Card title="Initiate" icon="play" href="#initiate">
-    Create transaction with HTLC script conditions
+    Start the cross-chain swap by depositing funds into the HTLC on the source chain.
   </Card>
   <Card title="Redeem" icon="check" href="#redeem">
-    Spend by revealing secret and providing signature
+    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
   </Card>
   <Card title="Refund" icon="rotate-left" href="#refund">
-    Reclaim after relative timelock expires
+    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
   </Card>
   <Card title="Instant Refund" icon="bolt" href="#instant-refund">
-    Cancel with mutual 2-of-2 signatures
+    Cancel the swap and get an instant refund on the source chain during the settlement window.
   </Card>
 </CardGroup>
-
-These functions look similar to what we have on [EVM contracts](/developers/contracts/atomic-swap-evm).
 
 Let's use the following struct for passing swap info:
 
@@ -51,15 +34,12 @@ type HTLC struct {
     InitiatorPubkey []byte
     // X-only pubkey of the redeemer
     RedeemerPubkey []byte
+    // sha256(preimage)
     SecretHash     []byte
     // expiry in blocks
     Timelock uint32
 }
 ```
-
-<Note>
-**Bitcoin Advantage**: X-only pubkeys (Taproot) provide better privacy and smaller transaction sizes compared to traditional Bitcoin addresses.
-</Note>
 
 ## Core Operations
 
@@ -72,7 +52,7 @@ Initiating an atomic swap on Bitcoin involves creating a transaction that locks 
     The initiator creates a Bitcoin transaction that:
     - Spends from their wallet (input)
     - Creates an output that pays to the HTLC script address
-    - The script address is derived from the HTLC parameters (pubkeys, secret hash, and timelock)
+    - The script address is derived from the HTLC parameters (pubkeys, secret hash, timelock and destination data)
   </Step>
   <Step title="Set Script Conditions">
     The HTLC script ensures that the locked funds can only be spent if either:
@@ -85,7 +65,7 @@ Initiating an atomic swap on Bitcoin involves creating a transaction that locks 
 The amount locked in the script becomes the swap amount. The transaction must be confirmed on the Bitcoin blockchain before the counterparty proceeds with their side of the swap.
 
 <Note>
-**Bitcoin Difference**: Unlike EVM contracts where state is stored on-chain, Bitcoin scripts are stateless and executed only when the UTXO is spent.
+Unlike EVM contracts where initiate details are known when the initiate happens on chain, in bitcoin only the spending branch details are made public. If redeem happens, only the redeemer public key and secret are made public, where as in the refund case only the initiator is made public.
 </Note>
 
 ### Redeem
@@ -165,7 +145,7 @@ The refund mechanism is a critical safety feature in atomic swaps that prevents 
 Key concepts in refunding:
 - **Timelock**: A waiting period measured in blocks
 - **Relative time**: Measured from when the swap was initiated
-- **Initiator authentication**: Only the original sender can refund
+- **Initiator authentication**: Only the initiator can refund
 
 The refund process involves:
 - Waiting for the timelock to expire
@@ -223,7 +203,7 @@ After OP_DROP:         After Push pubkey:     After CHECKSIG:
 </Info>
 
 <Note>
-**Bitcoin Advantage**: Relative timelock with CSV provides more flexibility than absolute block numbers, as it's measured from when the UTXO was created rather than a specific block height.
+Relative timelock with CSV provides more flexibility than absolute block numbers, as it's measured from when the UTXO was created rather than a specific block height.
 </Note>
 
 This provides a secure way to recover funds if:
@@ -321,7 +301,7 @@ The final state:
 </Info>
 
 <Note>
-**Bitcoin Advantage**: The `OP_CHECKSIGADD` operation provides efficient multi-signature verification using Tapscript's enhanced capabilities.
+The `OP_CHECKSIGADD` operation provides efficient multi-signature verification using Tapscript's enhanced capabilities.
 </Note>
 
 This approach efficiently implements a 2-of-2 multisignature requirement using Tapscript's enhanced capabilities.
@@ -339,7 +319,7 @@ The script ensures that both signatures are valid and match their respective pub
     Choose appropriate UTXOs to fund the HTLC script, considering transaction fees and optimal UTXO management.
   </Step>
   <Step title="Script Address Generation">
-    Generate the script address using Taproot's address format for better privacy and efficiency.
+    Generate the script address using Taproot's address format for better privacy, efficiency and cost optimisation.
   </Step>
   <Step title="Fee Calculation">
     Calculate appropriate fees based on current network conditions and transaction size.
@@ -356,11 +336,3 @@ Unlike EVM contracts with events, Bitcoin requires:
 - **Transaction parsing**: Monitor the blockchain for relevant transactions
 - **Script analysis**: Parse transaction scripts to determine swap states
 - **UTXO tracking**: Track when HTLCs are created, spent, or expired
-
-### Integration with EVM Swaps
-
-Bitcoin HTLCs are designed to work seamlessly with [EVM atomic swaps](/developers/contracts/atomic-swap-evm). The secret revealed when redeeming on Bitcoin can be used to claim funds on EVM chains, and vice versa.
-
-<Note>
-This provides a cooperative way to cancel the swap when both parties mutually agree to abort, whether due to better trade opportunities arising or changing market conditions before completion.
-</Note> 
