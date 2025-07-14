@@ -1,11 +1,11 @@
 ---
-title: "EVM"
+title: "EVMgoit"
 description: "Implement atomic swaps on EVM-compatible blockchains using smart contracts"
 ---
 
 ## Contract Architecture
 
-Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on EVM chains. The contract manages the lifecycle of a swap through four main operations:
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on EVM chains. The contract manages the lifecycle of a swap through four main operations with enhanced signature support and flexible initiation methods:
 
 <CardGroup cols={2}>
   <Card title="Initiate" icon="play" href="#initiate">
@@ -26,24 +26,43 @@ Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap function
 
 ### Initiate
 
-The initiate function creates a new HTLC by locking tokens in the contract. It requires:
+The initiate function creates a new HTLC by locking ERC20 tokens in the contract. EVM provides three flexible initiation methods:
 
-- **Hashlock**: SHA256 hash of a preimage known only to the initiator
-- **Timelock**: Block number after which refund is possible
-- **Redeemer Address**: Address authorized to claim the funds
-- **Token Amount**: Amount of tokens to lock
-
+**Basic Initiation:**
 ```solidity
 function initiate(
-    bytes32 secretHash,
-    uint256 timelock,
     address redeemer,
-    uint256 amount
-) external payable;
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash
+) external
+```
+
+**Initiation on Behalf:**
+```solidity
+function initiateOnBehalf(
+    address initiator,
+    address redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash
+) external
+```
+
+**Signature-Based Initiation:**
+```solidity
+function initiateWithSignature(
+    address initiator,
+    address redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash,
+    bytes calldata signature
+) external
 ```
 
 <Note>
-**EVM Advantage**: The function interface makes it easy to integrate with existing Solidity tooling and provides clear input validation.
+Uses EIP712 signatures for off-chain authorization, enabling gasless transactions where authorized third parties can initiate swaps on behalf of users.
 </Note>
 
 ### Redeem
@@ -52,13 +71,13 @@ The redeem function allows the redeemer to claim the locked tokens by providing 
 
 ```solidity
 function redeem(
-    bytes32 swapId,
-    bytes32 secret
-) external;
+    bytes32 orderID,
+    bytes calldata secret
+) external
 ```
 
 <Info>
-The secret must hash to the exact value stored during initiation. Once revealed, this secret enables the counterparty to claim funds on the other chain.
+The secret must hash to the exact value stored during initiation using SHA-256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
 </Info>
 
 ### Refund
@@ -66,24 +85,27 @@ The secret must hash to the exact value stored during initiation. Once revealed,
 The refund function allows the initiator to reclaim their tokens after the timelock has expired and the redeemer has not claimed the funds.
 
 ```solidity
-function refund(bytes32 swapId) external;
+function refund(bytes32 orderID) external
 ```
 
 <Note>
-**EVM Advantage**: Uses absolute block numbers for timelock, which can be more predictable than Bitcoin's relative timelock mechanism.
+Uses absolute block numbers for timelock, which provides predictable settlement windows based on consistent block production times.
 </Note>
 
 ### Instant Refund
 
-The instant refund function provides a way for both parties to mutually agree to cancel the swap before the timelock expires.
+The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires using EIP712 signatures.
 
 ```solidity
 function instantRefund(
-    bytes32 swapId,
-    bytes memory initiatorSignature,
-    bytes memory redeemerSignature
-) external;
+    bytes32 orderID,
+    bytes calldata signature
+) external
 ```
+
+<Warning>
+Requires the redeemer's EIP712 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
+</Warning>
 
 ## EVM-Specific Features
 
