@@ -1,6 +1,6 @@
 ---
-title: "Single Click Swaps"
-description: "Learn how to implement single-click cross-chain swaps that don't require users to stay online throughout the entire process. This guide explains Garden's preimage manager system that enables automated redemption."
+title: "One-Click Swaps"
+description: "Integrate one-click cross-chain swaps that handle the entire flow in the background"
 ---
 
 ## Overview
@@ -14,7 +14,7 @@ We recommend using this system in state-less or unstable network environments, i
 ## How It Works
 
 * This allows a user or an integrator to grant preimage manager access to generate the preimage, hold it until the solver initiate on the Destination chain.
-* Revealing the preimage claims funds to user's address, the preimage manager is not allowed to change the addresses of sender or recipient as they are pre set onchain, and are immutable.
+* Revealing the preimage claims funds to user's address, the preimage manager is not allowed to change the addresses of sender or recipient as they are pre set on-chain, and are immutable.
 * This is an **optional** convinience feature, allowing the user to interact with the swapping system, and not stay online until confirmation, this could add high UX value for swaps from slow chains like Bitcoin.
 
 ### Architecture Overview

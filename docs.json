@@ -89,9 +89,14 @@
             "pages": [
               "developers/overview",
               "developers/supported-chains",
-              "developers/affiliate-fees",
-              "developers/1click",
-              "developers/route-policy"
+              "developers/supported-routes"
+            ]
+          },
+          {
+            "group": "API",
+            "pages": [
+              "developers/api/overview",
+              "developers/api/affiliate-fees"
             ]
           },
           {
