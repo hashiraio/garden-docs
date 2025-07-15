@@ -53,7 +53,7 @@ export const getExplorerUrl = (chain, address) => {
 export const AssetRow = ({ chain, assets }) => {
   return (
     <tr>
-      <td className="flex items-center gap-2 w-fit whitespace-nowrap" colSpan={4}>
+      <td className="flex items-center gap-2 w-full whitespace-nowrap border-r-[1px] border-[#e5e1e2] dark:border-[#454143]/50" colSpan={4}>
         <Frame className="pointer-events-none w-[20px]">
           <img width="20" src={chain.icon} alt={chain.chain} />
         </Frame>
