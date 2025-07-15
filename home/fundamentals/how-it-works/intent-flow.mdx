@@ -12,13 +12,13 @@ Now that we know all the actors and modules in the system, let's take a detailed
 Here's a simplified representation of the process:
 
 <Steps>
-  <Step title="Intent Creation">
+  <Step title="Intent creation">
     User requests quote → Signs intent → Submits intent to order book
   </Step>
-  <Step title="Solver Selection">
+  <Step title="Solver selection">
     Order book selects solver → Solver begins settlement
   </Step>
-  <Step title="User Settlement">
+  <Step title="User settlement">
     User initiates transaction → Solver executes on destination chain
   </Step>
   <Step title="Completion">
@@ -31,13 +31,13 @@ Here is the detailed look into each step of the process.
 ## Creating an intent
 
 <CardGroup cols={1}>
-  <Card title="Request Quote" icon="calculator">
+  <Card title="Request quote" icon="calculator">
     The user starts the process by requesting a **quote** for a desired swap. The quote contains details like the input asset, output asset, chains involved, and the desired amounts.
   </Card>
-  <Card title="Accept Quote" icon="signature">
+  <Card title="Accept quote" icon="signature">
     The user receives the quote and must **accept it** by creating a **signed intent message.**
   </Card>
-  <Card title="Create Intent" icon="list-check">
+  <Card title="Create intent" icon="list-check">
     This signed intent represents the user's objective, including parameters like assets, chains, amounts, and expiration details.
   </Card>
 </CardGroup>
@@ -49,15 +49,15 @@ Once the user signs the intent, it is submitted to the **order book**, a decentr
 ### Auction process:
 
 <Steps>
-  <Step title="Quote Submission">
+  <Step title="Quote submission">
     All solvers submit their quotes based on the intent's parameters.
   </Step>
   
-  <Step title="Best Quote Determination">
+  <Step title="Best quote determination">
     The **best quote** (lowest price or highest efficiency) is determined.
   </Step>
   
-  <Step title="Breaking Draws">
+  <Step title="Breaking draws">
     Solvers with a **higher staker score** than the solver with the best quote have a 5-second window to match the quote.
     
     - **No acceptance:** The best-quote solver wins.
@@ -65,7 +65,7 @@ Once the user signs the intent, it is submitted to the **order book**, a decentr
     - **Multiple acceptances:** The solver with the highest staker score wins.
   </Step>
   
-  <Step title="Solver Confirmation">
+  <Step title="Solver confirmation">
     Once a solver is selected, they prepare to execute the swap.
   </Step>
 </Steps>
@@ -73,19 +73,19 @@ Once the user signs the intent, it is submitted to the **order book**, a decentr
 ## Settlement: User-side execution
 
 <Steps>
-  <Step title="Begin Settlement">
+  <Step title="Begin settlement">
     The settlement process begins once the selected solver is confirmed.
   </Step>
   
-  <Step title="User Initiation">
+  <Step title="User initiation">
     The user must **initiate settlement** by creating a **signed transaction message** for the intent.
   </Step>
   
-  <Step title="Relayer Broadcast">
+  <Step title="Relayer broadcast">
     The signed message is submitted to a **relayer**, which broadcasts it on the blockchain.
   </Step>
   
-  <Step title="On-chain Processing">
+  <Step title="On-chain processing">
     The transaction is processed on-chain, and the user's funds are locked or transferred to the relevant contract or wallet.
   </Step>
   
@@ -97,15 +97,15 @@ Once the user signs the intent, it is submitted to the **order book**, a decentr
 ## Settlement: Solver-side execution
 
 <Steps>
-  <Step title="Receive Confirmation">
+  <Step title="Receive confirmation">
     The solver, upon receiving confirmation of the user-side transaction, initiates the corresponding transaction on their end.
   </Step>
   
-  <Step title="Execute on Destination">
+  <Step title="Execute on destination">
     This step involves the solver locking funds on the destination chain, earmarked for the user.
   </Step>
   
-  <Step title="Solver Confirmation">
+  <Step title="Solver confirmation">
     The solver's transaction also undergoes a confirmation process on the destination chain to ensure security and reliability.
   </Step>
 </Steps>
@@ -113,12 +113,12 @@ Once the user signs the intent, it is submitted to the **order book**, a decentr
 ## Redemption
 
 <Steps>
-  <Step title="Asset Availability">
+  <Step title="Asset availability">
     After the solver's transaction achieves the required confirmations:
     - The user can redeem funds on destination revealing the swap prehash.
   </Step>
   
-  <Step title="Solver Redemption">
+  <Step title="Solver redemption">
     Once the user reveals the prehash the solver is able to recieve funds on the source chain, completing the swap.
   </Step>
-</Steps> 
+</Steps>

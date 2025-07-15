@@ -3,32 +3,25 @@ title: "Starknet"
 description: "Implement atomic swaps on Starknet using Cairo contracts and SNIP-12 signatures"
 ---
 
-## Contract Architecture
+## Contract architecture
 
 Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Starknet. The contract manages the lifecycle of a swap through four main operations with enhanced signature support and flexible initiation methods:
 
-<CardGroup cols={2}>
-  <Card title="Initiate" icon="play" href="#initiate">
-    Start the cross-chain swap by depositing funds into the HTLC on the source chain.
-  </Card>
-  <Card title="Redeem" icon="check" href="#redeem">
-    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
-  </Card>
-  <Card title="Refund" icon="rotate-left" href="#refund">
-    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
-  </Card>
-  <Card title="Instant Refund" icon="bolt" href="#instant-refund">
-    Cancel the swap and get an instant refund on the source chain during the settlement window.
-  </Card>
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant refund" icon="bolt" href="#instant-refund" />
 </CardGroup>
 
-## Core Functions
+## Core functions
 
 ### Initiate
 
 The initiate function creates a new HTLC by locking ERC20 tokens in the contract. Starknet provides three flexible initiation methods:
 
-**Basic Initiation:**
+#### Basic initiation
+
 ```rust
 fn initiate(
     ref self: ContractState,
@@ -39,7 +32,8 @@ fn initiate(
 )
 ```
 
-**Initiation on Behalf:**
+#### Initiation on behalf
+
 ```rust
 fn initiate_on_behalf(
     ref self: ContractState,
@@ -51,7 +45,8 @@ fn initiate_on_behalf(
 )
 ```
 
-**Signature-Based Initiation:**
+#### Signature-based initiation
+
 ```rust
 fn initiate_with_signature(
     ref self: ContractState,
@@ -81,7 +76,7 @@ fn redeem(
 ```
 
 <Info>
-The secret must hash to the exact value stored during initiation using SHA-256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
+The secret must hash to the exact value stored during initiation using SHA256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required — anyone can execute if they know the secret.
 </Info>
 
 ### Refund
@@ -96,10 +91,10 @@ fn refund(
 ```
 
 <Note>
-Uses block number-based timing similar to Ethereum, providing predictable settlement windows based on Starknet's consistent block production.
+Starknet uses block number-based timing similar to Ethereum, providing predictable settlement windows based on Starknet's consistent block production.
 </Note>
 
-### Instant Refund
+### Instant refund
 
 The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires using SNIP-12 signatures.
 
@@ -111,13 +106,13 @@ fn instant_refund(
 )
 ```
 
-<Warning>
-Requires the redeemer's SNIP-12 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
-</Warning>
+<Note>
+This requires the redeemer's SNIP-12 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
+</Note>
 
-## Starknet-Specific Features
+## Starknet-specific features
 
-### Order State Management
+### Order state management
 
 The contract uses a Cairo struct to store swap state with efficient storage patterns:
 
@@ -133,7 +128,7 @@ pub struct Order {
 }
 ```
 
-### Poseidon-Based Order IDs
+### Poseidon-based order IDs
 
 Starknet uses the Poseidon hash function for generating unique order identifiers:
 
@@ -156,7 +151,7 @@ fn generate_order_id(
 Poseidon hashing is optimized for zero-knowledge proofs and provides efficient computation on Starknet while ensuring order uniqueness.
 </Tip>
 
-### SNIP-12 Signature Validation
+### SNIP-12 signature validation
 
 The contract implements SNIP-12 (Starknet Improvement Proposal 12) for secure off-chain message signing:
 
@@ -167,7 +162,7 @@ let is_valid_signature = is_valid == starknet::VALIDATED || is_valid == 1;
 assert!(is_valid_signature, "HTLC: invalid initiator signature");
 ```
 
-### Event Logging
+### Event logging
 
 The contract emits events for each state transition to enable efficient off-chain monitoring:
 
@@ -188,7 +183,7 @@ pub struct Initiated {
 }
 ```
 
-### ERC20 Token Integration
+### ERC20 token integration
 
 Unlike native currency swaps, Starknet HTLC works with ERC20 tokens:
 
@@ -204,16 +199,7 @@ struct Storage {
 The contract uses OpenZeppelin's ERC20 interface for secure token transfers with proper allowance and balance checks.
 </Check>
 
-### Cairo Language Features
-
-The contract leverages Cairo's safety features and storage optimizations:
-
-- **Storage Maps**: Efficient key-value storage for orders
-- **Contract Address Types**: Type-safe address handling
-- **Felt252**: Native field element type for hashes and identifiers
-- **Array Types**: Dynamic arrays for signatures and secrets
-
-### Gas Optimization
+### Gas optimization
 
 Starknet's unique fee model enables several optimizations:
 
@@ -232,4 +218,4 @@ fn safe_params(
 
 <Info>
 Parameter validation is grouped into a single function to optimize for Starknet's execution model while maintaining security.
-</Info> 
+</Info>

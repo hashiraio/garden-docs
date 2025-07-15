@@ -3,13 +3,20 @@ title: "Bitcoin"
 description: "Implement atomic swaps on Bitcoin using scripts for initiate, redeem, refund, and instant refund operations"
 ---
 
-<Note>
-The article assumes that the reader has knowledge of taproot in bitcoin and does not cover the construction of transactions.
-</Note>
+<Info>
+Learn about [P2TR (Pay To Taproot)](https://learnmeabitcoin.com/technical/script/p2tr/) to understand how to spend from a HTLC script.
+</Info>
 
-## HTLC script architecture
+## Script architecture
 
-Instead of contract functions, Bitcoin implements atomic swap logic through scripts that are executed when UTXOs are spent. Let's explore the four core operations.
+Instead of contract functions, Bitcoin implements atomic swap logic through scripts that are executed when UTXOs are spent. Let's explore the four core operations:
+
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant refund" icon="bolt" href="#instant-refund" />
+</CardGroup>
 
 We will use the following struct for passing swap info:
 
@@ -232,7 +239,7 @@ OP_2
 OP_NUMEQUAL
 ```
 
-#### Stack Visualization
+#### Stack visualization
 
 ```
 Initial State:              After Push initiatorPubkey:   After First CHECKSIG:
@@ -287,3 +294,11 @@ The `OP_CHECKSIGADD` operation provides efficient multi-signature verification u
 This approach efficiently implements a 2-of-2 multisignature requirement using Tapscript's enhanced capabilities.
 
 The script ensures that both signatures are valid and match their respective public keys, confirming that both parties have mutually agreed to cancel the swap.
+
+## Bitcoin-specific considerations
+
+### Transaction construction
+
+- Input selection: Choose appropriate UTXOs to fund the HTLC script, considering transaction fees and optimal UTXO management.
+- Script address generation: Generate the script address using Taproot's address format for better privacy, efficiency and cost optimization.
+- Fee calculation: Calculate appropriate fees based on current network conditions and transaction size.

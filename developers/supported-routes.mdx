@@ -21,7 +21,7 @@ Route policies use a priority-based validation system with four key components:
 4. **Default Policy**: Fallback behavior for unconfigured routes.
 
 <Steps>
-    <Step title="Isolation Groups">
+    <Step title="Isolation groups">
     If either asset is in an isolation group, the route is only valid if both assets are in the same isolation group.
 
     ```typescript
@@ -30,7 +30,7 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Whitelist Overrides">
+    <Step title="Whitelist overrides">
     Explicit exceptions that allow routes regardless of other restrictions.
 
     ```typescript
@@ -39,7 +39,7 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Blacklist Pairs">
+    <Step title="Blacklist pairs">
     Forbidden routes that override the default policy.
 
     ```typescript
@@ -48,12 +48,12 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Default Policy">
+    <Step title="Default policy">
     Applied when no other rules match — either "open" (allow) or "closed" (deny).
     </Step>
 </Steps>
 
-## Local Route Matrix Generation
+## Local route matrix generation
 
 Here's a complete script to route matrix generation for local route validation:
 
@@ -865,7 +865,7 @@ async def example():
 ```
 </CodeGroup>
 
-## Integration Guide
+## Integration guide
 
 ```typescript
 import { RouteValidator, buildRouteMatrix } from './RouteValidator';
@@ -896,7 +896,7 @@ const destinations = validator.getValidDestinations('bitcoin:BTC', allAssets);
 const routeMatrix = buildRouteMatrix(allAssets, validator);
 ```
 
-## Wildcard Patterns
+## Wildcard patterns
 
 The system supports wildcard patterns for flexible policy configuration:
 
@@ -935,7 +935,7 @@ Match any asset (use with caution):
 </Accordion>
 </AccordionGroup>
 
-## Best Practices
+## Best practices
 
 1. **Store the policy configuration locally** and refresh it periodically rather than fetching it on every route validation.
 2. **Implement proper error handling** and refresh the policy when a get quote or create order fails due to an unsupported pair.
