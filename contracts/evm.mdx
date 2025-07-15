@@ -20,7 +20,7 @@ Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap function
 
 The initiate function creates a new HTLC by locking tokens in the contract. EVM provides different implementations for ERC20 tokens vs. native ETH:
 
-**Basic initiation:**
+#### Basic initiation
 
 <CodeGroup>
 ```solidity ERC20
@@ -42,7 +42,7 @@ function initiate(
 ```
 </CodeGroup>
 
-**Initiation on behalf:**
+#### Initiation on behalf
 
 <CodeGroup>
 ```solidity ERC20
@@ -66,7 +66,7 @@ function initiateOnBehalf(
 ```
 </CodeGroup>
 
-**Signature-based initiation (ERC20 only):**
+#### Signature-based initiation (ERC20 only)
 
 ```solidity
 function initiateWithSignature(

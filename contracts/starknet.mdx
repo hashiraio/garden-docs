@@ -20,7 +20,8 @@ Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap function
 
 The initiate function creates a new HTLC by locking ERC20 tokens in the contract. Starknet provides three flexible initiation methods:
 
-**Basic initiation:**
+#### Basic initiation
+
 ```rust
 fn initiate(
     ref self: ContractState,
@@ -31,7 +32,8 @@ fn initiate(
 )
 ```
 
-**Initiation on behalf:**
+#### Initiation on behalf
+
 ```rust
 fn initiate_on_behalf(
     ref self: ContractState,
@@ -43,7 +45,8 @@ fn initiate_on_behalf(
 )
 ```
 
-**Signature-based initiation:**
+#### Signature-based initiation
+
 ```rust
 fn initiate_with_signature(
     ref self: ContractState,
@@ -195,8 +198,6 @@ struct Storage {
 <Check>
 The contract uses OpenZeppelin's ERC20 interface for secure token transfers with proper allowance and balance checks.
 </Check>
-
-### Cairo language features
 
 ### Gas optimization
 
