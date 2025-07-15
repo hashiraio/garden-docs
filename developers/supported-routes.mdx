@@ -21,7 +21,7 @@ Route policies use a priority-based validation system with four key components:
 4. **Default Policy**: Fallback behavior for unconfigured routes.
 
 <Steps>
-    <Step title="Isolation Groups">
+    <Step title="Isolation groups">
     If either asset is in an isolation group, the route is only valid if both assets are in the same isolation group.
 
     ```typescript
@@ -30,7 +30,7 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Whitelist Overrides">
+    <Step title="Whitelist overrides">
     Explicit exceptions that allow routes regardless of other restrictions.
 
     ```typescript
@@ -39,7 +39,7 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Blacklist Pairs">
+    <Step title="Blacklist pairs">
     Forbidden routes that override the default policy.
 
     ```typescript
@@ -48,7 +48,7 @@ Route policies use a priority-based validation system with four key components:
     ```
     </Step>
 
-    <Step title="Default Policy">
+    <Step title="Default policy">
     Applied when no other rules match — either "open" (allow) or "closed" (deny).
     </Step>
 </Steps>
