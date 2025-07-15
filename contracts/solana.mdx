@@ -5,7 +5,14 @@ description: "Implement atomic swaps on Solana using Anchor programs and PDAs"
 
 ## Contract architecture
 
-Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Solana. The program manages the lifecycle of a swap through four main operations using Program Derived Addresses (PDAs) for state management.
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Solana. The program manages the lifecycle of a swap through four main operations using Program Derived Addresses (PDAs) for state management:
+
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant Refund" icon="bolt" href="#instant-refund" />
+</CardGroup>
 
 ## Core functions
 

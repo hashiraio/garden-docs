@@ -7,9 +7,16 @@ description: "Implement atomic swaps on Bitcoin using scripts for initiate, rede
 The article assumes that the reader has knowledge of taproot in bitcoin and does not cover the construction of transactions.
 </Note>
 
-## HTLC script architecture
+## Script architecture
 
-Instead of contract functions, Bitcoin implements atomic swap logic through scripts that are executed when UTXOs are spent. Let's explore the four core operations.
+Instead of contract functions, Bitcoin implements atomic swap logic through scripts that are executed when UTXOs are spent. Let's explore the four core operations:
+
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant Refund" icon="bolt" href="#instant-refund" />
+</CardGroup>
 
 We will use the following struct for passing swap info:
 
