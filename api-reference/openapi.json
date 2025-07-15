@@ -34,6 +34,33 @@
       }
     },
     "schemas": {
+      "HTLCSchemaName": {
+        "type": "string",
+        "title": "htlc",
+        "enum": [
+          "evm:htlc",
+          "evm:htlc_erc20",
+          "solana:htlc",
+          "solana:htlc_spltoken",
+          "starknet:htlc",
+          "starknet:htlc_erc20"
+        ]
+      },
+      "TokenSchemaName": {
+        "type": "string",
+        "title": "token",
+        "enum": [
+          "evm:erc20",
+          "solana:spltoken",
+          "starknet:erc20"
+        ]
+      },
+      "SchemaName": {
+        "oneOf": [
+          { "$ref": "#/components/schemas/HTLCSchemaName" },
+          { "$ref": "#/components/schemas/TokenSchemaName" }
+        ]
+      },
       "Chain": {
         "oneOf": [
           {
@@ -101,6 +128,14 @@
           },
           "destination_timelock": {
             "type": "string"
+          },
+          "supported_htlc_schemas": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/HTLCSchemaName"}
+          },
+          "supported_token_schemas": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/TokenSchemaName"}
           }
         }
       },
@@ -177,6 +212,14 @@
           }
         ]
       },
+      "Contract": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "schema": { "$ref": "#/components/schemas/SchemaName" }
+          },
+          "nullable": true
+      },
       "AssetVerbose": {
         "type": "object",
         "title": "Asset Information",
@@ -191,13 +234,10 @@
             "type": "string"
           },
           "htlc": {
-            "type": "string",
-            "nullable": true
+            "$ref": "#/components/schemas/Contract"
           },
           "token": {
-            "type": "string",
-            "description": "If null, the asset is considered the gas token.",
-            "nullable": true
+            "$ref": "#/components/schemas/Contract"
           },
           "decimals": {
             "type": "integer",
@@ -915,6 +955,39 @@
           }
         ]
       },
+      "Schema": { 
+        "type": "object",
+        "properties": {
+          "name": { "$ref": "#/components/schemas/SchemaName" },
+          "schema": { "type": "object" }
+        }
+      },
+      "SchemaResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": { "$ref": "#/components/schemas/Schema" }
+            }
+          }
+        ]
+      },
+      "SchemasResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": { "type": "array", "items": { "$ref": "#/components/schemas/Schema"} }
+            }
+          }
+        ]
+      },
       "AssetsResponse": {
         "allOf": [
           {
@@ -1248,6 +1321,50 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schemas": {
+      "get": {
+        "summary": "Get all supported contract schemas.",
+        "responses": {
+          "200": {
+            "description": "Get the ABI for EVM, Starknet contracts and IDL for Solana contracts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemasResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schemas/{name}": {
+      "get": {
+        "summary": "Get contract schema.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SchemaName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the ABI for EVM contracts or IDL for Solana contracts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemaResponse"
                 }
               }
             }

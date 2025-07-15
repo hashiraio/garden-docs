@@ -2,6 +2,23 @@
 title: "Changelog"
 description: "Product updates and announcements"
 ---
+<Update label="July 15, 2025" description="v2.0.1" tags={["API"]}>
+  ## New Endpoints
+  
+  - **Schema Retrieval**: Added `/schemas/{name}` endpoint for fetching specific contract schemas
+  - **Schema Listing**: Added `/schemas` endpoint for browsing available contract interfaces
+
+  ## Enhanced Schema Types
+  
+  - **HTLC Schemas**: Support for different HTLC contract types across chains
+    - `evm:htlc`, `evm:htlc_erc20`
+    - `solana:htlc`, `solana:htlc_spltoken` 
+    - `starknet:htlc`, `starknet:htlc_erc20`
+  - **Token Schemas**: Support for blockchain-specific token standards
+    - `evm:erc20`, `solana:spltoken`, `starknet:erc20`
+  - **Chain Metadata**: Added `supported_htlc_schemas` and `supported_token_schemas` fields to chain information
+  - **Asset Metadata**: Updated `htlc` and `token` fields to be objects that include schema names
+</Update>
 
 <Update label="July 11, 2025" description="v2.0.0" tags={["API"]}>
   ## API Architecture Overhaul
