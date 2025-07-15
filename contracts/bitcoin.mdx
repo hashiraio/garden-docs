@@ -7,26 +7,11 @@ description: "Implement atomic swaps on Bitcoin using scripts for initiate, rede
 The article assumes that the reader has knowledge of taproot in bitcoin and does not cover the construction of transactions.
 </Note>
 
-## HTLC Script Architecture
+## HTLC script architecture
 
-Instead of contract functions, Bitcoin implements atomic swap logic through **scripts** that are executed when UTXOs are spent. Let's explore the four core operations:
+Instead of contract functions, Bitcoin implements atomic swap logic through scripts that are executed when UTXOs are spent. Let's explore the four core operations.
 
-<CardGroup cols={2}>
-  <Card title="Initiate" icon="play" href="#initiate">
-    Start the cross-chain swap by depositing funds into the HTLC on the source chain.
-  </Card>
-  <Card title="Redeem" icon="check" href="#redeem">
-    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
-  </Card>
-  <Card title="Refund" icon="rotate-left" href="#refund">
-    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
-  </Card>
-  <Card title="Instant Refund" icon="bolt" href="#instant-refund">
-    Cancel the swap and get an instant refund on the source chain during the settlement window.
-  </Card>
-</CardGroup>
-
-Let's use the following struct for passing swap info:
+We will use the following struct for passing swap info:
 
 ```go
 type HTLC struct {
@@ -41,20 +26,19 @@ type HTLC struct {
 }
 ```
 
-## Core Operations
+## Core operations
 
 ### Initiate
 
 Initiating an atomic swap on Bitcoin involves creating a transaction that locks funds in an HTLC script. Here's what happens during initiation:
 
 <Steps>
-  <Step title="Create Transaction">
+  <Step title="Create transaction">
     The initiator creates a Bitcoin transaction that:
-    - Spends from their wallet (input)
-    - Creates an output that pays to the HTLC script address
-    - The script address is derived from the HTLC parameters (pubkeys, secret hash, timelock and destination data)
+    - Spends from their wallet (input).
+    - Creates an output that pays to the HTLC script address (derived from the HTLC parameters — pubkeys, secret hash, timelock, and destination data)
   </Step>
-  <Step title="Set Script Conditions">
+  <Step title="Set script conditions">
     The HTLC script ensures that the locked funds can only be spent if either:
     - The redeemer provides the correct secret and their signature (redeem path)
     - The initiator claims back after timelock expiry (refund path)
@@ -62,11 +46,7 @@ Initiating an atomic swap on Bitcoin involves creating a transaction that locks 
   </Step>
 </Steps>
 
-The amount locked in the script becomes the swap amount. The transaction must be confirmed on the Bitcoin blockchain before the counterparty proceeds with their side of the swap.
-
-<Note>
-Unlike EVM contracts where initiate details are known when the initiate happens on chain, in bitcoin only the spending branch details are made public. If redeem happens, only the redeemer public key and secret are made public, where as in the refund case only the initiator is made public.
-</Note>
+The amount locked in the script is used as the swap amount.
 
 ### Redeem
 
@@ -74,9 +54,9 @@ Redeeming an atomic swap means claiming the locked funds by providing the secret
 
 The redeem process involves:
 
-1. Creating a transaction that spends from the HTLC script address
-2. Providing the secret that matches the hash
-3. Signing the transaction with the redeemer's private key
+1. Creating a transaction that spends from the HTLC script address.
+2. Providing the secret that matches the hash.
+3. Signing the transaction with the redeemer's private key.
 
 Let's understand this through a high-level function similar to an EVM contract:
 
@@ -91,8 +71,8 @@ func Redeem(htlc *HTLC, secret []byte, signature []byte) {
 
 This function performs two critical checks:
 
-- **Secret validation**: Ensures the provided secret hashes to the expected value
-- **Signature verification**: Confirms the redeemer is authorized to claim
+- Secret validation: Ensures the provided secret hashes to the expected value.
+- Signature verification: Confirms the redeemer is authorized to claim.
 
 When translated to Bitcoin Script, we need to consider its stack-based nature. Here's how the script works:
 
@@ -105,10 +85,10 @@ OP_CHECKSIG
 ```
 
 <Info>
-**Bitcoin Advantage**: Stack-based execution provides deterministic behavior and prevents many classes of smart contract vulnerabilities.
+Stack-based execution provides deterministic behavior and prevents many classes of smart contract vulnerabilities.
 </Info>
 
-#### Stack Visualization
+#### Stack visualization
 
 ```
 Initial State:          After OP_SHA256:       After Push secretHash:
@@ -129,11 +109,11 @@ After EQUALVERIFY:     After Push pubkey:     After CHECKSIG:
 ```
 
 <Info>
-**Important notes:**
+Notes:
 - The stack grows and shrinks from the top (top element is consumed first)
 - `OP_SHA256` consumes the secret and produces its hash (proves knowledge of preimage)
-- `OP_EQUALVERIFY` is critical - it fails immediately if the hashes don't match
-- Signature verification happens only if the secret was valid
+- `OP_EQUALVERIFY` is critical — it fails immediately if the hashes don't match
+- Signature verification happens only if the secret is valid
 </Info>
 
 If all conditions are met, the script returns true and the funds can be sent to the redeemer's address.
@@ -143,9 +123,9 @@ If all conditions are met, the script returns true and the funds can be sent to 
 The refund mechanism is a critical safety feature in atomic swaps that prevents funds from being locked forever if the swap fails to complete.
 
 Key concepts in refunding:
-- **Timelock**: A waiting period measured in blocks
-- **Relative time**: Measured from when the swap was initiated
-- **Initiator authentication**: Only the initiator can refund
+- Timelock: A waiting period measured in blocks.
+- Relative time: Measured from when the swap was initiated.
+- Initiator authentication: Only the initiator can refund.
 
 The refund process involves:
 - Waiting for the timelock to expire
@@ -176,7 +156,7 @@ OP_DATA_32 {initiatorPubkey}
 OP_CHECKSIG
 ```
 
-#### Stack Visualization
+#### Stack visualization
 
 ```
 Initial State:          After OP_10:           After CSV:
@@ -195,11 +175,11 @@ After OP_DROP:         After Push pubkey:     After CHECKSIG:
 ```
 
 <Info>
-**Important notes:**
-- `OP_CHECKSEQUENCEVERIFY` verifies that enough time has passed (relative to when UTXO was created)
-- CSV fails and prevents spending if the timelock hasn't expired
-- CSV doesn't consume the timelock value, so `OP_DROP` is needed to remove it
-- The final signature check ensures only the original initiator can refund
+Notes:
+- `OP_CHECKSEQUENCEVERIFY` verifies that enough time has passed (relative to when UTXO was created).
+- CSV fails and prevents spending if the timelock hasn't expired.
+- CSV doesn't consume the timelock value, so `OP_DROP` is needed to remove it.
+- The final signature check ensures only the original initiator can refund.
 </Info>
 
 <Note>
@@ -207,18 +187,18 @@ Relative timelock with CSV provides more flexibility than absolute block numbers
 </Note>
 
 This provides a secure way to recover funds if:
-- The counterparty never participates
-- Network issues prevent completion
-- The counterparty abandons the swap
+- The counterparty never participates.
+- Network issues prevent completion.
+- The counterparty abandons the swap.
 
-### Instant Refund
+### Instant refund
 
 Instant refund is a cooperative cancellation mechanism that allows both parties to mutually agree to terminate the swap early, without waiting for the timelock to expire.
 
 Key concepts in instant refund:
-- **Multi-signature**: Requires both parties to agree
-- **No timelock**: Can be executed at any time
-- **Mutual authentication**: Both parties must provide valid signatures
+- Multi-signature: Requires both parties to agree.
+- No timelock: Can be executed at any time.
+- Mutual authentication: Both parties must provide valid signatures.
 
 The instant refund process involves creating a transaction that spends from the HTLC script address, having both parties sign the transaction, and providing both signatures in the correct order.
 
@@ -238,8 +218,8 @@ func InstantRefund(htlc *HTLC, initiatorSignature []byte, redeemerSignature []by
 
 This function performs two critical checks:
 
-- **Initiator signature validation**: Ensures the initiator has agreed to cancel
-- **Redeemer signature validation**: Ensures the redeemer has agreed to cancel
+- Initiator signature validation: Ensures the initiator has agreed to cancel
+- Redeemer signature validation: Ensures the redeemer has agreed to cancel
 
 When translated to Bitcoin Script, we need to consider its stack-based nature. Here's how the script works:
 
@@ -280,7 +260,7 @@ After NUMEQUAL:
 ```
 
 <Info>
-**Important notes about `OP_CHECKSIGADD`:**
+Notes about `OP_CHECKSIGADD`:
 
 It consumes three stack elements:
 - A public key (redeemerPubkey)
@@ -306,33 +286,4 @@ The `OP_CHECKSIGADD` operation provides efficient multi-signature verification u
 
 This approach efficiently implements a 2-of-2 multisignature requirement using Tapscript's enhanced capabilities.
 
-The direction of stack operations is critical to understand: the top item in each visualization is the top of the stack (the item that will be consumed first by the next operation).
-
 The script ensures that both signatures are valid and match their respective public keys, confirming that both parties have mutually agreed to cancel the swap.
-
-## Bitcoin-Specific Considerations
-
-### Transaction Construction
-
-<Steps>
-  <Step title="Input Selection">
-    Choose appropriate UTXOs to fund the HTLC script, considering transaction fees and optimal UTXO management.
-  </Step>
-  <Step title="Script Address Generation">
-    Generate the script address using Taproot's address format for better privacy, efficiency and cost optimisation.
-  </Step>
-  <Step title="Fee Calculation">
-    Calculate appropriate fees based on current network conditions and transaction size.
-  </Step>
-  <Step title="Transaction Broadcasting">
-    Broadcast the transaction to the Bitcoin network and wait for confirmation.
-  </Step>
-</Steps>
-
-### Monitoring and State Tracking
-
-Unlike EVM contracts with events, Bitcoin requires:
-
-- **Transaction parsing**: Monitor the blockchain for relevant transactions
-- **Script analysis**: Parse transaction scripts to determine swap states
-- **UTXO tracking**: Track when HTLCs are created, spent, or expired

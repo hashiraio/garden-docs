@@ -1,11 +1,11 @@
 ---
-title: "HTLC"
-description: "Learn about atomic swaps, the secure cross-chain transaction mechanism powered by Hashed Time Lock Contracts (HTLCs). Understand core methods, security features, and cross-chain coordination."
+title: "HTLCs"
+description: "Atomic swaps enable secure cross-chain swaps using Hashed Time Lock Contracts (HTLCs)"
 ---
 
-Atomic swaps enable secure cross-chain transactions using **Hashed Time Lock Contracts (HTLCs)**. These contracts ensure that either both parties complete the swap or both get their funds back - no party can be cheated.
+HTLCs ensure that either both parties complete the swap or both get their funds back — no party can be cheated.
 
-### Universal Concepts
+## Universal concepts
 
 Regardless of the blockchain, all atomic swap implementations share these core methods:
 
@@ -24,11 +24,11 @@ Regardless of the blockchain, all atomic swap implementations share these core m
   </Card>
 </CardGroup>
 
-### Security Features
+## Security features
 
 <Steps>
   <Step title="Universal Compatibility">
-    Any chain that supports Sha256 hashing and Relative TimeLocks can be added to Garden.
+    Any chain that supports SHA256 hashing and Relative Timelocks can be added to Garden.
   </Step>
   <Step title="Timelock Safety">
     Funds can always be recovered if the counterparty doesn't participate within the specified timeframe.
@@ -41,15 +41,15 @@ Regardless of the blockchain, all atomic swap implementations share these core m
   </Step>
 </Steps>
 
-### Cross-Chain Coordination
+## Cross-chain coordination
 
-The preimage revealed when redeeming on one chain can be used to claim funds on the other chain. This creates the atomic property:
+The preimage revealed when redeeming on one chain can be used to claim funds on the other chain. This creates the *atomic* property:
 
-1. **Initiator** locks funds on Chain A with sha256(preimage)
-2. **Redeemer** locks funds on Chain B with the same sha256(preimage)
+1. **Initiator** locks funds on Chain A with `sha256(preimage)`
+2. **Redeemer** locks funds on Chain B with the same `sha256(preimage)`
 3. **Initiator** redeems on Chain B by revealing the preimage
 4. **Redeemer** uses the revealed preimage to claim funds on Chain A
 
 <Info>
-Both implementations use the same cryptographic primitives and security model, but differ in their execution environments and technical approaches.
+  Both implementations use the same cryptographic primitives and security model, but differ in their execution environments and technical approaches.
 </Info>

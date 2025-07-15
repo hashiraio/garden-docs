@@ -85,12 +85,12 @@
         "tab": "Developers",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Get Started",
             "pages": [
               "developers/overview",
               "developers/supported-chains",
               "developers/supported-routes",
-              "developers/api/affiliate-fees"
+              "developers/affiliate-fees"
             ]
           },
           {
@@ -148,11 +148,11 @@
           {
             "group": "Get Started",
             "pages": [
-              "contracts/get-started"
+              "contracts/overview"
             ]
           },
           {
-            "group": "HTLC",
+            "group": "Contracts",
             "pages": [
               "contracts/bitcoin", 
               "contracts/evm",
