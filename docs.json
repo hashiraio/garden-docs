@@ -89,7 +89,8 @@
             "pages": [
               "developers/overview",
               "developers/supported-chains",
-              "developers/supported-routes"
+              "developers/supported-routes",
+              "developers/api/affiliate-fees"
             ]
           },
           {
