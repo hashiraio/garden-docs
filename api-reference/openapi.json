@@ -371,19 +371,19 @@
           },
           "balance": {
             "type": "string",
-            "example": "2005081260295471559422"
+            "example": "3134508350"
           },
           "virtual_balance": {
             "type": "string",
-            "example": "2005081260295471559422"
+            "example": "3134508350"
           },
           "readable_balance": {
-            "type": "number",
-            "example": 2005.08126030
+            "type": "string",
+            "example": "31.34508350"
           },
           "fiat_value": {
-            "type": "number",
-            "example": 223.5006887196492
+            "type": "string",
+            "example": "3709623.9781701067"
           }
         }
       },
