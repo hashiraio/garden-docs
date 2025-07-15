@@ -287,3 +287,11 @@ The `OP_CHECKSIGADD` operation provides efficient multi-signature verification u
 This approach efficiently implements a 2-of-2 multisignature requirement using Tapscript's enhanced capabilities.
 
 The script ensures that both signatures are valid and match their respective public keys, confirming that both parties have mutually agreed to cancel the swap.
+
+## Bitcoin-specific considerations
+
+### Transaction construction
+
+- Input selection: Choose appropriate UTXOs to fund the HTLC script, considering transaction fees and optimal UTXO management.
+- Script address generation: Generate the script address using Taproot's address format for better privacy, efficiency and cost optimization.
+- Fee calculation: Calculate appropriate fees based on current network conditions and transaction size.

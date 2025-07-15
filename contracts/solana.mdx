@@ -3,35 +3,20 @@ title: "Solana"
 description: "Implement atomic swaps on Solana using Anchor programs and PDAs"
 ---
 
-## Contract Architecture
+## Contract architecture
 
-Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Solana. The program manages the lifecycle of a swap through four main operations using Program Derived Addresses (PDAs) for state management:
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Solana. The program manages the lifecycle of a swap through four main operations using Program Derived Addresses (PDAs) for state management.
 
-<CardGroup cols={2}>
-  <Card title="Initiate" icon="play" href="#initiate">
-      Start the cross-chain swap by depositing funds into the HTLC on the source chain.
-  </Card>
-  <Card title="Redeem" icon="check" href="#redeem">
-    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
-  </Card>
-  <Card title="Refund" icon="rotate-left" href="#refund">
-    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
-  </Card>
-  <Card title="Instant Refund" icon="bolt" href="#instant-refund">
-    Cancel the swap and get an instant refund on the source chain during the settlement window.
-  </Card>
-</CardGroup>
-
-## Core Functions
+## Core functions
 
 ### Initiate
 
 The initiate function creates a new HTLC by transferring SOL to a PDA vault. It requires:
 
-- **Secret Hash**: SHA256 hash of a preimage known only to the initiator
-- **Timelock**: Number of slots after which refund is possible (1 slot ≈ 400ms)
-- **Redeemer**: Public key authorized to claim the funds
-- **Amount**: Quantity of native SOL in lamports (1 SOL = 1,000,000,000 lamports)
+- Secret hash: SHA256 hash of a preimage known only to the initiator.
+- Timelock: Number of slots after which refund is possible (1 slot ≈ 400ms).
+- Redeemer: Public key authorized to claim the funds.
+- Amount: Quantity of native SOL in lamports (1 SOL = 1,000,000,000 lamports).
 
 ```rust
 pub fn initiate(
@@ -59,7 +44,7 @@ pub fn redeem(
 ```
 
 <Info>
-The secret must hash to the exact value stored during initiation. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
+The secret must hash to the exact value stored during initiation. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required — anyone can execute if they know the secret.
 </Info>
 
 ### Refund
@@ -74,7 +59,7 @@ pub fn refund(ctx: Context<Refund>) -> Result<()>
 Uses slot-based timing which provides more granular control than Bitcoin's block-based system. Each slot represents approximately 400ms.
 </Note>
 
-### Instant Refund
+### Instant refund
 
 The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires.
 
@@ -86,9 +71,9 @@ pub fn instant_refund(ctx: Context<InstantRefund>) -> Result<()>
 Requires the redeemer's signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
 </Warning>
 
-## Solana-Specific Features
+## Solana-specific features
 
-### PDA State Management
+### PDA state management
 
 The program uses a PDA (Program Derived Address) to store swap state, derived from deterministic seeds:
 
@@ -104,7 +89,7 @@ pub struct SwapAccount {
 }
 ```
 
-### Account Constraints
+### Account constraints
 
 Anchor provides compile-time account validation and runtime constraints:
 
@@ -144,7 +129,7 @@ pub struct Redeemed {
 }
 ```
 
-### Rent Management
+### Rent management
 
 Solana's rent system is automatically handled through Anchor's `close` attribute:
 
@@ -157,7 +142,7 @@ pub swap_account: Account<'info, SwapAccount>,
 When a swap completes (redeem/refund), the PDA is closed and rent is automatically refunded to the initiator, ensuring no SOL is permanently locked.
 </Check>
 
-### Error Handling
+### Error handling
 
 Custom error types provide clear feedback for failed operations:
 
@@ -173,4 +158,4 @@ pub enum SwapError {
     #[msg("Attempt to perform a refund before expiry time")]
     RefundBeforeExpiry,
 }
-``` 
+```

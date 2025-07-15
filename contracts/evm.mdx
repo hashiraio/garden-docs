@@ -3,32 +3,17 @@ title: "EVM"
 description: "Implement atomic swaps on EVM-compatible blockchains using smart contracts"
 ---
 
-## Contract Architecture
+## Contract architecture
 
-Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on EVM chains. The contract manages the lifecycle of a swap through four main operations with enhanced signature support and flexible initiation methods:
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on EVM chains. The contract manages the lifecycle of a swap through four main operations with enhanced signature support and flexible initiation methods.
 
-<CardGroup cols={2}>
-  <Card title="Initiate" icon="play" href="#initiate">
-    Start the cross-chain swap by depositing funds into the HTLC on the source chain.
-  </Card>
-  <Card title="Redeem" icon="check" href="#redeem">
-    Complete the cross-chain swap by redeeming funds from the HTLC on the destination chain.
-  </Card>
-  <Card title="Refund" icon="rotate-left" href="#refund">
-    Get your funds refunded on the source chain, if swap does not happen within the settlement window. 
-  </Card>
-  <Card title="Instant Refund" icon="bolt" href="#instant-refund">
-    Cancel the swap and get an instant refund on the source chain during the settlement window.
-  </Card>
-</CardGroup>
-
-## Core Functions
+## Core functions
 
 ### Initiate
 
-The initiate function creates a new HTLC by locking tokens in the contract. EVM provides different implementations for ERC20 tokens vs native ETH:
+The initiate function creates a new HTLC by locking tokens in the contract. EVM provides different implementations for ERC20 tokens vs. native ETH:
 
-**Basic Initiation:**
+**Basic initiation:**
 
 <CodeGroup>
 ```solidity ERC20
@@ -50,7 +35,7 @@ function initiate(
 ```
 </CodeGroup>
 
-**Initiation on Behalf:**
+**Initiation on behalf:**
 
 <CodeGroup>
 ```solidity ERC20
@@ -74,7 +59,7 @@ function initiateOnBehalf(
 ```
 </CodeGroup>
 
-**Signature-Based Initiation (ERC20 only):**
+**Signature-based initiation (ERC20 only):**
 
 ```solidity
 function initiateWithSignature(
@@ -112,7 +97,7 @@ function redeem(
 </CodeGroup>
 
 <Info>
-The secret must hash to the exact value stored during initiation using SHA-256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
+The secret must hash to the exact value stored during initiation using SHA256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
 </Info>
 
 ### Refund
@@ -133,7 +118,7 @@ function refund(bytes32 orderID) external
 Uses absolute block numbers for timelock, which provides predictable settlement windows based on consistent block production times.
 </Note>
 
-### Instant Refund
+### Instant refund
 
 The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires using EIP712 signatures.
 
@@ -153,15 +138,15 @@ function instantRefund(
 ```
 </CodeGroup>
 
-<Warning>
-Requires the redeemer's EIP712 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
-</Warning>
+<Note>
+This requires the redeemer's EIP712 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
+</Note>
 
-## EVM-Specific Features
+## EVM-specific features
 
-### Order State Management
+### Order state management
 
-Both contracts use a struct to store swap state with different address types for native vs ERC20 handling:
+Both contracts use a struct to store swap state with different address types for native vs. ERC20 handling:
 
 <CodeGroup>
 ```solidity ERC20
@@ -187,23 +172,23 @@ struct Order {
 ```
 </CodeGroup>
 
-### Token Handling Differences
+### Token handling differences
 
-**ERC20 Implementation:**
-- Uses SafeERC20 for secure token transfers
-- Requires token approval before initiation
-- Transfers tokens via `transferFrom` and `transfer`
+**ERC20 implementation:**
+- Uses SafeERC20 for secure token transfers.
+- Requires token approval before initiation.
+- Transfers tokens via `transferFrom` and `transfer`.
 
-**Native ETH Implementation:**
-- Uses `payable` functions and `msg.value`
-- Direct ETH transfers via `.transfer()`
-- No approval required
+**Native ETH implementation:**
+- Uses `payable` functions and `msg.value`.
+- Direct ETH transfers via `.transfer()`.
+- No approval required.
 
 <Tip>
 The native ETH version simplifies the user experience by eliminating the need for token approvals, while the ERC20 version provides compatibility with all standard tokens.
 </Tip>
 
-### EIP712 Signature Support
+### EIP712 signature support
 
 Both contracts implement EIP712 for secure off-chain message signing:
 
@@ -215,7 +200,7 @@ function instantRefundDigest(bytes32 orderID) public view returns (bytes32) {
 }
 ```
 
-### Event Logging
+### Event logging
 
 Both contracts emit identical events for each state transition to enable efficient off-chain monitoring:
 
@@ -225,9 +210,9 @@ event Redeemed(bytes32 indexed orderID, bytes secret);
 event Refunded(bytes32 indexed orderID);
 ```
 
-### Order ID Generation
+### Order ID generation
 
-Unique order identifiers are generated using SHA-256 hashing with chain-specific parameters:
+Unique order identifiers are generated using SHA256 hashing with chain-specific parameters:
 
 ```solidity
 bytes32 orderID = sha256(abi.encode(
