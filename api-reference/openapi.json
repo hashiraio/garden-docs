@@ -1333,7 +1333,7 @@
         "summary": "Get all supported contract schemas.",
         "responses": {
           "200": {
-            "description": "Get the ABI for EVM, Starknet contracts and IDL for Solana contracts.",
+            "description": "The ABI for EVM, Starknet contracts and IDL for Solana contracts.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1360,7 +1360,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get the ABI for EVM contracts or IDL for Solana contracts.",
+            "description": "The ABI for EVM contracts or IDL for Solana contracts.",
             "content": {
               "application/json": {
                 "schema": {

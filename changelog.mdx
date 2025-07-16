@@ -3,21 +3,21 @@ title: "Changelog"
 description: "Product updates and announcements"
 ---
 <Update label="July 15, 2025" description="v2.0.1" tags={["API"]}>
-  ## New Endpoints
+  ### New endpoints
   
-  - **Schema Retrieval**: Added `/schemas/{name}` endpoint for fetching specific contract schemas
-  - **Schema Listing**: Added `/schemas` endpoint for browsing available contract interfaces
+  - Add `/schemas/{name}` endpoint for fetching specific contract schemas
+  - Add `/schemas` endpoint for browsing available contract interfaces
 
-  ## Enhanced Schema Types
+  ### Enhanced schema types
   
-  - **HTLC Schemas**: Support for different HTLC contract types across chains
+  - Add support for different HTLC contract types across chains:
     - `evm:htlc`, `evm:htlc_erc20`
     - `solana:htlc`, `solana:htlc_spltoken` 
     - `starknet:htlc`, `starknet:htlc_erc20`
-  - **Token Schemas**: Support for blockchain-specific token standards
+  - Add support for blockchain-specific token standards:
     - `evm:erc20`, `solana:spltoken`, `starknet:erc20`
-  - **Chain Metadata**: Added `supported_htlc_schemas` and `supported_token_schemas` fields to chain information
-  - **Asset Metadata**: Updated `htlc` and `token` fields to be objects that include schema names
+  - Add `supported_htlc_schemas` and `supported_token_schemas` fields to chain information
+  - Update `htlc` and `token` fields to be objects that include schema names
 </Update>
 
 <Update label="July 11, 2025" description="v2.0.0" tags={["API"]}>
@@ -28,16 +28,16 @@ description: "Product updates and announcements"
 
   ### New endpoints
     
-    - Add /policy endpoint for client-side route validation and reduced API dependencies
-    - Add /liquidity endpoint for real-time liquidity information
+    - Add `/policy` endpoint for client-side route validation and reduced API dependencies
+    - Add `/liquidity` endpoint for real-time liquidity information
 
   ### Consolidated API structure
     
-    - Unify quote functionality under /quote endpoint
-    - Streamline order operations with /orders and /orders/{order} endpoints
-    - Simplify chain and asset queries with /chains and /assets endpoints
-    - Add /health endpoint for service monitoring
-    - Integrate /fees and /volume endpoints for swap metrics
+    - Unify quote functionality under `/quote` endpoint
+    - Streamline order operations with `/orders` and `/orders/{order}` endpoints
+    - Simplify chain and asset queries with `/chains` and `/assets` endpoints
+    - Add `/health` endpoint for service monitoring
+    - Integrate `/fees` and `/volume` endpoints for swap metrics
 
   ### Developer experience improvements
 
