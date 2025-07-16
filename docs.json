@@ -5,7 +5,7 @@
   "colors": {
     "primary": "#e36492",
     "light": "#f29Fcd",
-    "dark": "#1b1b1d"
+    "dark": "#e36492"
   },
   "favicon": "/favicon.png",
   "openapi": "api-reference/openapi.json",
@@ -56,20 +56,6 @@
             ]
           },
           {
-            "group": "User Guides",
-            "pages": [
-              {
-                "group": "Swap",
-                "pages": [
-                  "home/basics/guides/swap/btc-wbtc",
-                  "home/basics/guides/swap/wbtc-btc",
-                  "home/basics/guides/swap/wbtc-wbtc"
-                ]
-              },
-              "home/basics/guides/stake/stake-seed"
-            ]
-          },
-          {
             "group": "Governance",
             "pages": [
               "home/governance",
@@ -77,6 +63,19 @@
               "home/governance/tokenomics",
               "home/governance/gardener-pass",
               "home/governance/snapshot"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              {
+                "group": "Guides",
+                "pages": [
+                  "home/resources/guides/swap/btc-wbtc",
+                  "home/resources/guides/swap/wbtc-btc",
+                  "home/resources/guides/swap/wbtc-wbtc"
+                ]
+              }
             ]
           }
         ]
