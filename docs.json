@@ -157,7 +157,8 @@
               "contracts/bitcoin", 
               "contracts/evm",
               "contracts/solana",
-              "contracts/starknet"
+              "contracts/starknet",
+              "contracts/sui"
             ]
           }
         ]
