@@ -156,7 +156,8 @@
               "contracts/bitcoin", 
               "contracts/evm",
               "contracts/solana",
-              "contracts/starknet"
+              "contracts/starknet",
+              "contracts/sui"
             ]
           }
         ]
@@ -173,12 +174,20 @@
           {
             "group": "Global",
             "pages": [
-              "api-reference/endpoint/get-chains",
-              "api-reference/endpoint/get-assets",
-              "api-reference/endpoint/get-policy",
-              "api-reference/endpoint/get-liquidity",
+              "api-reference/endpoint/get-health",
               "api-reference/endpoint/get-volume",
               "api-reference/endpoint/get-fees"
+            ]
+          },
+          {
+            "group": "Blockchain",
+            "pages": [
+              "api-reference/endpoint/blockchain/get-chains",
+              "api-reference/endpoint/blockchain/get-assets",
+              "api-reference/endpoint/blockchain/get-policy",
+              "api-reference/endpoint/blockchain/get-liquidity",
+              "api-reference/endpoint/blockchain/get-schema",
+              "api-reference/endpoint/blockchain/get-schemas"
             ]
           },
           {

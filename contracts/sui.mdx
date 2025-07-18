@@ -1,0 +1,208 @@
+---
+title: "Sui"
+description: "Implement atomic swaps on Sui using Move contracts with object-based architecture and registry pattern"
+---
+
+## Contract architecture
+
+Garden uses Hashed Time Lock Contracts (HTLCs) to implement atomic swap functionality on Sui. The contract leverages Sui's object model with a shared registry pattern for efficient order management:
+
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant refund" icon="bolt" href="#instant-refund" />
+</CardGroup>
+
+## Core functions
+
+### Initiate
+
+The initiate function creates a new HTLC by locking coins in a shared registry. Sui provides two initiation methods:
+
+#### Basic initiation
+
+```move
+public fun initiate<CoinType>(
+    orders_reg: &mut OrdersRegistry<CoinType>,
+    redeemer_pubk: vector<u8>,
+    secret_hash: vector<u8>,
+    amount: u64,
+    timelock: u256,
+    coins: Coin<CoinType>,
+    clock: &Clock,
+    ctx: &mut TxContext,
+)
+```
+
+#### Initiation on behalf
+
+```move
+public fun initiate_on_behalf<CoinType>(
+    orders_reg: &mut OrdersRegistry<CoinType>,
+    initiator: address,
+    redeemer_pubk: vector<u8>,
+    secret_hash: vector<u8>,
+    amount: u64,
+    timelock: u256,
+    coins: Coin<CoinType>,
+    clock: &Clock,
+    ctx: &mut TxContext,
+)
+```
+
+<Note>
+Sui uses Ed25519 public keys for redeemers instead of addresses, providing more flexibility in key management and enabling advanced signature schemes.
+</Note>
+
+### Redeem
+
+The redeem function allows the redeemer to claim the locked tokens by providing the secret that hashes to the stored secret hash.
+
+```move
+public fun redeem_swap<CoinType>(
+    orders_reg: &mut OrdersRegistry<CoinType>,
+    order_id: vector<u8>,
+    secret: vector<u8>,
+    ctx: &mut TxContext,
+)
+```
+
+<Info>
+The secret must hash to the exact value stored during initiation using SHA256. Once revealed, this secret enables the counterparty to claim funds on the other chain. No signature required - anyone can execute if they know the secret.
+</Info>
+
+### Refund
+
+The refund function allows the initiator to reclaim their tokens after the timelock has expired and the redeemer has not claimed the funds.
+
+```move
+public fun refund_swap<CoinType>(
+    orders_reg: &mut OrdersRegistry<CoinType>,
+    order_id: vector<u8>,
+    clock: &Clock,
+    ctx: &mut TxContext,
+)
+```
+
+<Note>
+Uses absolute timestamps in milliseconds for timelock, providing more granular control compared to block-based systems.
+</Note>
+
+### Instant refund
+
+The instant refund function provides a way for the redeemer to consent to canceling the swap before the timelock expires using Ed25519 signatures.
+
+```move
+public fun instant_refund<CoinType>(
+    orders_reg: &mut OrdersRegistry<CoinType>,
+    order_id: vector<u8>,
+    signature: vector<u8>,
+    ctx: &mut TxContext,
+)
+```
+
+<Note>
+This requires the redeemer's Ed25519 signature to prevent unauthorized instant refunds. This ensures mutual consent before the settlement window expires.
+</Note>
+
+## Sui-specific features
+
+### Order state management
+
+The contract uses Move structs to store swap state with Sui's object model:
+
+```move
+public struct Order<phantom CoinType> has key, store {
+    id: UID,
+    is_fulfilled: bool,
+    initiator: address,
+    redeemer_pubk: vector<u8>,
+    amount: u64,
+    initiated_at: u256,
+    coins: Coin<CoinType>,
+    timelock: u256,
+}
+```
+
+### Registry pattern
+
+Sui's shared object model enables efficient order management through a registry:
+
+```move
+public struct OrdersRegistry<phantom CoinType> has key, store {
+    id: UID,
+}
+```
+
+<Note>
+The registry uses dynamic fields to store orders, allowing unlimited scalability while maintaining efficient access patterns.
+</Note>
+
+### Token handling
+
+**Native Coin objects:**
+- Orders store coins directly as `Coin<CoinType>` objects.
+- Built-in safety guarantees prevent accidental coin loss.
+- Uses `transfer::public_transfer` for secure transfers.
+- No manual balance tracking required.
+
+<Tip>
+Sui's Coin objects provide superior safety compared to manual balance management, as coins cannot be accidentally lost or duplicated due to Move's resource type system.
+</Tip>
+
+### Address generation
+
+Sui generates addresses from Ed25519 public keys using a specific scheme:
+
+```move
+fun gen_addr(pubk: vector<u8>): address {
+    // 0x00 = ED25519, 0x01 = Secp256k1, 0x02 = Secp256r1, 0x03 = multiSig
+    let flag: u8 = 0;
+    let mut preimage = vector::empty<u8>();
+    vector::push_back(&mut preimage, flag);
+    vector::append(&mut preimage, pubk);
+    let addr = blake2b256(&preimage);
+    address::from_bytes(addr)
+}
+```
+
+### Event logging
+
+The contract emits events for each state transition to enable efficient off-chain monitoring:
+
+```move
+public struct Initiated has copy, drop {
+    order_id: vector<u8>,
+    secret_hash: vector<u8>,
+    amount: u64,
+}
+
+public struct Redeemed has copy, drop {
+    order_id: vector<u8>,
+    secret_hash: vector<u8>,
+    secret: vector<u8>,
+}
+
+public struct Refunded has copy, drop {
+    order_id: vector<u8>,
+}
+```
+
+### Order ID generation
+
+Unique order identifiers are generated using SHA256 hashing with chain-specific parameters:
+
+```move
+fun create_order_id(
+    secret_hash: vector<u8>,
+    initiator: address,
+    redeemer: address,
+    timelock: u256,
+    amount: u64,
+): vector<u8>
+```
+
+<Check>
+Chain ID inclusion prevents cross-chain replay attacks, while the parameter combination ensures each order is uniquely identifiable across the network.
+</Check>
