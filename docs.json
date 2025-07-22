@@ -25,7 +25,8 @@
           {
             "group": "Fundamentals",
             "pages": [
-              "index",
+              "hello",
+              "get-started",
               {
                 "group": "Introduction",
                 "pages": [
@@ -285,6 +286,32 @@
           {
             "label": "Media Kit",
             "href": "https://docs.garden.finance/home/guides/brand"
+          }
+        ]
+      },
+      {
+        "header": "Mainnet",
+        "items": [
+          {
+            "label": "Analytics",
+            "href": "https://dune.com/garden_finance/gardenfinance"
+          },
+          {
+            "label": "Explorer",
+            "href": "https://explorer.garden.finance/"
+          }
+        ]
+      },
+      {
+        "header": "Testnet",
+        "items": [
+          {
+            "label": "Faucet",
+            "href": "https://testnetbtc.com"
+          },
+          {
+            "label": "Explorer",
+            "href": "https://testnet-explorer.garden.finance/"
           }
         ]
       }
