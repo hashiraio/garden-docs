@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 export const MAINNET_ASSETS_URL = "https://api.garden.finance/v2/chains";
-export const TESTNET_ASSETS_URL = "https://testnet.api.garden.finance/v2/chains";
+export const TESTNET_ASSETS_URL =
+  "https://testnet.api.garden.finance/v2/chains";
 
 export const CHAIN_EXPLORERS = {
   botanix: "https://botanixscan.io/",
@@ -22,38 +23,48 @@ export const CHAIN_EXPLORERS = {
   base_sepolia: "https://sepolia.basescan.org/",
   monad_testnet: "https://explorer.monad-devnet.devnet101.com",
   arbitrum_sepolia: "https://sepolia.arbiscan.io/",
-  bitcoin_testnet: "https://mempool.space/testnet4/"
+  bitcoin_testnet: "https://mempool.space/testnet4/",
 };
 
-
-
-export const trimAssetName = (id)=>{
+export const trimAssetName = (id) => {
   return id.split(":")[1].toUpperCase();
-}
+};
 
-export const titilize = (chain)=>{
+export const titilize = (chain) => {
   const chainSplit = chain.split("_");
-  const firstWord = chainSplit[0].charAt(0).toUpperCase() + chainSplit[0].slice(1);
-  const secondWord = chainSplit.length > 1 ? chainSplit[1].charAt(0).toUpperCase() + chainSplit[1].slice(1) : "";
+  const firstWord =
+    chainSplit[0].charAt(0).toUpperCase() + chainSplit[0].slice(1);
+  const secondWord =
+    chainSplit.length > 1
+      ? chainSplit[1].charAt(0).toUpperCase() + chainSplit[1].slice(1)
+      : "";
   return firstWord + " " + secondWord;
-}
+};
 
 export const getExplorerUrl = (chain, address) => {
-  if(chain.includes("bitcoin")){
-    return "/developers/contracts/atomic-swap-btc";
-  } else if (chain.includes("starknet")){
+  if (chain.includes("bitcoin")) {
+    return "/contracts/bitcoin";
+  } else if (chain.includes("starknet")) {
     return CHAIN_EXPLORERS[chain] + "contract/" + address + "#overview";
-  } else if(chain.includes("solana")){
-    return CHAIN_EXPLORERS[chain] + "address/" + "2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF" + (chain.includes("testnet") ? "?cluster=devnet" : "");
+  } else if (chain.includes("solana")) {
+    return (
+      CHAIN_EXPLORERS[chain] +
+      "address/" +
+      "2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF" +
+      (chain.includes("testnet") ? "?cluster=devnet" : "")
+    );
   } else {
     return CHAIN_EXPLORERS[chain] + "address/" + address + "#code";
   }
-}
+};
 
 export const AssetRow = ({ chain, assets }) => {
   return (
     <tr>
-      <td className="flex items-center gap-2 w-full whitespace-nowrap border-r-[1px] border-[#e5e1e2] dark:border-[#454143]/50" colSpan={4}>
+      <td
+        className="flex items-center gap-2 w-full whitespace-nowrap border-r-[1px] border-[#e5e1e2] dark:border-[#454143]/50"
+        colSpan={4}
+      >
         <Frame className="pointer-events-none w-[20px]">
           <img width="20" src={chain.icon} alt={chain.chain} />
         </Frame>
@@ -64,11 +75,11 @@ export const AssetRow = ({ chain, assets }) => {
           {assets.map((asset, i) => (
             <a
               key={i}
-              href={getExplorerUrl(chain.chain,asset.htlc)}
+              href={getExplorerUrl(chain.chain, asset.htlc?.address)}
               className="border-none flex items-center gap-2"
             >
               <Frame className="pointer-events-none w-[20px]">
-                <img width="20" src={asset.icon} alt={asset.id}/>
+                <img width="20" src={asset.icon} alt={asset.id} />
               </Frame>
               <span>{trimAssetName(asset.id)}</span>
             </a>
@@ -79,24 +90,25 @@ export const AssetRow = ({ chain, assets }) => {
   );
 };
 
-export const getAssets = async (url = MAINNET_ASSETS_URL)=>{
+export const getAssets = async (url = MAINNET_ASSETS_URL) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    if(data.status.includes("OK")){
+    if (data.status.includes("OK")) {
       return [];
     }
     const sortedResult = data.result.sort((a, b) => {
       return a.chain.localeCompare(b.chain);
     });
+    console.log(sortedResult[0].assets[0].htlc.address);
     return sortedResult;
   } catch (error) {
-    console.log("Error fetching assets",error);
+    console.log("Error fetching assets", error);
     return [];
   }
-}
+};
 
-export const SupportedAssets = ({url}) => {
+export const SupportedAssets = ({ url }) => {
   const [supportedAssetsConfig, setSupportedAssetsConfig] = useState([]);
 
   useEffect(() => {
