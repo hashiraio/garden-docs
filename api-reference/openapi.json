@@ -1481,7 +1481,7 @@
           },
           {
             "in": "query",
-            "name": "from",
+            "name": "from_timestamp",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -1490,7 +1490,7 @@
           },
           {
             "in": "query",
-            "name": "to",
+            "name": "to_timestamp",
             "schema": {
               "type": "string",
               "format": "date-time"
