@@ -681,7 +681,11 @@
           "order_id": {
             "type": "string"
           },
-          "transaction": {
+          "approval_transaction": {
+            "nullable": true,
+            "$ref": "#/components/schemas/EVMTransaction"
+          },
+          "initiate_transaction": {
             "$ref": "#/components/schemas/EVMTransaction"
           },
           "typed_data": {
@@ -807,7 +811,12 @@
           "order_id": {
             "type": "string"
           },
-          "transaction": {
+          "approval_call": {
+            "nullable": true,
+            "$ref": "#/components/schemas/StarknetTransaction"
+          },
+          "initiate_call": {
+            "nullable": true,
             "$ref": "#/components/schemas/StarknetTransaction"
           },
           "typed_data": {
