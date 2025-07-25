@@ -207,6 +207,8 @@
               "monad_testnet:cbbtc",
               "monad_testnet:usdc",
               "solana_testnet:sol",
+              "solana_testnet:usdc",
+              "solana_testnet:cbbtc",
               "starknet_sepolia:wbtc"
             ]
           }
@@ -1375,6 +1377,129 @@
     "/orders": {
       "get": {
         "summary": "Get all orders.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "a single order id can be passed or a list of csv can be passed"
+            }
+          },
+          {
+            "in": "query",
+            "name": "integrator",
+            "schema": {
+              "type": "string",
+              "description": "a single integrator can be passed or a list of csv can be passed"
+            }
+          },
+          {
+            "in": "query",
+            "name": "created_at",
+            "schema": {
+              "type": "string",
+              "description": "a single timestamp can be passed or a range can be passed like this '[start-end]'"
+            }
+          },
+          {
+            "in": "query",
+            "name": "chain",
+            "schema": {
+              "description": "a single chain can be passed or multiple can be passed as csv",
+              "$ref": "#/components/schemas/Chain"
+            }
+          },
+          {
+            "in": "query",
+            "name": "asset",
+            "schema": {
+              "description": "a single chain can be passed or multiple can be passed as csv",
+              "$ref": "#/components/schemas/Asset"
+            }
+          },
+          {
+            "in": "query",
+            "name": "amount",
+            "schema": {
+              "type": "string",
+              "description": "a single amount can be passed or a range can be passed like this '[start-end]'"
+            }
+          },
+          {
+            "in": "query",
+            "name": "value",
+            "schema": {
+              "type": "string",
+              "description": "a single value can be passed or a range can be passed like this '[start-end]'"
+            }
+          },
+          {
+            "in": "query",
+            "name": "secret_hash",
+            "schema": {
+              "type": "string",
+              "description": "a single secret hash can be passed or multiple can be passed as csv"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tx_hash",
+            "schema": {
+              "type": "string",
+              "description": "a single tx hash can be passed or multiple can be passed as csv, this is checked against all three initiate, redeem and refund tx_hashes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "swap_id",
+            "schema": {
+              "type": "string",
+              "description": "a single swap id can be passed or multiple can be passed as csv"
+            }
+          },
+          {
+            "in": "query",
+            "name": "owner",
+            "schema": {
+              "type": "string",
+              "description": "a single owner address can be passed or multiple can be passed as csv"
+            }
+          },
+          {
+            "in": "query",
+            "name": "delegate",
+            "schema": {
+              "type": "string",
+              "description": "a single delegate address can be passed or multiple can be passed as csv"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "value",
+                "-value",
+                "created_at",
+                "-created_at"
+              ],
+              "description": "allows you to order the orders based on time of creation and value of swap"
+            }
+          },
+          {
+            "in": "query",
+            "name": "side",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "source",
+                "destination"
+              ],
+              "description": "allows you to sub filter for matches on swap specific fields, like amount, tx_hash, swap_id, owner and delegate on either source or destination swaps"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of orders.",
