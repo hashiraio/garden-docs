@@ -21,19 +21,25 @@
     "tabs": [
       {
         "tab": "Home",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "tab": "Get Started",
         "groups": [
           {
             "group": "Fundamentals",
             "pages": [
-              "index",
+              "home/about",
               {
-                "group": "Introduction",
+                "group": "Core Concepts",
                 "pages": [
-                  "home/fundamentals/introduction/intents",
-                  "home/fundamentals/introduction/atomic-swaps",
-                  "home/fundamentals/introduction/solvers",
-                  "home/fundamentals/introduction/stakers",
-                  "home/fundamentals/introduction/auctions"
+                  "home/fundamentals/core-concepts/intents",
+                  "home/fundamentals/core-concepts/atomic-swaps",
+                  "home/fundamentals/core-concepts/solvers",
+                  "home/fundamentals/core-concepts/stakers",
+                  "home/fundamentals/core-concepts/auctions"
                 ]
               },
               {
@@ -243,7 +249,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Launch App",
+      "label": "Launch app",
       "href": "https://app.garden.finance"
     }
   },
