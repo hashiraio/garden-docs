@@ -6,14 +6,21 @@ export function openSearch() {
     document.getElementById("search-bar-entry").click();
 }
 
-<div className="w-full h-96 flex flex-col items-center justify-center bg-white/5 text-white">
+<div className="w-full h-96 flex flex-col items-center justify-center bg-black/5 dark:bg-white/5 dark:text-white">
     <div className="w-full max-w-[600px]">
-        <img src="/logo/dark.svg" className="w-full" />
+        <img
+            className="w-full hidden dark:block"
+            src="/logo/dark.svg"
+        />
+        <img
+            className="w-full block dark:hidden"
+            src="/logo/light.svg"
+        />
     </div>
     <div className="text-xl mt-2">
         Swap Bitcoin cross-chain in minutes.
     </div>
-    <div className="flex items-center w-full max-w-[450px] border border-white/10 rounded-lg mt-10 px-4 py-2" onClick={openSearch}>
+    <div className="flex items-center w-full max-w-[450px] border border-white/10 ring-1 ring-gray-400/20 rounded-lg mt-10 px-4 py-2" onClick={openSearch}>
         <span className="text-gray-400">Ask me anything...</span>
     </div>
 </div>
