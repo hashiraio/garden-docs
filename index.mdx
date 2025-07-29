@@ -7,7 +7,7 @@ export function openSearch() {
 }
 
 <div className="w-full h-96 flex flex-col items-center justify-center bg-[#e4ebf2] dark:bg-white/5 dark:text-white">
-    <div className="w-full max-w-[600px]">
+    <div className="w-full max-w-[400px] px-4 sm:max-w-[600px]">
         <img
             className="w-full hidden dark:block"
             src="/logo/dark.svg"
@@ -23,6 +23,9 @@ export function openSearch() {
     <div className="flex items-center w-full max-w-[450px] border border-white/10 ring-1 ring-gray-400/20 rounded-lg mt-10 px-4 py-2" onClick={openSearch}>
         Ask me anything...
     </div>
+    <a className="mt-6" href="/home/about">
+        <div className="inline-flex bg-primary-dark text-white rounded-full px-4 py-1.5 hover:opacity-[0.9]">Get started →</div>
+    </a>
 </div>
 
 <div className="max-w-8xl mx-auto my-24 px-4 lg:px-8">
@@ -45,10 +48,58 @@ export function openSearch() {
         </Card>
     </CardGroup>
 
-    <div className="flex justify-center items-center gap-4 mt-20 mb-4">
-        <span className="font-semibold text-2xl text-center text-gray-800 dark:text-white">New here?</span>
-        <a href="/home/about">
-            <div className="inline-flex bg-primary-dark text-white rounded-full px-4 py-1.5 hover:opacity-[0.9]">Learn about Garden</div>
+    <div className="font-semibold text-2xl text-center text-gray-800 dark:text-white mt-20 mb-4">
+        Read the contracts
+    </div>
+    <div className="text-lg text-center mb-4">
+        Dive into the atomic swapping contracts powering Garden.
+    </div>
+
+    <div className="grid grid-cols-5 gap-x-4 max-w-[600px] mx-auto">
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/contracts/bitcoin">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/btc.svg"
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Bitcoin</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/contracts/evm">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/ethereum.svg"
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">EVM</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/contracts/solana">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/solana.png"
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Solana</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/contracts/starknet">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/starknet.svg"
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Starknet</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/contracts/sui">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/sui.png"
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Sui</div>
+            </a>
         </a>
     </div>
 </div>
