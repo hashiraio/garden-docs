@@ -28,6 +28,15 @@ export const CHAIN_EXPLORERS = {
   bnbchain_testnet: "https://testnet.bscscan.com/",
 };
 
+export const CHAIN_NAMES = {
+  bnbchain: "BNB Chain",
+  bnbchain_testnet: "BNB Chain Testnet",
+};
+
+export const getChainName = (chain) => {
+  return CHAIN_NAMES[chain] || chain;
+};
+
 export const trimAssetName = (id) => {
   return id.split(":")[1].toUpperCase();
 };
@@ -70,7 +79,7 @@ export const AssetRow = ({ chain, assets }) => {
         <Frame className="pointer-events-none w-[20px]">
           <img width="20" src={chain.icon} alt={chain.chain} />
         </Frame>
-        <strong>{titilize(chain.chain)}</strong>
+        <strong>{titilize(getChainName(chain.chain))}</strong>
       </td>
       <td colSpan={4}>
         <div className="flex gap-4 flex-wrap mx-2">
