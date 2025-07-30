@@ -16,6 +16,7 @@ export const CHAIN_EXPLORERS = {
   unichain: "https://uniscan.xyz/",
   arbitrum: "https://arbiscan.io/",
   bitcoin: "https://mempool.space/",
+  bnbchain: "https://bscscan.com/",
   starknet_sepolia: "https://sepolia.starkscan.co/",
   ethereum_sepolia: "https://sepolia.etherscan.io/",
   solana_testnet: "https://explorer.solana.com/",
@@ -24,6 +25,7 @@ export const CHAIN_EXPLORERS = {
   monad_testnet: "https://explorer.monad-devnet.devnet101.com",
   arbitrum_sepolia: "https://sepolia.arbiscan.io/",
   bitcoin_testnet: "https://mempool.space/testnet4/",
+  bnbchain_testnet: "https://testnet.bscscan.com/",
 };
 
 export const trimAssetName = (id) => {
