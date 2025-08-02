@@ -16,6 +16,7 @@ export const CHAIN_EXPLORERS = {
   unichain: "https://uniscan.xyz/",
   arbitrum: "https://arbiscan.io/",
   bitcoin: "https://mempool.space/",
+  bnbchain: "https://bscscan.com/",
   starknet_sepolia: "https://sepolia.starkscan.co/",
   ethereum_sepolia: "https://sepolia.etherscan.io/",
   solana_testnet: "https://explorer.solana.com/",
@@ -24,6 +25,16 @@ export const CHAIN_EXPLORERS = {
   monad_testnet: "https://explorer.monad-devnet.devnet101.com",
   arbitrum_sepolia: "https://sepolia.arbiscan.io/",
   bitcoin_testnet: "https://mempool.space/testnet4/",
+  bnbchain_testnet: "https://testnet.bscscan.com/",
+};
+
+export const CHAIN_NAMES = {
+  bnbchain: "BNB Chain",
+  bnbchain_testnet: "BNB Chain Testnet",
+};
+
+export const getChainName = (chain) => {
+  return CHAIN_NAMES[chain] || chain;
 };
 
 export const trimAssetName = (id) => {
@@ -68,7 +79,7 @@ export const AssetRow = ({ chain, assets }) => {
         <Frame className="pointer-events-none w-[20px]">
           <img width="20" src={chain.icon} alt={chain.chain} />
         </Frame>
-        <strong>{titilize(chain.chain)}</strong>
+        <strong>{titilize(getChainName(chain.chain))}</strong>
       </td>
       <td colSpan={4}>
         <div className="flex gap-4 flex-wrap mx-2">

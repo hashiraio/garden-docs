@@ -3,19 +3,32 @@ id: supported-chains
 title: Supported Chains and Assets
 ---
 
-import {SupportedAssets, AssetRow, MAINNET_ASSETS_URL, TESTNET_ASSETS_URL, getAssets, trimAssetName, getExplorerUrl, CHAIN_EXPLORERS, titilize} from "/snippets/supported-assets.jsx";
+import {
+  SupportedAssets,
+  AssetRow,
+  MAINNET_ASSETS_URL,
+  TESTNET_ASSETS_URL,
+  getAssets,
+  trimAssetName,
+  getExplorerUrl,
+  CHAIN_EXPLORERS,
+  titilize,
+  CHAIN_NAMES,
+  getChainName,
+} from "/snippets/supported-assets.jsx";
 
 Garden uses the following contracts to perform swaps on respective chains:
 
 <Tabs>
-    <Tab title="Mainnet">
-        <SupportedAssets key={MAINNET_ASSETS_URL} url={MAINNET_ASSETS_URL}/>
-    </Tab>
-    <Tab title="Testnet">
-        <SupportedAssets key={TESTNET_ASSETS_URL} url={TESTNET_ASSETS_URL}/>
-    </Tab>
+  <Tab title="Mainnet">
+    <SupportedAssets key={MAINNET_ASSETS_URL} url={MAINNET_ASSETS_URL} />
+  </Tab>
+  <Tab title="Testnet">
+    <SupportedAssets key={TESTNET_ASSETS_URL} url={TESTNET_ASSETS_URL} />
+  </Tab>
 </Tabs>
 
 <Tip>
-    If you would like to see a chain or asset that isn't listed here, reach out to us in the [Townhall](https://discord.gg/dZwSjh9922).
+  If you would like to see a chain or asset that isn't listed here, reach out to
+  us in the [Townhall](https://discord.gg/dZwSjh9922).
 </Tip>
