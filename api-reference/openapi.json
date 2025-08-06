@@ -1826,7 +1826,7 @@
         }
       }
     },
-    "/earnings": {
+    "/affiliates/earnings": {
       "get": {
         "summary": "Get affiliate earnings.",
         "responses": {
@@ -1866,7 +1866,7 @@
         }
       }
     },
-    "/history": {
+    "/affiliates/history": {
       "get": {
         "summary": "Get credit and debit history of an affiliate.",
         "responses": {
