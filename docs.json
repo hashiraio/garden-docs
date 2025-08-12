@@ -7,10 +7,7 @@
     "light": "#f29Fcd",
     "dark": "#e36492"
   },
-  "favicon": {
-    "dark": "/favicon-dark.png",
-    "light": "/favicon-light.png"
-  },
+  "favicon": "/favicon.svg",
   "openapi": "api-reference/openapi.json",
   "contextual": {
     "options": [
