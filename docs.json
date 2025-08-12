@@ -7,15 +7,15 @@
     "light": "#f29Fcd",
     "dark": "#e36492"
   },
-  "favicon": "/favicon.png",
+  "favicon": "/favicon.svg",
   "openapi": "api-reference/openapi.json",
   "contextual": {
-   "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude"
-   ]
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
   },
   "navigation": {
     "tabs": [
@@ -159,7 +159,7 @@
           {
             "group": "Contracts",
             "pages": [
-              "contracts/bitcoin", 
+              "contracts/bitcoin",
               "contracts/evm",
               "contracts/solana",
               "contracts/starknet",
