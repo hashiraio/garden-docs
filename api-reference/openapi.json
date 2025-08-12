@@ -1245,6 +1245,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "affiliate_fee",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -1637,6 +1644,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SolverResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/solvers/{solver}/orders": {
+      "get": {
+        "summary": "Get all matched orders by solver.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solver",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solver's matched orders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersResponse"
                 }
               }
             }
