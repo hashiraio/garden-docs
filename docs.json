@@ -8,10 +8,8 @@
     "dark": "#FC79C1"
   },
   "favicon": "/favicon.svg",
-  "seo": {
-    "metatags": {
-      "og:image": "https://garden.imgix.net/metaimage2.png"
-    }
+  "thumbnails": {
+    "background": "https://garden.imgix.net/metaimage2.png"
   },
   "fonts": {
     "family": "Haffer"
