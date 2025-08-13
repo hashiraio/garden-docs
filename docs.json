@@ -8,6 +8,11 @@
     "dark": "#FC79C1"
   },
   "favicon": "/favicon.svg",
+  "seo": {
+    "metatags": {
+      "og:image": "https://garden.imgix.net/chain_images/ethereum.svg"
+    }
+  },
   "openapi": "api-reference/openapi.json",
   "contextual": {
     "options": [
