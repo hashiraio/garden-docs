@@ -10,9 +10,7 @@
   "favicon": "/favicon.svg",
   "seo": {
     "metatags": {
-      "og:title": "Garden Finance",
-      "og:image": "https://garden.imgix.net/chain_images/ethereum.svg",
-      "og:description": "Garden is the fastest Bitcoin bridge, enabling cross-chain Bitcoin swaps in as little as 30 seconds. It is built using an intents-based architecture with trustless settlements, ensuring zero custody risk for the users."
+      "og:image": "https://garden.imgix.net/metadata.png"
     }
   },
   "openapi": "api-reference/openapi.json",
