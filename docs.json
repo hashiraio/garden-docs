@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Garden Docs",
   "colors": {
-    "primary": "#e36492",
+    "primary": "#FC79C1",
     "light": "#f29Fcd",
-    "dark": "#e36492"
+    "dark": "#FC79C1"
   },
   "favicon": "/favicon.svg",
   "openapi": "api-reference/openapi.json",
