@@ -1534,6 +1534,17 @@
               "type": "integer"
             },
             "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter orders by status"
           }
         ],
         "responses": {
