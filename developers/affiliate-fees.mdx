@@ -163,21 +163,20 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
 
 ## How to Claim
 
-Affiliates can claim their earnings by first checking available amounts through the API, then submitting an on-chain transaction to the distributor contract.
+The claiming process involves two steps: checking your available earnings through the API, then submitting an on-chain transaction to withdraw them.
 
 ### Check Available Earnings
 
 First, call the earnings endpoint to get your claimable amounts:
 
-<RequestExample>
 ```bash cURL
 curl -X 'GET' 'https://api.garden.finance/v2/affiliates/earnings' \
     -H 'garden-app-id: YOUR_APP_ID' \
     -H 'accept: application/json'
 ```
-</RequestExample>
 
-<ResponseExample>
+Example response:
+
 ```json Success
 {
   "status": "Ok",
@@ -196,7 +195,6 @@ curl -X 'GET' 'https://api.garden.finance/v2/affiliates/earnings' \
   ]
 }
 ```
-</ResponseExample>
 
 <Note>
   The `claim_amount`, `claim_amount_usd`, `claim_signature`, and `claim_contract` fields are only included when you have unclaimed earnings available.
@@ -230,7 +228,7 @@ async function claimAffiliateEarnings(claimData) {
   const claimParams = {
     toAddress: claimData.affiliate,
     tokenAddress: claimData.token_address,
-    totalRewards: BigInt(claimData.claim_amount)
+    totalRewards: BigInt(claimData.total_earnings)
   };
 
   const hash = await client.writeContract({
