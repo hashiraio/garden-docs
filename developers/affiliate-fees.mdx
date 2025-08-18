@@ -209,36 +209,48 @@ To claim your earnings, you need to call the `claim` function on the distributor
 </Note>
 
 ```javascript JavaScript
-import { createWalletClient, http, parseAbi } from 'viem';
+import { createWalletClient, createPublicClient, http, parseAbi } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { mainnet } from 'viem/chains';
 
 async function claimAffiliateEarnings(claimData) {
   const account = privateKeyToAccount('<YOUR_PRIVATE_KEY>');
-  const client = createWalletClient({
+  
+  // Create wallet client for sending transactions
+  const walletClient = createWalletClient({
     account,
     chain: mainnet,
     transport: http('YOUR_RPC_URL'),
   });
 
+  // Create public client for reading transaction receipts
+  const publicClient = createPublicClient({
+    chain: mainnet,
+    transport: http('YOUR_RPC_URL'),
+  });
+
+  // Parse the ABI for the claim function
   const abi = parseAbi([
-    'function claim(tuple(address toAddress, address tokenAddress, uint256 totalRewards) _claim, bytes _signature) external'
+    'function claim((address toAddress, address tokenAddress, uint256 totalRewards) _claim, bytes _signature)'
   ]);
 
+  // Prepare claim parameters
   const claimParams = {
     toAddress: claimData.affiliate,
     tokenAddress: claimData.token_address,
     totalRewards: BigInt(claimData.total_earnings)
   };
 
-  const hash = await client.writeContract({
+  // Execute the claim transaction
+  const hash = await walletClient.writeContract({
     address: claimData.claim_contract,
     abi,
     functionName: 'claim',
     args: [claimParams, claimData.claim_signature]
   });
 
-  const receipt = await client.waitForTransactionReceipt({ hash });
+  // Wait for transaction receipt
+  const receipt = await publicClient.waitForTransactionReceipt({ hash });
   return receipt;
 }
 ```
