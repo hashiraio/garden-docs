@@ -1986,6 +1986,15 @@
               "format": "int64"
             },
             "description": "Filter by timestamp in Unix timestamp format"
+          },
+          {
+            "in": "query",
+            "name": "chain",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by chain"
           }
         ],
         "responses": {
