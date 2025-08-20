@@ -1919,6 +1919,7 @@
     "/volume-metrics": {
       "get": {
         "summary": "Get detailed volume metrics and analytics.",
+        "security": [],
         "description": "Returns comprehensive volume data including historical trends, chain-specific breakdowns, and asset pair analytics.",
         "responses": {
           "200": {
