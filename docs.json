@@ -189,11 +189,11 @@
             ]
           },
           {
-            "group": "Analytics",
+            "group": "Insights",
             "pages": [
-              "api-reference/endpoint/analytics/get-volume",
-              "api-reference/endpoint/analytics/get-volume-metrics",
-              "api-reference/endpoint/analytics/competitors"
+              "api-reference/endpoint/insights/get-volume",
+              "api-reference/endpoint/insights/get-volume-metrics",
+              "api-reference/endpoint/insights/competitors"
             ]
           }
         ]
