@@ -175,7 +175,8 @@
             "description": "Total earnings in USD for the mentioned asset for the affiliate."
           },
           "affiliate": {
-            "type": "string"
+            "type": "string",
+            "description": "The address that will receive the earnings."
           },
           "asset": {
             "$ref": "#/components/schemas/AffiliateFeeAsset"
