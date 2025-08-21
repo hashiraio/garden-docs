@@ -210,8 +210,7 @@
           {
             "group": "Affiliate",
             "pages": [
-              "api-reference/endpoint/affiliate/get-earnings",
-              "api-reference/endpoint/affiliate/get-history"
+              "api-reference/endpoint/affiliate/get-earnings"
             ]
           }
         ]

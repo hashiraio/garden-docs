@@ -230,106 +230,6 @@
           }
         ]
       },
-      "AffiliateTransactionType": {
-        "type": "string",
-        "enum": [
-          "credit",
-          "debit"
-        ],
-        "description": "Transaction type: 'credit' for earnings, 'debit' for claimed amounts."
-      },
-      "AffiliateHistoryItem": {
-        "type": "object",
-        "properties": {
-          "asset": {
-            "$ref": "#/components/schemas/AffiliateFeeAsset"
-          },
-          "affiliate": {
-            "type": "string",
-            "description": "The recipient address of the affiliate."
-          },
-          "amount": {
-            "type": "string",
-            "description": "The amount of the transaction in asset units."
-          },
-          "amount_usd": {
-            "type": "string",
-            "description": "The amount of the transaction in USD."
-          },
-            "type": {
-            "$ref": "#/components/schemas/AffiliateTransactionType"
-           },
-          "id": {
-            "type": "string",
-            "description": "Order ID for credit, transaction hash for debit."
-          },
-          "timestamp": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "asset",
-          "affiliate",
-          "amount",
-          "amount_usd",
-          "type",
-          "id",
-          "timestamp"
-        ]
-      },
-      "PaginatedAffiliateHistoryItems": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AffiliateHistoryItem"
-            }
-          },
-          "total_earned": {
-            "type": "string",
-            "description": "Total earnings in USD for the affiliate."
-          },
-          "total_claimed": {
-            "type": "string",
-            "description": "Total claimed earnings in USD for the affiliate."
-          },
-          "page": {
-            "type": "integer"
-          },
-          "total_pages": {
-            "type": "integer"
-          },
-          "total_items": {
-            "type": "integer"
-          },
-          "per_page": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "data",
-          "total_earned",
-          "total_claimed",
-          "page",
-          "total_pages",
-          "total_items",
-          "per_page"
-         ]
-      },
-      "AffiliateHistoryResponse": {
-        "allOf": [
-          {"$ref": "#/components/schemas/Response"},
-          {
-            "type": "object",
-            "properties": {
-              "result": {
-                "$ref": "#/components/schemas/PaginatedAffiliateHistoryItems"
-              }
-            }
-          }
-        ]
-      },
       "Asset": {
         "oneOf": [
           {
@@ -1835,7 +1735,7 @@
         }
       }
     },
-    "/affiliates/earnings": {
+    "/apps/earnings": {
       "get": {
         "summary": "Get affiliate earnings.",
         "responses": {
@@ -1869,21 +1769,6 @@
                     }
                   ]
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/affiliates/history": {
-      "get": {
-        "summary": "Get credit and debit history of an affiliate.",
-        "responses": {
-          "200": {
-            "description": "Credit and debit history of an affiliate.",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AffiliateHistoryResponse" }
               }
             }
           }
