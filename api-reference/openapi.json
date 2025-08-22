@@ -1481,24 +1481,6 @@
           },
           {
             "in": "query",
-            "name": "from_timestamp",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "Filter orders starting from the given timestamp"
-          },
-          {
-            "in": "query",
-            "name": "to_timestamp",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "Filter orders till the given timestamp"
-          },
-          {
-            "in": "query",
             "name": "tx_hash",
             "schema": {
               "type": "string"
@@ -1507,7 +1489,7 @@
           },
           {
             "in": "query",
-            "name": "source_chain",
+            "name": "from_chain",
             "schema": {
               "type": "array",
               "items": {
@@ -1518,7 +1500,7 @@
           },
           {
             "in": "query",
-            "name": "dest_chain",
+            "name": "to_chain",
             "schema": {
               "type": "array",
               "items": {
@@ -1537,14 +1519,20 @@
           },
           {
             "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
             "name": "status",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string"
             },
-            "description": "Filter orders by status"
+            "description": "Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded. Example: status=not-initiated,in-progress",
+            "example": "not-initiated,in-progress"
           }
         ],
         "responses": {
