@@ -1491,23 +1491,17 @@
             "in": "query",
             "name": "from_chain",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string"
             },
-            "description": "Filter orders by source chains"
+            "description": "Filter orders by source chain"
           },
           {
             "in": "query",
             "name": "to_chain",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string"
             },
-            "description": "Filter orders by destination chains"
+            "description": "Filter orders by destination chain"
           },
           {
             "in": "query",
