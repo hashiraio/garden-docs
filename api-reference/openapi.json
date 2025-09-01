@@ -1933,7 +1933,6 @@
     "/policy": {
       "get": {
         "summary": "Get route policy configuration.",
-        "description": "Returns policy rules that clients can use to determine valid swap routes locally. Includes isolation groups, blacklists, and whitelists.",
         "responses": {
           "200": {
             "description": "Route policy configuration.",
