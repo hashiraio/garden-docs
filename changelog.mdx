@@ -3,53 +3,53 @@ title: "Changelog"
 description: "Product updates and announcements"
 ---
 <Update label="September 1, 2025" description="v2.5.2" tags={["SDK"]}>
-  - Add Core support
-  - Fix post-approval check for allowance
+  - Add Core chain support.
+  - Add check after approval to verify the latest allowance amount.
 </Update>
 
 <Update label="September 1, 2025" description="v2.5.1" tags={["SDK"]}>
-  - Add support for SPL tokens in Solana
+  - Add Spl tokens support in Solana chain.
 </Update>
 
 <Update label="August 26, 2025" description="v2.5.0" tags={["SDK"]}>
-  - Add Sui support
-  - Add yarn link support for local testing
+  - Add Sui chain support.
+  - Add yarn link support allowing developers to locally test the changes done in SDK within a working project directory.
 </Update>
 
 <Update label="August 26, 2025" description="v2.4.6" tags={["SDK"]}>
-  - Update status filters in `getOrders` utility
+  - Extend getOrders function with new filters (e.g. status , transaction hash) for more precise order queries.
 </Update>
 
 <Update label="August 26, 2025" description="v2.4.5" tags={["SDK"]}>
-  - Add abort controller to Orderbook calls
+  - Accept AbortController as a parameter in get methods of `@gardenfi/orderbook` to allow cancellation of ongoing orderbook API calls.
 </Update>
 
 <Update label="August 26, 2025" description="v2.4.4" tags={["SDK"]}>
-  - Fix error handling in `switchOrAddNetwork` utility for case when network is not found
+  - Fix error handling in `switchOrAddNetwork` utility for case when network is not found.
 </Update>
 
 <Update label="August 10, 2025" description="v2.4.2" tags={["SDK"]}>
-  - Fix order status parser ensuring timely confirmations
+  - Fix order status parsing to ensure swap initiation and initiation detection are confirmed before the attested deadline, preventing orders from being accepted after expiry.
 </Update>
 
 <Update label="July 30, 2025" description="v2.4.0" tags={["SDK"]}>
-  - Add optional secret management
+  - Add optional secret management to SDK. This is configured via the `handleSecretManagement` flag: when set to `true`, the relayer manages order redemption, eliminating the need for the user to keep the browser open after initiating a swap; when set to `false`, the user must handle secrets and keep the browser open until redemption is complete.
 </Update>
 
 <Update label="July 30, 2025" description="v2.3.3" tags={["SDK"]}>
-  - Add BNB support
+  - Add BNB chain support.
 </Update>
 
 <Update label="July 30, 2025" description="v2.3.2" tags={["SDK"]}>
-  - Add Instant refund SACP call for expired orders
+  - Add Instant refund SACP call for expired orders for automatic refunds.
 </Update>
 
 <Update label="July 17, 2025" description="v2.3.1" tags={["SDK"]}>
-  - Finalize all inputs of a Partially Signed Bitcoin Transaction in PhantomProvider
+  - Finalize all inputs of a Partially Signed Bitcoin Transaction in PhantomProvider.
 </Update>
 
 <Update label="July 16, 2025" description="v2.3.0" tags={["SDK"]}>
-  - Remove catalogfi dependencies and update dependency cycle 
+  - Move `@catalogfi/wallets` dependency to Garden SDK.
 </Update>
 
 <Update label="July 15, 2025" description="v2.0.1" tags={["API"]}>
