@@ -7,15 +7,15 @@
     "light": "#f29Fcd",
     "dark": "#e36492"
   },
-  "favicon": "/favicon.png",
+  "favicon": "/favicon.svg",
   "openapi": "api-reference/openapi.json",
   "contextual": {
-   "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude"
-   ]
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
   },
   "navigation": {
     "tabs": [
@@ -159,7 +159,7 @@
           {
             "group": "Contracts",
             "pages": [
-              "contracts/bitcoin", 
+              "contracts/bitcoin",
               "contracts/evm",
               "contracts/solana",
               "contracts/starknet",
@@ -236,7 +236,7 @@
         },
         {
           "anchor": "Community",
-          "href": "https://discord.gg/dZwSjh9922",
+          "href": "https://discord.gg/B7RczEFuJ5",
           "icon": "discord"
         }
       ]
@@ -250,7 +250,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://discord.gg/dZwSjh9922"
+        "href": "https://discord.gg/B7RczEFuJ5"
       }
     ],
     "primary": {
@@ -263,7 +263,7 @@
     "socials": {
       "x": "https://x.com/garden_finance",
       "github": "https://github.com/gardenfi",
-      "discord": "https://discord.gg/dZwSjh9922"
+      "discord": "https://discord.gg/B7RczEFuJ5"
     },
     "links": [
       {

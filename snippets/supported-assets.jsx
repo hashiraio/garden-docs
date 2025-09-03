@@ -4,30 +4,6 @@ export const MAINNET_ASSETS_URL = "https://api.garden.finance/v2/chains";
 export const TESTNET_ASSETS_URL =
   "https://testnet.api.garden.finance/v2/chains";
 
-export const CHAIN_EXPLORERS = {
-  botanix: "https://botanixscan.io/",
-  hyperliquid: "https://purrsec.com/",
-  corn: "https://cornscan.io/",
-  ethereum: "https://etherscan.io/",
-  bera: "https://berascan.com/",
-  starknet: "https://starkscan.co/",
-  solana: "https://explorer.solana.com/",
-  base: "https://basescan.org/",
-  unichain: "https://uniscan.xyz/",
-  arbitrum: "https://arbiscan.io/",
-  bitcoin: "https://mempool.space/",
-  bnbchain: "https://bscscan.com/",
-  starknet_sepolia: "https://sepolia.starkscan.co/",
-  ethereum_sepolia: "https://sepolia.etherscan.io/",
-  solana_testnet: "https://explorer.solana.com/",
-  citrea_testnet: "https://explorer.testnet.citrea.xyz/",
-  base_sepolia: "https://sepolia.basescan.org/",
-  monad_testnet: "https://explorer.monad-devnet.devnet101.com",
-  arbitrum_sepolia: "https://sepolia.arbiscan.io/",
-  bitcoin_testnet: "https://mempool.space/testnet4/",
-  bnbchain_testnet: "https://testnet.bscscan.com/",
-};
-
 export const CHAIN_NAMES = {
   bnbchain: "BNB Chain",
   bnbchain_testnet: "BNB Chain Testnet",
@@ -38,7 +14,15 @@ export const getChainName = (chain) => {
 };
 
 export const trimAssetName = (id) => {
-  return id.split(":")[1].toUpperCase();
+  const ASSET_NAME_OVERRIDE = {
+    "cbbtc": "cbBTC",
+    "ibtc" : "iBTC",
+    "ubtc" : "uBTC",
+  };
+  
+  const assetName = id.split(":")[1];
+  const override = ASSET_NAME_OVERRIDE[assetName.toLowerCase()];
+  return override || assetName.toUpperCase();
 };
 
 export const titilize = (chain) => {
@@ -52,24 +36,27 @@ export const titilize = (chain) => {
   return firstWord + " " + secondWord;
 };
 
-export const getExplorerUrl = (chain, address) => {
+export const getExplorerUrl = (chain, address, explorer_url) => {
   if (chain.includes("bitcoin")) {
     return "/contracts/bitcoin";
   } else if (chain.includes("starknet")) {
-    return CHAIN_EXPLORERS[chain] + "contract/" + address + "#overview";
+    return explorer_url + "contract/" + address + "#overview";
   } else if (chain.includes("solana")) {
     return (
-      CHAIN_EXPLORERS[chain] +
-      "address/" +
+      explorer_url +
+      "/address/" +
       "2bag6xpshpvPe7SJ9nSDLHpxqhEAoHPGpEkjNSv7gxoF" +
       (chain.includes("testnet") ? "?cluster=devnet" : "")
     );
+  } else if (chain.includes("sui")) {
+    return explorer_url + "/object/" + address;
   } else {
-    return CHAIN_EXPLORERS[chain] + "address/" + address + "#code";
+    return explorer_url + "/address/" + address + "#code";
   }
 };
 
 export const AssetRow = ({ chain, assets }) => {
+  // console.log(assets)
   return (
     <tr>
       <td
@@ -77,7 +64,7 @@ export const AssetRow = ({ chain, assets }) => {
         colSpan={4}
       >
         <Frame className="pointer-events-none w-[20px]">
-          <img width="20" src={chain.icon} alt={chain.chain} />
+          <img width="20" src={chain.icon} alt={chain.chain} className="w-full"/>
         </Frame>
         <strong>{titilize(getChainName(chain.chain))}</strong>
       </td>
@@ -86,11 +73,15 @@ export const AssetRow = ({ chain, assets }) => {
           {assets.map((asset, i) => (
             <a
               key={i}
-              href={getExplorerUrl(chain.chain, asset.htlc?.address)}
+              href={getExplorerUrl(
+                chain.chain,
+                asset.htlc?.address,
+                chain.explorer_url
+              )}
               className="border-none flex items-center gap-2"
             >
               <Frame className="pointer-events-none w-[20px]">
-                <img width="20" src={asset.icon} alt={asset.id} />
+                <img width="20" src={asset.icon} alt={asset.id} className="w-full"/>
               </Frame>
               <span>{trimAssetName(asset.id)}</span>
             </a>
@@ -147,7 +138,11 @@ export const SupportedAssets = ({ url }) => {
         {supportedAssetsConfig.map((chainConfig, i) => (
           <AssetRow
             key={i}
-            chain={{ chain: chainConfig.chain, icon: chainConfig.icon }}
+            chain={{
+              chain: chainConfig.chain,
+              icon: chainConfig.icon,
+              explorer_url: chainConfig.explorer_url,
+            }}
             assets={chainConfig.assets}
           />
         ))}
