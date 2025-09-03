@@ -435,19 +435,51 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     "status": "Ok",
                     "result": {
                         "order_id": "ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb",
-                        "versioned_tx": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100020408032aa331a727d64421581d1ec2ea7cdde7ac7bb04a7ab7bb5e7f4ea5992f08b30c777cae9e6cbeb9830b8b0cd529b6e1f3667ae0c1c21071cb64bba2c7763e000000000000000000000000000000000000000000000000000000000000000017b7828ca6c4f06b51139a60254f81fe1249c8e2b122febf32ca81322b9f1e8ed3c02412b5458cdb8b14d42d4a61166f85f0f4e4d536c8a9f111a4de7e86b77801030301000258053f7b71994b940e89e4221500000000c04b03000000000044070018cffb963a80cb5bf8974e0d64934c614d26340d947ddf3b762a014cacb8841dc97c588ab9e1b94f62627b97d54f8c1048b28c26749d413032e9d66c4e"
+                        "versioned_tx": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100020408032aa331a727d64421581d1ec2ea7cdde7ac7bb04a7ab7bb5e7f4ea5992f08b30c777cae9e6cbeb9830b8b0cd529b6e1f3667ae0c1c21071cb64bba2c7763e000000000000000000000000000000000000000000000000000000000000000017b7828ca6c4f06b51139a60254f81fe1249c8e2b122febf32ca81322b9f1e8ed3c02412b5458cdb8b14d42d4a61166f85f0f4e4d536c8a9f111a4de7e86b77801030301000258053f7b71994b940e89e4221500000000c04b03000000000044070018cffb963a80cb5bf8974e0d64934c614d26340d947ddf3b762a014cacb8841dc97c588ab9e1b94f62627b97d54f8c1048b28c26749d413032e9d66c4e",
+                        "versioned_tx_gasless": null
                     }
                 }
                 ```
                 Then deposit the funds:
-                ```javascript
-                // Convert transaction object from response.
-                const buffer = Buffer.from(response.result.versioned_tx, 'hex');
-                const transaction = VersionedTransaction.deserialize(buffer);
-                
-                // Sign and send using your wallet.
-                const signature = await wallet.signAndSendTransaction(transaction);
-                ```
+                <Tabs>
+                    <Tab title="Submit transaction">
+                        ```typescript
+                        // Decode and deserialize the `versioned_tx` field
+                        const buffer = Buffer.from(response.result.versioned_tx, 'base64');
+                        const transaction = VersionedTransaction.deserialize(buffer);
+
+                        // Sign and send using your wallet.
+                        const signature = await wallet.signAndSendTransaction(transaction);
+                        ```
+                    </Tab>
+                    <Tab title="Gasless submission">
+                        <Note>
+                            Currently, this is only supported for Solana SPL orders.  
+                            As such, `versioned_tx_gasless` will be `null` for Solana orders with native SOL.
+                        </Note>
+                        ```typescript
+                        // Note the use of `versioned_tx_gasless`
+                        const buffer = Buffer.from(response.result.versioned_tx_gasless, 'base64');
+                        const transaction = VersionedTransaction.deserialize(buffer);
+
+                        // Sign using your wallet
+                        const signedTransaction = await wallet.signTransaction(transaction);
+
+                        // Serialize and base64 encode the signed transaction
+                        const encodedTx = Buffer.from(signedTransaction.serialize()).toString('base64');
+
+                        // Pass this encoded transaction to the garden API
+                        await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                            method: 'PATCH',
+                            headers: {
+                                'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ signature: encodedTx })
+                        });
+                        ```
+                    </Tab>
+                </Tabs>
             </Step>
             <Step title="Check Order Status">
                 Get the order by ID to check the status of the swap.
