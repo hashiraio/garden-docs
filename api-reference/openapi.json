@@ -752,7 +752,8 @@
         "type": "object",
         "required": [
           "order_id",
-          "transaction",
+          "approval_transaction",
+          "initiate_transaction",
           "typed_data"
         ],
         "properties": {
@@ -761,7 +762,8 @@
           },
           "approval_transaction": {
             "nullable": true,
-            "$ref": "#/components/schemas/EVMTransaction"
+            "$ref": "#/components/schemas/EVMTransaction",
+            "description": "Can be `null`, if user has already given approval"
           },
           "initiate_transaction": {
             "$ref": "#/components/schemas/EVMTransaction"
@@ -899,18 +901,20 @@
         "type": "object",
         "required": [
           "order_id",
-          "transaction",
+          "approval_transaction",
+          "initiate_transaction",
           "typed_data"
         ],
         "properties": {
           "order_id": {
             "type": "string"
           },
-          "approval_call": {
+          "approval_transaction": {
             "nullable": true,
-            "$ref": "#/components/schemas/StarknetTransaction"
+            "$ref": "#/components/schemas/StarknetTransaction",
+            "description": "Can be `null`, if user has already given approval"
           },
-          "initiate_call": {
+          "initiate_transaction": {
             "nullable": true,
             "$ref": "#/components/schemas/StarknetTransaction"
           },
@@ -934,6 +938,25 @@
           }
         }
       },
+      "SuiInitiateRequest": {
+        "type": "object",
+        "required": [
+          "order_id",
+          "ptb_bytes"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          },
+          "ptb_bytes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
       "InitiateRequest": {
         "anyOf": [
           {
@@ -951,6 +974,10 @@
           {
             "title": "solana",
             "$ref": "#/components/schemas/SolanaInitiateRequest"
+          },
+          {
+            "title": "sui",
+            "$ref": "#/components/schemas/SuiInitiateRequest"
           }
         ]
       },
