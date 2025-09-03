@@ -1,0 +1,237 @@
+
+---
+title: "Strategy Configuration"
+description: "Configure solver fees and pricing strategies on top of Garden's fair price"
+---
+
+## Overview
+
+The strategy object allows solvers to define custom fee structures that are applied on top of Garden's fair pricing mechanism. This ensures users see transparent quotes that include all necessary costs while maintaining competitive pricing through Garden's auction system.
+
+<Tip>
+    Strategy fees are calculated and displayed to users before they submit orders, ensuring complete transparency in pricing.
+</Tip>
+
+## How it works
+
+Solver strategies use a two-component fee structure applied to the Garden fair price:
+
+1. **Static Fees**: Fixed costs in US cents to cover on-chain gas expenses
+2. **Dynamic Fees**: Percentage-based costs in basis points (bips) to cover liquidity, rebalancing, and hedging
+
+<Note>
+    1 basis point (bip) = 0.01% of the transaction value
+</Note>
+
+## Strategy syntax
+
+Strategies are defined using route patterns with fee tuples:
+
+```typescript
+"source_chain:source_asset -> destination_chain:destination_asset = (static_fee, dynamic_fee)"
+```
+
+<Steps>
+    <Step title="Dynamic fees only">
+    Apply percentage-based fees without static costs:
+
+    ```typescript
+    "bitcoin:BTC -> ethereum:WBTC = (_, 30)"
+    ```
+    
+    This charges 30 bips (0.30%) on BTC to WBTC swaps.
+    </Step>
+
+    <Step title="Static fees only">
+    Apply fixed costs without percentage fees:
+
+    ```typescript
+    "bitcoin:* -> * = (50, _)"
+    ```
+    
+    This charges 50 cents for any swap originating from Bitcoin.
+    </Step>
+
+    <Step title="Combined fees">
+    Apply both static and dynamic fees:
+
+    ```typescript
+    "bitcoin:BTC -> * = (50, 20)"
+    ```
+    
+    This charges 50 cents plus 20 bips for BTC to any asset.
+    </Step>
+
+    <Step title="Default strategy">
+    Fallback fees when no specific pattern matches:
+
+    ```typescript
+    "(50, 30)"
+    ```
+    
+    Default: 50 cents static + 30 bips dynamic if not specified.
+    </Step>
+</Steps>
+
+## Pattern matching
+
+Strategy patterns support flexible matching with wildcards:
+
+<AccordionGroup>
+<Accordion title="Exact asset matching">
+Match specific asset pairs:
+
+```typescript
+"ethereum:USDC -> arbitrum:USDC = (25, 10)"
+"bitcoin:BTC -> ethereum:WBTC = (100, 25)"
+```
+</Accordion>
+
+<Accordion title="Chain-level wildcards">
+Match all assets on a specific chain:
+
+```typescript
+// Higher fees for all Ethereum destination assets
+"* -> ethereum:* = (75, 40)"
+
+// Lower fees for Arbitrum origination
+"arbitrum:* -> * = (10, 15)"
+```
+</Accordion>
+
+<Accordion title="Asset-level wildcards">
+Match specific assets across all chains:
+
+```typescript
+// Stablecoin transfers have minimal fees
+"*:USDC -> *:USDC = (10, 5)"
+"*:USDT -> *:USDT = (10, 5)"
+
+// Higher fees for wrapped Bitcoin variants
+"*:WBTC -> * = (50, 35)"
+```
+</Accordion>
+
+<Accordion title="Universal wildcards">
+Match any asset (use for broad policies):
+
+```typescript
+// Base fee for all unmatched routes
+"* -> * = (50, 30)"
+```
+</Accordion>
+</AccordionGroup>
+
+## Priority resolution
+
+When multiple patterns could match a route, the most specific pattern takes precedence:
+
+1. **Exact matches** (highest priority): `ethereum:USDC -> arbitrum:USDC`
+2. **Single wildcard**: `ethereum:USDC -> *:USDC` or `ethereum:* -> arbitrum:USDC`
+3. **Double wildcard**: `ethereum:* -> *` or `* -> arbitrum:*`
+4. **Universal wildcard**: `* -> *`
+5. **Default strategy** (lowest priority): When no pattern matches
+
+## Implementation example
+
+```typescript
+interface FeeStrategy {
+  staticFee: number;  // US cents
+  dynamicFee: number; // basis points
+}
+
+interface StrategyRule {
+  pattern: string;
+  fees: FeeStrategy;
+}
+
+class SolverStrategy {
+  private rules: StrategyRule[] = [];
+  private defaultFees: FeeStrategy = { staticFee: 50, dynamicFee: 30 };
+
+  // Add a new strategy rule
+  addRule(pattern: string, staticFee?: number, dynamicFee?: number) {
+    this.rules.push({
+      pattern,
+      fees: {
+        staticFee: staticFee ?? 0,
+        dynamicFee: dynamicFee ?? 0
+      }
+    });
+  }
+
+  // Calculate total fees for a route
+  calculateFees(
+    fromAsset: string, 
+    toAsset: string, 
+    amountInUSD: number
+  ): { staticFee: number; dynamicFee: number; totalFee: number } {
+    const route = `${fromAsset} -> ${toAsset}`;
+    const fees = this.getFeesForRoute(route);
+    
+    const dynamicFeeAmount = (amountInUSD * fees.dynamicFee) / 10000;
+    const totalFee = (fees.staticFee / 100) + dynamicFeeAmount;
+    
+    return {
+      staticFee: fees.staticFee,
+      dynamicFee: fees.dynamicFee,
+      totalFee
+    };
+  }
+
+  // Get fees for a specific route
+  private getFeesForRoute(route: string): FeeStrategy {
+    // Find the most specific matching pattern
+    const matchingRule = this.rules
+      .filter(rule => this.matchesPattern(route, rule.pattern))
+      .sort((a, b) => this.getSpecificity(b.pattern) - this.getSpecificity(a.pattern))[0];
+    
+    return matchingRule?.fees ?? this.defaultFees;
+  }
+
+  private matchesPattern(route: string, pattern: string): boolean {
+    // Implementation of pattern matching logic
+    // Similar to the route policy matcher
+  }
+
+  private getSpecificity(pattern: string): number {
+    // Calculate pattern specificity for priority resolution
+    const wildcards = (pattern.match(/\*/g) || []).length;
+    return 10 - wildcards;
+  }
+}
+
+// Usage example
+const strategy = new SolverStrategy();
+
+// Add strategy rules
+strategy.addRule("bitcoin:BTC -> ethereum:WBTC", 0, 30);
+strategy.addRule("ethereum:* -> arbitrum:*", 25, 15);
+strategy.addRule("*:USDC -> *:USDC", 10, 5);
+
+// Calculate fees for a $1000 swap
+const fees = strategy.calculateFees("bitcoin:BTC", "ethereum:WBTC", 1000);
+console.log(fees); // { staticFee: 0, dynamicFee: 30, totalFee: 3.00 }
+```
+
+## Best practices
+
+1. **Set competitive fees**: Garden's auction mechanism rewards efficient pricing
+2. **Consider gas costs**: Ensure static fees adequately cover on-chain expenses
+3. **Account for liquidity depth**: Higher dynamic fees for illiquid pairs
+4. **Monitor performance**: Adjust strategies based on execution success rates
+5. **Transparent pricing**: Users see all fees before confirming orders
+
+## Fee calculation example
+
+For a user swapping $10,000 worth of BTC to WBTC with strategy `(50, 30)`:
+
+- **Garden fair price**: $10,000 worth of WBTC
+- **Static fee**: $0.50 (50 cents)
+- **Dynamic fee**: $30.00 (30 bips of $10,000)
+- **Total cost**: $10,030.50
+- **User receives**: $9,969.50 worth of WBTC
+
+<Info>
+    All fees are deducted from the source amount before the swap execution, ensuring users receive exactly what the quote promises.
+</Info>
