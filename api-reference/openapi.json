@@ -334,6 +334,17 @@
           }
         }
       },
+      "OrderStatus": {
+        "type": "string",
+        "title": "status",
+        "enum": [
+          "not-initiated", 
+          "in-progress", 
+          "completed", 
+          "expired", 
+          "refunded"
+        ]
+      },
       "Swap": {
         "type": "object",
         "properties": {
