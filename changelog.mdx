@@ -8,12 +8,12 @@ description: "Product updates and announcements"
 </Update>
 
 <Update label="September 1, 2025" description="v2.5.1" tags={["SDK"]}>
-  - Add Spl tokens support in Solana chain.
+  - Add SPL tokens support in Solana chain.
 </Update>
 
 <Update label="August 26, 2025" description="v2.5.0" tags={["SDK"]}>
   - Add Sui chain support.
-  - Add yarn link support allowing developers to locally test the changes done in SDK within a working project directory.
+  - Add `yarn link` support allowing developers to locally test the changes done in SDK within a working project directory.
 </Update>
 
 <Update label="August 26, 2025" description="v2.4.6" tags={["SDK"]}>
@@ -33,19 +33,15 @@ description: "Product updates and announcements"
 </Update>
 
 <Update label="July 30, 2025" description="v2.4.0" tags={["SDK"]}>
-  - Add optional secret management to SDK. This is configured via the `handleSecretManagement` flag: when set to `true`, the relayer manages order redemption, eliminating the need for the user to keep the browser open after initiating a swap; when set to `false`, the user must handle secrets and keep the browser open until redemption is complete.
+   - Add `handleSecretManagement` flag for optional secret management. When set to `true`, the relayer manages order redemption, eliminating the need for the user to keep the browser open after initiating a swap. When set to `false`, the user must handle secrets and keep the browser open until redemption is complete.
 </Update>
 
 <Update label="July 30, 2025" description="v2.3.3" tags={["SDK"]}>
   - Add BNB chain support.
 </Update>
 
-<Update label="July 30, 2025" description="v2.3.2" tags={["SDK"]}>
-  - Add Instant refund SACP call for expired orders for automatic refunds.
-</Update>
-
 <Update label="July 17, 2025" description="v2.3.1" tags={["SDK"]}>
-  - Finalize all inputs of a Partially Signed Bitcoin Transaction in PhantomProvider.
+  - Finalize all inputs of a Partially Signed Bitcoin Transaction in PhantomProvider, fixing issues with transaction broadcasting.
 </Update>
 
 <Update label="July 16, 2025" description="v2.3.0" tags={["SDK"]}>
