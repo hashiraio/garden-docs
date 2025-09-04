@@ -2,120 +2,92 @@
 title: "Changelog"
 description: "Product updates and announcements"
 ---
-<Update label="September 3, 2025" description="v1.1.4" tags={["APP"]}>
-  ### New chains
-  - Add core support 
-  - Add chain-specific app (https://core.garden.finance)
-
-  ### Miscellaneous
-  - Add base mini app support.
-  - Fixed favicons on Safari
-</Update>
-
 <Update label="September 1, 2025" description="v2.5.2" tags={["SDK"]}>
   ### New chains
-  - Add Core chain support.
+  - Add Core support
 
   ### New assets
-  - Add SPL tokens support in Solana chain.
+  - Add SPL tokens support for Solana
 
-  ### Add post approval allowance check
+  ### Approval flow improvements
   - Add check after approval to verify the latest allowance amount.
 </Update>
 
 <Update label="September 1, 2025" description="v2.0.7" tags={["API"]}>
-  ### Watchers
-  - Updated event watch deadline for Bitcoin swaps from 1hr to 6hrs
+  ### Watcher improvements
+  - Update event watch deadline for Bitcoin swaps from 1 hour to 6 hours
 </Update>
 
 <Update label="August 26, 2025" description="v2.5.0" tags={["SDK"]}>
   ### New chains
-  - Add Sui chain support.
+  - Add Sui support
 
-  ### Optimised API call management
+  ### API call improvements
   - Extend `getOrders` function with new filters (e.g. status , transaction hash) for more precise order queries.
-  - Accept AbortController as a parameter in get methods of `@gardenfi/orderbook` to allow cancellation of ongoing orderbook API calls.
+  - Accept `AbortController` as a parameter in get methods of `@gardenfi/orderbook` to allow cancellation of ongoing orderbook API calls.
 
-  ### Improved network switching in wallets
+  ### Network switching improvements
   - Fix error handling in `switchOrAddNetwork` utility for case when network is not found.
 
-  ### Allow developers to link modified garden.js to their dApps
+  ### Local testing
   - Add `yarn link` support allowing developers to locally test the changes done in SDK within a working project directory.  
 </Update>
 
 <Update label="August 20, 2025" description="v2.0.6" tags={["API"]}>
-  ### Endpoints
+  ### Affiliate fees endpoint
   - Add GET `/apps/earnings` to track an integrator's affiliate fees
-</Update>
-
-<Update label="August 15, 2025" description="v1.1.1" tags={["APP"]}>
-  ### New chains
-  - Add sui support 
 </Update>
 
 <Update label="August 11, 2025" description="v2.0.5" tags={["API"]}>
   ### New chains
-  - Add Sui support 
-
-  ### New assets
-  - Add Sui native asset
-
-  ### Endpoints
-  - Updated GET `/chains` to support sui
-  - Updated GET `/assets` to support sui:sui
-  - Updated POST `/orders` to return sui transaction object while creating orders from sui
+  - Add Sui support
 </Update>
 
 <Update label="August 10, 2025" description="v2.4.2" tags={["SDK"]}>
-  ### Fixed order status on deposit expiry
+  ### Order status fixes
   - Fix order status parsing to ensure swap initiation and initiation detection are confirmed before the attested deadline, preventing orders from being accepted after expiry.
 </Update>
 
 <Update label="August 5, 2025" description="v2.0.4" tags={["API"]}>
-  ### New assets
-  - Add support for Solana SPL tokens  
-
-  ### Endpoints
-  - Updated GET `/assets` to add solana:usdc and solana:cbbtc
+  ### New chains
+  - Add SPL tokens support for Solana
 </Update>
 
 <Update label="August 1, 2025" description="v2.0.3" tags={["API"]}>
-  ### Endpoints
-  - Updated GET `/orders` to include the following filters ("address", "tx_hash", "from_chain", "to_chain", "page", "per_page", "status")
-  - Updated GET `/chains` to include the default explorer url
+  ### Endpoint updates
+  - Update GET `/orders` to include the following filters: `address`, `tx_hash`, `from_chain`, `to_chain`, `page`, `per_page`, `status`
+  - Update GET `/chains` to include the default explorer URL
 </Update>
 
 <Update label="July 30, 2025" description="v2.4.0" tags={["SDK"]}>
   ### New chains
-  - Add BNB chain support.
+  - Add BNB Chain support
 
-  ### Updated to support 1click swaps
-  - Add `handleSecretManagement` flag for optional secret management. 
-    - When set to `false`, we use [1click](/developers/api/1click) swaps. 
-    - When set to `true`, we manage secrets within the SDK, and the user has to keep his session active.
+  ### One-click swaps
+  - Add `handleSecretManagement` flag for optional secret management.
+    - When set to `false`, we use [one-click swaps](/developers/api/1click)
+    - When set to `true`, we manage secrets within the SDK, and the user has to keep his session active
 </Update>
 
 <Update label="July 29, 2025" description="v2.0.3" tags={["API"]}>
-  ### Endpoints
-  - Add PATCH `/orders/:id?action=refund` endpoint to process bitcoin refunds
+  ### New endpoint
+  - Add PATCH `/orders/:id?action=refund` endpoint to process Bitcoin refunds
 </Update>
 
 <Update label="July 24, 2025" description="v2.0.2" tags={["API"]}>
-  ### Endpoints
-  - Updated GET `/assets` endpoint to return chain_id and fiat value
-  - Updated POST `/orders` endpoint to make bitcoin address optional, to support swappers to update the refund address after expiry
+  ### Endpoint updates
+  - Update GET `/assets` endpoint to return `chain_id` and fiat value
+  - Update POST `/orders` endpoint to make Bitcoin address optional, to allow refund address updates after expiry
 </Update>
 
 <Update label="July 17, 2025" description="v2.3.1" tags={["SDK"]}>
-  ### Fixed PSBT handling within Phantom
-  
-  - Finalize all inputs of a Partially Signed Bitcoin Transaction in PhantomProvider, fixing issues with transaction broadcasting.
+  ### Phantom wallet fixes
+  - Finalize all inputs of a Partially Signed Bitcoin Transaction in `PhantomProvider`, fixing issues with transaction broadcasting
 </Update>
 
 <Update label="July 16, 2025" description="v2.3.0" tags={["SDK"]}>
-  ### Removed outdated external dependencies
-
-  - Internalised `@catalogfi/wallets` dependency to Garden SDK.
+  ### Dependency update
+  - Internalised `@catalogfi/wallets` dependency to Garden SDK
 </Update>
 
 <Update label="July 15, 2025" description="v2.0.1" tags={["API"]}>
