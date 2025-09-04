@@ -65,10 +65,9 @@ export const AssetRow = ({ chain, assets }) => {
       >
         <Frame className="pointer-events-none w-[20px]">
           <img
-            width="w-full"
             src={chain.icon}
             alt={chain.chain}
-            className="aspect-square"
+            className="aspect-square w-full"
           />
         </Frame>
         <strong>{titilize(getChainName(chain.chain))}</strong>
@@ -87,10 +86,9 @@ export const AssetRow = ({ chain, assets }) => {
             >
               <Frame className="pointer-events-none w-[20px]">
                 <img
-                  width="w-full"
                   src={asset.icon}
                   alt={asset.id}
-                  className="aspect-square"
+                  className="aspect-square w-full"
                 />
               </Frame>
               <span>{trimAssetName(asset.id)}</span>
