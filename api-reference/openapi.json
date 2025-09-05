@@ -1019,6 +1019,10 @@
           "solver_id": {
             "type": "string"
           },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated swap time in seconds"
+          },
           "source": {
             "$ref": "#/components/schemas/QuoteAsset"
           },
