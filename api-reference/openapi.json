@@ -1028,6 +1028,11 @@
           },
           "destination": {
             "$ref": "#/components/schemas/QuoteAsset"
+          },
+          "slippage": {
+            "type": "integer",
+            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "example": 50
           }
         }
       },
@@ -1388,7 +1393,18 @@
             "name": "affiliate_fee",
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "example": 10
+          },
+          {
+            "in": "query",
+            "name": "slippage",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
+            "example": 50
           }
         ],
         "responses": {
@@ -1662,6 +1678,22 @@
               "type": "string"
             },
             "description": "Filter orders by destination chain"
+          },
+          {
+            "in": "query",
+            "name": "from_owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter orders by source owner"
+          },
+          {
+            "in": "query",
+            "name": "to_owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter orders by destination owner"
           },
           {
             "in": "query",
