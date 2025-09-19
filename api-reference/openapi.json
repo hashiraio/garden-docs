@@ -353,11 +353,11 @@
         "type": "object",
         "properties": {
           "created_at": {
-            "description": "The timestamp when the swap was created.",
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "swap_id": {
-            "description": "The unique identifier for the swap.",
+            "description": "A unique identifier for the swap.",
             "type": "string"
           },
           "chain": {
@@ -367,11 +367,11 @@
             "$ref": "#/components/schemas/Asset"
           },
           "initiator": {
-            "description": "The address of the initiator.",
+            "description": "Address transferring funds.",
             "type": "string"
           },
           "redeemer": {
-            "description": "The address of the redeemer.",
+            "description": "Address receiving funds.",
             "type": "string"
           },
           "delegate": {
@@ -379,23 +379,22 @@
             "type": "string"
           },
           "timelock": {
-            "description": "The timelock for the swap.",
+            "description": "Timelock for the swap (in blocknumbers).",
             "type": "integer"
           },
           "filled_amount": {
-            "description": "The amount of the swap that has been filled.",
+            "description": "Amount that has been filled.",
             "type": "string"
           },
           "asset_price": {
-            "description": "The price of the asset.",
+            "description": "Price of the asset during swap.",
             "type": "integer"
           },
           "amount": {
-            "description": "The amount of the swap.",
             "type": "string"
           },
           "secret_hash": {
-            "description": "A 32-bytes hexadecimal string used to redeem the order securely.",
+            "description": "SHA256 of the secret",
             "type": "string"
           },
           "secret": {
@@ -403,56 +402,53 @@
             "type": "string"
           },
           "instant_refund_tx": {
-            "description": "The transaction hash for an instant refund. It is used when the swap fails unexpectedly.",
+            "description": "On chain transaction hash of instant refund.",
             "type": "string"
           },
           "initiate_tx_hash": {
-            "description": "The initiate transaction hash for the swap",
+            "description": "On chain transaction hash of initiate.",
             "type": "string"
           },
           "redeem_tx_hash": {
-            "description": "The redeem transaction hash for the swap.",
+            "description": "On chain transaction hash of redeem.",
             "type": "string"
           },
           "refund_tx_hash": {
-            "description": "The transaction hash for refunding the swap after the timelock expires.",
+            "description": "On chain transaction hash of refund.",
             "type": "string"
           },
           "initiate_block_number": {
-            "description": "The block number when the swap was initiated.",
+            "description": "Block number of the initiate transaction.",
             "type": "string",
             "nullable": true
           },
           "redeem_block_number": {
-            "description": "The block number when the swap was redeemed.",
+            "description": "Block number of the redeem transaction.",
             "type": "string",
             "nullable": true
           },
           "refund_block_number": {
-            "description": "The block number when the swap was refunded.",
+            "description": "Block number of the refund transaction.",
             "type": "string",
             "nullable": true
           },
           "required_confirmations": {
-            "description": "The number of confirmations required for the swap transaction.",
+            "description": "Number of confirmations required.",
             "type": "integer"
           },
           "current_confirmations": {
-            "description": "The number of confirmations the swap transaction has received so far.",
+            "description": "Number of confirmations received so far.",
             "type": "integer"
           },
           "initiate_timestamp": {
-            "description": "The timestamp when the swap was initiated",
             "type": "string",
             "nullable": true
           },
           "redeem_timestamp": {
-            "description": "The timestamp when the swap was redeemed.",
             "type": "string",
             "nullable": true
           },
           "refund_timestamp": {
-            "description": "The timestamp when the swap was refunded.",
             "type": "string",
             "nullable": true
           }
@@ -462,11 +458,11 @@
         "type": "object",
         "properties": {
           "order_id": {
-            "description": "The ID of the order.",
+            "description": "A unique identifier for order.",
             "type": "string"
           },
           "created_at": {
-            "description": "The timestamp when the order was created",
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "source_swap": {
@@ -481,7 +477,7 @@
             "example": 0.5
           },
           "nonce": {
-            "description": "The nonce for the order",
+            "description": "Nonce for the order",
             "type": "string"
           },
           "affiliate_fees": {
@@ -710,7 +706,7 @@
         "properties": {
           "order_id": {
             "type": "string",
-            "description": "The ID of the order."
+            "description": "A unique identifier for order."
           },
           "to": {
             "type": "string",
@@ -809,7 +805,7 @@
         "properties": {
           "order_id": {
             "type": "string",
-            "description": "The ID of the order."
+            "description": "A unique identifier for the order"
           },
           "approval_transaction": {
             "nullable": true,
@@ -958,7 +954,7 @@
         ],
         "properties": {
           "order_id": {
-            "description": "The ID of the order.",
+            "description": "A unique identifier for order.",
             "type": "string"
           },
           "approval_transaction": {
@@ -984,7 +980,7 @@
         "properties": {
           "order_id": {
             "type": "string",
-            "description": "The ID of the order."
+            "description": "A unique identifier for the order"
           },
           "versioned_tx": {
             "type": "string"
@@ -1000,7 +996,7 @@
         "properties": {
           "order_id": {
             "type": "string",
-            "description": "The ID of the order."
+            "description": "A unique identifier for the order"
           },
           "ptb_bytes": {
             "type": "array",
@@ -1060,7 +1056,7 @@
         "type": "object",
         "properties": {
           "solver_id": {
-            "description": "The ID of the solver that matched the order.",
+            "description": "A unique identifier for solver that matched the order.",
             "type": "string"
           },
           "estimated_time": {
@@ -1438,7 +1434,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "description": "(Optional) in BIPS (base index points) where 100 bips = 1%",
             "example": 10
           },
           {
@@ -1447,7 +1443,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
+            "description": "(Optional) in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           }
         ],
