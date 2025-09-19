@@ -323,20 +323,24 @@
             "$ref": "#/components/schemas/Asset"
           },
           "owner": {
-            "type": "string"
+            "type": "string",
+            "description": "The address of the account owner."
           },
           "delegate": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "(Optional) The address on whose behalf the order is initiated."
           },
           "amount": {
-            "type": "string"
+            "type": "string",
+            "description": "The amount of the asset, represented as a string."
           }
         }
       },
       "OrderStatus": {
         "type": "string",
         "title": "status",
+        "description": "The status of the order.",
         "enum": [
           "not-initiated", 
           "in-progress", 
@@ -349,9 +353,11 @@
         "type": "object",
         "properties": {
           "created_at": {
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "swap_id": {
+            "description": "A unique identifier for the swap.",
             "type": "string"
           },
           "chain": {
@@ -361,60 +367,77 @@
             "$ref": "#/components/schemas/Asset"
           },
           "initiator": {
+            "description": "Address transferring funds.",
             "type": "string"
           },
           "redeemer": {
+            "description": "Address receiving funds.",
             "type": "string"
           },
           "delegate": {
+            "description": "An optional address on whose behalf the swap is initiated.",
             "type": "string"
           },
           "timelock": {
+            "description": "Timelock for the swap (in blocknumbers).",
             "type": "integer"
           },
           "filled_amount": {
+            "description": "Amount that has been filled.",
             "type": "string"
           },
           "asset_price": {
+            "description": "Price of the asset during swap.",
             "type": "integer"
           },
           "amount": {
             "type": "string"
           },
           "secret_hash": {
+            "description": "SHA256 of the secret",
             "type": "string"
           },
           "secret": {
+            "description": "The actual secret used for the swap. It is updated once, the order is fulfilled.",
             "type": "string"
           },
           "instant_refund_tx": {
+            "description": "On chain transaction hash of instant refund.",
             "type": "string"
           },
           "initiate_tx_hash": {
+            "description": "On chain transaction hash of initiate.",
             "type": "string"
           },
           "redeem_tx_hash": {
+            "description": "On chain transaction hash of redeem.",
             "type": "string"
           },
           "refund_tx_hash": {
+            "description": "On chain transaction hash of refund.",
             "type": "string"
           },
           "initiate_block_number": {
+            "description": "Block number of the initiate transaction.",
             "type": "string",
             "nullable": true
           },
           "redeem_block_number": {
+            "description": "Block number of the redeem transaction.",
             "type": "string",
             "nullable": true
           },
           "refund_block_number": {
+            "description": "Block number of the refund transaction.",
             "type": "string",
             "nullable": true
           },
           "required_confirmations": {
+            "description": "Number of confirmations required.",
             "type": "integer"
           },
           "current_confirmations": {
+            "description": "Number of confirmations received so far.",
             "type": "integer"
           },
           "initiate_timestamp": {
@@ -435,9 +458,11 @@
         "type": "object",
         "properties": {
           "order_id": {
+            "description": "A unique identifier for order.",
             "type": "string"
           },
           "created_at": {
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "source_swap": {
@@ -447,14 +472,17 @@
             "$ref": "#/components/schemas/Swap"
           },
           "slippage": {
+            "description": "In BIPS (base index points) 100 bips = 1%",
             "type": "number",
             "example": 0.5
           },
           "nonce": {
+            "description": "Nonce for the order",
             "type": "string"
           },
           "affiliate_fees": {
             "type": "array",
+            "description": "Integrator fees associated with the order",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -531,6 +559,7 @@
         "required": [],
         "properties": {
           "address": {
+            "description": "Address of the affiliate",
             "type": "string"
           },
           "asset": {
@@ -558,18 +587,21 @@
           },
           "slippage": {
             "type": "number",
-            "description": "In BIPS (base index points) 100 bips = 1%",
+            "description": "In BIPS (base index points) 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           },
           "secret_hash": {
             "type": "string",
+            "description": "(Optional) A 32-byte hexadecimal string used for order redemption when secret is managed by user.",
             "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
           },
           "nonce": {
-            "type": "string"
+            "description": "(Optional) A unique number used for generating the secret and secret hash when secret management is handled on our side. If not provided, it defaults to the current total order count + 1.",
+            "type": "number"
           },
           "affiliate_fees": {
             "type": "array",
+            "description": "(Optional) Integrator fees associated with the order.",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -673,13 +705,16 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for order."
           },
           "to": {
-            "type": "string"
+            "type": "string",
+            "description": "The address of the recipient."
           },
           "amount": {
-            "type": "number"
+            "type": "number",
+            "description": "The amount to be sent."
           }
         }
       },
@@ -769,7 +804,8 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order"
           },
           "approval_transaction": {
             "nullable": true,
@@ -918,6 +954,7 @@
         ],
         "properties": {
           "order_id": {
+            "description": "A unique identifier for order.",
             "type": "string"
           },
           "approval_transaction": {
@@ -942,7 +979,8 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order"
           },
           "versioned_tx": {
             "type": "string"
@@ -957,7 +995,8 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order"
           },
           "ptb_bytes": {
             "type": "array",
@@ -1017,6 +1056,7 @@
         "type": "object",
         "properties": {
           "solver_id": {
+            "description": "A unique identifier for solver that matched the order.",
             "type": "string"
           },
           "estimated_time": {
@@ -1394,7 +1434,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "description": "(Optional) in BIPS (base index points) where 100 bips = 1%",
             "example": 10
           },
           {
@@ -1403,7 +1443,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
+            "description": "(Optional) in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           }
         ],
