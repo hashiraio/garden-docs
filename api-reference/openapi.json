@@ -324,16 +324,15 @@
           },
           "owner": {
             "type": "string",
-            "description": "The address of the account owner."
+            "description": "Address associated with the asset."
           },
           "delegate": {
             "type": "string",
             "nullable": true,
-            "description": "(Optional) The address on whose behalf the order is initiated."
+            "description": "(Optional) msg.sender of the intiate_on_behalf call. When passed, initiate_transaction will be a call to intiate on behalf method in the contract."
           },
           "amount": {
-            "type": "string",
-            "description": "The amount of the asset, represented as a string."
+            "type": "string"
           }
         }
       },
@@ -375,7 +374,7 @@
             "type": "string"
           },
           "delegate": {
-            "description": "An optional address on whose behalf the swap is initiated.",
+            "description": "sender of the intiate_on_behalf call. When passed, initiate_transaction will be a call to intiate on behalf method in the contract.",
             "type": "string"
           },
           "timelock": {
@@ -398,7 +397,7 @@
             "type": "string"
           },
           "secret": {
-            "description": "The actual secret used for the swap. It is updated once, the order is fulfilled.",
+            "description": "The secret used to lock the funds onchain",
             "type": "string"
           },
           "instant_refund_tx": {
@@ -592,7 +591,7 @@
           },
           "secret_hash": {
             "type": "string",
-            "description": "(Optional) A 32-byte hexadecimal string used for order redemption when secret is managed by user.",
+            "description": "(Optional) SHA256 hash of the secret. Required when secret management is implemented on user side.",
             "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
           },
           "nonce": {
