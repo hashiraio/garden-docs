@@ -15,11 +15,11 @@ export const getChainName = (chain) => {
 
 export const trimAssetName = (id) => {
   const ASSET_NAME_OVERRIDE = {
-    "cbbtc": "cbBTC",
-    "ibtc" : "iBTC",
-    "ubtc" : "uBTC",
+    cbbtc: "cbBTC",
+    ibtc: "iBTC",
+    ubtc: "uBTC",
   };
-  
+
   const assetName = id.split(":")[1];
   const override = ASSET_NAME_OVERRIDE[assetName.toLowerCase()];
   return override || assetName.toUpperCase();
@@ -64,7 +64,11 @@ export const AssetRow = ({ chain, assets }) => {
         colSpan={4}
       >
         <Frame className="pointer-events-none w-[20px]">
-          <img width="20" src={chain.icon} alt={chain.chain} className="w-full"/>
+          <img
+            src={chain.icon}
+            alt={chain.chain}
+            className="aspect-square w-full"
+          />
         </Frame>
         <strong>{titilize(getChainName(chain.chain))}</strong>
       </td>
@@ -81,7 +85,11 @@ export const AssetRow = ({ chain, assets }) => {
               className="border-none flex items-center gap-2"
             >
               <Frame className="pointer-events-none w-[20px]">
-                <img width="20" src={asset.icon} alt={asset.id} className="w-full"/>
+                <img
+                  src={asset.icon}
+                  alt={asset.id}
+                  className="aspect-square w-full"
+                />
               </Frame>
               <span>{trimAssetName(asset.id)}</span>
             </a>
