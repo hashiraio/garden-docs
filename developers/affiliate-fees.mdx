@@ -161,11 +161,11 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
 
 </Tabs>
 
-## How to Claim
+## How to claim
 
 The claiming process involves two steps: checking your available earnings through the API, then submitting an on-chain transaction to withdraw them.
 
-### Check Available Earnings
+### Check available earnings
 
 First, call the earnings endpoint to get your claimable amounts:
 
@@ -200,7 +200,7 @@ Example response:
   The `claim_amount`, `claim_amount_usd`, `claim_signature`, and `claim_contract` fields are only included when you have unclaimed earnings available.
 </Note>
 
-### Claim Your Earnings
+### Claim your earnings
 
 To claim your earnings, you need to call the `claim` function on the distributor contract. Here's how to construct the transaction:
 
