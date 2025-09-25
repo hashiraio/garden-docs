@@ -426,19 +426,19 @@
             "type": "string"
           },
           "instant_refund_tx": {
-            "description": "On chain transaction hash of instant refund.",
+            "description": "On-chain transaction hash of instant refund.",
             "type": "string"
           },
           "initiate_tx_hash": {
-            "description": "On chain transaction hash of initiate.",
+            "description": "On-chain transaction hash of initiate.",
             "type": "string"
           },
           "redeem_tx_hash": {
-            "description": "On chain transaction hash of redeem.",
+            "description": "On-chain transaction hash of redeem.",
             "type": "string"
           },
           "refund_tx_hash": {
-            "description": "On chain transaction hash of refund.",
+            "description": "On-chain transaction hash of refund.",
             "type": "string"
           },
           "initiate_block_number": {
@@ -496,7 +496,7 @@
             "$ref": "#/components/schemas/Swap"
           },
           "slippage": {
-            "description": "In BIPS (base index points) 100 bips = 1%).",
+            "description": "In BIPS (base index points) 100 bips = 1%.",
             "type": "number",
             "example": 0.5
           },
@@ -591,7 +591,7 @@
           },
           "fee": {
             "type": "integer",
-            "description": "In BIPS (base index points) 100 bips = 1%).",
+            "description": "In BIPS (base index points) 100 bips = 1%.",
             "example": 10
           }
         }
@@ -621,7 +621,7 @@
           },
           "affiliate_fees": {
             "type": "array",
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -1456,7 +1456,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
             "example": 10
           },
           {
@@ -1465,7 +1465,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "**(Optional)** Add slippage up to 5% for each quote/swap, defined in bips (100 bips = 1%).",
+            "description": "**(Optional)** Add slippage up to 5% for each quote/swap, defined in bips (100 bips = 1%.",
             "example": 50
           }
         ],
