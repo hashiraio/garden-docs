@@ -399,7 +399,7 @@
             "type": "string"
           },
           "delegate": {
-            "description": "Executes the swap on behalf of the user. Use this when calling Garden from your own smart contract; provide your contract’s address here.",
+            "description": "Address that performed the swap for the user, if applicable.",
             "type": "string"
           },
           "timelock": {
