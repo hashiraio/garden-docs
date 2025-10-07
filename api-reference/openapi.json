@@ -252,23 +252,30 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "arbitrum:ibtc",
               "arbitrum:usdc",
               "arbitrum:wbtc",
+              "arbitrum:seed",
               "base:cbbtc",
-              "bera:lbtc",
               "base:usdc",
+              "bera:lbtc",
               "bitcoin:btc",
+              "bnbchain:bnb",
+              "bnbchain:btcb",
+              "bnbchain:usdc",
               "botanix:btc",
+              "core:wbtc",
               "corn:btcn",
               "ethereum:cbbtc",
               "ethereum:wbtc",
-              "ethereum:ibtc",
               "ethereum:seed",
               "ethereum:usdc",
-              "hyperevm:ubtc",
+              "ethereum:eth",
+              "hyperliquid:ubtc",
               "solana:sol",
+              "solana:usdc",
+              "solana:cbbtc",
               "starknet:wbtc",
+              "sui:sui",
               "unichain:usdc",
               "unichain:wbtc"
             ]
@@ -280,18 +287,71 @@
               "arbitrum_sepolia:seed",
               "arbitrum_sepolia:ibtc",
               "arbitrum_sepolia:wbtc",
+              "arbitrum_sepolia:usdc",
               "base_sepolia:wbtc",
               "base_sepolia:usdt",
               "base_sepolia:ibtc",
+              "base_sepolia:usdc",
               "bitcoin_testnet:btc",
-              "citrea_testnet:cbtc",
+              "bnbchain_testnet:wbtc",
               "citrea_testnet:wcbtc",
+              "citrea_testnet:wbtc",
+              "citrea_testnet:cbtc",
+              "citrea_testnet:cbbtc",
+              "citrea_testnet:usdc",
+              "citrea_testnet:usdt",
               "ethereum_sepolia:wbtc",
+              "ethereum_sepolia:usdc",
               "monad_testnet:cbbtc",
               "monad_testnet:usdc",
               "solana_testnet:sol",
-              "starknet_sepolia:wbtc"
+              "solana_testnet:usdc",
+              "solana_testnet:cbbtc",
+              "starknet_sepolia:wbtc",
+              "sui_testnet:sui"
             ]
+          }
+        ]
+      },
+      "AssetName": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "enum": [
+              "USD Coin",
+              "Binance Bitcoin",
+              "Bitcorn",
+              "Bitcoin",
+              "BNB",
+              "Botanix Bitcoin",
+              "Coinbase Wrapped Bitcoin",
+              "Ethereum",
+              "Lombard Bitcoin",
+              "SEED",
+              "SUI",
+              "Solana",
+              "Unit Bitcoin",
+              "Wrapped Bitcoin"
+            ]            
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "enum": [
+              "Bitcoin",
+              "Citrea Bitcoin",
+              "Coinbase Wrapped Bitcoin",
+              "iBTC",
+              "SEED",
+              "Solana",
+              "SUI",
+              "Tether USD",
+              "USD Coin",
+              "Wrapped Bitcoin",
+              "Wrapped Citrea Bitcoin"
+            ]
+            
           }
         ]
       },
@@ -313,6 +373,9 @@
         "properties": {
           "id": {
             "$ref": "#/components/schemas/Asset"
+          },
+          "name": {
+            "$ref": "#/components/schemas/AssetName"
           },
           "chain": {
             "$ref": "#/components/schemas/Chain"
@@ -1055,6 +1118,16 @@
             "type": "integer",
             "description": "in BIPS (base index points) where 100 bips = 1%",
             "example": 50
+          },
+          "fee": {
+            "type": "integer",
+            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "example": 30
+          },
+          "fixed_fee": {
+            "type": "string",
+            "description": "in USD",
+            "example": "0.05"
           }
         }
       },
