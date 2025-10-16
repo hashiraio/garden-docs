@@ -6,7 +6,7 @@
   "info": {
     "title": "Garden API",
     "version": "2.0.0",
-    "description": "API specification for various endpoints"
+    "description": "API specification for various endpoints."
   },
   "servers": [
     {
@@ -401,18 +401,45 @@
           }
         }
       },
-      "Account": {
+      "SourceAccount":{
         "type": "object",
+        "required": [
+          "owner",
+          "amount",
+          "asset"
+        ],
         "properties": {
           "asset": {
             "$ref": "#/components/schemas/Asset"
           },
           "owner": {
-            "type": "string"
+            "type": "string",
+            "description": "Source address of the user."
           },
           "delegate": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "**(Optional)** Executes the swap on behalf of the user. Use this when calling Garden from your own smart contract; provide your contract’s address here."
+          },
+          "amount": {
+            "type": "string"
+          }
+        }
+      },
+      "DestinationAccount": {
+        "type": "object",
+        "required": [
+          "owner",
+          "amount",
+          "asset"
+        ],
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Destination address of the user."
           },
           "amount": {
             "type": "string"
@@ -422,6 +449,7 @@
       "OrderStatus": {
         "type": "string",
         "title": "status",
+        "description": "The status of the order.",
         "enum": [
           "not-initiated", 
           "in-progress", 
@@ -434,9 +462,11 @@
         "type": "object",
         "properties": {
           "created_at": {
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "swap_id": {
+            "description": "A unique identifier for the swap.",
             "type": "string"
           },
           "chain": {
@@ -446,60 +476,77 @@
             "$ref": "#/components/schemas/Asset"
           },
           "initiator": {
+            "description": "Address transferring funds.",
             "type": "string"
           },
           "redeemer": {
+            "description": "Address receiving funds.",
             "type": "string"
           },
           "delegate": {
+            "description": "Address that performed the swap for the user, if applicable.",
             "type": "string"
           },
           "timelock": {
+            "description": "Timelock for the swap (in block numbers).",
             "type": "integer"
           },
           "filled_amount": {
+            "description": "Amount that has been filled.",
             "type": "string"
           },
           "asset_price": {
+            "description": "Price of the asset during swap.",
             "type": "integer"
           },
           "amount": {
             "type": "string"
           },
           "secret_hash": {
+            "description": "SHA256 of the secret.",
             "type": "string"
           },
           "secret": {
+            "description": "The secret used to lock the funds on-chain.",
             "type": "string"
           },
           "instant_refund_tx": {
+            "description": "On-chain transaction hash of instant refund.",
             "type": "string"
           },
           "initiate_tx_hash": {
+            "description": "On-chain transaction hash of initiate.",
             "type": "string"
           },
           "redeem_tx_hash": {
+            "description": "On-chain transaction hash of redeem.",
             "type": "string"
           },
           "refund_tx_hash": {
+            "description": "On-chain transaction hash of refund.",
             "type": "string"
           },
           "initiate_block_number": {
+            "description": "Block number of the initiate transaction.",
             "type": "string",
             "nullable": true
           },
           "redeem_block_number": {
+            "description": "Block number of the redeem transaction.",
             "type": "string",
             "nullable": true
           },
           "refund_block_number": {
+            "description": "Block number of the refund transaction.",
             "type": "string",
             "nullable": true
           },
           "required_confirmations": {
+            "description": "Number of confirmations required.",
             "type": "integer"
           },
           "current_confirmations": {
+            "description": "Number of confirmations received so far.",
             "type": "integer"
           },
           "initiate_timestamp": {
@@ -520,9 +567,11 @@
         "type": "object",
         "properties": {
           "order_id": {
+            "description": "A unique identifier for the order.",
             "type": "string"
           },
           "created_at": {
+            "description": "Timestamp of order creation.",
             "type": "string"
           },
           "source_swap": {
@@ -532,14 +581,17 @@
             "$ref": "#/components/schemas/Swap"
           },
           "slippage": {
+            "description": "In BIPS (base index points) 100 bips = 1%.",
             "type": "number",
             "example": 0.5
           },
           "nonce": {
+            "description": "Nonce for the order.",
             "type": "string"
           },
           "affiliate_fees": {
             "type": "array",
+            "description": "Integrator fees associated with the order.",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -616,6 +668,7 @@
         "required": [],
         "properties": {
           "address": {
+            "description": "Address of the affiliate.",
             "type": "string"
           },
           "asset": {
@@ -623,7 +676,7 @@
           },
           "fee": {
             "type": "integer",
-            "description": "In BIPS (base index points) 100 bips = 1%",
+            "description": "In BIPS (base index points) 100 bips = 1%.",
             "example": 10
           }
         }
@@ -636,25 +689,24 @@
         ],
         "properties": {
           "source": {
-            "$ref": "#/components/schemas/Account"
+            "$ref": "#/components/schemas/SourceAccount"
           },
           "destination": {
-            "$ref": "#/components/schemas/Account"
+            "$ref": "#/components/schemas/DestinationAccount"
           },
           "slippage": {
             "type": "number",
-            "description": "In BIPS (base index points) 100 bips = 1%",
+            "description": "**(Optional)** In BIPS (base index points) 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           },
           "secret_hash": {
             "type": "string",
+            "description": "**(Optional)** SHA256 hash of the secret. Required when secret management is implemented on user side.",
             "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
-          },
-          "nonce": {
-            "type": "string"
           },
           "affiliate_fees": {
             "type": "array",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -666,7 +718,8 @@
         "title": "Initiate",
         "properties": {
           "signature": {
-            "type": "string"
+            "type": "string",
+            "description": "An ECDSA signature generated by the initiator over an EIP-712 typed data message containing parameters such as the redeemer address and secret hash obtained from the [create order endpoint](./create-order). Submitting this signature enables the relayer to initiate the swap on behalf of the initiator, making the process gasless for the user."
           }
         },
         "required": [
@@ -695,7 +748,8 @@
         "title": "Instant Refund",
         "properties": {
           "signature": {
-            "type": "string"
+            "type": "string",
+            "description": "A Schnorr signature generated by the initiator over the instant refund hash obtained from the [instant refund hash endpoint](./get-instant-refund-hash). This signature represents the initiator’s partial spend authorization for the Taproot script controlling the initiator's UTXO. Submitting this signature allows the solver to later provide its own Schnorr signature to fully satisfy the Taproot instant refund leaf and broadcast the refund transaction instantly, without requiring further initiator interaction."
           }
         },
         "required": [
@@ -758,13 +812,16 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order."
           },
           "to": {
-            "type": "string"
+            "type": "string",
+            "description": "The address of the recipient."
           },
           "amount": {
-            "type": "number"
+            "type": "number",
+            "description": "The amount to be sent."
           }
         }
       },
@@ -854,12 +911,13 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order."
           },
           "approval_transaction": {
             "nullable": true,
             "$ref": "#/components/schemas/EVMTransaction",
-            "description": "Can be `null`, if user has already given approval"
+            "description": "Can be `null`, if user has already given approval."
           },
           "initiate_transaction": {
             "$ref": "#/components/schemas/EVMTransaction"
@@ -1003,12 +1061,13 @@
         ],
         "properties": {
           "order_id": {
+            "description": "A unique identifier for the order.",
             "type": "string"
           },
           "approval_transaction": {
             "nullable": true,
             "$ref": "#/components/schemas/StarknetTransaction",
-            "description": "Can be `null`, if user has already given approval"
+            "description": "Can be `null`, if user has already given approval."
           },
           "initiate_transaction": {
             "nullable": true,
@@ -1027,7 +1086,8 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order."
           },
           "versioned_tx": {
             "type": "string"
@@ -1042,7 +1102,8 @@
         ],
         "properties": {
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "description": "A unique identifier for the order."
           },
           "ptb_bytes": {
             "type": "array",
@@ -1085,16 +1146,18 @@
           },
           "amount": {
             "type": "string",
-            "example": "1000000"
+            "example": "1000000",
+            "description": "Raw asset amount in the smallest unit (e.g., satoshis for BTC, wei for ETH)."
           },
           "display": {
             "type": "string",
             "example": "0.01",
-            "description": "USD Value"
+            "description": "Amount after applying decimal places (e.g., 0.01 BTC)."
           },
           "value": {
             "type": "string",
-            "example": "100"
+            "example": "100",
+            "description": "Fiat value (in USD) equivalent of the displayed amount."
           }
         }
       },
@@ -1102,11 +1165,12 @@
         "type": "object",
         "properties": {
           "solver_id": {
+            "description": "A unique identifier for the solver who provided the quote.",
             "type": "string"
           },
           "estimated_time": {
             "type": "integer",
-            "description": "Estimated swap time in seconds"
+            "description": "Estimated swap time in seconds."
           },
           "source": {
             "$ref": "#/components/schemas/QuoteAsset"
@@ -1116,7 +1180,7 @@
           },
           "slippage": {
             "type": "integer",
-            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "description": "Slippage defined for this quote.",
             "example": 50
           },
           "fee": {
@@ -1368,7 +1432,7 @@
               "closed"
             ],
             "default": "open",
-            "description": "Default policy for routes not covered by specific rules"
+            "description": "Default policy for routes not covered by specific rules."
           },
           "isolation_groups": {
             "type": "array",
@@ -1378,7 +1442,7 @@
             "example": [
               "ethereum:SEED <-> arbitrum:SEED"
             ],
-            "description": "Assets in an isolation group can ONLY trade with other assets in the same group"
+            "description": "Assets in an isolation group can ONLY trade with other assets in the same group."
           },
           "blacklist_pairs": {
             "type": "array",
@@ -1389,7 +1453,7 @@
               "bitcoin:BTC -> starknet:*",
               "*:USDC -> bitcoin:*"
             ],
-            "description": "Explicitly forbidden trading pairs using pattern matching"
+            "description": "Explicitly forbidden trading pairs using pattern matching."
           },
           "whitelist_overrides": {
             "type": "array",
@@ -1399,7 +1463,7 @@
             "example": [
               "ethereum:USDC -> bitcoin:BTC"
             ],
-            "description": "Explicit overrides that bypass other restrictions"
+            "description": "Explicit overrides that bypass other restrictions."
           }
         }
       },
@@ -1489,7 +1553,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
             "example": 10
           },
           {
@@ -1498,7 +1562,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "in BIPS (base index points) where 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
+            "description": "**(Optional)** Add slippage up to 5% for each quote/swap, defined in bips (100 bips = 1%.",
             "example": 50
           }
         ],
@@ -1532,7 +1596,7 @@
             }
           },
           "503": {
-            "description": "Server is unavilable.",
+            "description": "Server is unavailable.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1696,7 +1760,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by address"
+            "description": "Filter orders by address."
           },
           {
             "in": "query",
@@ -1704,7 +1768,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by transaction hash"
+            "description": "Filter orders by transaction hash."
           },
           {
             "in": "query",
@@ -1712,7 +1776,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by source chain"
+            "description": "Filter orders by source chain."
           },
           {
             "in": "query",
@@ -1720,7 +1784,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by destination chain"
+            "description": "Filter orders by destination chain."
           },
           {
             "in": "query",
@@ -1728,7 +1792,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by source owner"
+            "description": "Filter orders by source owner."
           },
           {
             "in": "query",
@@ -1736,7 +1800,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by destination owner"
+            "description": "Filter orders by destination owner."
           },
           {
             "in": "query",
@@ -1744,7 +1808,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Page number"
+            "description": "Page number."
           },
           {
             "in": "query",
@@ -1752,7 +1816,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Number of items per page"
+            "description": "Number of items per page."
           },
           {
             "in": "query",
@@ -1760,7 +1824,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded. Example: status=not-initiated,in-progress",
+            "description": "Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded. Example: status=not-initiated,in-progress.",
             "example": "not-initiated,in-progress"
           }
         ],
