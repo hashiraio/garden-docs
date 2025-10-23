@@ -36,6 +36,10 @@ export const titilize = (chain) => {
   return firstWord + " " + secondWord;
 };
 
+export const shouldUseSquareLogo = (chain) => {
+  return chain === "base" || chain === "base_sepolia";
+};
+
 export const getExplorerUrl = (chain, address, explorer_url) => {
   if (chain.includes("bitcoin")) {
     return "/contracts/bitcoin";
@@ -57,13 +61,19 @@ export const getExplorerUrl = (chain, address, explorer_url) => {
 
 export const AssetRow = ({ chain, assets }) => {
   // console.log(assets)
+  const useSquareLogo = shouldUseSquareLogo(chain.chain);
+
   return (
     <tr>
       <td
         className="flex items-center gap-2 w-full whitespace-nowrap border-r-[1px] border-[#e5e1e2] dark:border-[#454143]/50"
         colSpan={4}
       >
-        <Frame className="pointer-events-none w-[20px]">
+        <Frame
+          className={`pointer-events-none w-[20px] ${
+            useSquareLogo ? " rounded-none " : ""
+          }`}
+        >
           <img
             src={chain.icon}
             alt={chain.chain}
