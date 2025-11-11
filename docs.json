@@ -140,6 +140,12 @@
             ]
           },
           {
+            "group": "Security",
+            "pages": [
+              "developers/security/address_screening"
+            ]
+          },
+          {
             "group": "Testing",
             "pages": [
               "developers/localnet"
