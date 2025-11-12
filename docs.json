@@ -81,7 +81,13 @@
                   "home/resources/guides/swap/wbtc-btc",
                   "home/resources/guides/swap/wbtc-wbtc"
                 ]
-              }
+              },
+              {
+            "group": "Compliance",
+            "pages": [
+              "home/compliance/address_screening"
+            ]
+          }
             ]
           }
         ]
@@ -137,12 +143,6 @@
             "pages": [
               "developers/guides/cookbook",
               "developers/guides/sdk"
-            ]
-          },
-          {
-            "group": "Security",
-            "pages": [
-              "developers/security/address_screening"
             ]
           },
           {
