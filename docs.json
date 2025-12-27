@@ -142,7 +142,8 @@
             "group": "Developer Guides",
             "pages": [
               "developers/guides/cookbook",
-              "developers/guides/sdk"
+              "developers/guides/sdk",
+              "developers/guides/api"
             ]
           },
           {
