@@ -103,6 +103,38 @@
           }
         ]
       },
+      "ChainId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "enum": [
+              "evm:42161",
+              "evm:8453",
+              "evm:56",
+              "evm:1",
+              "solana",
+              "bitcoin",
+              "starknet:23448594291968334"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "enum": [
+              "arbitrum_sepolia:421614",
+              "evm:84532",
+              "bitcoin_testnet",
+              "evm:5115",
+              "ethereum_sepolia:11155111",
+              "hyperliquid_testnet",
+              "evm:10143",
+              "solana:103",
+              "starknet:393402133025997798000961"
+            ]
+          }
+        ]
+      },
       "ChainWithAssets": {
         "allOf": [
           {
@@ -125,10 +157,16 @@
         "type": "object",
         "title": "Chain Information",
         "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ChainId"
+          },
           "chain": {
             "$ref": "#/components/schemas/Chain"
           },
           "icon": {
+            "type": "string"
+          },
+          "explorer_url": {
             "type": "string"
           },
           "confirmation_target": {
@@ -319,39 +357,38 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "USD Coin",
-              "Binance Bitcoin",
+              "USD Coin:USDC",
+              "Binance Bitcoin:BTCB",
               "Bitcorn",
-              "Bitcoin",
+              "Bitcoin:BTC",
               "BNB",
-              "Botanix Bitcoin",
-              "Coinbase Wrapped Bitcoin",
+              "Botanix Bitcoin:BTC",
+              "Coinbase Wrapped Bitcoin:cbBTC",
               "Ethereum",
-              "Lombard Bitcoin",
-              "SEED",
+              "Lombard Bitcoin:BTC",
+              "Seed:SEED",
               "SUI",
               "Solana",
               "Unit Bitcoin",
-              "Wrapped Bitcoin"
-            ]            
+              "Wrapped Bitcoin:WBTC"
+            ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "Bitcoin",
-              "Citrea Bitcoin",
-              "Coinbase Wrapped Bitcoin",
-              "iBTC",
-              "SEED",
+              "Bitcoin:BTC",
+              "Citrea Bitcoin:CBTC",
+              "Coinbase Wrapped Bitcoin:cbBTC",
+              "iBTC:iBTC",
+              "Seed:SEED",
               "Solana",
               "SUI",
-              "Tether USD",
-              "USD Coin",
-              "Wrapped Bitcoin",
-              "Wrapped Citrea Bitcoin"
+              "Tether USD:USDT",
+              "USD Coin:USDC",
+              "Wrapped Bitcoin:WBTC",
+              "Wrapped Citrea Bitcoin:WCBTC"
             ]
-            
           }
         ]
       },
@@ -378,7 +415,7 @@
             "$ref": "#/components/schemas/AssetName"
           },
           "chain": {
-            "$ref": "#/components/schemas/Chain"
+            "$ref": "#/components/schemas/ChainId"
           },
           "icon": {
             "type": "string"
@@ -398,6 +435,10 @@
           },
           "max_amount": {
             "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "example": 1.0
           }
         }
       },
@@ -579,11 +620,6 @@
           },
           "destination_swap": {
             "$ref": "#/components/schemas/Swap"
-          },
-          "slippage": {
-            "description": "In BIPS (base index points) 100 bips = 1%.",
-            "type": "number",
-            "example": 0.5
           },
           "nonce": {
             "description": "Nonce for the order.",
@@ -1253,7 +1289,7 @@
               "result": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Liquidity"
+                  "$ref": "#/components/schemas/SolverLiquidity"
                 }
               }
             }
@@ -1297,7 +1333,10 @@
             "$ref": "#/components/schemas/SchemaName"
           },
           "schema": {
-            "type": "object"
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
           }
         }
       },
