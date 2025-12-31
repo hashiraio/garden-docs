@@ -637,9 +637,6 @@
           },
           "version": {
             "type": "string"
-          },
-          "solver_id": {
-            "type": "string"
           }
         }
       },
