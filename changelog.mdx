@@ -5,11 +5,10 @@ description: "Product updates and announcements"
 
 <Update label="December 31, 2025" description="v2.0.13" tags={["API"]}>
   ### Endpoint updates
-  - Update GET `/chains` endpoint to include `id` field having chain identifiers and corresponding `explorer_url`
-  - Update GET `/assets` endpoint to include ticker symbols in `name` and chain identifiers in `chain`, add `price` field
-  - Update GET `/liquidity` endpoint to include corresponding `solver_id` for each liquidity object
-  - Update GET `/schemas` endpoint to return array of schema objects
-  - Update GET `/orders` endpoint to no longer return `slippage` field
+  - Update GET `/chains` to include the `id` and the `explorer_url` fields
+  - Update GET `/assets` to include ticker symbols in the `name` field and chain identifiers in the `chain` field
+  - Update GET `/liquidity` to include corresponding `solver_id` field for each liquidity entry
+  - Update GET `/schemas` to return an array of schemas
 </Update>
 
 <Update label="October 7, 2025" description="v2.0.12" tags={["API"]}>
