@@ -1846,6 +1846,14 @@
           },
           {
             "in": "query",
+            "name": "solver_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter orders by solver ID."
+          },
+          {
+            "in": "query",
             "name": "page",
             "schema": {
               "type": "integer"
