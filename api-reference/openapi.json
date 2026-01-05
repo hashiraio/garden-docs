@@ -939,7 +939,7 @@
               "version": {
                 "type": "string"
               },
-              "chainWithId": {
+              "chainId": {
                 "type": "string"
               },
               "verifyingContract": {
@@ -1000,7 +1000,7 @@
           "domain": {
             "type": "object",
             "properties": {
-              "chainWithId": {
+              "chainId": {
                 "type": "string",
                 "example": "SN_SEPOLIA"
               },
@@ -1139,26 +1139,9 @@
           },
           "versioned_tx": {
             "type": "string"
-          }
-        }
-      },
-      "SuiInitiateRequest": {
-        "type": "object",
-        "required": [
-          "order_id",
-          "ptb_bytes"
-        ],
-        "properties": {
-          "order_id": {
-            "type": "string",
-            "description": "A unique identifier for the order."
           },
-          "ptb_bytes": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+          "versioned_tx_gasless": {
+            "type": "string"
           }
         }
       },
