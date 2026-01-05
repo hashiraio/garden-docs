@@ -45,7 +45,6 @@
           "evm:htlc_erc20",
           "solana:htlc",
           "solana:htlc_spltoken",
-          "starknet:htlc",
           "starknet:htlc_erc20"
         ]
       },
@@ -54,7 +53,6 @@
         "title": "token",
         "enum": [
           "evm:erc20",
-          "solana:spltoken",
           "starknet:erc20"
         ]
       },
@@ -76,12 +74,11 @@
             "enum": [
               "arbitrum",
               "base",
-              "bera",
               "bitcoin",
+              "bnbchain",
               "botanix",
-              "corn",
               "ethereum",
-              "hyperliquid",
+              "monad",
               "solana",
               "starknet"
             ]
@@ -90,15 +87,19 @@
             "type": "string",
             "title": "testnet",
             "enum": [
+              "alpen_signet",
+              "alpen_testnet",
               "arbitrum_sepolia",
               "base_sepolia",
               "bitcoin_testnet",
+              "bnbchain_testnet",
               "citrea_testnet",
               "ethereum_sepolia",
-              "hyperliquid_testnet",
+              "litecoin_testnet",
               "monad_testnet",
               "solana_testnet",
-              "starknet_sepolia"
+              "starknet_sepolia",
+              "tron_shasta"
             ]
           }
         ]
@@ -109,12 +110,14 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "evm:42161",
-              "evm:8453",
-              "evm:56",
-              "evm:1",
-              "solana",
               "bitcoin",
+              "evm:1",
+              "evm:143",
+              "evm:3637",
+              "evm:42161",
+              "evm:56",
+              "evm:8453",
+              "solana:101",
               "starknet:23448594291968334"
             ]
           },
@@ -122,15 +125,17 @@
             "type": "string",
             "title": "testnet",
             "enum": [
-              "arbitrum_sepolia:421614",
-              "evm:84532",
-              "bitcoin_testnet",
-              "evm:5115",
-              "ethereum_sepolia:11155111",
-              "hyperliquid_testnet",
+              "bitcoin",
               "evm:10143",
+              "evm:11155111",
+              "evm:421614",
+              "evm:5115",
+              "evm:8150",
+              "evm:84532",
+              "evm:97",
               "solana:103",
-              "starknet:393402133025997798000961"
+              "starknet:393402133025997798000961",
+              "tron:2494104990"
             ]
           }
         ]
@@ -198,20 +203,27 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "arbitrum:usdc",
               "base:cbbtc",
-              "base:usdc",
               "ethereum:cbbtc",
-              "ethereum:seed",
-              "ethereum:usdc"
+              "monad:usdc",
+              "solana:cbbtc",
+              "solana:usdc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "ethereum_sepolia:wbtc",
-              "ethereum_sepolia:usdc"
+              "alpen_testnet:usdc",
+              "arbitrum_sepolia:usdc",
+              "base_sepolia:usdc",
+              "citrea_testnet:cbbtc",
+              "citrea_testnet:usdc",
+              "ethereum_sepolia:usdc",
+              "monad_testnet:cbbtc",
+              "monad_testnet:usdc",
+              "solana_testnet:cbbtc",
+              "solana_testnet:usdc"
             ]
           }
         ]
@@ -290,63 +302,63 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "arbitrum:usdc",
               "arbitrum:wbtc",
-              "arbitrum:seed",
               "base:cbbtc",
-              "base:usdc",
-              "bera:lbtc",
               "bitcoin:btc",
-              "bnbchain:bnb",
               "bnbchain:btcb",
-              "bnbchain:usdc",
               "botanix:btc",
               "core:wbtc",
               "corn:btcn",
               "ethereum:cbbtc",
+              "ethereum:usdt",
               "ethereum:wbtc",
-              "ethereum:seed",
-              "ethereum:usdc",
-              "ethereum:eth",
-              "hyperliquid:ubtc",
+              "litecoin:ltc",
+              "monad:mon",
+              "monad:usdc",
+              "solana:cbbtc",
               "solana:sol",
               "solana:usdc",
-              "solana:cbbtc",
               "starknet:wbtc",
-              "sui:sui",
-              "unichain:usdc",
-              "unichain:wbtc"
+              "tron:usdt",
+              "tron:wbtc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "arbitrum_sepolia:seed",
+              "alpen_signet:btc",
+              "alpen_testnet:sbtc",
+              "alpen_testnet:usdc",
               "arbitrum_sepolia:ibtc",
-              "arbitrum_sepolia:wbtc",
+              "arbitrum_sepolia:seed",
               "arbitrum_sepolia:usdc",
-              "base_sepolia:wbtc",
-              "base_sepolia:usdt",
+              "arbitrum_sepolia:wbtc",
+              "base_sepolia:cbltc",
               "base_sepolia:ibtc",
               "base_sepolia:usdc",
+              "base_sepolia:usdt",
+              "base_sepolia:wbtc",
               "bitcoin_testnet:btc",
               "bnbchain_testnet:wbtc",
-              "citrea_testnet:wcbtc",
-              "citrea_testnet:wbtc",
-              "citrea_testnet:cbtc",
               "citrea_testnet:cbbtc",
+              "citrea_testnet:cbtc",
               "citrea_testnet:usdc",
               "citrea_testnet:usdt",
-              "ethereum_sepolia:wbtc",
+              "citrea_testnet:wbtc",
+              "citrea_testnet:wcbtc",
               "ethereum_sepolia:usdc",
+              "ethereum_sepolia:wbtc",
+              "litecoin_testnet:tltc",
               "monad_testnet:cbbtc",
               "monad_testnet:usdc",
+              "solana_testnet:cbbtc",
               "solana_testnet:sol",
               "solana_testnet:usdc",
-              "solana_testnet:cbbtc",
               "starknet_sepolia:wbtc",
-              "sui_testnet:sui"
+              "sui_testnet:sui",
+              "tron_shasta:usdt",
+              "tron_shasta:wbtc"
             ]
           }
         ]
@@ -357,37 +369,39 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
-              "USD Coin:USDC",
+              "Wrapped Bitcoin:WBTC",
               "Binance Bitcoin:BTCB",
-              "Bitcorn",
               "Bitcoin:BTC",
-              "BNB",
+              "Bitcorn:BTCN",
               "Botanix Bitcoin:BTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
-              "Ethereum",
-              "Lombard Bitcoin:BTC",
-              "Seed:SEED",
-              "SUI",
-              "Solana",
-              "Unit Bitcoin",
-              "Wrapped Bitcoin:WBTC"
+              "Litecoin",
+              "Monad:MON",
+              "Solana:SOL",
+              "Tether USD:USDT",
+              "USD Coin:USDC"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
+              "Alpen:BTC",
               "Bitcoin:BTC",
               "Citrea Bitcoin:CBTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
-              "iBTC:iBTC",
+              "Coinbase Wrapped Litecoin:cbLTC",
+              "Litecoin",
               "Seed:SEED",
-              "Solana",
-              "SUI",
+              "Signet BTC:sBTC",
+              "Solana:SOL",
+              "Sui:SUI",
+              "Tether USD",
               "Tether USD:USDT",
               "USD Coin:USDC",
               "Wrapped Bitcoin:WBTC",
-              "Wrapped Citrea Bitcoin:WCBTC"
+              "Wrapped Citrea Bitcoin:WCBTC",
+              "iBTC:iBTC"
             ]
           }
         ]
@@ -737,11 +751,6 @@
             "type": "number",
             "description": "**(Optional)** In BIPS (base index points) 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
-          },
-          "secret_hash": {
-            "type": "string",
-            "description": "**(Optional)** SHA256 hash of the secret. Required when secret management is implemented on user side.",
-            "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
           },
           "affiliate_fees": {
             "type": "array",
