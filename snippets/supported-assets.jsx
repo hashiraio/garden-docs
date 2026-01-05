@@ -120,7 +120,6 @@ export const getAssets = async (url = MAINNET_ASSETS_URL) => {
     const sortedResult = data.result.sort((a, b) => {
       return a.chain.localeCompare(b.chain);
     });
-    console.log(sortedResult[0].assets[0].htlc.address);
     return sortedResult;
   } catch (error) {
     console.log("Error fetching assets", error);
