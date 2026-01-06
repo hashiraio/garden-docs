@@ -44,7 +44,6 @@
           "evm:htlc",
           "evm:htlc_erc20",
           "solana:htlc",
-          "solana:htlc_spltoken",
           "starknet:htlc_erc20"
         ]
       },
@@ -53,6 +52,7 @@
         "title": "token",
         "enum": [
           "evm:erc20",
+          "solana:htlc_spltoken",
           "starknet:erc20"
         ]
       },
@@ -203,27 +203,25 @@
             "type": "string",
             "title": "mainnet",
             "enum": [
+              "arbitrum:usdc",
+              "arbitrum:cbbtc",
+              "base:usdc",
               "base:cbbtc",
-              "ethereum:cbbtc",
-              "monad:usdc",
-              "solana:cbbtc",
-              "solana:usdc"
+              "ethereum:usdc",
+              "ethereum:cbbtc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
             "enum": [
-              "alpen_testnet:usdc",
               "arbitrum_sepolia:usdc",
               "base_sepolia:usdc",
-              "citrea_testnet:cbbtc",
               "citrea_testnet:usdc",
+              "citrea_testnet:cbbtc",
               "ethereum_sepolia:usdc",
-              "monad_testnet:cbbtc",
               "monad_testnet:usdc",
-              "solana_testnet:cbbtc",
-              "solana_testnet:usdc"
+              "monad_testnet:cbbtc"
             ]
           }
         ]
@@ -276,7 +274,7 @@
         ]
       },
       "AffiliateEarningsResponse": {
-       "allOf": [
+        "allOf": [
           {
             "$ref": "#/components/schemas/Response"
           },
@@ -1142,6 +1140,26 @@
           },
           "versioned_tx_gasless": {
             "type": "string"
+          }
+        }
+      },
+      "SuiInitiateRequest": {
+        "type": "object",
+        "required": [
+          "order_id",
+          "ptb_bytes"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "A unique identifier for the order."
+          },
+          "ptb_bytes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         }
       },
