@@ -160,7 +160,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             <Step title="Get Quote">
                 Let's get a quote to trade 50 LTC on **Litecoin Testnet** to WBTC on **Base Sepolia**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=litecoin_testnet:tltc&to=base_sepolia:wbtc&from_amount=5000000000' \
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=litecoin_testnet:ltc&to=base_sepolia:wbtc&from_amount=5000000000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
@@ -170,7 +170,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     "result": [
                         {
                         "source": {
-                            "asset": "litecoin_testnet:tltc",
+                            "asset": "litecoin_testnet:ltc",
                             "amount": "5000000000",
                             "display": "50.00000000",
                             "value": "4625.00"
@@ -199,7 +199,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     --header 'Content-Type: application/json' \
                     --data '{
                         "source": {
-                            "asset": "litecoin_testnet:tltc",
+                            "asset": "litecoin_testnet:ltc",
                             "owner": "tltc1qyw3c0rvn6kk1c688y3dygvckn57525y8emy4p5",
                             "amount": "5000000000"
                         },
@@ -241,7 +241,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             "created_at": "2026-01-05T14:15:30.123456Z",
                             "swap_id": "tltc1qr5jm6h8fxavry3af9h5g2dwp5mkj6z8t9vq8dw",
                             "chain": "litecoin_testnet",
-                            "asset": "litecoin_testnet:tltc",
+                            "asset": "litecoin_testnet:ltc",
                             "initiator": "tltc1qyw3c0rvn6kk1c688y3dygvckn57525y8emy4p5",
                             "redeemer": "tltc1qm8x7h2vfp9k3n5r2t8w6y4u9v3c5x7z8a2b4d6",
                             "timelock": 144,
@@ -543,9 +543,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
     <Tab title="From Tron">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade 0.0005 WBTC on **Tron Shasta** to WBTC on **Arbitrum Testnet**.
+                Let's get a quote to trade 0.0005 WBTC on **Tron Shasta** to WBTC on **Arbitrum Sepolia**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=tron_shasta:wbtc&to=arbitrum_testnet:wbtc&from_amount=50000' \
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=tron_shasta:wbtc&to=arbitrum_sepolia:wbtc&from_amount=50000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
@@ -561,7 +561,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             "value": "50.00"
                         },
                         "destination": {
-                            "asset": "arbitrum_testnet:wbtc",
+                            "asset": "arbitrum_sepolia:wbtc",
                             "amount": "49850",
                             "display": "0.00049850",
                             "value": "49.85"
@@ -589,7 +589,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                                 "amount": "50000"
                             },
                             "destination": {
-                                "asset": "arbitrum_testnet:wbtc",
+                                "asset": "arbitrum_sepolia:wbtc",
                                 "owner": "0x8a5c2e9f1b4d7a3c6e9f2b5d8a1c4e7f9b2d5e8a",
                                 "amount": "49850"
                             }
@@ -679,19 +679,64 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 <Tabs>
                     <Tab title="Submit transaction">
                         ```typescript
-                        await window.ethereum.request({
-                            method: 'eth_sendTransaction', 
-                            params: [response.result.transaction]
-                        });
+                        // Approval transaction
+                        const dataWithoutSelector = '0x' + response.result.approval_transaction.data.slice(10);
+                        const params = window.tronWeb.utils.abi.decodeParams(
+                            ['spender', 'amount'],
+                            ['address', 'uint256'],
+                            dataWithoutSelector,
+                            false,
+                        );
+                        const approval_transaction = await window.tronWeb.transactionBuilder.triggerSmartContract(
+                            response.result.approval_transaction.to,
+                            'approve(address,uint256)',
+                            { feeLimit: parseInt(response.result.approval_transaction.gas_limit), callValue: parseInt(response.result.approval_transaction.value) },
+                            [
+                                { type: 'address', value: params.spender },
+                                { type: 'uint256', value: params.amount.toString() },
+                            ],
+                            window.tronWeb.defaultAddress.base58
+                        );
+                        const approval_signedTx = await window.tronWeb.trx.sign(approval_transaction.transaction);
+                        const approval_broadcastResult = await window.tronWeb.trx.sendRawTransaction(approval_signedTx);
+
+                        // Initiate transaction
+                        const initiate_transaction = await window.tronWeb.transactionBuilder.triggerSmartContract(
+                            response.result.initiate_transaction.to,
+                            'initiate(address,uint256,uint256,bytes32,bytes)',
+                            { 
+                                feeLimit: parseInt(response.result.initiate_transaction.gas_limit), 
+                                callValue: parseInt(response.result.initiate_transaction.value) 
+                            },
+                            [
+                                { type: 'address', value: response.result.typed_data.message.redeemer },
+                                { type: 'uint256', value: response.result.typed_data.message.timelock },
+                                { type: 'uint256', value: response.result.typed_data.message.amount },
+                                { type: 'bytes32', value: toBytes32Hex(String(response.result.typed_data.message.secretHash)) },
+                                { type: 'bytes', value: response.result.typed_data.message.destinationData },
+                            ],
+                            window.tronWeb.defaultAddress.base58
+                        );
+                        const initiate_signedTx = await window.tronWeb.trx.sign(initiate_transaction.transaction);
+                        const initiate_broadcastResult = await window.tronWeb.trx.sendRawTransaction(initiate_signedTx);
                         ```
                     </Tab>
                     <Tab title="Gasless submission">
                         ```typescript
-                        // Sign typed data.
-                        const signature = await window.ethereum.request({
-                            method: 'eth_signTypedData_v4',
-                            params: [userAddress, JSON.stringify(response.result.typed_data)]
-                        });
+                        const typedData = response.result.typed_data;
+                        const types = { ...typedData.types };
+                        delete types.EIP712Domain;
+                        types.Initiate = types.Initiate.filter(
+                            (field) => field.name !== 'destinationData'
+                        );
+                        const message = { ...typedData.message };
+                        delete message.destinationData;
+                        // Sign typed data using TronWeb
+                        const signature = await window.tronWeb.trx._signTypedData(
+                            typedData.domain,
+                            types,
+                            message
+                        );
 
                         // Initiate the swap with the signature.
                         await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
@@ -747,8 +792,8 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "destination_swap": {
                             "created_at": "2026-01-06T08:30:15.456789Z",
                             "swap_id": "f1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef123456789",
-                            "chain": "arbitrum_testnet",
-                            "asset": "arbitrum_testnet:wbtc",
+                            "chain": "arbitrum_sepolia",
+                            "asset": "arbitrum_sepolia:wbtc",
                             "initiator": "0x8a5c2e9f1b4d7a3c6e9f2b5d8a1c4e7f9b2d5e8a",
                             "redeemer": "0x9b6d3f1e2c4a7b8d5e9f2a3c6d8e1f4a7b9c2d5e",
                             "timelock": 3600,
