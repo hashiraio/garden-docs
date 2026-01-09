@@ -71,6 +71,7 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "arbitrum",
               "base",
@@ -86,6 +87,7 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
               "alpen_signet",
               "alpen_testnet",
@@ -109,6 +111,7 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "bitcoin",
               "evm:1",
@@ -124,6 +127,7 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
               "bitcoin",
               "evm:10143",
@@ -202,6 +206,7 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "arbitrum:usdc",
               "arbitrum:cbbtc",
@@ -214,6 +219,7 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
               "arbitrum_sepolia:usdc",
               "base_sepolia:usdc",
@@ -299,6 +305,7 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "arbitrum:wbtc",
               "base:cbbtc",
@@ -324,6 +331,7 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
               "alpen_signet:btc",
               "alpen_testnet:sbtc",
@@ -366,6 +374,7 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "Wrapped Bitcoin:WBTC",
               "Binance Bitcoin:BTCB",
@@ -383,6 +392,7 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
               "Alpen:BTC",
               "Bitcoin:BTC",
@@ -1170,7 +1180,15 @@
             "$ref": "#/components/schemas/BitcoinInitiateRequest"
           },
           {
+            "title": "litecoin",
+            "$ref": "#/components/schemas/BitcoinInitiateRequest"
+          },
+          {
             "title": "evm",
+            "$ref": "#/components/schemas/EVMInitiateRequest"
+          },
+          {
+            "title": "tron",
             "$ref": "#/components/schemas/EVMInitiateRequest"
           },
           {
@@ -1605,7 +1623,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
             "example": 10
           },
           {
@@ -1642,7 +1660,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": "Online"
                 }
               }
             }
@@ -1652,7 +1685,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Error"
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Error",
+                  "error": "Server unavailable"
                 }
               }
             }
@@ -1663,6 +1711,17 @@
     "/chains": {
       "get": {
         "summary": "Get all the supported chains and assets.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            },
+            "description": "**(Optional)** Asset filter."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Object with supported chains and assets.",
@@ -1684,9 +1743,11 @@
           {
             "in": "query",
             "name": "from",
+            "required": false,
             "schema": {
               "$ref": "#/components/schemas/Asset"
-            }
+            },
+            "description": "**(Optional)** Asset filter."
           }
         ],
         "responses": {
@@ -1723,6 +1784,58 @@
     "/fees": {
       "get": {
         "summary": "Get swap fees.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific source chain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
         "responses": {
           "200": {
             "description": "Total swap fees.",
@@ -1732,8 +1845,8 @@
                   "$ref": "#/components/schemas/ResponseString"
                 },
                 "example": {
-                    "status": "Ok",
-                    "result": "2668122"
+                  "status": "Ok",
+                  "result": "2668122"
                 }
               }
             }
@@ -1744,6 +1857,58 @@
     "/volume": {
       "get": {
         "summary": "Get swap volume.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter statistics by specific source blockchain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
         "responses": {
           "200": {
             "description": "Total swap volume.",
@@ -1812,7 +1977,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by address."
+            "description": "**(Optional)** Filter orders by address."
           },
           {
             "in": "query",
@@ -1820,23 +1985,23 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by transaction hash."
+            "description": "**(Optional)** Filter orders by transaction hash."
           },
           {
             "in": "query",
             "name": "from_chain",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Chain"
             },
-            "description": "Filter orders by source chain."
+            "description": "**(Optional)** Filter orders by source chain."
           },
           {
             "in": "query",
             "name": "to_chain",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Chain"
             },
-            "description": "Filter orders by destination chain."
+            "description": "**(Optional)** Filter orders by destination chain."
           },
           {
             "in": "query",
@@ -1844,7 +2009,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by source owner."
+            "description": "**(Optional)** Filter orders by source owner. Comma-separated for multiple values.",
+            "example": "0x123...,0x456..."
           },
           {
             "in": "query",
@@ -1852,7 +2018,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by destination owner."
+            "description": "**(Optional)** Filter orders by destination owner. Comma-separated for multiple values.",
+            "example": "0x789...,0xabc..."
           },
           {
             "in": "query",
@@ -1860,7 +2027,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by solver ID."
+            "description": "**(Optional)** Filter orders by solver ID. Comma-separated for multiple values.",
+            "example": "solver1,solver2"
           },
           {
             "in": "query",
@@ -1868,7 +2036,8 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Page number."
+            "description": "**(Optional)** Page number.",
+            "example": 1
           },
           {
             "in": "query",
@@ -1876,7 +2045,8 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Number of items per page."
+            "description": "**(Optional)** Number of items per page.",
+            "example": 10
           },
           {
             "in": "query",
@@ -1884,7 +2054,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded. Example: status=not-initiated,in-progress.",
+            "description": "**(Optional)** Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded.",
             "example": "not-initiated,in-progress"
           }
         ],
