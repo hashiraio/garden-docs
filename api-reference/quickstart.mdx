@@ -145,7 +145,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "nonce": "1751978328975",
                         "order_id": "f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121",
                         "affiliate_fees": [],
-                        "version": "v2"
+                        "version": "v2",
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
+                        "integrator": "DocsTesting",
                     }
                 }
                 ```
@@ -220,9 +222,6 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     }
                 }
                 ```
-                <Note>
-                    Send 50 LTC to `tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx`. You can use our [faucet](https://testnetbtc.com) on testnet.
-                </Note>
             </Step>
             <Step title="Check Order Status">
                 Get the order by ID to check the status of the swap.
@@ -291,7 +290,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "nonce": "1752389456123",
                         "order_id": "e9a12d1320fce93c5855b6014abeb5f5de85ecc8c0eef8133f2da03822596781",
                         "affiliate_fees": [],
+                        "integrator": "DocsTesting",
                         "version": "v2"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```
@@ -531,6 +532,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
                         "version": "v3"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```
@@ -679,6 +681,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 <Tabs>
                     <Tab title="Submit transaction">
                         ```typescript
+                        // Dependencies: "tronweb": "6.0.4"
                         // Approval transaction
                         const dataWithoutSelector = '0x' + response.result.approval_transaction.data.slice(10);
                         const params = window.tronWeb.utils.abi.decodeParams(
@@ -723,6 +726,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     </Tab>
                     <Tab title="Gasless submission">
                         ```typescript
+                        // Dependencies: "tronweb": "6.0.4"
                         const typedData = response.result.typed_data;
                         const types = { ...typedData.types };
                         delete types.EIP712Domain;
@@ -817,7 +821,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "nonce": "1736152215456",
                         "order_id": "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890",
                         "affiliate_fees": [],
+                        "integrator": "DocsTesting",
                         "version": "v3"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```
@@ -1002,6 +1008,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
                         "version": "v1"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```
@@ -1264,6 +1271,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
                         "version": "v2"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```
@@ -1439,6 +1447,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
                         "version": "v2"
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                     }
                 }
                 ```

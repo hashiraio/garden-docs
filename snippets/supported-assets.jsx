@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+const { useEffect, useState } = React;
 export const MAINNET_ASSETS_URL = "https://api.garden.finance/v2/chains";
 export const TESTNET_ASSETS_URL =
   "https://testnet.api.garden.finance/v2/chains";
