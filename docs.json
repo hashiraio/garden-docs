@@ -166,7 +166,9 @@
             "group": "Contracts",
             "pages": [
               "contracts/bitcoin",
+              "contracts/litecoin",
               "contracts/evm",
+              "contracts/tron",
               "contracts/solana",
               "contracts/starknet",
               "contracts/sui"
