@@ -804,11 +804,6 @@
           "secret"
         ]
       },
-      "RefundActionRequest": {
-        "type": "object",
-        "title": "Refund",
-        "properties": {}
-      },
       "InstantRefundActionRequest": {
         "type": "object",
         "title": "Instant Refund",
@@ -2179,9 +2174,6 @@
                   },
                   {
                     "$ref": "#/components/schemas/RedeemActionRequest"
-                  },
-                  {
-                    "$ref": "#/components/schemas/RefundActionRequest"
                   },
                   {
                     "$ref": "#/components/schemas/InstantRefundActionRequest"
