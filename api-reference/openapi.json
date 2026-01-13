@@ -44,7 +44,8 @@
           "evm:htlc",
           "evm:htlc_erc20",
           "solana:htlc",
-          "starknet:htlc_erc20"
+          "starknet:htlc_erc20",
+          "solana:htlc_spltoken"
         ]
       },
       "TokenSchemaName": {
@@ -52,7 +53,6 @@
         "title": "token",
         "enum": [
           "evm:erc20",
-          "solana:htlc_spltoken",
           "starknet:erc20"
         ]
       },
@@ -73,12 +73,12 @@
             "title": "mainnet",
             "description": "Mainnet",
             "enum": [
-              "bitcoin",
               "arbitrum",
+              "ethereum",
+              "bitcoin",
               "base",
               "bnbchain",
               "botanix",
-              "ethereum",
               "monad",
               "solana",
               "starknet"
@@ -89,9 +89,9 @@
             "title": "testnet",
             "description": "Testnet",
             "enum": [
+              "arbitrum_sepolia",
               "alpen_signet",
               "alpen_testnet",
-              "arbitrum_sepolia",
               "base_sepolia",
               "bitcoin_testnet",
               "bnbchain_testnet",
@@ -113,11 +113,11 @@
             "title": "mainnet",
             "description": "Mainnet",
             "enum": [
+              "evm:42161",
               "bitcoin",
               "evm:1",
               "evm:143",
               "evm:3637",
-              "evm:42161",
               "evm:56",
               "evm:8453",
               "solana:101",
@@ -129,10 +129,10 @@
             "title": "testnet",
             "description": "Testnet",
             "enum": [
+              "evm:421614",
               "bitcoin",
               "evm:10143",
               "evm:11155111",
-              "evm:421614",
               "evm:5115",
               "evm:8150",
               "evm:84532",
@@ -434,10 +434,10 @@
             "type": "string"
           },
           "htlc": {
-            "$ref": "#/components/schemas/Contract"
+            "$ref": "#/components/schemas/HTLCSchemaName"
           },
           "token": {
-            "$ref": "#/components/schemas/Contract"
+            "$ref": "#/components/schemas/TokenSchemaName"
           },
           "decimals": {
             "type": "integer",
