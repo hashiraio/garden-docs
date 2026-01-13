@@ -3,6 +3,13 @@ title: "Changelog"
 description: "Product updates and announcements"
 ---
 
+<Update label="January 12, 2026" description="v2.0.15" tags={["API"]}>
+  ### Endpoint updates
+  - Add Tron and Litecoin support
+  - Update GET `/fee`, `/volume`, `/chains` and `/assets` endpoints to accept new query parameters
+  - Update PATCH `/orders/:id` endpoint requires `signatures` array instead of `signature` string for `action=instant-refund`
+</Update>
+
 <Update label="January 1, 2026" description="v2.0.14" tags={["API"]}>
   ### Endpoint updates
   - Update GET `/orders` to include `solver_id` field

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+const { useEffect, useState } = React;
 export const MAINNET_ASSETS_URL = "https://api.garden.finance/v2/chains";
 export const TESTNET_ASSETS_URL =
   "https://testnet.api.garden.finance/v2/chains";
@@ -114,13 +113,12 @@ export const getAssets = async (url = MAINNET_ASSETS_URL) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    if (data.status.includes("OK")) {
+    if (data.status.includes("Ok")) {
       return [];
     }
     const sortedResult = data.result.sort((a, b) => {
       return a.chain.localeCompare(b.chain);
     });
-    console.log(sortedResult[0].assets[0].htlc.address);
     return sortedResult;
   } catch (error) {
     console.log("Error fetching assets", error);

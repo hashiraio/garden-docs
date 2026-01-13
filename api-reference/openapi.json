@@ -44,8 +44,6 @@
           "evm:htlc",
           "evm:htlc_erc20",
           "solana:htlc",
-          "solana:htlc_spltoken",
-          "starknet:htlc",
           "starknet:htlc_erc20"
         ]
       },
@@ -54,7 +52,7 @@
         "title": "token",
         "enum": [
           "evm:erc20",
-          "solana:spltoken",
+          "solana:htlc_spltoken",
           "starknet:erc20"
         ]
       },
@@ -73,15 +71,15 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "arbitrum",
               "base",
-              "bera",
               "bitcoin",
+              "bnbchain",
               "botanix",
-              "corn",
               "ethereum",
-              "hyperliquid",
+              "monad",
               "solana",
               "starknet"
             ]
@@ -89,16 +87,21 @@
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
+              "alpen_signet",
+              "alpen_testnet",
               "arbitrum_sepolia",
               "base_sepolia",
               "bitcoin_testnet",
+              "bnbchain_testnet",
               "citrea_testnet",
               "ethereum_sepolia",
-              "hyperliquid_testnet",
+              "litecoin_testnet",
               "monad_testnet",
               "solana_testnet",
-              "starknet_sepolia"
+              "starknet_sepolia",
+              "tron_shasta"
             ]
           }
         ]
@@ -108,29 +111,35 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
-              "evm:42161",
-              "evm:8453",
-              "evm:56",
-              "evm:1",
-              "solana",
               "bitcoin",
+              "evm:1",
+              "evm:143",
+              "evm:3637",
+              "evm:42161",
+              "evm:56",
+              "evm:8453",
+              "solana:101",
               "starknet:23448594291968334"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
-              "arbitrum_sepolia:421614",
-              "evm:84532",
-              "bitcoin_testnet",
-              "evm:5115",
-              "ethereum_sepolia:11155111",
-              "hyperliquid_testnet",
+              "bitcoin",
               "evm:10143",
+              "evm:11155111",
+              "evm:421614",
+              "evm:5115",
+              "evm:8150",
+              "evm:84532",
+              "evm:97",
               "solana:103",
-              "starknet:393402133025997798000961"
+              "starknet:393402133025997798000961",
+              "tron:2494104990"
             ]
           }
         ]
@@ -197,21 +206,28 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
               "arbitrum:usdc",
-              "base:cbbtc",
+              "arbitrum:cbbtc",
               "base:usdc",
-              "ethereum:cbbtc",
-              "ethereum:seed",
-              "ethereum:usdc"
+              "base:cbbtc",
+              "ethereum:usdc",
+              "ethereum:cbbtc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
-              "ethereum_sepolia:wbtc",
-              "ethereum_sepolia:usdc"
+              "arbitrum_sepolia:usdc",
+              "base_sepolia:usdc",
+              "citrea_testnet:usdc",
+              "citrea_testnet:cbbtc",
+              "ethereum_sepolia:usdc",
+              "monad_testnet:usdc",
+              "monad_testnet:cbbtc"
             ]
           }
         ]
@@ -264,7 +280,7 @@
         ]
       },
       "AffiliateEarningsResponse": {
-       "allOf": [
+        "allOf": [
           {
             "$ref": "#/components/schemas/Response"
           },
@@ -289,64 +305,66 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
-              "arbitrum:usdc",
               "arbitrum:wbtc",
-              "arbitrum:seed",
               "base:cbbtc",
-              "base:usdc",
-              "bera:lbtc",
               "bitcoin:btc",
-              "bnbchain:bnb",
               "bnbchain:btcb",
-              "bnbchain:usdc",
               "botanix:btc",
               "core:wbtc",
               "corn:btcn",
               "ethereum:cbbtc",
+              "ethereum:usdt",
               "ethereum:wbtc",
-              "ethereum:seed",
-              "ethereum:usdc",
-              "ethereum:eth",
-              "hyperliquid:ubtc",
+              "litecoin:ltc",
+              "monad:mon",
+              "monad:usdc",
+              "solana:cbbtc",
               "solana:sol",
               "solana:usdc",
-              "solana:cbbtc",
               "starknet:wbtc",
-              "sui:sui",
-              "unichain:usdc",
-              "unichain:wbtc"
+              "tron:usdt",
+              "tron:wbtc"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
-              "arbitrum_sepolia:seed",
+              "alpen_signet:btc",
+              "alpen_testnet:sbtc",
+              "alpen_testnet:usdc",
               "arbitrum_sepolia:ibtc",
-              "arbitrum_sepolia:wbtc",
+              "arbitrum_sepolia:seed",
               "arbitrum_sepolia:usdc",
-              "base_sepolia:wbtc",
-              "base_sepolia:usdt",
+              "arbitrum_sepolia:wbtc",
+              "base_sepolia:cbltc",
               "base_sepolia:ibtc",
               "base_sepolia:usdc",
+              "base_sepolia:usdt",
+              "base_sepolia:wbtc",
               "bitcoin_testnet:btc",
               "bnbchain_testnet:wbtc",
-              "citrea_testnet:wcbtc",
-              "citrea_testnet:wbtc",
-              "citrea_testnet:cbtc",
               "citrea_testnet:cbbtc",
+              "citrea_testnet:cbtc",
               "citrea_testnet:usdc",
               "citrea_testnet:usdt",
-              "ethereum_sepolia:wbtc",
+              "citrea_testnet:wbtc",
+              "citrea_testnet:wcbtc",
               "ethereum_sepolia:usdc",
+              "ethereum_sepolia:wbtc",
+              "litecoin_testnet:tltc",
               "monad_testnet:cbbtc",
               "monad_testnet:usdc",
+              "solana_testnet:cbbtc",
               "solana_testnet:sol",
               "solana_testnet:usdc",
-              "solana_testnet:cbbtc",
               "starknet_sepolia:wbtc",
-              "sui_testnet:sui"
+              "sui_testnet:sui",
+              "tron_shasta:usdt",
+              "tron_shasta:wbtc"
             ]
           }
         ]
@@ -356,38 +374,42 @@
           {
             "type": "string",
             "title": "mainnet",
+            "description": "Mainnet",
             "enum": [
-              "USD Coin:USDC",
+              "Wrapped Bitcoin:WBTC",
               "Binance Bitcoin:BTCB",
-              "Bitcorn",
               "Bitcoin:BTC",
-              "BNB",
+              "Bitcorn:BTCN",
               "Botanix Bitcoin:BTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
-              "Ethereum",
-              "Lombard Bitcoin:BTC",
-              "Seed:SEED",
-              "SUI",
-              "Solana",
-              "Unit Bitcoin",
-              "Wrapped Bitcoin:WBTC"
+              "Litecoin",
+              "Monad:MON",
+              "Solana:SOL",
+              "Tether USD:USDT",
+              "USD Coin:USDC"
             ]
           },
           {
             "type": "string",
             "title": "testnet",
+            "description": "Testnet",
             "enum": [
+              "Alpen:BTC",
               "Bitcoin:BTC",
               "Citrea Bitcoin:CBTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
-              "iBTC:iBTC",
+              "Coinbase Wrapped Litecoin:cbLTC",
+              "Litecoin",
               "Seed:SEED",
-              "Solana",
-              "SUI",
+              "Signet BTC:sBTC",
+              "Solana:SOL",
+              "Sui:SUI",
+              "Tether USD",
               "Tether USD:USDT",
               "USD Coin:USDC",
               "Wrapped Bitcoin:WBTC",
-              "Wrapped Citrea Bitcoin:WCBTC"
+              "Wrapped Citrea Bitcoin:WCBTC",
+              "iBTC:iBTC"
             ]
           }
         ]
@@ -738,14 +760,19 @@
             "description": "**(Optional)** In BIPS (base index points) 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           },
-          "secret_hash": {
+          "nonce": {
             "type": "string",
-            "description": "**(Optional)** SHA256 hash of the secret. Required when secret management is implemented on user side.",
-            "example": "0x057ff5cacab1d75df04e8e9d349f0d8dd92e87b989244b934d9b09bc99fc4173"
+            "description": "**(Optional)** Custom nonce for the order. If not provided, one will be generated.",
+            "example": "1736152215456"
+          },
+          "solver_id": {
+            "type": "string",
+            "description": "**(Optional)** Specific solver ID to use for this order.",
+            "example": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635"
           },
           "affiliate_fees": {
             "type": "array",
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -779,20 +806,25 @@
       },
       "RefundActionRequest": {
         "type": "object",
-        "title": "Refund",
-        "properties": {}
+        "title": "Refund"
       },
       "InstantRefundActionRequest": {
         "type": "object",
         "title": "Instant Refund",
         "properties": {
-          "signature": {
-            "type": "string",
-            "description": "A Schnorr signature generated by the initiator over the instant refund hash obtained from the [instant refund hash endpoint](./get-instant-refund-hash). This signature represents the initiator’s partial spend authorization for the Taproot script controlling the initiator's UTXO. Submitting this signature allows the solver to later provide its own Schnorr signature to fully satisfy the Taproot instant refund leaf and broadcast the refund transaction instantly, without requiring further initiator interaction."
+          "signatures": {
+            "type": "array",
+            "description": "A Schnorr signature generated by the initiator over the instant refund hash obtained from the [instant refund hash endpoint](./get-instant-refund-hash). This signature represents the initiator’s partial spend authorization for the Taproot script controlling the initiator's UTXO. Submitting this signature allows the solver to later provide its own Schnorr signature to fully satisfy the Taproot instant refund leaf and broadcast the refund transaction instantly, without requiring further initiator interaction.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "0x1234567890123456789012345678901234567890123456789012345678901234"
+            ]
           }
         },
         "required": [
-          "signature"
+          "signatures"
         ]
       },
       "PaginatedOrders": {
@@ -930,7 +962,7 @@
               "version": {
                 "type": "string"
               },
-              "chainWithId": {
+              "chainId": {
                 "type": "string"
               },
               "verifyingContract": {
@@ -991,7 +1023,7 @@
           "domain": {
             "type": "object",
             "properties": {
-              "chainWithId": {
+              "chainId": {
                 "type": "string",
                 "example": "SN_SEPOLIA"
               },
@@ -1130,6 +1162,9 @@
           },
           "versioned_tx": {
             "type": "string"
+          },
+          "versioned_tx_gasless": {
+            "type": "string"
           }
         }
       },
@@ -1160,7 +1195,15 @@
             "$ref": "#/components/schemas/BitcoinInitiateRequest"
           },
           {
+            "title": "litecoin",
+            "$ref": "#/components/schemas/BitcoinInitiateRequest"
+          },
+          {
             "title": "evm",
+            "$ref": "#/components/schemas/EVMInitiateRequest"
+          },
+          {
+            "title": "tron",
             "$ref": "#/components/schemas/EVMInitiateRequest"
           },
           {
@@ -1595,7 +1638,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%.",
+            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
             "example": 10
           },
           {
@@ -1632,7 +1675,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": "Online"
                 }
               }
             }
@@ -1642,7 +1700,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Error"
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Error",
+                  "error": "Server unavailable"
                 }
               }
             }
@@ -1653,6 +1726,17 @@
     "/chains": {
       "get": {
         "summary": "Get all the supported chains and assets.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            },
+            "description": "**(Optional)** Asset filter."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Object with supported chains and assets.",
@@ -1674,9 +1758,11 @@
           {
             "in": "query",
             "name": "from",
+            "required": false,
             "schema": {
               "$ref": "#/components/schemas/Asset"
-            }
+            },
+            "description": "**(Optional)** Asset filter."
           }
         ],
         "responses": {
@@ -1713,6 +1799,58 @@
     "/fees": {
       "get": {
         "summary": "Get swap fees.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific source chain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
         "responses": {
           "200": {
             "description": "Total swap fees.",
@@ -1722,8 +1860,8 @@
                   "$ref": "#/components/schemas/ResponseString"
                 },
                 "example": {
-                    "status": "Ok",
-                    "result": "2668122"
+                  "status": "Ok",
+                  "result": "2668122"
                 }
               }
             }
@@ -1734,6 +1872,58 @@
     "/volume": {
       "get": {
         "summary": "Get swap volume.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter statistics by specific source blockchain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
         "responses": {
           "200": {
             "description": "Total swap volume.",
@@ -1802,7 +1992,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by address."
+            "description": "**(Optional)** Filter orders by address."
           },
           {
             "in": "query",
@@ -1810,23 +2000,23 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by transaction hash."
+            "description": "**(Optional)** Filter orders by transaction hash."
           },
           {
             "in": "query",
             "name": "from_chain",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Chain"
             },
-            "description": "Filter orders by source chain."
+            "description": "**(Optional)** Filter orders by source chain."
           },
           {
             "in": "query",
             "name": "to_chain",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Chain"
             },
-            "description": "Filter orders by destination chain."
+            "description": "**(Optional)** Filter orders by destination chain."
           },
           {
             "in": "query",
@@ -1834,7 +2024,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by source owner."
+            "description": "**(Optional)** Filter orders by source owner. Comma-separated for multiple values.",
+            "example": "0x123...,0x456..."
           },
           {
             "in": "query",
@@ -1842,7 +2033,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by destination owner."
+            "description": "**(Optional)** Filter orders by destination owner. Comma-separated for multiple values.",
+            "example": "0x789...,0xabc..."
           },
           {
             "in": "query",
@@ -1850,7 +2042,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by solver ID."
+            "description": "**(Optional)** Filter orders by solver ID. Comma-separated for multiple values.",
+            "example": "solver1,solver2"
           },
           {
             "in": "query",
@@ -1858,7 +2051,8 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Page number."
+            "description": "**(Optional)** Page number.",
+            "example": 1
           },
           {
             "in": "query",
@@ -1866,7 +2060,8 @@
             "schema": {
               "type": "integer"
             },
-            "description": "Number of items per page."
+            "description": "**(Optional)** Number of items per page.",
+            "example": 10
           },
           {
             "in": "query",
@@ -1874,7 +2069,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded. Example: status=not-initiated,in-progress.",
+            "description": "**(Optional)** Filter orders by status. Comma-separated string with allowed values: not-initiated, in-progress, completed, expired, refunded.",
             "example": "not-initiated,in-progress"
           }
         ],
