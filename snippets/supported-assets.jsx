@@ -113,7 +113,7 @@ export const getAssets = async (url = MAINNET_ASSETS_URL) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    if (data.status.includes("Ok")) {
+    if (!data.status.includes("Ok")) {
       return [];
     }
     const sortedResult = data.result.sort((a, b) => {
