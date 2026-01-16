@@ -86,7 +86,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```json Response expandable
+                ```json Response expandable focus={46}
                 {
                     "status": "Ok",
                     "result": {
@@ -161,9 +161,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
     <Tab title="From Litecoin">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade 0.1 LTC on **Litecoin Testnet** to WBTC on **Base Sepolia**.
+                Let's get a quote to trade 0.01 LTC on **Litecoin Testnet** to WBTC on **Base Sepolia**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=litecoin_testnet:ltc&to=base_sepolia:wbtc&from_amount=10000000' \
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=litecoin_testnet:ltc&to=base_sepolia:wbtc&from_amount=1000000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
@@ -174,15 +174,15 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         {
                         "source": {
                             "asset": "litecoin_testnet:ltc",
-                            "amount": "10000000",
-                            "display": "0.10000000",
-                            "value": "7.6141"
+                            "amount": "1000000",
+                            "display": "0.01000000",
+                            "value": "0.7239"
                         },
                         "destination": {
                             "asset": "base_sepolia:wbtc",
-                            "amount": "8237",
-                            "display": "0.00008237",
-                            "value": "7.5912"
+                            "amount": "755",
+                            "display": "0.00000755",
+                            "value": "0.7218"
                         },
                         "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                         "estimated_time": 20,
@@ -204,12 +204,12 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         "source": {
                             "asset": "litecoin_testnet:ltc",
                             "owner": "tltc1qycexnc7fjqh2x4dnaht6gumcjxdzkdpjnlxe4s",
-                            "amount": "10000000"
+                            "amount": "1000000"
                         },
                         "destination": {
                             "asset": "base_sepolia:wbtc",
                             "owner": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
-                            "amount": "8237"
+                            "amount": "755"
                         }
                     }'
                 ```
@@ -217,84 +217,84 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 {
                     "status": "Ok",
                     "result": {
-                        "order_id": "e9a12d1320fce93c5855b6014abeb5f5de85ecc8c0eef8133f2da03822596781",
+                        "order_id": "353e76a02a46c493a600f0a35e7e873dab370633f16f1d27af2570fc12ada3e8",
                         "to": "tltc1p9am469q2d6mfpkgrlgpd4c7tzv2lv5rug2yn9vz6vx0myj9jr5kqrc76rt",
-                        "amount": "10000000"
+                        "amount": "1000000"
                     }
                 }
                 ```
                 <Note>
-                    Send 0.1 LTC to `tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx`. You can use this [faucet](https://cypherfaucet.com/ltc-testnet) on testnet.
+                    Send 0.01 LTC to `tltc1p9am469q2d6mfpkgrlgpd4c7tzv2lv5rug2yn9vz6vx0myj9jr5kqrc76rt`. You can use this [faucet](https://cypherfaucet.com/ltc-testnet) on testnet.
                 </Note>
             </Step>
             <Step title="Check Order Status">
                 Get the order by ID to check the status of the swap.
                 ```bash wrap
                 curl -X 'GET' \
-                'https://testnet.api.garden.finance/v2/orders/e9a12d1320fce93c5855b6014abeb5f5de85ecc8c0eef8133f2da03822596781' \
+                'https://testnet.api.garden.finance/v2/orders/353e76a02a46c493a600f0a35e7e873dab370633f16f1d27af2570fc12ada3e8' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'                
                 ```
-                ```json Response expandable
+                ```json Response expandable focus={44}
                 {
                     "status": "Ok",
                     "result": {
-                        "created_at": "2026-01-05T14:15:30.123456Z",
+                        "created_at": "2026-01-08T06:03:46.125199Z",
                         "source_swap": {
-                            "created_at": "2026-01-05T14:15:30.123456Z",
-                            "swap_id": "tltc1p9am469q2d6mfpkgrlgpd4c7tzv2lv5rug2yn9vz6vx0myj9jr5kqrc76rt",
+                            "created_at": "2026-01-08T06:03:46.125199Z",
+                            "swap_id": "tltc1pqujpwdy2syf0agyyeg8xn0nwhy8qjxe9sqchmv563q7up9cgzc5q5cdl6s",
                             "chain": "litecoin_testnet",
                             "asset": "litecoin_testnet:ltc",
-                            "initiator": "tltc1qycexnc7fjqh2x4dnaht6gumcjxdzkdpjnlxe4s",
-                            "redeemer": "tltc1qm8x7h2vfp9k3n5r2t8w6y4u9v3c5x7z8a2b4d6",
+                            "initiator": "c3989e1d1359c83db04785c14ee84f05210acc3bb4d270619559632869c15c3b",
+                            "redeemer": "2623c14333640ab262b4dda40382e64da8c20e78e98d597e218568fb5fe3e283",
                             "timelock": 144,
-                            "filled_amount": "10000000",
-                            "asset_price": 76.1,
-                            "amount": "10000000",
-                            "secret_hash": "5d7e3a9f1c2b8e4d6a7c9f2e5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9",
-                            "secret": "9f2e5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9d2a5c8e1f4b7c9a2d5e8",
-                            "initiate_tx_hash": "a7f3c8e2d5b9a1c4e7f9b2d5a8c1e4f7b9c2e5d8a1c4f7e9b2d5c8e1f4b7c9a2:125678",
-                            "redeem_tx_hash": "d2e5f8b1c4a7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b2d5a8c1",
+                            "filled_amount": "1000000",
+                            "asset_price": 81.64041962329875,
+                            "amount": "1000000",
+                            "secret_hash": "81e8dd7fd72d336f2ac3fbdece4d046054d0d114c511bf831cf4df61097c9aa5",
+                            "secret": "197b2e1e1105c9bec013e9a081dd13378855bd7a3b65b3fcd396a0d965bc506f",
+                            "initiate_tx_hash": "6dc881199ce0fac5287cf55761dceec7347bbb328fe6fc7f13207afe06f5f3f6:4512211",
+                            "redeem_tx_hash": "c6d176a2be224686e43cc837bd70f05b64711b314aa91015c42b8a31a7f35ce1",
                             "refund_tx_hash": "",
-                            "initiate_block_number": "125678",
-                            "redeem_block_number": "125692",
+                            "initiate_block_number": "4512211",
+                            "redeem_block_number": "4512212",
                             "refund_block_number": "0",
                             "required_confirmations": 1,
                             "current_confirmations": 1,
-                            "initiate_timestamp": "2026-01-05T14:16:15Z",
-                            "redeem_timestamp": "2026-01-05T14:20:30Z",
+                            "initiate_timestamp": "2026-01-08T06:08:10Z",
+                            "redeem_timestamp": "2026-01-08T06:12:39Z",
                             "refund_timestamp": null
                         },
                         "destination_swap": {
-                            "created_at": "2026-01-05T14:15:30.123456Z",
-                            "swap_id": "8e2f5b9d1c4a7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b2d5a8",
+                            "created_at": "2026-01-08T06:03:46.125199Z",
+                            "swap_id": "8334288fa1924abe3c89bbc709e95f8caae605534a6cd268315f943d6bd72c19",
                             "chain": "base_sepolia",
                             "asset": "base_sepolia:wbtc",
-                            "initiator": "0x8a5c2e9f1b4d7a3c6e9f2b5d8a1c4e7f9b2d5e8a",
-                            "redeemer": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                            "initiator": "0x133C4FCaBf1e79AE04100da0cDEC281a82ca226C",
+                            "redeemer": "0xf519fa84c50E3459a570a1a514d2eaA960AFf934",
                             "timelock": 3600,
-                            "filled_amount": "8237",
-                            "asset_price": 90447,
-                            "amount": "8237",
-                            "secret_hash": "5d7e3a9f1c2b8e4d6a7c9f2e5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9",
-                            "secret": "9f2e5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9d2a5c8e1f4b7c9a2d5e8",
-                            "initiate_tx_hash": "0x3c7a9e2f5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b2",
-                            "redeem_tx_hash": "0x9d2e5f8b1c4a7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b2d5a8",
+                            "filled_amount": "896",
+                            "asset_price": 90802.0,
+                            "amount": "896",
+                            "secret_hash": "81e8dd7fd72d336f2ac3fbdece4d046054d0d114c511bf831cf4df61097c9aa5",
+                            "secret": "197b2e1e1105c9bec013e9a081dd13378855bd7a3b65b3fcd396a0d965bc506f",
+                            "initiate_tx_hash": "0xa28991ceecde416fd5acec5863ce0688d6e2500af2f94156ed4baf22a3b04f36",
+                            "redeem_tx_hash": "0x2c4c740be46277f4ac9b12b438f9278fd49ca403c742a0860ad0cd10ab04d381",
                             "refund_tx_hash": "",
-                            "initiate_block_number": "28145821",
-                            "redeem_block_number": "28145825",
+                            "initiate_block_number": "36042112",
+                            "redeem_block_number": "36042116",
                             "refund_block_number": "0",
                             "required_confirmations": 0,
                             "current_confirmations": 0,
-                            "initiate_timestamp": "2026-01-05T14:18:45Z",
-                            "redeem_timestamp": "2026-01-05T14:19:12Z",
+                            "initiate_timestamp": "2026-01-08T06:08:32Z",
+                            "redeem_timestamp": "2026-01-08T06:08:40Z",
                             "refund_timestamp": null
                         },
-                        "nonce": "1752389456123",
-                        "order_id": "e9a12d1320fce93c5855b6014abeb5f5de85ecc8c0eef8133f2da03822596781",
+                        "nonce": "1767852225934",
+                        "order_id": "353e76a02a46c493a600f0a35e7e873dab370633f16f1d27af2570fc12ada3e8",
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
-                        "version": "v2",
+                        "version": "v3",
                         "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d"
                     }
                 }
@@ -571,11 +571,11 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             "display": "0.00049850",
                             "value": "49.85"
                         },
-                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635",
+                        "solver_id": "0x90eb912279ee8a3c56f784a44dedffae4487524d",
                         "estimated_time": 20,
-                        "slippage": 50,
+                        "slippage": 0,
                         "fee": 30,
-                        "fixed_fee": "0.0"
+                        "fixed_fee": "0"
                         }
                     ]
                 }
@@ -590,12 +590,12 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         --data '{
                             "source": {
                                 "asset": "tron_shasta:wbtc",
-                                "owner": "TVei41NQrhCY9i8vFKpftdHB2S6DQeynWD",
+                                "owner": "TWbEz5ibiL6dreiLJ5oBF5CwDkw6Xfe6KX",
                                 "amount": "50000"
                             },
                             "destination": {
                                 "asset": "arbitrum_sepolia:wbtc",
-                                "owner": "0x8a5c2e9f1b4d7a3c6e9f2b5d8a1c4e7f9b2d5e8a",
+                                "owner": "0xA39ABb978cfd2ba459163ad1EaB6E8940Fbf4359",
                                 "amount": "49850"
                             }
                         }'
@@ -608,7 +608,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             "chain_id": 2494104990,
                             "data": "0x095ea7b30000000000000000000000001ce431493d15db597bbc1c74ae09407a76f19458ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                             "gas_limit": "500000000",
-                            "to": "TQLCQXShhosGFTf2jxEk1FNTQyPW3kc4nK",
+                            "to": "TCbyHXPZ2o3qPfQUSrqPoS3NkwEJ94P3AS",
                             "value": "0"
                         },
                         "initiate_transaction": {
@@ -630,7 +630,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                                 "amount": "5000000000",
                                 "destinationData": "0x",
                                 "redeemer": "TKmnp9reskx58cYACSzvbXDBr7hKFh7XHS",
-                                "secretHash": "0xdf8f1793684d3bbbd41aa803c8180807977e2aa33b67f63a7addbcf16831e158",
+                                "secretHash": "9bf64d0cd7a8f0d254dcc48724e4d2969fdf8dfc25619bc622a3bcecb33e29c8",
                                 "timelock": 432000
                             },
                             "primaryType": "Initiate",
@@ -762,67 +762,67 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 Get the order by ID to check the status of the swap.
                  ```bash wrap
                 curl -X 'GET' \
-                'https://testnet.api.garden.finance/v2/orders/a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890' \
+                'https://testnet.api.garden.finance/v2/orders/b0d73ffcc814f4b6476be779d588985aeb178ba6eeee27a5cf4d9d33461b4005' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'
                 ```
-                ```json Response expandable focus={45}
+                ```json Response expandable focus={44}
                 {
                     "status": "Ok",
                     "result": {
-                        "created_at": "2026-01-06T08:30:15.456789Z",
+                        "created_at": "2026-01-16T11:16:46.050428Z",
                         "source_swap": {
-                            "created_at": "2026-01-06T08:30:15.456789Z",
-                            "swap_id": "e0f05748c3f7b95da9fea60d1f4ae128efb31f4bc9cf49009f4115f237d9fca9",
+                            "created_at": "2026-01-16T11:16:46.050428Z",
+                            "swap_id": "2db870aaaf5a2b65d2362da52ef564f42d88542f38e55dacdcb802d5eabef44b",
                             "chain": "tron_shasta",
                             "asset": "tron_shasta:wbtc",
-                            "initiator": "TVei41NQrhCY9i8vFKpftdHB2S6DQeynWD",
+                            "initiator": "TWbEz5ibiL6dreiLJ5oBF5CwDkw6Xfe6KX",
                             "redeemer": "TKmnp9reskx58cYACSzvbXDBr7hKFh7XHS",
-                            "timelock": 7200,
+                            "timelock": 432000,
                             "filled_amount": "50000",
-                            "asset_price": 100000.0,
+                            "asset_price": 95291.0,
                             "amount": "50000",
-                            "secret_hash": "eba5a7a4ea7fce56078c557abbaaee20deec3efca58cda3c20b37d175a435f2a",
-                            "secret": "5f7f5a0c87be45d1df37e2c0bb154f755b875b2f5183d4e276d354370961a66a",
-                            "initiate_tx_hash": "0xc644b766905835275a6582ad4375839888b2e2d9f2c21982b38df54d761e2f26",
-                            "redeem_tx_hash": "0x7a8c5d92e6f3b1a4c8d7e9f2b5c8a3d6e1f4b7c9a2d5e8f1b4c7a9d2e5f8b1c5",
+                            "secret_hash": "9bf64d0cd7a8f0d254dcc48724e4d2969fdf8dfc25619bc622a3bcecb33e29c8",
+                            "secret": "f1a5f527cdffa795cd571b833e726a67df4ecfa77f5b01cbecd6c35c1e74eca4",
+                            "initiate_tx_hash": "0xc85acba4e03fb55807049ee048b96081b5686a6ceee4ea382d3cfa8f36d1a4c5",
+                            "redeem_tx_hash": "0xc66c1bfb1b6b276556a5a034f67b0525bedc44184827b68dd9147fbdf666c434",
                             "refund_tx_hash": "",
-                            "initiate_block_number": "45678912",
-                            "redeem_block_number": "45678925",
+                            "initiate_block_number": "61503886",
+                            "redeem_block_number": "61503898",
                             "refund_block_number": "0",
                             "required_confirmations": 1,
                             "current_confirmations": 1,
-                            "initiate_timestamp": "2026-01-06T08:32:30Z",
-                            "redeem_timestamp": "2026-01-06T08:35:45Z",
+                            "initiate_timestamp": "2026-01-16T11:17:36Z",
+                            "redeem_timestamp": "2026-01-16T11:18:18Z",
                             "refund_timestamp": null
                         },
                         "destination_swap": {
-                            "created_at": "2026-01-06T08:30:15.456789Z",
-                            "swap_id": "f1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef123456789",
+                            "created_at": "2026-01-16T11:16:46.050428Z",
+                            "swap_id": "ce80898324c992c2112d8caafe8d2cc95c1c167ef1934bc6eed610c4b235b923",
                             "chain": "arbitrum_sepolia",
                             "asset": "arbitrum_sepolia:wbtc",
-                            "initiator": "0x8a5c2e9f1b4d7a3c6e9f2b5d8a1c4e7f9b2d5e8a",
-                            "redeemer": "0x9b6d3f1e2c4a7b8d5e9f2a3c6d8e1f4a7b9c2d5e",
-                            "timelock": 3600,
+                            "initiator": "0x35ac29159116f687fa7dec74c3331a2d5bb1e89e",
+                            "redeemer": "0xA39ABb978cfd2ba459163ad1EaB6E8940Fbf4359",
+                            "timelock": 36000,
                             "filled_amount": "49850",
-                            "asset_price": 100000.0,
+                            "asset_price": 95291.0,
                             "amount": "49850",
-                            "secret_hash": "eba5a7a4ea7fce56078c557abbaaee20deec3efca58cda3c20b37d175a435f2a",
-                            "secret": "5f7f5a0c87be45d1df37e2c0bb154f755b875b2f5183d4e276d354370961a66a",
-                            "initiate_tx_hash": "0x9d2e5f8b1c4a7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b2d5a9",
-                            "redeem_tx_hash": "0x3c7a9e2f5b8d1a4c7e9f2b5d8a1c4e7f9b2d5a8c1e4f7b9c2d5e8a1c4f7e9b3",
+                            "secret_hash": "9bf64d0cd7a8f0d254dcc48724e4d2969fdf8dfc25619bc622a3bcecb33e29c8",
+                            "secret": "f1a5f527cdffa795cd571b833e726a67df4ecfa77f5b01cbecd6c35c1e74eca4",
+                            "initiate_tx_hash": "0xc520b684eb9376b83622fb12871a8a96b5cdf4be68914abd426d24850ccf310f",
+                            "redeem_tx_hash": "0x1abd4e96badd88915547c0c67bea14de545fc78dc4e034aa37dc3ee94243bbf5",
                             "refund_tx_hash": "",
-                            "initiate_block_number": "12345678",
-                            "redeem_block_number": "12345682",
+                            "initiate_block_number": "233982423",
+                            "redeem_block_number": "233982458",
                             "refund_block_number": "0",
                             "required_confirmations": 0,
                             "current_confirmations": 0,
-                            "initiate_timestamp": "2026-01-06T08:33:15Z",
-                            "redeem_timestamp": "2026-01-06T08:33:42Z",
+                            "initiate_timestamp": "2026-01-16T11:17:59Z",
+                            "redeem_timestamp": "2026-01-16T11:18:07Z",
                             "refund_timestamp": null
                         },
-                        "nonce": "1736152215456",
-                        "order_id": "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890",
+                        "nonce": "1768562205873",
+                        "order_id": "b0d73ffcc814f4b6476be779d588985aeb178ba6eeee27a5cf4d9d33461b4005",
                         "affiliate_fees": [],
                         "integrator": "DocsTesting",
                         "version": "v3",
