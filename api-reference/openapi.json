@@ -2038,6 +2038,15 @@
           },
           {
             "in": "query",
+            "name": "integrator",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by Integrator. Comma-separated for multiple values.",
+            "example": "integrator1,integrator2"
+          },
+          {
+            "in": "query",
             "name": "page",
             "schema": {
               "type": "integer"
