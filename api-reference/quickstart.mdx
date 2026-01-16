@@ -4,7 +4,8 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
 ---
 
 <Note>
-    This guide uses a testing app ID. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5).
+  This guide uses a testing app ID. Planning to build a production app with our
+  API? Reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5).
 </Note>
 
 <Tabs>
@@ -160,7 +161,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
     <Tab title="From Litecoin">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade 50 LTC on **Litecoin Testnet** to WBTC on **Base Sepolia**.
+                Let's get a quote to trade 0.1 LTC on **Litecoin Testnet** to WBTC on **Base Sepolia**.
                 ```bash wrap
                 curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=litecoin_testnet:ltc&to=base_sepolia:wbtc&from_amount=10000000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -202,7 +203,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     --data '{
                         "source": {
                             "asset": "litecoin_testnet:ltc",
-                            "owner": "tltc1qyw3c0rvn6kk1c688y3dygvckn57525y8emy4p5",
+                            "owner": "tltc1qycexnc7fjqh2x4dnaht6gumcjxdzkdpjnlxe4s",
                             "amount": "10000000"
                         },
                         "destination": {
@@ -244,7 +245,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             "swap_id": "tltc1p9am469q2d6mfpkgrlgpd4c7tzv2lv5rug2yn9vz6vx0myj9jr5kqrc76rt",
                             "chain": "litecoin_testnet",
                             "asset": "litecoin_testnet:ltc",
-                            "initiator": "tltc1qyw3c0rvn6kk1c688y3dygvckn57525y8emy4p5",
+                            "initiator": "tltc1qycexnc7fjqh2x4dnaht6gumcjxdzkdpjnlxe4s",
                             "redeemer": "tltc1qm8x7h2vfp9k3n5r2t8w6y4u9v3c5x7z8a2b4d6",
                             "timelock": 144,
                             "filled_amount": "10000000",
@@ -471,7 +472,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/7e69c6514fa6c7a46b88e235e484d9958029cbe748e125add69b1ffcf7265198' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable focus={45}
                 {
@@ -551,7 +552,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 ```bash wrap
                 curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=tron_shasta:wbtc&to=arbitrum_sepolia:wbtc&from_amount=50000' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable
                 {
@@ -599,7 +600,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             }
                         }'
                 ```
-                ```json Response expandable wrap 
+                ```json Response expandable wrap
                 {
                     "status": "Ok",
                     "result": {
@@ -709,9 +710,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                         const initiate_transaction = await window.tronWeb.transactionBuilder.triggerSmartContract(
                             response.result.initiate_transaction.to,
                             'initiate(address,uint256,uint256,bytes32,bytes)',
-                            { 
-                                feeLimit: parseInt(response.result.initiate_transaction.gas_limit), 
-                                callValue: parseInt(response.result.initiate_transaction.value) 
+                            {
+                                feeLimit: parseInt(response.result.initiate_transaction.gas_limit),
+                                callValue: parseInt(response.result.initiate_transaction.value)
                             },
                             [
                                 { type: 'address', value: response.result.typed_data.message.redeemer },
@@ -763,7 +764,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable focus={45}
                 {
@@ -842,7 +843,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 ```bash wrap
                 curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=solana_testnet:sol&to=bitcoin_testnet:btc&from_amount=354608265' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable
                 {
@@ -914,7 +915,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     </Tab>
                     <Tab title="Gasless submission">
                         <Note>
-                            Currently, this is only supported for Solana SPL orders.  
+                            Currently, this is only supported for Solana SPL orders.
                             As such, `versioned_tx_gasless` will be `null` for Solana orders with native SOL.
                         </Note>
                         ```typescript
@@ -947,7 +948,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable focus={45}
                 {
@@ -1210,7 +1211,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/f64db51ba3894ba3720925aaa816d4eb538f623802686595bf8ac50ecbc68bad' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable focus={45}
                 {
@@ -1353,12 +1354,12 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
                 import { Transaction } from "@mysten/sui/transactions";
                 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-                
+
                 const client = new SuiClient({ url: getFullnodeUrl('testnet') });
                 const gasPrice = await client.getReferenceGasPrice();
                 const estimatedGasBudget = 10000000; // 10M gas units as a conservative estimate
-                
-                let transaction = Transaction.fromKind(new Uint8Array(ptb_bytes)) // ptb_bytes are the Programmable Transaction Bytes returned from the create order response 
+
+                let transaction = Transaction.fromKind(new Uint8Array(ptb_bytes)) // ptb_bytes are the Programmable Transaction Bytes returned from the create order response
                 transaction.setSender(sender);
                 transaction.setGasPrice(gasPrice);
                 transaction.setGasBudget(estimatedGasBudget);
@@ -1386,7 +1387,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/e7a2d8b8dbf8d1e315c17e40cd9287410ea9449258f806a1833b7f9ad68527f5' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
-                -H 'accept: application/json'                
+                -H 'accept: application/json'
                 ```
                 ```json Response expandable focus={45}
                 {
@@ -1459,8 +1460,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
         </Steps>
     </Tab>
+
 </Tabs>
 
 <Check>
-    Congratulations, you have successfully completed a cross-chain swap!
+  Congratulations, you have successfully completed a cross-chain swap!
 </Check>
