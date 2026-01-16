@@ -16,33 +16,33 @@ title: "Quickstart"
             BitcoinProvider,
             BitcoinNetwork,
             BitcoinWallet,
-        } from '@catalogfi/wallets';
+        } from '@gardenfi/core';
+        import { with0x } from '@gardenfi/utils';
         import { createWalletClient, http } from 'viem';
         import { privateKeyToAccount } from 'viem/accounts';
         import { arbitrumSepolia } from 'viem/chains';
         import { RpcProvider, Account } from 'starknet';
-        import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+        import * as anchor from '@coral-xyz/anchor';
+        import { web3 } from '@coral-xyz/anchor';
 
         // Ethereum wallet setup
-        const ethereumAccount = privateKeyToAccount('<YOUR_EVM_PRIVATE_KEY>');
+        const ethereumAccount = privateKeyToAccount(with0x('<YOUR_EVM_PRIVATE_KEY>'));
         const ethereumWalletClient = createWalletClient({
-        ethereumAccount,
-        chain: arbitrumSepolia,
-        transport: http(),
+            account: ethereumAccount,
+            chain: arbitrumSepolia,
+            transport: http(),
         });
 
         // Starknet wallet setup
         const starknetProvider = new RpcProvider(); // Using default RPC URL
-        const starknetWallet = new Account(
-            starknetProvider,
-            '<YOUR_STARKNET_ADDRESS>',
-            '<YOUR_STARKNET_PRIVATE_KEY>',
-            '1', // preffered cairo version
-            '0x3' // contract version
-        );
+        const starknetWallet = new Account({
+            provider: starknetProvider,
+            signer: <YOUR_STARKNET_PRIVATE_KEY>,
+            address: <YOUR_STARKNET_ADDRESS>,
+        });
 
         // Solana wallet setup
-        const solanaPrivKeyBytes = new Uint8Array('<YOUR_SOLANA_PRIVATE_KEY_BYTES>');
+        const solanaPrivKeyBytes = new Uint8Array('<YOUR_SOLANA_PRIVATE_KEY_IN_BYTES>');
         const solanaUser = web3.Keypair.fromSecretKey(solanaPrivKeyBytes);
         const solanaConnection = new web3.Connection(RPC_URL, { commitment: 'confirmed' });
         const solanaWallet = new anchor.Wallet(solanaUser);
@@ -54,26 +54,22 @@ title: "Quickstart"
 
     </Step>
     <Step title="Configure Garden instance">
-        <Tip>
-            A digest key is a 32-byte key that serves as a unique identifier, used for generating secrets (preimages for HTLCs). It functions as a Garden account, but it is strictly non-custodial, with no funds ever being associated with it or moved through it.
+    <Tip>
+            For API key, reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5) or raise a support ticket.
         </Tip>
-
         <Tabs>
             <Tab title="Default wallet clients">
                 ```js
                 import { Garden } from '@gardenfi/core';
-                import { Environment, DigestKey } from '@gardenfi/utils';
-
-                const digestKey = DigestKey.from('<YOUR_DIGEST_KEY>');
+                import { Network } from '@gardenfi/utils';
 
                 const garden = Garden.fromWallets({
                     environment: Network.TESTNET,
-                    apiKey: digestKey.val,
+                    apiKey: '<YOUR_API_KEY>',
                     wallets: {
                         evm: ethereumWalletClient,
                         starknet: starknetWallet,
-                        solana: solanaProvider,
-                        sui: suiSigner
+                        solana: solanaProvider
                     }
                 });
                 ```
@@ -89,12 +85,11 @@ title: "Quickstart"
 
                 const garden = new Garden({
                     environment: Network.TESTNET,
-                    digestKey: digestKey.val,
+                    apiKey: '<YOUR_API_KEY>',
                     htlc: {
                         evm: <IEVMHTLC>,
                         starknet: <IStarknetHTLC>,
-                        solana: <ISolanaHTLC>,
-                        sui: <ISuiHTLC>
+                        solana: <ISolanaHTLC>
                     },
                 });
                 ```
@@ -121,15 +116,18 @@ title: "Quickstart"
         );
 
         const receiveAmount = quote.val?.[0].destination.amount;
+        const solverId = quote.val?.[0].solver_id;
+        const sourceAddress = ethereumAccount.address;
+        const destinationAddress = '<YOUR_BITCOIN_ADDRESS';
 
         const swapParams: SwapParams = {
             fromAsset,
             toAsset,
             sendAmount,
             receiveAmount,
-            addresses: {
-                bitcoin: '<YOUR_BITCOIN_ADDRESS>',
-            },
+            solverId,
+            sourceAddress,
+            destinationAddress
         };
 
         // Create the swap

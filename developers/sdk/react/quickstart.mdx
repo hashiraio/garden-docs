@@ -3,10 +3,13 @@ title: "Quickstart"
 ---
 
 <Steps>
-    <Step title="Prerequistes">
+    <Step title="Prerequisites">
         This guide assumes that you have completed the [Setup](/developers/sdk/react/setup) guide.
     </Step>
     <Step title="Setup your React app">
+        <Tip>
+            For API key, reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5) or raise a support ticket.
+        </Tip>
         Integrate Garden into your React app by wrapping it with the **GardenProvider**. This enables interaction with the protocol and handles session management.
 
         <Note>
@@ -21,7 +24,6 @@ title: "Quickstart"
             import { useWalletClient } from 'wagmi';
             import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
             import { AnchorProvider } from "@coral-xyz/anchor";
-            import { useCurrentWallet } from "@mysten/dapp-kit";
 
             function App() {
                 // EVM
@@ -32,8 +34,6 @@ title: "Quickstart"
                 const { connection } = useConnection();
                 const anchorWallet = useAnchorWallet();
                 const solanaAnchorProvider = new AnchorProvider(connection, anchorWallet, {});
-                // Sui
-                const { currentWallet: SuiWallet } = useCurrentWallet();
 
                 return (
                 <GardenProvider
@@ -43,10 +43,10 @@ title: "Quickstart"
                         wallets: {
                             evm: walletClient,
                             starknet: starknetWallet,
-                            solana: solanaAnchorProvider,
-                            sui: suiWallet
+                            solana: solanaAnchorProvider
                         }
                     }}
+                    store={localStorage}
                 >
                     {/* Your swap component */}
                 </GardenProvider>
@@ -77,9 +77,7 @@ title: "Quickstart"
                                 autoConnect
                             >
                                 <SolanaProvider>
-                                    <SuiProvider>
-                                        <App />
-                                    </SuiProvider>
+                                    <App />
                                 </SolanaProvider>
                             </StarknetConfig>
                         </QueryClientProvider>
@@ -147,35 +145,6 @@ title: "Quickstart"
                 );
             };
             ```
-            ```tsx suiProvider.tsx
-            import {
-                createNetworkConfig,
-                SuiClientProvider,
-                WalletProvider,
-            } from "@mysten/dapp-kit";
-            import { FC, ReactNode } from "react";
-            import { network } from "./constants";
-            import { Network } from "@gardenfi/utils";
-
-            interface SuiProviderProps {
-                children: ReactNode;
-            }
-
-            export const SuiProvider: FC<SuiProviderProps> = ({ children }) => {
-                const { networkConfig } = createNetworkConfig({
-                    testnet: {url: "https://fullnode.testnet.sui.io:443"},
-                });
-
-                return (
-                    <SuiClientProvider
-                        networks={networkConfig}
-                        defaultNetwork={network ? Network.MAINNET : Network.TESTNET}
-                    >
-                        <WalletProvider autoConnect={true}>{children}</WalletProvider>
-                    </SuiClientProvider>
-                );
-            };
-            ```
         </CodeGroup>
     </Step>
     <Step title="Create a swap component">
@@ -190,11 +159,14 @@ title: "Quickstart"
         import { useGarden } from '@gardenfi/react-hooks';
         import { Assets } from '@gardenfi/orderbook';
         import BigNumber from 'bignumber.js';
+        import { useAccount } from "wagmi";
 
         export const Swap = () => {
             const [quoteAmount, setQuoteAmount] = useState<string>();
+            const [solverId, setSolverId] = useState<string>();
 
             const { swap, getQuote } = useGarden();
+            const { address: evmAddress } = useAccount();
 
             // Define the assets involved in the swap
             const inputAsset = Assets.arbitrum_sepolia.WBTC;
@@ -222,7 +194,9 @@ title: "Quickstart"
 
                 // Select a quote and save it (the user will confirm this quote before the swap is executed)
                 const quoteAmount = quote.val[0].destination.amount
+                const solverId = quote.val[0].solver_id
                 setQuoteAmount(quoteAmount);
+                setSolverId(solverId)
             };
 
             const handleSwap = async () => {
@@ -234,9 +208,9 @@ title: "Quickstart"
                     toAsset: outputAsset,
                     sendAmount: amount.toString(),
                     receiveAmount: quoteAmount,
-                    addresses: {
-                        bitcoin: btcAddress
-                    },
+                    solverId,
+                    sourceAddress: evmAddress,
+                    destinationAddress: btcAddress,
                 });
                 if (!order.ok) {
                     return alert(order.error);
@@ -260,5 +234,5 @@ title: "Quickstart"
 </Steps>
 
 <Note>
-  To include affiliate fees in your swap flow, refer to the implementation [here](/developers/fees#react).
+  To include affiliate fees in your swap flow, refer to the implementation [here](/developers/affiliate-fees#using-sdk).
 </Note>
