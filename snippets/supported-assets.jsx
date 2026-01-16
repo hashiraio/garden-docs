@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+const { useEffect, useState } = React;
 export const MAINNET_ASSETS_URL = "https://api.garden.finance/v2/chains";
 export const TESTNET_ASSETS_URL =
   "https://testnet.api.garden.finance/v2/chains";
@@ -36,6 +35,10 @@ export const titilize = (chain) => {
   return firstWord + " " + secondWord;
 };
 
+export const shouldUseSquareLogo = (chain) => {
+  return chain === "base" || chain === "base_sepolia";
+};
+
 export const getExplorerUrl = (chain, address, explorer_url) => {
   if (chain.includes("bitcoin")) {
     return "/contracts/bitcoin";
@@ -57,13 +60,19 @@ export const getExplorerUrl = (chain, address, explorer_url) => {
 
 export const AssetRow = ({ chain, assets }) => {
   // console.log(assets)
+  const useSquareLogo = shouldUseSquareLogo(chain.chain);
+
   return (
     <tr>
       <td
         className="flex items-center gap-2 w-full whitespace-nowrap border-r-[1px] border-[#e5e1e2] dark:border-[#454143]/50"
         colSpan={4}
       >
-        <Frame className="pointer-events-none w-[20px]">
+        <Frame
+          className={`pointer-events-none w-[20px] ${
+            useSquareLogo ? " rounded-none " : ""
+          }`}
+        >
           <img
             src={chain.icon}
             alt={chain.chain}
@@ -104,13 +113,12 @@ export const getAssets = async (url = MAINNET_ASSETS_URL) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    if (data.status.includes("OK")) {
+    if (!data.status.includes("Ok")) {
       return [];
     }
     const sortedResult = data.result.sort((a, b) => {
       return a.chain.localeCompare(b.chain);
     });
-    console.log(sortedResult[0].assets[0].htlc.address);
     return sortedResult;
   } catch (error) {
     console.log("Error fetching assets", error);

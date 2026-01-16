@@ -3,6 +3,39 @@ title: "Changelog"
 description: "Product updates and announcements"
 ---
 
+<Update label="January 12, 2026" description="v2.0.15" tags={["API"]}>
+  ### Endpoint updates
+  - Add Tron and Litecoin support
+  - Update GET `/fee`, `/volume`, `/chains` and `/assets` endpoints to accept new query parameters
+  - Update PATCH `/orders/:id` endpoint requires `signatures` array instead of `signature` string for `action=instant-refund`
+</Update>
+
+<Update label="January 1, 2026" description="v2.0.14" tags={["API"]}>
+  ### Endpoint updates
+  - Update GET `/orders` to include `solver_id` field
+  - Update GET `/orders` to accept `solver_id` as a query parameter
+</Update>
+
+<Update label="December 31, 2025" description="v2.0.13" tags={["API"]}>
+  ### Endpoint updates
+  - Update GET `/chains` to include the `id` and the `explorer_url` fields
+  - Update GET `/assets` to include ticker symbols in the `name` field and chain identifiers in the `chain` field
+  - Update GET `/liquidity` to include corresponding `solver_id` field for each liquidity entry
+  - Update GET `/schemas` to return an array of schemas
+</Update>
+
+<Update label="October 7, 2025" description="v2.0.12" tags={["API"]}>
+  ### Endpoint update
+  - Update GET `/quote` endpoint to include `fee` and `fixed_fee`
+  - Update GET `/assets` endpoint to include `name`
+  - Update GET `/chains` endpoint to include `name`
+</Update>
+
+<Update label="September 24, 2025" description="v2.0.11" tags={["API"]}>
+  ### New endpoint
+  - Add `/apps/earnings` endpoint for fetching affiliate earnings
+</Update>
+
 <Update label="September 15, 2025" description="v2.0.10" tags={["API"]}>
   ### Endpoint updates
   - Update POST `/orders` to use `initiate_on_behalf` calldata when the source delegate is passed
