@@ -47,16 +47,10 @@ title: "Quickstart"
         const solanaConnection = new web3.Connection(RPC_URL, { commitment: 'confirmed' });
         const solanaWallet = new anchor.Wallet(solanaUser);
         const solanaProvider = new anchor.AnchorProvider(solanaConnection, solanaWallet);
-
-        // Sui wallet setup
-        const suiSigner = Ed25519Keypair.fromSecretKey('<YOUR_SUI_PRIVATE_KEY>');
         ```
 
     </Step>
     <Step title="Configure Garden instance">
-    <Tip>
-            For API key, reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5) or raise a support ticket.
-        </Tip>
         <Tabs>
             <Tab title="Default wallet clients">
                 ```js

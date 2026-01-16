@@ -13,7 +13,7 @@ title: "Quickstart"
         Integrate Garden into your React app by wrapping it with the **GardenProvider**. This enables interaction with the protocol and handles session management.
 
         <Note>
-            The Starknet, Solana and Sui configurations are only necessary if you choose to support those chains in your app.
+            The Starknet and Solana configurations are only necessary if you choose to support those chains in your app.
         </Note>
 
         <CodeGroup>
@@ -64,7 +64,6 @@ title: "Quickstart"
             import { StarknetConfig } from '@starknet-react/core';
             import { starknetChains, connectors as starknetConnectors, starknetProviders } from './starknetConfig.ts';
             import { SolanaProvider } from "./solanaProvider.tsx";
-            import { SuiProvider } from "./suiProvider.tsx";
 
             ReactDOM.createRoot(document.getElementById('root')!).render(
                 <React.StrictMode>
