@@ -728,7 +728,7 @@
           },
           "fee": {
             "type": "integer",
-            "description": "In BIPS (base index points) 100 bips = 1%.",
+            "description": "In BIPS (base index points), 100 bips = 1%.",
             "example": 10
           }
         }
@@ -748,7 +748,7 @@
           },
           "slippage": {
             "type": "number",
-            "description": "**(Optional)** In BIPS (base index points) 100 bips = 1%\nWhen not specified, the slippage configured in app settings is used, or zero if no default is configured.",
+            "description": "**(Optional)** In BIPS (base index points), 100 bips = 1%. When not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           },
           "nonce": {
@@ -1258,12 +1258,12 @@
           },
           "fee": {
             "type": "integer",
-            "description": "in BIPS (base index points) where 100 bips = 1%",
+            "description": "In BIPS (base index points), where 100 bips = 1%.",
             "example": 30
           },
           "fixed_fee": {
             "type": "string",
-            "description": "in USD",
+            "description": "In USD.",
             "example": "0.05"
           }
         }
@@ -1983,7 +1983,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "**(Optional)** Filter orders by address."
+            "description": "**(Optional)** Filter orders by an address."
           },
           {
             "in": "query",
@@ -1991,7 +1991,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "**(Optional)** Filter orders by transaction hash."
+            "description": "**(Optional)** Filter orders by a transaction hash."
           },
           {
             "in": "query",
@@ -1999,7 +1999,7 @@
             "schema": {
               "$ref": "#/components/schemas/Chain"
             },
-            "description": "**(Optional)** Filter orders by source chain."
+            "description": "**(Optional)** Filter orders by the source chain."
           },
           {
             "in": "query",
@@ -2007,7 +2007,7 @@
             "schema": {
               "$ref": "#/components/schemas/Chain"
             },
-            "description": "**(Optional)** Filter orders by destination chain."
+            "description": "**(Optional)** Filter orders by the destination chain."
           },
           {
             "in": "query",
@@ -2015,7 +2015,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "**(Optional)** Filter orders by source owner. Comma-separated for multiple values.",
+            "description": "**(Optional)** Filter orders by the source owner. Comma-separated for multiple values.",
             "example": "0x123...,0x456..."
           },
           {
@@ -2024,7 +2024,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "**(Optional)** Filter orders by destination owner. Comma-separated for multiple values.",
+            "description": "**(Optional)** Filter orders by the destination owner. Comma-separated for multiple values.",
             "example": "0x789...,0xabc..."
           },
           {
@@ -2033,8 +2033,17 @@
             "schema": {
               "type": "string"
             },
-            "description": "**(Optional)** Filter orders by solver ID. Comma-separated for multiple values.",
+            "description": "**(Optional)** Filter orders by a solver ID. Comma-separated for multiple values.",
             "example": "solver1,solver2"
+          },
+          {
+            "in": "query",
+            "name": "integrator",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by an integrator. Comma-separated for multiple values.",
+            "example": "integrator1,integrator2"
           },
           {
             "in": "query",
