@@ -4,8 +4,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
 ---
 
 <Note>
-  This guide uses a testing app ID. Planning to build a production app with our
-  API? Reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5).
+  This guide uses a testing app ID. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5).
 </Note>
 
 <Tabs>
@@ -47,6 +46,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                     --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -75,11 +77,11 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 }
                 ```
                 <Note>
-                    Send 0.0005 BTC to `tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp`. You can use our [faucet](https://testnetbtc.com) on testnet.
+                    Send 0.0005 BTC to the `to` address in the response. You may use our [faucet](https://testnetbtc.com) on testnet.
                 </Note>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/f8a12d1320fce93c5888b6014abeb5f5de85ecc8c0eef8133f3da03822592121' \
@@ -196,6 +198,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                     --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -224,11 +229,11 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 }
                 ```
                 <Note>
-                    Send 0.01 LTC to `tltc1p9am469q2d6mfpkgrlgpd4c7tzv2lv5rug2yn9vz6vx0myj9jr5kqrc76rt`. You can use this [faucet](https://cypherfaucet.com/ltc-testnet) on testnet.
+                    Send 0.01 LTC to the `to` address in the response. You may use this [faucet](https://cypherfaucet.com/ltc-testnet) on testnet.
                 </Note>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/353e76a02a46c493a600f0a35e7e873dab370633f16f1d27af2570fc12ada3e8' \
@@ -343,6 +348,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -467,7 +475,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                  ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/7e69c6514fa6c7a46b88e235e484d9958029cbe748e125add69b1ffcf7265198' \
@@ -583,6 +591,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -759,7 +770,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                  ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/b0d73ffcc814f4b6476be779d588985aeb178ba6eeee27a5cf4d9d33461b4005' \
@@ -874,6 +885,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -943,7 +957,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                  ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/ee54521431fd3b7c01f46f2aaec086362d8cf2d6a7d3b31233c66c31bed9e4eb' \
@@ -1059,6 +1073,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                         --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -1206,7 +1223,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 </Tabs>
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/f64db51ba3894ba3720925aaa816d4eb538f623802686595bf8ac50ecbc68bad' \
@@ -1323,6 +1340,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
             </Step>
             <Step title="Submit Order">
                 Once a quote is received, we can submit the order:
+                <Warning>
+                    Use `amount` and `asset` from your quote response. Use your wallet addresses for `owner`.
+                </Warning>
                 ```bash
                 curl --location 'https://testnet.api.garden.finance/v2/orders' \
                     --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
@@ -1374,15 +1394,13 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                             showEffects: true,
                         },
                     });
-
-                    console.log(result)
                 } catch (error) {
                     console.error('Transaction execution failed:', error);
                 }
                 ```
             </Step>
             <Step title="Check Order Status">
-                Get the order by ID to check the status of the swap.
+                Check the order status using the `order_id` from the response.
                 ```bash wrap
                 curl -X 'GET' \
                 'https://testnet.api.garden.finance/v2/orders/e7a2d8b8dbf8d1e315c17e40cd9287410ea9449258f806a1833b7f9ad68527f5' \
@@ -1464,5 +1482,5 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
 </Tabs>
 
 <Check>
-  Congratulations, you have successfully completed a cross-chain swap!
+    Congratulations, you have successfully completed a cross-chain swap!
 </Check>
