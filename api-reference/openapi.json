@@ -41,8 +41,8 @@
         "type": "string",
         "title": "htlc",
         "enum": [
-          "evm:htlc",
           "evm:htlc_erc20",
+          "evm:htlc",
           "solana:htlc",
           "starknet:htlc_erc20",
           "solana:htlc_spltoken"
@@ -79,9 +79,13 @@
               "base",
               "bnbchain",
               "botanix",
+              "citrea",
+              "hyperevm",
+              "litecoin",
               "monad",
               "solana",
-              "starknet"
+              "starknet",
+              "tron"
             ]
           },
           {
@@ -101,7 +105,8 @@
               "monad_testnet",
               "solana_testnet",
               "starknet_sepolia",
-              "tron_shasta"
+              "tron_shasta",
+              "xrpl_testnet"
             ]
           }
         ]
@@ -118,10 +123,14 @@
               "evm:1",
               "evm:143",
               "evm:3637",
+              "evm:4114",
               "evm:56",
               "evm:8453",
+              "evm:999",
+              "litecoin",
               "solana:101",
-              "starknet:23448594291968334"
+              "starknet:23448594291968334",
+              "tron:728126428"
             ]
           },
           {
@@ -130,6 +139,7 @@
             "description": "Testnet",
             "enum": [
               "evm:421614",
+              "alpen_signet",
               "bitcoin",
               "evm:10143",
               "evm:11155111",
@@ -137,9 +147,11 @@
               "evm:8150",
               "evm:84532",
               "evm:97",
+              "litecoin",
               "solana:103",
               "starknet:393402133025997798000961",
-              "tron:2494104990"
+              "tron:2494104990",
+              "xrpl"
             ]
           }
         ]
@@ -166,11 +178,19 @@
         "type": "object",
         "title": "Chain Information",
         "properties": {
+          "chain": {
+            "$ref": "#/components/schemas/Chain"
+          },
+          "display":{
+            "type": "string",
+            "example": "Arbitrum"
+          },
           "id": {
             "$ref": "#/components/schemas/ChainWithId"
           },
-          "chain": {
-            "$ref": "#/components/schemas/Chain"
+          "native_asset_id": {
+            "type": "string",
+            "example": "arbitrum:eth"
           },
           "icon": {
             "type": "string"
@@ -309,18 +329,23 @@
             "enum": [
               "arbitrum:wbtc",
               "ethereum:wbtc",
+              "arbitrum:ibtc",
               "base:cbbtc",
               "bitcoin:btc",
               "bnbchain:btcb",
               "botanix:btc",
+              "citrea:cbtc",
               "ethereum:cbbtc",
               "ethereum:usdt",
+              "hyperevm:ubtc",
+              "litecoin:ltc",
               "monad:mon",
               "monad:usdc",
               "solana:cbbtc",
               "solana:sol",
               "solana:usdc",
-              "starknet:wbtc"
+              "starknet:wbtc",
+              "tron:usdt"
             ]
           },
           {
@@ -337,6 +362,7 @@
               "arbitrum_sepolia:seed",
               "arbitrum_sepolia:usdc",
               "base_sepolia:cbltc",
+              "base_sepolia:cbxrp",
               "base_sepolia:ibtc",
               "base_sepolia:usdc",
               "base_sepolia:usdt",
@@ -358,7 +384,8 @@
               "solana_testnet:usdc",
               "starknet_sepolia:wbtc",
               "tron_shasta:usdt",
-              "tron_shasta:wbtc"
+              "tron_shasta:wbtc",
+              "xrpl_testnet:xrp"
             ]
           }
         ]
@@ -374,11 +401,15 @@
               "Binance Bitcoin:BTCB",
               "Bitcoin:BTC",
               "Botanix Bitcoin:BTC",
+              "Citrea Bitcoin:cBTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
+              "Litecoin:LTC",
               "Monad:MON",
               "Solana:SOL",
               "Tether USD:USDT",
-              "USD Coin:USDC"
+              "USD Coin:USDC",
+              "Unit Bitcoin:uBTC",
+              "iBTC:iBTC"
             ]
           },
           {
@@ -392,6 +423,7 @@
               "Citrea Bitcoin:CBTC",
               "Coinbase Wrapped Bitcoin:cbBTC",
               "Coinbase Wrapped Litecoin:cbLTC",
+              "Coinbase Wrapped XRP:cbXRP",
               "Litecoin",
               "Seed:SEED",
               "Signet BTC:sBTC",
@@ -400,6 +432,7 @@
               "Tether USD:USDT",
               "USD Coin:USDC",
               "Wrapped Citrea Bitcoin:WCBTC",
+              "XRP",
               "iBTC:iBTC"
             ]
           }
@@ -416,6 +449,28 @@
           }
         },
         "nullable": true
+      },
+      "HTLCSchema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/HTLCSchemaName"
+          }
+        }
+      },
+      "TokenSchema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TokenSchemaName"
+          }
+        }
       },
       "AssetVerbose": {
         "type": "object",
@@ -434,10 +489,10 @@
             "type": "string"
           },
           "htlc": {
-            "$ref": "#/components/schemas/HTLCSchemaName"
+            "$ref": "#/components/schemas/HTLCSchema"
           },
           "token": {
-            "$ref": "#/components/schemas/TokenSchemaName"
+            "$ref": "#/components/schemas/TokenSchema"
           },
           "decimals": {
             "type": "integer",
@@ -673,6 +728,9 @@
         "properties": {
           "asset": {
             "$ref": "#/components/schemas/Asset"
+          },
+          "address": {
+            "type": "string"
           },
           "balance": {
             "type": "string",
