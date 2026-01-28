@@ -181,7 +181,7 @@
           "chain": {
             "$ref": "#/components/schemas/Chain"
           },
-          "display":{
+          "name":{
             "type": "string",
             "example": "Arbitrum"
           },
