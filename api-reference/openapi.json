@@ -1698,6 +1698,15 @@
             },
             "description": "**(Optional)** Add slippage up to 5% for each quote/swap, defined in bips (100 bips = 1%.",
             "example": 50
+          },
+          {
+            "in": "query",
+            "name": "indicative",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Return an indicative quote.\n**Default**: false",
+            "example": false
           }
         ],
         "responses": {
