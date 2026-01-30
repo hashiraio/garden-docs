@@ -452,6 +452,7 @@
       },
       "HTLCSchema": {
         "type": "object",
+        "description": "Can be **null** for UTXO-based chains.",
         "properties": {
           "address": {
             "type": "string"
@@ -463,6 +464,7 @@
       },
       "TokenSchema": {
         "type": "object",
+        "description": "Can be **null** for native tokens with no address.",
         "properties": {
           "address": {
             "type": "string"
@@ -606,7 +608,7 @@
           },
           "asset_price": {
             "description": "Price of the asset during swap.",
-            "type": "integer"
+            "type": "number"
           },
           "amount": {
             "type": "string"
