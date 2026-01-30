@@ -620,7 +620,7 @@
             "type": "string"
           },
           "instant_refund_tx": {
-            "description": "**(Optional)** Transaction bytes of instant refund for bitcoin.",
+            "description": "**(Optional)** Instant refund transaction bytes. Only available for bitcoin source swaps.",
             "type": "string"
           },
           "initiate_tx_hash": {
