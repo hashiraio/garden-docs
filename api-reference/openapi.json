@@ -452,7 +452,7 @@
       },
       "HTLCSchema": {
         "type": "object",
-        "description": "Can be **null** for UTXO-based chains.",
+        "description": "Always **null** for UTXO-based chains. **Example:** Bitcoin.",
         "properties": {
           "address": {
             "type": "string"
@@ -464,7 +464,7 @@
       },
       "TokenSchema": {
         "type": "object",
-        "description": "Can be **null** for native tokens with no address.",
+        "description": "Always **null** for native assets with no address. **Example:** ETH on Ethereum.",
         "properties": {
           "address": {
             "type": "string"
@@ -622,7 +622,7 @@
             "type": "string"
           },
           "instant_refund_tx": {
-            "description": "**(Optional)** Instant refund transaction bytes. Only available for bitcoin source swaps.",
+            "description": "**(Optional)** Instant refund transaction bytes. Only available for source swaps on UTXO-based chains. **Example:** Bitcoin.",
             "type": "string"
           },
           "initiate_tx_hash": {
