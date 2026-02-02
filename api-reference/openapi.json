@@ -452,6 +452,7 @@
       },
       "HTLCSchema": {
         "type": "object",
+        "description": "Always **null** for UTXO-based chains. **Example:** Bitcoin.",
         "properties": {
           "address": {
             "type": "string"
@@ -463,6 +464,7 @@
       },
       "TokenSchema": {
         "type": "object",
+        "description": "Always **null** for native assets with no address. **Example:** ETH on Ethereum.",
         "properties": {
           "address": {
             "type": "string"
@@ -601,12 +603,12 @@
             "type": "integer"
           },
           "filled_amount": {
-            "description": "Amount that has been filled.",
+            "description": "Amount that has been filled.\n**Default:** \"0\"",
             "type": "string"
           },
           "asset_price": {
             "description": "Price of the asset during swap.",
-            "type": "integer"
+            "type": "number"
           },
           "amount": {
             "type": "string"
@@ -616,46 +618,43 @@
             "type": "string"
           },
           "secret": {
-            "description": "The secret used to lock the funds on-chain.",
+            "description": "The secret used to lock the funds on-chain.\n**Default:** \"\" *(empty string)*",
             "type": "string"
           },
           "instant_refund_tx": {
-            "description": "On-chain transaction hash of instant refund.",
+            "description": "**(Optional)** Instant refund transaction bytes. Only available for source swaps on UTXO-based chains. **Example:** Bitcoin.",
             "type": "string"
           },
           "initiate_tx_hash": {
-            "description": "On-chain transaction hash of initiate.",
+            "description": "On-chain transaction hash of initiate.\n**Default:** \"\" *(empty string)*",
             "type": "string"
           },
           "redeem_tx_hash": {
-            "description": "On-chain transaction hash of redeem.",
+            "description": "On-chain transaction hash of redeem.\n**Default:** \"\" *(empty string)*",
             "type": "string"
           },
           "refund_tx_hash": {
-            "description": "On-chain transaction hash of refund.",
+            "description": "On-chain transaction hash of refund.\n**Default:** \"\" *(empty string)*",
             "type": "string"
           },
           "initiate_block_number": {
-            "description": "Block number of the initiate transaction.",
-            "type": "string",
-            "nullable": true
+            "description": "Block number of the initiate transaction.\n**Default:** \"0\"",
+            "type": "string"
           },
           "redeem_block_number": {
-            "description": "Block number of the redeem transaction.",
-            "type": "string",
-            "nullable": true
+            "description": "Block number of the redeem transaction.\n**Default:** \"0\"",
+            "type": "string"
           },
           "refund_block_number": {
-            "description": "Block number of the refund transaction.",
-            "type": "string",
-            "nullable": true
+            "description": "Block number of the refund transaction.\n**Default:** \"0\"",
+            "type": "string"
           },
           "required_confirmations": {
             "description": "Number of confirmations required.",
             "type": "integer"
           },
           "current_confirmations": {
-            "description": "Number of confirmations received so far.",
+            "description": "Number of confirmations received so far.\n**Default:** \"0\"",
             "type": "integer"
           },
           "initiate_timestamp": {
@@ -730,7 +729,8 @@
             "$ref": "#/components/schemas/Asset"
           },
           "address": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "balance": {
             "type": "string",
