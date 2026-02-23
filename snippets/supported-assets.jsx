@@ -6,6 +6,8 @@ export const TESTNET_ASSETS_URL =
 export const CHAIN_NAMES = {
   bnbchain: "BNB Chain",
   bnbchain_testnet: "BNB Chain Testnet",
+  megaeth: "MegaETH",
+  hyperevm: "HyperEVM",
 };
 
 export const getChainName = (chain) => {
@@ -89,7 +91,7 @@ export const AssetRow = ({ chain, assets }) => {
               href={getExplorerUrl(
                 chain.chain,
                 asset.htlc?.address,
-                chain.explorer_url
+                chain.explorer_url,
               )}
               className="border-none flex items-center gap-2"
             >
