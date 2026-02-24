@@ -8,6 +8,8 @@ import {
   AssetRow,
   MAINNET_ASSETS_URL,
   TESTNET_ASSETS_URL,
+  MAINNET_CHAINS_STATIC,
+  TESTNET_CHAINS_STATIC,
   getAssets,
   trimAssetName,
   getExplorerUrl,
@@ -15,6 +17,7 @@ import {
   CHAIN_NAMES,
   getChainName,
   shouldUseSquareLogo,
+  SupportedChainsStaticSEO,
 } from "/snippets/supported-assets.jsx";
 
 Garden uses the following contracts to perform swaps on respective chains:
@@ -27,6 +30,11 @@ Garden uses the following contracts to perform swaps on respective chains:
     <SupportedAssets key={TESTNET_ASSETS_URL} url={TESTNET_ASSETS_URL} />
   </Tab>
 </Tabs>
+
+<SupportedChainsStaticSEO
+  mainnetChains={MAINNET_CHAINS_STATIC}
+  testnetChains={TESTNET_CHAINS_STATIC}
+/>
 
 <Tip>
   If you would like to see a chain or asset that isn't listed here, reach out to
