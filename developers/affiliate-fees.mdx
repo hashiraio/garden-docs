@@ -26,6 +26,7 @@ For example, a 30 bps fee could be split by sending 10 bps in USDC to an Ethereu
         ```shell
         curl -X 'GET' \
             'https://testnet.api.garden.finance/v2/quote?from=bitcoin_testnet:btc&to=base_sepolia:wbtc&from_amount=100000&affiliate_fee=30' \
+            -H 'garden-app-id: YOUR_APP_ID' \
             -H 'accept: application/json'
         ```
 
