@@ -821,7 +821,7 @@
           },
           "affiliate_fees": {
             "type": "array",
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
+            "description": "**(Optional)** Add an [affiliate fee](/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
             "items": {
               "$ref": "#/components/schemas/AffiliateFee"
             }
@@ -1679,7 +1679,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "**(Optional)** Add an [affiliate fee](https://garden-e60e7dd0-chore-updatedescriptions.mintlify.app/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
+            "description": "**(Optional)** Add an [affiliate fee](/developers/affiliate-fees) to each swap, defined in bips (100 bips = 1%).",
             "example": 10
           },
           {
