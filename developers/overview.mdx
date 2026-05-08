@@ -1,42 +1,96 @@
 ---
-title: "Developer Overview"
-description: "Integrate Garden's Bitcoin bridging capabilities into your wallet, aggregator, or dApp"
+title: Developer Overview
+description: Add native Bitcoin swaps to your wallet, aggregator, or dApp
 ---
 
-Garden was built with the vision of enabling Bitcoin in DeFi as seamlessly as possible. To achieve this, we've designed Garden to be easy to integrate into any wallet, aggregator, or dApp, empowering developers to unlock Bitcoin's potential in their products.
+Garden lets you add Bitcoin swaps to any product. Pick your integration path below and
+follow the quickstart — most integrators are up and running in under 30 minutes.
 
-## What does Garden unlock?
+---
 
-Traditionally, cross-chain flows require users to manually bridge their Bitcoin before using those funds in dApps. Garden simplifies this with an SDK and API that abstracts the bridging process, letting users directly utilize Bitcoin within DeFi ecosystems. Here's what Garden can enable:
+## Choose your integration path
 
-<CardGroup cols={3}>
-  <Card title="Bitcoin liquidity access" icon="bitcoin">
-    Access to Bitcoin's existing liquidity, seamlessly integrated into your product or chain.
+<CardGroup cols={2}>
+  <Card title="API" icon="webhook" href="/developers/api/overview">
+    You control the full flow.
   </Card>
-  <Card title="Native Bitcoin experience" icon="user-check">
-    A native Bitcoin experience for users, free from bridging complexities.
-  </Card>
-  <Card title="Customizable tools" icon="screwdriver-wrench">
-    Customizable SDK and API tools designed to fit your unique use case.
+  <Card title="SDK" icon="code" href="/developers/sdk/overview">
+    Most of the integration is already handled for you.
   </Card>
 </CardGroup>
 
-## Choosing between SDK and API
+---
 
-Choosing between Garden's SDK and API depends on your project's requirements:
+## Before you start
 
-### SDK
+- **App ID** — sign up on the [Integrator Portal](https://portal.garden.finance) to get
+  your custom production keys.
+- **Testnet funds** — get testnet BTC from our [faucet](https://testnetbtc.com).
 
-Garden SDK is a customizable API wrapper tailored for React and Node-based dApps. It simplifies integration with a plug-and-play approach, requiring minimal setup. This is ideal for developers seeking a quick and efficient way to integrate Bitcoin swaps with minimal setup. Check out the quick start guides for [React](/developers/sdk/react/quickstart) and [Node](/developers/sdk/nodejs/quickstart) to get an understanding.
+---
 
-### API
+## Up and running in 30 minutes
 
-Garden APIs are designed for broader application environments, such as wallets, mobile apps, or implementations in Rust, Go, or other programming languages. While highly flexible, it requires more development effort, making it perfect for advanced workflows. Begin with exploring the [API overview](/developers/api/overview).
+<Tabs>
+  <Tab title="API">
 
-<div className="overflow-x-auto">
-  | **Feature**            | **SDK**                     | **API**                              |
-  |-------------------------|-----------------------------|--------------------------------------|
-  | **Integration speed**   | Quick and simple            | Requires more effort and expertise   |
-  | **Best for**            | React, Node-based dApps     | Wallets, mobile apps, diverse setups |
-  | **Recommended use cases** | Standard swaps in existing products | Advanced workflows and unique environments |
-</div>
+    <Steps>
+      <Step title="Get a quote">
+        `GET /quote` returns a valid quote for your chosen route.
+      </Step>
+      <Step title="Create an order">
+        `POST /orders` returns an order with an ID. Status is `Created`.
+      </Step>
+      <Step title="Submit funds">
+        Once matched, interact with the contract on the source chain to initiate
+        the swap.
+      </Step>
+      <Step title="See the full swap flow">
+        Poll `GET /orders/{id}` until the order reaches `Completed` state.
+      </Step>
+    </Steps>
+
+    Follow the [API Quickstart](/api-reference/quickstart) for the full walkthrough.
+
+  </Tab>
+  <Tab title="SDK">
+
+    <Steps>
+      <Step title="Get a quote">
+        Call `getQuote()` and get back a valid quote with send amount, receive
+        amount, and fee.
+      </Step>
+      <Step title="Execute the swap">
+        Call `swap()` — the SDK handles order creation, fund submission, and
+        settlement automatically.
+      </Step>
+      <Step title="See the full swap flow">
+        Order moves through its states and reaches `Completed`. Funds arrive on the
+        destination chain.
+      </Step>
+    </Steps>
+
+    Follow the [React](/developers/sdk/react/quickstart) or
+    [Node.js](/developers/sdk/nodejs/quickstart) quickstart for the full walkthrough.
+
+  </Tab>
+</Tabs>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Order Lifecycle" icon="arrows-spin" href="/developers/core/order-lifecycle">
+    Every order status and what it means. Read this before building your UI states.
+  </Card>
+  <Card title="Contracts" icon="file-contract" href="/contracts/overview">
+    HTLC contract details for each supported chain.
+  </Card>
+  <Card title="Supported Chains & Assets" icon="link" href="/developers/supported-chains">
+    All supported routes and chain identifiers.
+  </Card>
+  <Card title="Affiliate Fees" icon="circle-dollar-to-slot" href="/developers/affiliate-fees">
+    Earn revenue from swaps through your integration.
+  </Card>
+</CardGroup>
