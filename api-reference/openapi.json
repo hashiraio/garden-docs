@@ -692,6 +692,10 @@
             "description": "Nonce for the order.",
             "type": "string"
           },
+          "deadline": {
+            "description": "Unix timestamp after which the order expires.",
+            "type": "number"
+          },
           "affiliate_fees": {
             "type": "array",
             "description": "Integrator fees associated with the order.",
