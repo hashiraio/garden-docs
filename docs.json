@@ -18,6 +18,25 @@
     ]
   },
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/gardenfi"
+        },
+        {
+          "anchor": "Blog",
+          "icon": "newspaper",
+          "href": "https://garden.finance/blog"
+        },
+        {
+          "anchor": "Community",
+          "icon": "discord",
+          "href": "https://discord.gg/B7RczEFuJ5"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Home",
@@ -84,7 +103,7 @@
               }
             ]
           },
-              {
+          {
             "group": "Compliance",
             "pages": [
               "home/compliance/address_screening"
@@ -186,15 +205,18 @@
             ]
           },
           {
-            "group": "Global",
+            "group": "Orders",
             "pages": [
-              "api-reference/endpoint/get-health",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
+              "api-reference/endpoint/get-quote",
+              "api-reference/endpoint/orders/get-order-by-id",
+              "api-reference/endpoint/orders/get-orders",
+              "api-reference/endpoint/orders/create-order",
+              "api-reference/endpoint/orders/get-instant-refund-hash",
+              "api-reference/endpoint/orders/patch"
             ]
           },
           {
-            "group": "Blockchain",
+            "group": "Assets & Routes",
             "pages": [
               "api-reference/endpoint/blockchain/get-chains",
               "api-reference/endpoint/blockchain/get-assets",
@@ -205,14 +227,11 @@
             ]
           },
           {
-            "group": "Orders",
+            "group": "Monitoring",
             "pages": [
-              "api-reference/endpoint/get-quote",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-orders",
-              "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-instant-refund-hash",
-              "api-reference/endpoint/orders/patch"
+              "api-reference/endpoint/get-health",
+              "api-reference/endpoint/get-volume",
+              "api-reference/endpoint/get-fees"
             ]
           },
           {
@@ -229,26 +248,7 @@
           "changelog"
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/gardenfi",
-          "icon": "github"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://garden.finance/blog",
-          "icon": "newspaper"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://discord.gg/B7RczEFuJ5",
-          "icon": "discord"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
