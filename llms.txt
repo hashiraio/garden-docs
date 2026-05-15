@@ -1,0 +1,70 @@
+# Garden
+
+> Garden is Bitcoin swap infrastructure for developers. Use Garden's API or SDK to add native Bitcoin swaps to any wallet, app, or backend — users get cross-chain swaps without giving up custody, you get production-ready infrastructure. Backed by $2B+ in volume and 32 active integrators including Coinbase, MetaMask, Phantom, Robinhood Wallet, Kraken, and Ledger. Settlement is trustless via HTLCs — no wrapped assets, no liquidity pools. Supported chains: Bitcoin, Ethereum, Arbitrum, Base, Solana, Starknet, Sui, Tron, Litecoin, and more. [Check supported chains for latest information.](https://docs.garden.finance/developers/supported-chains.md)
+
+Garden uses an intent-based orderbook model — users submit swap intents, solvers compete to fill them, and settlement is peer-to-peer and atomic via HTLCs.
+
+**API:** You control the full swap flow — quote, create order, monitor state transitions, and handle HTLC actions directly. Best for wallets, mobile apps, and non-JS environments (Rust, Go, etc).
+
+**SDK:** Most of the integration is handled for you. Connects directly into React or Node.js environments with minimal setup. Best for dApps and web-based products.
+
+
+> Full documentation (important pages, single file): https://docs.garden.finance/llms-full.txt
+> OpenAPI spec: https://docs.garden.finance/api-reference/openapi.json
+> GitHub: https://github.com/gardenfi
+
+---
+
+## Start here
+
+- [Developer Overview](https://docs.garden.finance/developers/overview.md): Start here. Covers what Garden enables, when to use API vs SDK, and how to choose your integration path.
+- [API Quickstart](https://docs.garden.finance/api-reference/quickstart.md): End-to-end walkthrough of the core API flow — get a quote, create an order, and track it to completion.
+- [One-Click Swaps](https://docs.garden.finance/developers/api/1click.md): Integration path where a preimage manager handles destination chain redemption automatically — the user does not need to stay online after initiating. Best for mobile apps, slow source chains like Bitcoin, or stateless/unstable network environments.
+- [React Quickstart](https://docs.garden.finance/developers/sdk/react/quickstart.md): Build a working swap UI in React using the Garden SDK.
+- [Node.js Quickstart](https://docs.garden.finance/developers/sdk/nodejs/quickstart.md): End-to-end swap flow in Node.js.
+- [Order Lifecycle](https://docs.garden.finance/developers/core/order-lifecycle.md): The canonical state machine for a swap — every status an order moves through, from creation to completion or refund. Read this before building any UI state logic.
+- [Supported Chains and Assets](https://docs.garden.finance/developers/supported-chains.md): Full list of supported chains, assets, and asset IDs. Use the `/assets` and `/chains` endpoints to query this programmatically.
+- [Affiliate Fees](https://docs.garden.finance/developers/affiliate-fees.md): Earn revenue from Garden swaps by adding an affiliate fee to quotes from your integration.
+- [Contracts](https://docs.garden.finance/contracts/overview.md): Garden's on-chain contract references.
+
+---
+
+## API reference
+
+Garden's REST API. The full machine-readable spec is at `/api-reference/openapi.json`. Most endpoints require a `garden-app-id` header (API key). The only exception is `/health`, which is unauthenticated. Get your key from the [Integrator Portal](https://portal.garden.finance). Pass `garden-app-id: <your-key>` in every request.
+
+- [Swap Quote](https://docs.garden.finance/api-reference/endpoint/get-quote.md): Get a quote for a given asset pair. Returns solver options sorted by output amount and estimated time. Required first step before creating an order.
+- [Create Order](https://docs.garden.finance/api-reference/endpoint/orders/create-order.md): Submit a swap order using quote output. Returns deposit address and amount for the source chain.
+- [Order](https://docs.garden.finance/api-reference/endpoint/orders/get-order-by-id.md): Get full status of a specific order by ID. Poll this to track state transitions. Completion is signalled by `destination_swap.redeem_tx_hash` being populated.
+- [Orders](https://docs.garden.finance/api-reference/endpoint/orders/get-orders.md): List and filter orders by address, status, or pagination. Use for building dashboards or monitoring integrations.
+- [Gasless / Execute HTLC Action](https://docs.garden.finance/api-reference/endpoint/orders/patch.md): Execute HTLC actions (initiate, redeem, refund, instant refund) on behalf of a user. Payload format varies by chain.
+- [Instant Refund Hash](https://docs.garden.finance/api-reference/endpoint/orders/get-instant-refund-hash.md): Get the hash required to execute an instant refund for a given order.
+- [Supported Assets](https://docs.garden.finance/api-reference/endpoint/blockchain/get-assets.md): Query all supported assets with chain, contract address, and schema metadata.
+- [Supported Chains](https://docs.garden.finance/api-reference/endpoint/blockchain/get-chains.md): Query all supported chains with environment and configuration details.
+- [Available Liquidity](https://docs.garden.finance/api-reference/endpoint/blockchain/get-liquidity.md): Query current liquidity depth for a given route. Use before quoting large orders.
+- [Route Policy](https://docs.garden.finance/api-reference/endpoint/blockchain/get-policy.md): Query route-specific constraints — min/max amounts, fees, and restrictions.
+- [Total Fees](https://docs.garden.finance/api-reference/endpoint/get-fees.md): Query total protocol fees. Useful for cost modelling and affiliate fee calculations.
+- [Server Health](https://docs.garden.finance/api-reference/endpoint/get-health.md): Liveness check for the Garden API. Use in production monitoring.
+
+---
+
+## SDK
+
+TypeScript packages for React and Node.js.
+
+- [SDK Overview](https://docs.garden.finance/developers/sdk/overview.md): Overview of the Garden SDK packages — `@gardenfi/core`, `@gardenfi/orderbook`, `@gardenfi/react-hooks`.
+- [React Setup](https://docs.garden.finance/developers/sdk/react/setup.md): Install and configure the React SDK. Includes required WASM polyfills and bundler configuration (Vite/Next.js).
+- [React Quickstart](https://docs.garden.finance/developers/sdk/react/quickstart.md): Build a working swap UI in React using the Garden SDK.
+- [Node.js Setup](https://docs.garden.finance/developers/sdk/nodejs/setup.md): Install and configure the Node.js SDK for backend or server-side integrations.
+- [Node.js Quickstart](https://docs.garden.finance/developers/sdk/nodejs/quickstart.md): End-to-end swap flow in Node.js.
+
+---
+
+## Optional
+
+- [About Garden](https://docs.garden.finance/home/about.md)
+- [How Garden Works](https://docs.garden.finance/home/fundamentals/how-it-works/intent-flow.md): The complete protocol flow — from intent submission through solver matching to settlement.
+- [Benefits](https://docs.garden.finance/home/fundamentals/benefits/overview.md): Why trustless, intent-based Bitcoin infrastructure matters — key advantages of Garden's design.
+- [Atomic Swaps](https://docs.garden.finance/home/fundamentals/core-concepts/atomic-swaps.md): How HTLCs enable trustless P2P settlement without custodians or wrapped assets.
+- [Changelog](https://docs.garden.finance/changelog.md): Product updates and API changes.
+- [Community](https://discord.gg/B7RczEFuJ5): Join the Garden developer Discord for support and announcements.
