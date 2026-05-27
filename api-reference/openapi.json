@@ -604,14 +604,14 @@
           },
           "filled_amount": {
             "description": "Amount that has been filled.\n**Default:** \"0\"",
-            "type": "string"
+            "type": "integer"
           },
           "asset_price": {
             "description": "Price of the asset during swap.",
-            "type": "number"
+            "type": "integer"
           },
           "amount": {
-            "type": "string"
+            "type": "integer"
           },
           "secret_hash": {
             "description": "SHA256 of the secret.",
@@ -639,15 +639,15 @@
           },
           "initiate_block_number": {
             "description": "Block number of the initiate transaction.\n**Default:** \"0\"",
-            "type": "string"
+            "type": "integer"
           },
           "redeem_block_number": {
             "description": "Block number of the redeem transaction.\n**Default:** \"0\"",
-            "type": "string"
+            "type": "integer"
           },
           "refund_block_number": {
             "description": "Block number of the refund transaction.\n**Default:** \"0\"",
-            "type": "string"
+            "type": "integer"
           },
           "required_confirmations": {
             "description": "Number of confirmations required.",
@@ -694,7 +694,7 @@
           },
           "deadline": {
             "description": "Unix timestamp after which the order expires.",
-            "type": "number"
+            "type": "integer"
           },
           "affiliate_fees": {
             "type": "array",
