@@ -638,15 +638,15 @@
             "type": "string"
           },
           "initiate_block_number": {
-            "description": "Block number of the initiate transaction.\n**Default:** \"0\"",
+            "description": "Block number of the initiate transaction.\n**Default:** 0",
             "type": "integer"
           },
           "redeem_block_number": {
-            "description": "Block number of the redeem transaction.\n**Default:** \"0\"",
+            "description": "Block number of the redeem transaction.\n**Default:** 0",
             "type": "integer"
           },
           "refund_block_number": {
-            "description": "Block number of the refund transaction.\n**Default:** \"0\"",
+            "description": "Block number of the refund transaction.\n**Default:** 0",
             "type": "integer"
           },
           "required_confirmations": {
@@ -654,7 +654,7 @@
             "type": "integer"
           },
           "current_confirmations": {
-            "description": "Number of confirmations received so far.\n**Default:** \"0\"",
+            "description": "Number of confirmations received so far.\n**Default:** 0",
             "type": "integer"
           },
           "initiate_timestamp": {
