@@ -507,7 +507,7 @@
             "type": "string"
           },
           "price": {
-            "type": "number",
+            "type": "integer",
             "example": 1.0
           }
         }
@@ -603,7 +603,7 @@
             "type": "integer"
           },
           "filled_amount": {
-            "description": "Amount that has been filled.\n**Default:** \"0\"",
+            "description": "Amount that has been filled.\n**Default:** 0",
             "type": "integer"
           },
           "asset_price": {
@@ -809,7 +809,7 @@
             "$ref": "#/components/schemas/DestinationAccount"
           },
           "slippage": {
-            "type": "number",
+            "type": "integer",
             "description": "**(Optional)** In BIPS (base index points), 100 bips = 1%. When not specified, the slippage configured in app settings is used, or zero if no default is configured.",
             "example": 50
           },
@@ -936,7 +936,7 @@
             "description": "The address of the recipient."
           },
           "amount": {
-            "type": "number",
+            "type": "integer",
             "description": "The amount to be sent."
           }
         }
@@ -951,13 +951,13 @@
             "type": "string"
           },
           "chain_id": {
-            "type": "number"
+            "type": "integer"
           },
           "data": {
             "type": "string"
           },
           "gas_limit": {
-            "type": "number"
+            "type": "integer"
           }
         }
       },
@@ -989,10 +989,10 @@
                 "type": "string"
               },
               "timelock": {
-                "type": "number"
+                "type": "integer"
               },
               "amount": {
-                "type": "number"
+                "type": "integer"
               },
               "secretHash": {
                 "type": "string"
