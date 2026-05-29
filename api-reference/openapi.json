@@ -604,14 +604,14 @@
           },
           "filled_amount": {
             "description": "Amount that has been filled.\n**Default:** \"0\"",
-            "type": "integer"
+            "type": "string"
           },
           "asset_price": {
             "description": "Price of the asset during swap.",
             "type": "integer"
           },
           "amount": {
-            "type": "integer"
+            "type": "string"
           },
           "secret_hash": {
             "description": "SHA256 of the secret.",
@@ -639,15 +639,15 @@
           },
           "initiate_block_number": {
             "description": "Block number of the initiate transaction.\n**Default:** \"0\"",
-            "type": "integer"
+            "type": "string"
           },
           "redeem_block_number": {
             "description": "Block number of the redeem transaction.\n**Default:** \"0\"",
-            "type": "integer"
+            "type": "string"
           },
           "refund_block_number": {
             "description": "Block number of the refund transaction.\n**Default:** \"0\"",
-            "type": "integer"
+            "type": "string"
           },
           "required_confirmations": {
             "description": "Number of confirmations required.",
