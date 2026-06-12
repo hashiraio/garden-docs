@@ -4,7 +4,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
 ---
 
 <Note>
-  This guide uses a testing app ID. Planning to build a production app with our API? Reach out to us in the [Townhall](https://discord.gg/B7RczEFuJ5).
+  This guide uses a testing app ID. Create your own API key at [portal.garden.finance](https://portal.garden.finance).
 </Note>
 
 <Tabs>
@@ -1404,11 +1404,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 </Note>
             </Step>
             <Step title="Bridge and Initiate">
-                This step has two parts that must be completed in order.
+                #### 1. Bridge to HyperEVM
 
-                **1. Execute the core_to_evm_transfer**
-
-                Submit this transaction on HyperEVM (chain ID `998` on testnet) to bridge your USDC from HyperCore spot to HyperEVM:
+                Submit this on HyperEVM (chain ID `998` on testnet) to move your USDC from HyperCore spot to HyperEVM:
 
                 ```typescript
                 await window.ethereum.request({
@@ -1417,11 +1415,11 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 });
                 ```
 
-                Wait for the transaction to confirm — funds are available on HyperEVM in the next block.
+                Funds are available on HyperEVM in the next block.
 
-                **2. Initiate the HTLC**
+                #### 2. Initiate the swap
 
-                Once funds are on HyperEVM, lock them in the swap contract:
+                Lock the funds in the swap contract:
 
                 <Tabs>
                     <Tab title="Submit transaction">
@@ -1461,12 +1459,11 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'
                 ```
+                The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+
                 <Note>
-                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
-                </Note>
-                <Info>
                     **Refund path:** If the swap expires before the solver fulfills it, calling `refund()` on the HyperEVM HTLC will route your USDC back directly to your HyperCore spot account via the CoreWriter precompile — the same mechanism as settlement. No manual bridging back to HyperCore is required.
-                </Info>
+                </Note>
             </Step>
         </Steps>
     </Tab>
