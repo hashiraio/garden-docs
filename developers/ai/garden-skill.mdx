@@ -1,0 +1,321 @@
+---
+title: "Garden Swap Skill"
+description: "Perform cross-chain swaps with a plain-language request in Claude Code"
+---
+
+The **Garden Swap Skill** is a Claude Code skill that handles the full swap lifecycle — from quoting to confirmation — by responding to a natural-language swap request. It connects to the [Garden MCP server](/developers/ai/mcp), derives wallet addresses from your private key, executes the on-chain transactions, and polls for completion.
+
+One sentence is enough to start a swap:
+
+> *"Swap 0.001 BTC to wBTC"*
+> *"Bridge my wBTC to Bitcoin"*
+> *"Swap 0.5 SOL to BTC on Garden"*
+
+---
+
+## Compatibility
+
+The Garden Swap Skill's **auto-loading and Keychain credential management** are Claude Code-specific. However, the underlying signing scripts and MCP server are platform-agnostic — any terminal-based AI tool that supports both MCP and shell command execution can replicate the full automated swap flow with a small amount of manual setup.
+
+| Tool | Automated swap flow | How |
+|---|---|---|
+| **Claude Code** | Native | Skill auto-loads; Keychain manages the private key |
+| **Gemini CLI** | Yes, with manual setup | MCP + Bun scripts + `GARDEN_PRIVATE_KEY` env var |
+| **Codex CLI** | Yes, with manual setup | MCP + Bun scripts + `GARDEN_PRIVATE_KEY` env var |
+| Claude Desktop | MCP only | No shell execution; sign via external wallet |
+| Cursor / Windsurf | MCP only | No shell execution in chat; sign via external wallet |
+| ChatGPT Desktop | MCP only | No shell execution; sign via external wallet |
+
+---
+
+## Using on Gemini CLI
+
+Gemini CLI supports MCP servers and can execute shell commands, so the full quote → sign → initiate → poll flow works. The difference from Claude Code is that you provide the private key as an environment variable instead of Keychain, and you load the skill instructions manually at the start of the session.
+
+**Prerequisites**
+
+- [Gemini CLI](https://github.com/google-gemini/gemini-cli) installed and authenticated
+- [Bun](https://bun.sh) runtime — `curl -fsSL https://bun.sh/install | bash`
+- Garden MCP server connected (see [Connect your AI client → Gemini CLI](/developers/ai/mcp#connect-your-ai-client))
+
+<Steps>
+  <Step title="Clone and install the signing scripts">
+    ```bash
+    git clone https://github.com/gardenfi/garden-agent.git
+    cd garden-agent/garden-skill && bun install
+    ```
+  </Step>
+  <Step title="Store your private key in macOS Keychain">
+    Run the setup script once — it captures your key with hidden input and saves it to macOS Keychain, identical to Claude Code's setup:
+
+    ```bash
+    bash ~/garden-agent/garden-skill/scripts/setup-credentials.sh
+    ```
+
+    The key is stored under the service name `garden-pk`. Gemini will retrieve it at swap time using the same `security` command the skill uses internally:
+
+    ```bash
+    security find-generic-password -a garden -s garden-pk -w
+    ```
+
+    No environment variable needed.
+  </Step>
+  <Step title="Start a session with the skill instructions">
+    Pass the `SKILL.md` as a system prompt so Gemini follows the same swap flow:
+
+    ```bash
+    gemini --system-prompt "$(cat ~/garden-agent/garden-skill/SKILL.md)"
+    ```
+
+    If your version of Gemini CLI uses a different flag (e.g., `-s`), consult `gemini --help`.
+  </Step>
+  <Step title="Describe your swap">
+    ```
+    swap 0.001 wBTC to BTC
+    swap 0.5 SOL to BTC on Garden
+    ```
+
+    Gemini will call the Garden MCP tools for quotes and orders, then execute the Bun signing scripts from `$GARDEN_SCRIPTS_DIR` to initiate on-chain.
+  </Step>
+</Steps>
+
+---
+
+## Using on Codex CLI
+
+Codex CLI is purpose-built for running code and shell commands, so it pairs well with the Garden signing scripts. Setup is nearly identical to Gemini CLI.
+
+**Prerequisites**
+
+- [Codex CLI](https://github.com/openai/codex) installed and authenticated
+- [Bun](https://bun.sh) runtime — `curl -fsSL https://bun.sh/install | bash`
+- Garden MCP server connected (see [Connect your AI client → OpenAI Codex CLI](/developers/ai/mcp#connect-your-ai-client))
+
+<Steps>
+  <Step title="Clone and install the signing scripts">
+    ```bash
+    git clone https://github.com/gardenfi/garden-agent.git
+    cd garden-agent/garden-skill && bun install
+    ```
+  </Step>
+  <Step title="Store your private key in macOS Keychain">
+    Run the same setup script used by Claude Code:
+
+    ```bash
+    bash ~/garden-agent/garden-skill/scripts/setup-credentials.sh
+    ```
+
+    Codex retrieves the key at swap time via:
+
+    ```bash
+    security find-generic-password -a garden -s garden-pk -w
+    ```
+  </Step>
+  <Step title="Start a session with the skill instructions">
+    ```bash
+    codex --instructions "$(cat ~/garden-agent/garden-skill/SKILL.md)"
+    ```
+
+    Check `codex --help` if the flag name differs in your version.
+  </Step>
+  <Step title="Describe your swap">
+    ```
+    swap 0.001 BTC to wBTC
+    bridge my wBTC to Bitcoin on mainnet
+    ```
+
+    Codex will call the MCP tools and execute the signing scripts to complete the swap end-to-end.
+  </Step>
+</Steps>
+
+---
+
+## Why the experience differs from Claude Code
+
+| Capability | Claude Code | Gemini CLI / Codex CLI |
+|---|---|---|
+| Skill auto-loads | Yes — drop files in `~/.claude/skills/garden/` | No — pass `SKILL.md` manually each session |
+| Private key storage | macOS Keychain (never in environment) | macOS Keychain — same `setup-credentials.sh` script |
+| MCP auto-registration | Yes — skill registers servers on first run | No — configure MCP upfront |
+| Signing scripts | Same Bun scripts, identical behaviour | Same Bun scripts, identical behaviour |
+
+---
+
+## Installation
+
+**Prerequisites**
+
+- [Claude Code](https://claude.ai/code) installed and authenticated
+- [Bun](https://bun.sh) runtime — `curl -fsSL https://bun.sh/install | bash`
+
+**Steps**
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/gardenfi/garden-agent.git
+    cd garden-agent/garden-skill
+    ```
+  </Step>
+  <Step title="Copy the skill to Claude Code's skills directory">
+    The directory name must be exactly `garden`:
+
+    ```bash
+    cp -r . ~/.claude/skills/garden
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    cd ~/.claude/skills/garden && bun install
+    ```
+  </Step>
+  <Step title="Restart Claude Code">
+    Quit and reopen Claude Code. The skill is now active.
+  </Step>
+</Steps>
+
+**Updating the skill**
+
+```bash
+cd garden-agent/garden-skill
+git pull
+cp -r . ~/.claude/skills/garden
+cd ~/.claude/skills/garden && bun install
+```
+
+---
+
+## Usage
+
+Describe your swap in plain language inside any Claude Code conversation — no slash command needed:
+
+```
+swap 0.001 wBTC to BTC
+bridge my wBTC to bitcoin
+swap 0.5 SOL to BTC on Garden
+convert 0.0005 BTC to wBTC on testnet
+```
+
+**First-time setup (runs once)**
+
+When you trigger a swap for the first time, the skill will:
+
+1. **Register the Garden MCP servers** if they aren't already connected, then ask you to restart Claude Code.
+2. **Run the credential setup script** to capture your private key — it is stored directly in macOS Keychain and never appears in the conversation.
+
+After the one-time setup, subsequent swaps require no extra steps.
+
+---
+
+---
+
+## Supported swap directions
+
+| From | To | Source chain |
+|---|---|---|
+| BTC | wBTC | Bitcoin |
+| wBTC | BTC | Ethereum (EVM) |
+| SOL / SPL tokens | BTC, wBTC, Starknet assets | Solana |
+| STRK / ETH / wBTC | BTC, wBTC, Solana assets | Starknet |
+| BTC, wBTC | SOL / SPL tokens | Bitcoin / EVM |
+| BTC, wBTC | STRK / ETH / wBTC | Bitcoin / EVM |
+
+All chains derive addresses from a single `GARDEN_PRIVATE_KEY`:
+
+| Chain | Derivation |
+|---|---|
+| EVM | secp256k1 → Ethereum address |
+| Bitcoin | secp256k1 → P2TR taproot address |
+| Solana | 32-byte key as ed25519 seed → base58 pubkey |
+| Starknet | Key as STARK private key → OpenZeppelin account address |
+
+---
+
+## How it works
+
+When you describe a swap, the skill follows this sequence:
+
+<Steps>
+  <Step title="Verify MCP connectivity">
+    Checks that `mcp__garden-mainnet__get_quote` is available. If not, registers the MCP servers and prompts you to restart Claude Code.
+  </Step>
+  <Step title="Collect credentials">
+    Reads saved config from `~/.claude/skills/garden/config.json` and loads your private key from macOS Keychain. Only asks for missing values.
+  </Step>
+  <Step title="Get a quote">
+    Calls `get_quote` with your source asset, destination asset, and amount. Displays the expected receive amount and solver.
+  </Step>
+  <Step title="Confirm">
+    Shows the quote summary and waits for your approval before proceeding.
+  </Step>
+  <Step title="Create the order">
+    Calls `create_order` with the quoted amounts. Receives an `order_id` and deposit instructions.
+  </Step>
+  <Step title="Execute on-chain">
+    Sends the source-chain transaction. The exact method depends on the source chain:
+    - **EVM source** — broadcasts approval + initiate transactions via the bundled signing scripts
+    - **Bitcoin source** — sends BTC to the HTLC deposit address via the bundled Bitcoin script
+    - **Solana source** — signs and broadcasts a versioned transaction
+    - **Starknet source** — auto-deploys the OZ account if needed, then broadcasts approval + initiate
+  </Step>
+  <Step title="Poll for completion">
+    Calls `get_order_status` periodically and reports progress until `destination_swap.redeem_tx_hash` is set.
+  </Step>
+</Steps>
+
+---
+
+## Asset identifiers
+
+The skill resolves common names automatically, but you can be explicit:
+
+| Asset | Mainnet | Testnet |
+|---|---|---|
+| BTC | `bitcoin:btc` | `bitcoin_testnet:btc` |
+| wBTC (Ethereum) | `ethereum:wbtc` | `ethereum_sepolia:wbtc` |
+| SOL | `solana:sol` | `solana_testnet:sol` |
+| USDC (Solana) | `solana:usdc` | `solana_testnet:usdc` |
+| STRK | `starknet:strk` | `starknet_sepolia:strk` |
+| ETH (Starknet) | `starknet:eth` | `starknet_sepolia:eth` |
+| wBTC (Starknet) | `starknet:wbtc` | `starknet_sepolia:wbtc` |
+
+---
+
+## Credential management
+
+Sensitive values are kept out of the conversation entirely:
+
+| Value | Storage |
+|---|---|
+| Private key | macOS Keychain (`security find-generic-password`) |
+| RPC URLs, addresses | `~/.claude/skills/garden/config.json` |
+
+The skill never prints your private key. It is fetched live from Keychain only at the moment it is needed for signing, and only by the bundled scripts.
+
+---
+
+## Completion timeouts
+
+The skill stops polling and reports the `order_id` for manual tracking if these timeouts are reached:
+
+| Source chain | Timeout |
+|---|---|
+| EVM (wBTC) | 5 minutes |
+| Bitcoin | 60 minutes |
+| Solana | 2 minutes |
+| Starknet | 5 minutes |
+
+Bitcoin confirmations on mainnet typically take 10–20 minutes. Testnet blocks are mined very slowly — a BTC-source testnet order can take up to an hour. This is normal.
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Garden MCP Server" icon="server" href="/developers/ai/mcp">
+    Connect the MCP server that powers this skill.
+  </Card>
+  <Card title="Integration Skill" icon="code" href="/developers/ai/integration-skill">
+    Add Bitcoin swap support to your own application.
+  </Card>
+</CardGroup>

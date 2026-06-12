@@ -165,6 +165,15 @@
             ]
           },
           {
+            "group": "AI & Agents",
+            "pages": [
+              "developers/ai/overview",
+              "developers/ai/mcp",
+              "developers/ai/garden-skill",
+              "developers/ai/integration-skill"
+            ]
+          },
+          {
             "group": "Testing",
             "pages": [
               "developers/localnet"

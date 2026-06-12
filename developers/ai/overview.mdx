@@ -1,0 +1,67 @@
+---
+title: "AI & Agents Overview"
+description: "Use Garden Finance with AI assistants and Claude Code through MCP and skills"
+---
+
+Garden ships three components that bring cross-chain swaps into AI workflows:
+
+<CardGroup cols={3}>
+  <Card title="Garden MCP" icon="server" href="/developers/ai/mcp">
+    A remote MCP server that gives any AI assistant direct access to Garden's swap API — no local setup required.
+  </Card>
+  <Card title="Garden Swap Skill" icon="wand-magic-sparkles" href="/developers/ai/garden-skill">
+    A Claude Code skill that lets you perform cross-chain swaps by describing them in plain language.
+  </Card>
+  <Card title="Integration Skill" icon="code" href="/developers/ai/integration-skill">
+    A Claude Code skill that investigates your codebase and builds a complete Garden integration, ready to ship.
+  </Card>
+</CardGroup>
+
+---
+
+## How they fit together
+
+```
++-------------------------------------------------------------+
+|                        Claude Code                          |
+|                                                             |
+|   Garden Swap Skill            Integration Skill            |
+|   (swap BTC -> wBTC)      (add Bitcoin to my app)           |
+|         |                          |                        |
+|         +------------+-------------+                        |
+|                      |                                      |
+|              Garden MCP Server                              |
+|   get_quote  create_order  get_order_status  ...            |
++----------------------+--------------------------------------+
+                       |
+              Garden Finance API
+        (mainnet.api.garden.finance)
+```
+
+| Component | Who uses it | What it does |
+|---|---|---|
+| **Garden MCP** | Any MCP-compatible AI client | Exposes Garden API as callable tools |
+| **Garden Swap Skill** | Claude Code end-users | Executes swaps from a natural-language request |
+| **Integration Skill** | Claude Code developers | Integrates Garden into an existing codebase |
+
+---
+
+## Quick start
+
+Connect the MCP server to Claude Code in one command, then ask it to swap:
+
+```bash
+claude mcp add --transport http garden-mainnet \
+  https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp
+```
+
+Once connected, the **Garden Swap Skill** activates automatically when you describe a swap in Claude Code.
+
+<CardGroup cols={2}>
+  <Card title="MCP Server" icon="plug" href="/developers/ai/mcp">
+    Connect Claude Code, Cursor, or any MCP client.
+  </Card>
+  <Card title="Garden Swap Skill" icon="bolt" href="/developers/ai/garden-skill">
+    Swap BTC ↔ wBTC and more from the command line.
+  </Card>
+</CardGroup>
