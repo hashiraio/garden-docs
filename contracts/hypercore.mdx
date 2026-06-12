@@ -27,6 +27,10 @@ The CoreWriter precompile at `0x3333333333333333333333333333333333333333` enable
 - **Inbound (X → HyperCore):** After `redeem()` is called, the contract calls `spotSend` via CoreWriter to credit the asset directly to the redeemer's HyperCore spot balance.
 - **Outbound (HyperCore → X):** Before initiating the HTLC, the user calls `sendRawAction` via CoreWriter to move assets from their HyperCore spot account to HyperEVM.
 
+<Info>
+  For a deeper look at how HyperEVM interacts with HyperCore — including available precompile actions, L1 state reads, and block timing — see the [official Hyperliquid docs on interacting with HyperCore](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore).
+</Info>
+
 ## Contract architecture
 
 Garden uses Hashed Time Lock Contracts (HTLCs) for atomic swaps. The HyperCore HTLC shares the same interface as the standard EVM HTLC, with the `redeem` function modified to auto-settle into HyperCore spot.
