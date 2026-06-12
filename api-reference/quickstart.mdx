@@ -1424,6 +1424,14 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 Once funds are on HyperEVM, lock them in the swap contract:
 
                 <Tabs>
+                    <Tab title="Submit transaction">
+                        ```typescript
+                        await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [response.result.initiate_transaction]
+                        });
+                        ```
+                    </Tab>
                     <Tab title="Gasless submission">
                         ```typescript
                         // Sign the EIP-712 typed data off-chain
@@ -1440,14 +1448,6 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ signature })
-                        });
-                        ```
-                    </Tab>
-                    <Tab title="Submit transaction">
-                        ```typescript
-                        await window.ethereum.request({
-                            method: 'eth_sendTransaction',
-                            params: [response.result.initiate_transaction]
                         });
                         ```
                     </Tab>
