@@ -1302,6 +1302,175 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
         </Steps>
     </Tab>
 
+    <Tab title="From HyperCore">
+        <Steps>
+            <Step title="Get Quote">
+                Let's get a quote to trade 10 USDC on **HyperCore (Testnet)** to WBTC on **Base Sepolia**.
+                ```bash wrap
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=hyperliquid_testnet:usdc&to=base_sepolia:wbtc&from_amount=10000000' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'
+                ```
+                ```json Response expandable
+                {
+                    "status": "Ok",
+                    "result": [
+                        {
+                        "source": {
+                            "asset": "hyperliquid_testnet:usdc",
+                            "amount": "10000000",
+                            "display": "10.000000",
+                            "value": "10.00"
+                        },
+                        "destination": {
+                            "asset": "base_sepolia:wbtc",
+                            "amount": "90000",
+                            "display": "0.00090000",
+                            "value": "9.97"
+                        },
+                        "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635",
+                        "estimated_time": 60,
+                        "slippage": 50,
+                        "fee": 30,
+                        "fixed_fee": "0.0"
+                        }
+                    ]
+                }
+                ```
+            </Step>
+            <Step title="Submit Order">
+                Once a quote is received, submit the order:
+                <Warning>
+                    Use `amount` and `asset` from the quote response. Use your wallet addresses for `owner`. The `owner` for the source must be your HyperEVM address.
+                </Warning>
+                ```bash
+                curl --location 'https://testnet.api.garden.finance/v2/orders' \
+                    --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                    --header 'Content-Type: application/json' \
+                    --data '{
+                        "source": {
+                            "asset": "hyperliquid_testnet:usdc",
+                            "owner": "0xYourHyperEVMAddress",
+                            "amount": "10000000"
+                        },
+                        "destination": {
+                            "asset": "base_sepolia:wbtc",
+                            "owner": "0xYourBaseSepoliaAddress",
+                            "amount": "90000"
+                        }
+                    }'
+                ```
+                ```json Response expandable focus={29:35}
+                {
+                    "status": "Ok",
+                    "result": {
+                        "order_id": "c4d3ee14603bb46eef84062697cbf9512a3b4c5d",
+                        "approval_transaction": null,
+                        "initiate_transaction": {
+                            "to": "0x...",
+                            "value": "0x0",
+                            "data": "0x97ffc7ae...",
+                            "gas_limit": "0x493e0",
+                            "chain_id": 998
+                        },
+                        "typed_data": {
+                            "domain": {
+                                "name": "HTLC",
+                                "version": "3",
+                                "chainId": "0x3e6",
+                                "verifyingContract": "0x..."
+                            },
+                            "primaryType": "Initiate",
+                            "types": { "..." },
+                            "message": {
+                                "redeemer": "0x5f3a295d23bff9de6e09fe0a88f4f08e15f4c59c",
+                                "timelock": "0x15180",
+                                "amount": "0x989680",
+                                "secretHash": "0xe63a6d36..."
+                            }
+                        },
+                        "core_to_evm_transfer": {
+                            "to": "0x3333333333333333333333333333333333333333",
+                            "value": "0x0",
+                            "data": "0x17938e13...",
+                            "gas_limit": "0x186a0",
+                            "chain_id": 998
+                        }
+                    }
+                }
+                ```
+                <Note>
+                    For HyperCore → X swaps, the response includes a `core_to_evm_transfer` field. This is a pre-built transaction you must submit on HyperEVM **before** initiating the HTLC — it calls the CoreWriter precompile to move your USDC from your HyperCore spot account to HyperEVM. Funds become available in the next block.
+                </Note>
+            </Step>
+            <Step title="Bridge and Initiate">
+                This step has two parts that must be completed in order.
+
+                **1. Execute the core_to_evm_transfer**
+
+                Submit this transaction on HyperEVM (chain ID `998` on testnet) to bridge your USDC from HyperCore spot to HyperEVM:
+
+                ```typescript
+                await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [response.result.core_to_evm_transfer]
+                });
+                ```
+
+                Wait for the transaction to confirm — funds are available on HyperEVM in the next block.
+
+                **2. Initiate the HTLC**
+
+                Once funds are on HyperEVM, lock them in the swap contract:
+
+                <Tabs>
+                    <Tab title="Gasless submission">
+                        ```typescript
+                        // Sign the EIP-712 typed data off-chain
+                        const signature = await window.ethereum.request({
+                            method: 'eth_signTypedData_v4',
+                            params: [userAddress, JSON.stringify(response.result.typed_data)]
+                        });
+
+                        // Submit the signature — the solver initiates on your behalf
+                        await fetch(`https://testnet.api.garden.finance/v2/orders/${response.result.order_id}?action=initiate`, {
+                            method: 'PATCH',
+                            headers: {
+                                'garden-app-id': 'f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ signature })
+                        });
+                        ```
+                    </Tab>
+                    <Tab title="Submit transaction">
+                        ```typescript
+                        await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [response.result.initiate_transaction]
+                        });
+                        ```
+                    </Tab>
+                </Tabs>
+            </Step>
+            <Step title="Check Order Status">
+                Check the order status using the `order_id` from the response.
+                ```bash wrap
+                curl -X 'GET' \
+                'https://testnet.api.garden.finance/v2/orders/c4d3ee14603bb46eef84062697cbf9512a3b4c5d' \
+                -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+                -H 'accept: application/json'
+                ```
+                <Note>
+                    The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
+                </Note>
+                <Info>
+                    **Refund path:** If the swap expires before the solver fulfills it, calling `refund()` on the HyperEVM HTLC will route your USDC back directly to your HyperCore spot account via the CoreWriter precompile — the same mechanism as settlement. No manual bridging back to HyperCore is required.
+                </Info>
+            </Step>
+        </Steps>
+    </Tab>
+
     <Tab title="From Sui">
         <Steps>
             <Step title="Get Quote">
