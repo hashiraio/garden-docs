@@ -1305,9 +1305,9 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
     <Tab title="From HyperCore">
         <Steps>
             <Step title="Get Quote">
-                Let's get a quote to trade 10 USDC on **HyperCore (Testnet)** to WBTC on **Base Sepolia**.
+                Let's get a quote to trade 10 PURR on **HyperCore (Testnet)** to SOL on **Solana Testnet**.
                 ```bash wrap
-                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=hyperliquid_testnet:usdc&to=base_sepolia:wbtc&from_amount=10000000' \
+                curl -X 'GET' 'https://testnet.api.garden.finance/v2/quote?from=hypercore_testnet:purr&to=solana_testnet:sol&from_amount=10000000000000000000&indicative=false' \
                 -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
                 -H 'accept: application/json'
                 ```
@@ -1317,15 +1317,15 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     "result": [
                         {
                         "source": {
-                            "asset": "hyperliquid_testnet:usdc",
-                            "amount": "10000000",
-                            "display": "10.000000",
+                            "asset": "hypercore_testnet:purr",
+                            "amount": "10000000000000000000",
+                            "display": "10.000000000000000000",
                             "value": "10.00"
                         },
                         "destination": {
-                            "asset": "base_sepolia:wbtc",
-                            "amount": "90000",
-                            "display": "0.00090000",
+                            "asset": "solana_testnet:sol",
+                            "amount": "1500000000",
+                            "display": "1.500000000",
                             "value": "9.97"
                         },
                         "solver_id": "0x9dd9c2d208b07bf9a4ef9ca311f36d7185749635",
@@ -1349,14 +1349,14 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                     --header 'Content-Type: application/json' \
                     --data '{
                         "source": {
-                            "asset": "hyperliquid_testnet:usdc",
+                            "asset": "hypercore_testnet:purr",
                             "owner": "0xYourHyperEVMAddress",
-                            "amount": "10000000"
+                            "amount": "10000000000000000000"
                         },
                         "destination": {
-                            "asset": "base_sepolia:wbtc",
-                            "owner": "0xYourBaseSepoliaAddress",
-                            "amount": "90000"
+                            "asset": "solana_testnet:sol",
+                            "owner": "YourSolanaAddress",
+                            "amount": "1500000000"
                         }
                     }'
                 ```
@@ -1400,13 +1400,13 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 }
                 ```
                 <Note>
-                    For HyperCore → X swaps, the response includes a `core_to_evm_transfer` field. This is a pre-built transaction you must submit on HyperEVM **before** initiating the HTLC — it calls the CoreWriter precompile to move your USDC from your HyperCore spot account to HyperEVM. Funds become available in the next block.
+                    For HyperCore → X swaps, the response includes a `core_to_evm_transfer` field. This is a pre-built transaction you must submit on HyperEVM **before** initiating the HTLC — it calls the CoreWriter precompile to move your PURR from your HyperCore spot account to HyperEVM. Funds become available in the next block.
                 </Note>
             </Step>
             <Step title="Bridge and Initiate">
                 #### 1. Bridge to HyperEVM
 
-                Submit this on HyperEVM (chain ID `998` on testnet) to move your USDC from HyperCore spot to HyperEVM:
+                Submit this on HyperEVM (chain ID `998` on testnet) to move your PURR from HyperCore spot to HyperEVM:
 
                 ```typescript
                 await window.ethereum.request({
@@ -1462,7 +1462,7 @@ description: "Use Garden's API to get quotes, submit orders, and track their sta
                 The swap is complete once the `order.destination_swap.redeem_tx_hash` field is populated.
 
                 <Note>
-                    **Refund path:** If the swap expires before the solver fulfills it, calling `refund()` on the HyperEVM HTLC will route your USDC back directly to your HyperCore spot account via the CoreWriter precompile — the same mechanism as settlement. No manual bridging back to HyperCore is required.
+                    **Refund path:** If the swap expires before the solver fulfills it, calling `refund()` on the HyperEVM HTLC will route your PURR back directly to your HyperCore spot account via the CoreWriter precompile — the same mechanism as settlement. No manual bridging back to HyperCore is required.
                 </Note>
             </Step>
         </Steps>
