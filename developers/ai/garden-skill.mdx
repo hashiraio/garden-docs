@@ -15,16 +15,22 @@ One sentence is enough to start a swap:
 
 ## Compatibility
 
-The Garden Swap Skill's **auto-loading and Keychain credential management** are Claude Code-specific. However, the underlying signing scripts and MCP server are platform-agnostic — any terminal-based AI tool that supports both MCP and shell command execution can replicate the full automated swap flow with a small amount of manual setup.
+The Garden Swap Skill's **auto-loading** is Claude Code-specific, but the underlying signing scripts and credential helper (`keychain.ts`) work on **macOS, Linux, and Windows**. Any terminal-based AI tool that supports MCP and shell command execution can replicate the full automated swap flow with a small amount of manual setup.
 
 | Tool | Automated swap flow | How |
 |---|---|---|
-| **Claude Code** | Native | Skill auto-loads; Keychain manages the private key |
-| **Gemini CLI** | Yes, with manual setup | MCP + Bun scripts + `GARDEN_PRIVATE_KEY` env var |
-| **Codex CLI** | Yes, with manual setup | MCP + Bun scripts + `GARDEN_PRIVATE_KEY` env var |
+| **Claude Code** | Native | Skill auto-loads; cross-platform `keychain.ts` manages the private key |
+| **Gemini CLI** | Yes, with manual setup | MCP + Bun scripts + `keychain.ts run` |
+| **Codex CLI** | Yes, with manual setup | MCP + Bun scripts + `keychain.ts run` |
 | Claude Desktop | MCP only | No shell execution; sign via external wallet |
 | Cursor / Windsurf | MCP only | No shell execution in chat; sign via external wallet |
 | ChatGPT Desktop | MCP only | No shell execution; sign via external wallet |
+
+| Platform | Keystore used |
+|---|---|
+| macOS | macOS Keychain (`security`) |
+| Linux | GNOME Keyring / libsecret (`secret-tool`) — requires `libsecret-tools` |
+| Windows | Windows Credential Manager (PowerShell `PasswordVault`) |
 
 ---
 
@@ -45,20 +51,24 @@ Gemini CLI supports MCP servers and can execute shell commands, so the full quot
     cd garden-agent/garden-skill && bun install
     ```
   </Step>
-  <Step title="Store your private key in macOS Keychain">
-    Run the setup script once — it captures your key with hidden input and saves it to macOS Keychain, identical to Claude Code's setup:
+  <Step title="Store your private key in your OS keystore">
+    Run the setup script once — it captures your key with masked input and saves it to your OS keystore (macOS Keychain, Linux libsecret, or Windows Credential Manager). The key never appears in the conversation:
 
+    **macOS / Linux:**
     ```bash
     bash ~/garden-agent/garden-skill/scripts/setup-credentials.sh
     ```
 
-    The key is stored under the service name `garden-pk`. Gemini will retrieve it at swap time using the same `security` command the skill uses internally:
-
-    ```bash
-    security find-generic-password -a garden -s garden-pk -w
+    **Windows:**
+    ```powershell
+    powershell -ExecutionPolicy Bypass -File ~/garden-agent/garden-skill/scripts/setup-credentials.ps1
     ```
 
-    No environment variable needed.
+    Gemini retrieves the key at swap time via the cross-platform helper, which injects it into the subprocess env without ever printing it:
+
+    ```bash
+    bun run ~/garden-agent/garden-skill/scripts/keychain.ts run -- scripts/get-address.ts
+    ```
   </Step>
   <Step title="Start a session with the skill instructions">
     Pass the `SKILL.md` as a system prompt so Gemini follows the same swap flow:
@@ -73,9 +83,10 @@ Gemini CLI supports MCP servers and can execute shell commands, so the full quot
     ```
     swap 0.001 wBTC to BTC
     swap 0.5 SOL to BTC on Garden
+    bridge USDC on Arbitrum to Bitcoin
     ```
 
-    Gemini will call the Garden MCP tools for quotes and orders, then execute the Bun signing scripts from `$GARDEN_SCRIPTS_DIR` to initiate on-chain.
+    Gemini will call the Garden MCP tools for quotes and orders, then execute the Bun signing scripts via `keychain.ts run` to initiate on-chain.
   </Step>
 </Steps>
 
@@ -98,17 +109,23 @@ Codex CLI is purpose-built for running code and shell commands, so it pairs well
     cd garden-agent/garden-skill && bun install
     ```
   </Step>
-  <Step title="Store your private key in macOS Keychain">
+  <Step title="Store your private key in your OS keystore">
     Run the same setup script used by Claude Code:
 
+    **macOS / Linux:**
     ```bash
     bash ~/garden-agent/garden-skill/scripts/setup-credentials.sh
+    ```
+
+    **Windows:**
+    ```powershell
+    powershell -ExecutionPolicy Bypass -File ~/garden-agent/garden-skill/scripts/setup-credentials.ps1
     ```
 
     Codex retrieves the key at swap time via:
 
     ```bash
-    security find-generic-password -a garden -s garden-pk -w
+    bun run ~/garden-agent/garden-skill/scripts/keychain.ts run -- scripts/get-address.ts
     ```
   </Step>
   <Step title="Start a session with the skill instructions">
@@ -135,7 +152,7 @@ Codex CLI is purpose-built for running code and shell commands, so it pairs well
 | Capability | Claude Code | Gemini CLI / Codex CLI |
 |---|---|---|
 | Skill auto-loads | Yes — drop files in `~/.claude/skills/garden/` | No — pass `SKILL.md` manually each session |
-| Private key storage | macOS Keychain (never in environment) | macOS Keychain — same `setup-credentials.sh` script |
+| Private key storage | OS keystore via `keychain.ts` (never in environment) | OS keystore via `keychain.ts` — same setup scripts |
 | MCP auto-registration | Yes — skill registers servers on first run | No — configure MCP upfront |
 | Signing scripts | Same Bun scripts, identical behaviour | Same Bun scripts, identical behaviour |
 
@@ -147,6 +164,7 @@ Codex CLI is purpose-built for running code and shell commands, so it pairs well
 
 - [Claude Code](https://claude.ai/code) installed and authenticated
 - [Bun](https://bun.sh) runtime — `curl -fsSL https://bun.sh/install | bash`
+- **Linux only:** `libsecret-tools` — `sudo apt install libsecret-tools` or `sudo dnf install libsecret`
 
 **Steps**
 
@@ -191,9 +209,11 @@ Describe your swap in plain language inside any Claude Code conversation — no 
 
 ```
 swap 0.001 wBTC to BTC
-bridge my wBTC to bitcoin
-swap 0.5 SOL to BTC on Garden
-convert 0.0005 BTC to wBTC on testnet
+bridge USDC on Arbitrum to Bitcoin
+swap 0.5 SOL to strkBTC
+swap 0.001 BTC to cbBTC on Base
+convert 10 USDT to BTC
+swap wBTC to BTC on testnet
 ```
 
 **First-time setup (runs once)**
@@ -201,33 +221,33 @@ convert 0.0005 BTC to wBTC on testnet
 When you trigger a swap for the first time, the skill will:
 
 1. **Register the Garden MCP servers** if they aren't already connected, then ask you to restart Claude Code.
-2. **Run the credential setup script** to capture your private key — it is stored directly in macOS Keychain and never appears in the conversation.
+2. **Run the credential setup script** to capture your private key — it is stored directly in your OS keystore (macOS Keychain / Linux libsecret / Windows Credential Manager) and never appears in the conversation.
 
-After the one-time setup, subsequent swaps require no extra steps.
-
----
+After the one-time setup, subsequent swaps only ask for chain-specific RPC URLs (saved to `config.json` for reuse).
 
 ---
 
-## Supported swap directions
+## Supported chains
 
-| From | To | Source chain |
-|---|---|---|
-| BTC | wBTC | Bitcoin |
-| wBTC | BTC | Ethereum (EVM) |
-| SOL / SPL tokens | BTC, wBTC, Starknet assets | Solana |
-| STRK / ETH / wBTC | BTC, wBTC, Solana assets | Starknet |
-| BTC, wBTC | SOL / SPL tokens | Bitcoin / EVM |
-| BTC, wBTC | STRK / ETH / wBTC | Bitcoin / EVM |
+The skill works for any pair Garden has liquidity for — always run `get_quote` to confirm before promising a swap.
 
-All chains derive addresses from a single `GARDEN_PRIVATE_KEY`:
+| Family | Chains |
+|---|---|
+| **Bitcoin** | mainnet, testnet |
+| **EVM** | Ethereum, Arbitrum, Base, BNB Chain, Botanix, Citrea, HyperEVM, MegaETH, Monad — plus their testnets (Sepolia variants, Alpen, Arc, HyperCore) |
+| **Starknet** | mainnet, Sepolia |
+| **Solana** | mainnet, testnet |
+
+Example pairs that work today: BTC ↔ wBTC, wBTC (Ethereum) → cbBTC (Solana), USDC (Arbitrum) → BTC, SOL → strkBTC, wBTC (Starknet) → SOL, USDC (Solana) → wBTC (Ethereum), and many more.
+
+All chains derive addresses from a single private key:
 
 | Chain | Derivation |
 |---|---|
-| EVM | secp256k1 → Ethereum address |
-| Bitcoin | secp256k1 → P2TR taproot address |
+| EVM (any chain) | secp256k1 → Ethereum-format address (same across all EVMs) |
+| Bitcoin | secp256k1 → P2TR taproot address (network-specific) |
 | Solana | 32-byte key as ed25519 seed → base58 pubkey |
-| Starknet | Key as STARK private key → OpenZeppelin account address |
+| Starknet | Key ground to STARK curve → OpenZeppelin account address |
 
 ---
 
@@ -240,7 +260,7 @@ When you describe a swap, the skill follows this sequence:
     Checks that `mcp__garden-mainnet__get_quote` is available. If not, registers the MCP servers and prompts you to restart Claude Code.
   </Step>
   <Step title="Collect credentials">
-    Reads saved config from `~/.claude/skills/garden/config.json` and loads your private key from macOS Keychain. Only asks for missing values.
+    Reads saved RPC URLs and addresses from `~/.claude/skills/garden/config.json`. Confirms the private key is present in your OS keystore via `keychain.ts exists` (the value itself is never read into the conversation). Only asks for missing values.
   </Step>
   <Step title="Get a quote">
     Calls `get_quote` with your source asset, destination asset, and amount. Displays the expected receive amount and solver.
@@ -253,7 +273,7 @@ When you describe a swap, the skill follows this sequence:
   </Step>
   <Step title="Execute on-chain">
     Sends the source-chain transaction. The exact method depends on the source chain:
-    - **EVM source** — broadcasts approval + initiate transactions via the bundled signing scripts
+    - **EVM source** — polls `get_order_status` until a solver matches the order (to obtain `redeemer`, `timelock`, `secret_hash`), then builds both the ERC-20 `approve(htlc, amount)` and HTLC `initiate(redeemer, timelock, amount, secretHash)` calldata **locally** using viem's ABI encoding before broadcasting. The Garden hosted API does not return EVM calldata, so the client constructs it. Native-gas HTLC schemas (e.g. Botanix BTC, Citrea cBTC) skip the approve and send `initiate` as `payable` with `value = amount`.
     - **Bitcoin source** — sends BTC to the HTLC deposit address via the bundled Bitcoin script
     - **Solana source** — signs and broadcasts a versioned transaction
     - **Starknet source** — auto-deploys the OZ account if needed, then broadcasts approval + initiate
@@ -267,17 +287,43 @@ When you describe a swap, the skill follows this sequence:
 
 ## Asset identifiers
 
-The skill resolves common names automatically, but you can be explicit:
+Garden uses the pattern `<chain_prefix>:<token>` for asset IDs. The skill builds these automatically from your natural-language request, but you can be explicit.
+
+**Chain prefixes**
+
+| Chain | Mainnet prefix | Testnet prefix |
+|---|---|---|
+| Bitcoin | `bitcoin` | `bitcoin_testnet` |
+| Ethereum | `ethereum` | `ethereum_sepolia` |
+| Arbitrum | `arbitrum` | `arbitrum_sepolia` |
+| Base | `base` | `base_sepolia` |
+| BNB Chain | `bnbchain` | `bnbchain_testnet` |
+| Botanix | `botanix` | — |
+| Citrea | `citrea` | `citrea_testnet` |
+| HyperEVM | `hyperevm` | `hyperevm_testnet` |
+| MegaETH | `megaeth` | — |
+| Monad | `monad` | `monad_testnet` |
+| Starknet | `starknet` | `starknet_sepolia` |
+| Solana | `solana` | `solana_testnet` |
+
+**Common asset IDs**
 
 | Asset | Mainnet | Testnet |
 |---|---|---|
 | BTC | `bitcoin:btc` | `bitcoin_testnet:btc` |
-| wBTC (Ethereum) | `ethereum:wbtc` | `ethereum_sepolia:wbtc` |
+| Ethereum wBTC | `ethereum:wbtc` | `ethereum_sepolia:wbtc` |
+| Ethereum USDC | `ethereum:usdc` | `ethereum_sepolia:usdc` |
+| Ethereum USDT | `ethereum:usdt` | — |
+| Arbitrum wBTC | `arbitrum:wbtc` | `arbitrum_sepolia:wbtc` |
+| Base cbBTC | `base:cbbtc` | — |
+| Starknet wBTC | `starknet:wbtc` | `starknet_sepolia:wbtc` |
+| Starknet strkBTC | `starknet:strkbtc` | `starknet_sepolia:strkbtc` |
 | SOL | `solana:sol` | `solana_testnet:sol` |
-| USDC (Solana) | `solana:usdc` | `solana_testnet:usdc` |
-| STRK | `starknet:strk` | `starknet_sepolia:strk` |
-| ETH (Starknet) | `starknet:eth` | `starknet_sepolia:eth` |
-| wBTC (Starknet) | `starknet:wbtc` | `starknet_sepolia:wbtc` |
+| Solana USDC | `solana:usdc` | `solana_testnet:usdc` |
+| Solana cbBTC | `solana:cbbtc` | `solana_testnet:cbbtc` |
+| Solana CASH | `solana:cash` | `solana_testnet:cash` |
+
+For a complete list, call `get_assets` on the Garden MCP server.
 
 ---
 
@@ -287,10 +333,15 @@ Sensitive values are kept out of the conversation entirely:
 
 | Value | Storage |
 |---|---|
-| Private key | macOS Keychain (`security find-generic-password`) |
-| RPC URLs, addresses | `~/.claude/skills/garden/config.json` |
+| Private key | OS keystore via `scripts/keychain.ts` (macOS Keychain, Linux libsecret, or Windows Credential Manager) |
+| RPC URLs (per EVM chain, Starknet, Solana) | `~/.claude/skills/garden/config.json` |
+| Derived addresses (cached) | `~/.claude/skills/garden/config.json` |
+| Bitcoin destination address | `~/.claude/skills/garden/config.json` |
 
-The skill never prints your private key. It is fetched live from Keychain only at the moment it is needed for signing, and only by the bundled scripts.
+The skill never prints your private key. `keychain.ts` exposes three commands:
+- `exists` — returns `"1"` or `"0"`, never the value
+- `save <value>` — writes to the OS keystore
+- `run -- <script>` — fetches the key, injects it into the subprocess env as `GARDEN_PRIVATE_KEY`, runs the script, exits. The key is scoped to that single subprocess only.
 
 ---
 
@@ -300,9 +351,9 @@ The skill stops polling and reports the `order_id` for manual tracking if these 
 
 | Source chain | Timeout |
 |---|---|
-| EVM (wBTC) | 5 minutes |
+| EVM (any chain) | 5 minutes |
 | Bitcoin | 60 minutes |
-| Solana | 2 minutes |
+| Solana | 5 minutes |
 | Starknet | 5 minutes |
 
 Bitcoin confirmations on mainnet typically take 10–20 minutes. Testnet blocks are mined very slowly — a BTC-source testnet order can take up to an hour. This is normal.
