@@ -187,6 +187,7 @@
               "contracts/bitcoin",
               "contracts/litecoin",
               "contracts/evm",
+              "contracts/hypercore",
               "contracts/tron",
               "contracts/solana",
               "contracts/starknet",

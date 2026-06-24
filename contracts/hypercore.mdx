@@ -1,0 +1,177 @@
+---
+title: "HyperCore"
+description: "Atomic swap support for HyperCore users via a modified HTLC on HyperEVM"
+---
+
+<Warning>
+**The HTLC contract used for HyperCore swaps lives entirely on HyperEVM — not on HyperCore.** HyperCore is supported as a chain through Garden's integration with HyperEVM. No separate contract is deployed on HyperCore itself; what makes this integration unique is the modified `redeem` function that automatically settles funds into a user's HyperCore spot account.
+</Warning>
+
+## Overview
+
+HyperCore users can send and receive assets via atomic swaps through a modified HTLC deployed on HyperEVM. The key enhancement is HyperCore-native settlement on redemption: when `redeem()` is called, the contract routes funds directly to the redeemer's HyperCore spot account via the CoreWriter precompile — no separate bridge or withdrawal step is needed.
+
+## Network details
+
+| Network | Chain ID |
+|---------|----------|
+| HyperEVM Mainnet | `999` |
+| HyperEVM Testnet | `998` |
+
+All contract interactions and EIP-712 signing use the HyperEVM chain ID. There is no separate HyperCore chain ID from the integration side.
+
+## CoreWriter precompile
+
+The CoreWriter precompile at `0x3333333333333333333333333333333333333333` enables the HTLC to trigger HyperCore L1 actions directly from HyperEVM. It is used for two purposes:
+
+- **Inbound (X → HyperCore):** After `redeem()` is called, the contract calls `spotSend` via CoreWriter to credit the asset directly to the redeemer's HyperCore spot balance.
+- **Outbound (HyperCore → X):** Before initiating the HTLC, the user calls `sendRawAction` via CoreWriter to move assets from their HyperCore spot account to HyperEVM.
+
+<Info>
+  For a deeper look at how HyperEVM interacts with HyperCore — including available precompile actions, L1 state reads, and block timing — see the [official Hyperliquid docs on interacting with HyperCore](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore).
+</Info>
+
+## Contract architecture
+
+Garden uses Hashed Time Lock Contracts (HTLCs) for atomic swaps. The HyperCore HTLC shares the same interface as the standard EVM HTLC, with the `redeem` function modified to auto-settle into HyperCore spot.
+
+<CardGroup cols={4}>
+  <Card title="Initiate" icon="play" href="#initiate" />
+  <Card title="Redeem" icon="check" href="#redeem" />
+  <Card title="Refund" icon="rotate-left" href="#refund" />
+  <Card title="Instant refund" icon="bolt" href="#instant-refund" />
+</CardGroup>
+
+## Core functions
+
+### Initiate
+
+Locks ERC20 tokens (e.g. USDC) in the contract on HyperEVM. Two modes are supported:
+
+#### Direct initiation
+
+```solidity
+function initiate(
+    address redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash
+) external
+```
+
+#### Signature-based initiation (gasless)
+
+```solidity
+function initiateWithSignature(
+    address initiator,
+    address redeemer,
+    uint256 timelock,
+    uint256 amount,
+    bytes32 secretHash,
+    bytes calldata signature
+) external
+```
+
+<Note>
+With gasless initiation, the user signs an EIP-712 `Initiate` message off-chain and hands it to the solver. The solver calls `initiateWithSignature` on the user's behalf — the user pays no gas for HTLC initiation.
+</Note>
+
+### Redeem
+
+The redeem function is modified from the standard EVM HTLC to settle funds directly into the redeemer's **HyperCore spot account**.
+
+```solidity
+function redeem(
+    bytes32 orderID,
+    bytes calldata secret
+) external
+```
+
+When called, the contract:
+1. Verifies the secret against the stored SHA-256 hash.
+2. Transfers the token to its system address (`0x2000...0000`), triggering a HyperCore deposit.
+3. Calls `spotSend(redeemer, tokenIndex, amount)` via the CoreWriter precompile — the asset lands in the redeemer's HyperCore spot balance.
+
+<Info>
+The HyperCore `spotSend` transaction hash is treated as the final settlement proof. No additional signing or bridging is required after redemption.
+</Info>
+
+### Refund
+
+Allows the initiator to reclaim locked tokens after the timelock has expired. For HyperCore swaps, the modified `refund()` routes funds back to the initiator's **HyperCore spot account** — no manual bridging back is needed.
+
+```solidity
+function refund(bytes32 orderID) external
+```
+
+When called on a HyperCore order, the contract:
+1. Verifies the timelock has expired.
+2. Transfers the token to its system address (`0x2000...0000`), triggering a HyperCore deposit.
+3. Calls `spotSend(initiator, tokenIndex, amount)` via the CoreWriter precompile — the asset is returned directly to the initiator's HyperCore spot balance.
+
+<Note>
+Uses absolute block numbers for the timelock, consistent with the standard EVM HTLC.
+</Note>
+
+### Instant refund
+
+Allows the swap to be cancelled before the timelock expires, provided the redeemer consents via an EIP-712 signature.
+
+```solidity
+function instantRefund(
+    bytes32 orderID,
+    bytes calldata signature
+) external
+```
+
+<Note>
+Requires the redeemer's signature to prevent unauthorized cancellations. This ensures both parties consent before the settlement window expires.
+</Note>
+
+## EIP-712 signing
+
+### Initiation domain
+
+For gasless initiation, the user signs an EIP-712 `Initiate` message:
+
+```json
+Domain: { name: "HTLC", version: "3", chainId: 999 }
+Type:   Initiate(address redeemer, uint256 timelock, uint256 amount, bytes32 secretHash)
+```
+
+### Instant refund digest
+
+```solidity
+bytes32 private constant _REFUND_TYPEHASH = keccak256("Refund(bytes32 orderId)");
+
+function instantRefundDigest(bytes32 orderID) public view returns (bytes32) {
+    return _hashTypedDataV4(keccak256(abi.encode(_REFUND_TYPEHASH, orderID)));
+}
+```
+
+## Event logging
+
+Both state transitions and the final HyperCore settlement emit standard events for off-chain monitoring:
+
+```solidity
+event Initiated(bytes32 indexed orderID);
+event Redeemed(bytes32 indexed orderID, bytes secret);
+event Refunded(bytes32 indexed orderID);
+```
+
+## Order ID generation
+
+```solidity
+bytes32 orderID = sha256(abi.encode(
+    block.chainid,
+    secretHash,
+    initiator,
+    redeemer,
+    timelock,
+    amount
+));
+```
+
+<Check>
+Chain ID inclusion prevents cross-chain replay attacks, while the parameter combination ensures each order is uniquely identifiable.
+</Check>
