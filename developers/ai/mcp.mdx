@@ -1,0 +1,398 @@
+---
+title: "Garden MCP Server"
+description: "Remote MCP server that gives AI assistants direct access to Garden Finance's swap API"
+---
+
+The Garden MCP server exposes Garden's swap functionality as [Model Context Protocol](https://modelcontextprotocol.io) tools. Connect any MCP-compatible AI client — Claude Code, Claude Desktop, Cursor, Windsurf, ChatGPT Desktop, Codex CLI, Gemini CLI — and let it get quotes, create orders, and track swaps in real time.
+
+The server is hosted and publicly available. No local setup or API key required to connect.
+
+<Note>
+  The MCP server handles quoting and order creation, but **signing and initiating transactions requires your external wallet** — the server never holds your keys. If you want fully automated end-to-end swaps (quote → sign → initiate → poll), use the [Garden Swap Skill](/developers/ai/garden-skill) instead, which manages the full lifecycle including on-chain signing from Claude Code.
+</Note>
+
+---
+
+## Available tools
+
+| Tool | Description |
+|---|---|
+| `get_quote` | Get a swap quote between two assets — returns destination amount, fees, solver, and estimated time |
+| `create_order` | Submit a cross-chain swap order using amounts from a prior quote |
+| `get_order_status` | Get the current status of an order by ID |
+| `get_all_user_orders` | List all orders for a wallet address, with optional chain and status filters |
+| `get_assets` | List all supported assets available for swapping |
+| `get_chains` | List all supported blockchain networks |
+| `get_liquidity` | Get real-time liquidity information across all chains |
+
+---
+
+## Hosted endpoints
+
+| Network | MCP URL |
+|---|---|
+| Mainnet | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+| Testnet | `https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+
+---
+
+## Connect your AI client
+
+<AccordionGroup>
+  <Accordion title="Claude Code" icon="terminal">
+
+<Tabs>
+  <Tab title="CLI (recommended)">
+
+Run one command per network — Claude Code adds the server to your global config automatically:
+
+```bash
+# Mainnet
+claude mcp add --transport http garden-mainnet \
+  https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp
+
+# Testnet
+claude mcp add --transport http garden-testnet \
+  https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp
+```
+
+  </Tab>
+  <Tab title="settings.json">
+
+Add to `.claude/settings.json` (project-level) or `~/.claude/settings.json` (global):
+
+```json
+{
+  "mcpServers": {
+    "garden-mainnet": {
+      "type": "http",
+      "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    },
+    "garden-testnet": {
+      "type": "http",
+      "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    }
+  }
+}
+```
+
+  </Tab>
+</Tabs>
+
+Verify the connection:
+
+```bash
+claude mcp list
+```
+
+You should see `garden-mainnet` and `garden-testnet` listed as connected servers.
+
+  </Accordion>
+
+  <Accordion title="Claude Desktop" icon="desktop">
+
+<Steps>
+  <Step title="Open the config file">
+    The config file location depends on your OS:
+
+    | OS | Path |
+    |---|---|
+    | macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+    | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+    Create the file if it doesn't exist.
+  </Step>
+  <Step title="Add the Garden MCP server">
+    ```json
+    {
+      "mcpServers": {
+        "garden-mainnet": {
+          "type": "http",
+          "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        },
+        "garden-testnet": {
+          "type": "http",
+          "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        }
+      }
+    }
+    ```
+
+    If the file already has other `mcpServers` entries, merge the Garden keys into the existing object.
+  </Step>
+  <Step title="Restart Claude Desktop">
+    Quit and reopen Claude Desktop. The Garden tools will appear in the tool picker when you start a conversation.
+  </Step>
+</Steps>
+
+  </Accordion>
+
+  <Accordion title="Cursor" icon="mouse-pointer">
+
+<Tabs>
+  <Tab title="Settings UI">
+
+<Steps>
+  <Step title="Open MCP settings">
+    Go to **Cursor Settings** (⌘, on macOS) → **MCP** → **+ Add new MCP server**.
+  </Step>
+  <Step title="Enter the server details">
+    | Field | Value |
+    |---|---|
+    | Name | `garden-mainnet` |
+    | Type | `HTTP` |
+    | URL | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+  </Step>
+  <Step title="Save and verify">
+    Click **Save**. Cursor will connect and display the available Garden tools.
+  </Step>
+</Steps>
+
+  </Tab>
+  <Tab title="mcp.json">
+
+Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project-local):
+
+```json
+{
+  "mcpServers": {
+    "garden-mainnet": {
+      "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    },
+    "garden-testnet": {
+      "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    }
+  }
+}
+```
+
+Restart Cursor after saving.
+
+  </Tab>
+</Tabs>
+
+  </Accordion>
+
+  <Accordion title="Windsurf" icon="wind">
+
+<Steps>
+  <Step title="Open the MCP config file">
+    Open `~/.codeium/windsurf/mcp_config.json`. Create it if it doesn't exist.
+  </Step>
+  <Step title="Add the Garden MCP server">
+    ```json
+    {
+      "mcpServers": {
+        "garden-mainnet": {
+          "serverUrl": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        },
+        "garden-testnet": {
+          "serverUrl": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Restart Windsurf">
+    Reopen Windsurf. The Garden tools will be available in Cascade.
+  </Step>
+</Steps>
+
+  </Accordion>
+
+  <Accordion title="ChatGPT Desktop" icon="comment">
+
+<Steps>
+  <Step title="Open Settings">
+    In the ChatGPT desktop app, click your profile icon → **Settings** → **Connectors**.
+  </Step>
+  <Step title="Add an MCP server">
+    Click **+ Add MCP Server** and fill in:
+
+    | Field | Value |
+    |---|---|
+    | Name | `Garden Finance` |
+    | URL | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+  </Step>
+  <Step title="Enable and verify">
+    Toggle the server on. Start a new conversation and verify that Garden tools appear when you mention swapping assets.
+  </Step>
+</Steps>
+
+<Note>
+  MCP support in ChatGPT Desktop is available on macOS. Check [OpenAI's documentation](https://help.openai.com) for the latest availability on other platforms.
+</Note>
+
+  </Accordion>
+
+  <Accordion title="OpenAI Codex CLI" icon="code">
+
+<Steps>
+  <Step title="Open the Codex config file">
+    Open `~/.codex/config.toml`. Create it if it doesn't exist.
+  </Step>
+  <Step title="Add the Garden MCP server">
+    ```toml
+    [[mcp_servers]]
+    name = "garden-mainnet"
+    url  = "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+
+    [[mcp_servers]]
+    name = "garden-testnet"
+    url  = "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    ```
+  </Step>
+  <Step title="Verify the connection">
+    Run `codex` and ask it to list available tools — the Garden tools (`get_quote`, `create_order`, etc.) should appear.
+  </Step>
+</Steps>
+
+  </Accordion>
+
+  <Accordion title="Gemini CLI" icon="google">
+
+<Steps>
+  <Step title="Open the Gemini settings file">
+    Open `~/.gemini/settings.json`. Create it if it doesn't exist.
+  </Step>
+  <Step title="Add the Garden MCP server">
+    ```json
+    {
+      "mcpServers": {
+        "garden-mainnet": {
+          "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        },
+        "garden-testnet": {
+          "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Verify the connection">
+    Start a new `gemini` session. The Garden tools will be listed alongside any other configured MCP tools.
+  </Step>
+</Steps>
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Run locally
+
+If you want to self-host the MCP server (for custom App IDs, private deployments, or development):
+
+<Tabs>
+  <Tab title="Bun">
+
+**Prerequisites:** [Bun](https://bun.sh) v1.x
+
+```bash
+git clone https://github.com/gardenfi/garden-agent
+cd garden-agent/garden-mcp
+bun install
+
+# Mainnet
+BASE_URL=https://api.garden.finance/v2 \
+APP_ID=your_app_id \
+bun run index.ts
+
+# Testnet
+BASE_URL=https://testnet.api.garden.finance/v2 \
+APP_ID=your_app_id \
+bun run index.ts
+```
+
+Connect Claude Code to the local instance:
+
+```bash
+claude mcp add --transport http garden-local http://localhost:3000/mcp
+```
+
+  </Tab>
+  <Tab title="Docker Compose">
+
+**Prerequisites:** [Docker](https://docs.docker.com/get-docker/)
+
+```bash
+cd garden-agent/garden-mcp
+docker compose up --build
+```
+
+This starts mainnet on port `3001` and testnet on port `3002`:
+
+```bash
+claude mcp add --transport http garden-mainnet http://localhost:3001/mcp
+claude mcp add --transport http garden-testnet http://localhost:3002/mcp
+```
+
+  </Tab>
+</Tabs>
+
+### Environment variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `BASE_URL` | Yes | — | Garden API base URL (`https://api.garden.finance/v2` or testnet equivalent) |
+| `APP_ID` | Yes | — | Your Garden App ID |
+| `PORT` | No | `3000` | Port to listen on |
+
+Get an App ID from the [Garden Portal](https://portal.garden.finance).
+
+---
+
+## Deploy on Coolify
+
+<Steps>
+  <Step title="Fork the repository">
+    Fork or push `garden-agent/garden-mcp` to GitHub.
+  </Step>
+  <Step title="Create a new resource">
+    In Coolify: **New Resource → Docker Compose** → connect your repository.
+  </Step>
+  <Step title="Set environment variables">
+    | Variable | Value |
+    |---|---|
+    | `BASE_URL` | `https://api.garden.finance/v2` (mainnet) or testnet equivalent |
+    | `APP_ID` | Your Garden App ID |
+    | `PORT` | `3000` |
+  </Step>
+  <Step title="Point DNS">
+    Create a DNS record: `mcp.yourdomain.com` → your Coolify service.
+  </Step>
+  <Step title="Share the URL">
+    Users connect with `claude mcp add --transport http garden https://mcp.yourdomain.com/mcp` — no local setup needed.
+  </Step>
+</Steps>
+
+A health check endpoint at `GET /health` is built in — Coolify uses it to verify the service is running.
+
+---
+
+## Architecture
+
+The server uses the [MCP Streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) in **stateless mode**. Each request creates a fresh server instance, which works well here because all tools are pure API proxies with no session state.
+
+```
+MCP Client (Claude Code, Cursor, …)
+        │  POST /mcp
+        ▼
+  garden-mcp  (Express + StreamableHTTPServerTransport)
+        │
+        ▼
+  Garden Finance API  (api.garden.finance / testnet.api.garden.finance)
+```
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Garden Swap Skill" icon="wand-magic-sparkles" href="/developers/ai/garden-skill">
+    Once the MCP server is connected, use the Garden Swap Skill to execute swaps from natural language.
+  </Card>
+  <Card title="Integration Skill" icon="code" href="/developers/ai/integration-skill">
+    Let Claude Code build a complete Garden integration into your existing application.
+  </Card>
+</CardGroup>
