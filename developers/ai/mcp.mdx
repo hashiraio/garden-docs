@@ -3,12 +3,12 @@ title: "Garden MCP Server"
 description: "Remote MCP server that gives AI assistants direct access to Garden Finance's swap API"
 ---
 
-The Garden MCP server exposes Garden's swap functionality as [Model Context Protocol](https://modelcontextprotocol.io) tools. Connect any MCP-compatible AI client — Claude Code, Claude Desktop, Cursor, Windsurf, ChatGPT Desktop, Codex CLI, Gemini CLI — and let it get quotes, create orders, and track swaps in real time.
+The Garden MCP server exposes Garden's swap functionality as [Model Context Protocol](https://modelcontextprotocol.io) tools. Connect any MCP-compatible AI client (Claude Code, Claude Desktop, Cursor, Windsurf, ChatGPT Desktop, Codex CLI, Gemini CLI) and let it get quotes, create orders, and track swaps in real time.
 
 The server is hosted and publicly available. No local setup or API key required to connect.
 
 <Note>
-  The MCP server handles quoting and order creation, but **signing and initiating transactions requires your external wallet** — the server never holds your keys. If you want fully automated end-to-end swaps (quote → sign → initiate → poll), use the [Garden Swap Skill](/developers/ai/garden-skill) instead, which manages the full lifecycle including on-chain signing from Claude Code.
+  The MCP server handles quoting and order creation, but **signing and initiating transactions requires your external wallet** since the server never holds your keys. If you want fully automated end-to-end swaps (quote → sign → initiate → poll), use the [Garden Swap Skill](/developers/ai/garden-skill) instead, which manages the full lifecycle including on-chain signing from Claude Code.
 </Note>
 
 ---
@@ -17,7 +17,7 @@ The server is hosted and publicly available. No local setup or API key required 
 
 | Tool | Description |
 |---|---|
-| `get_quote` | Get a swap quote between two assets — returns destination amount, fees, solver, and estimated time |
+| `get_quote` | Get a swap quote between two assets and return the destination amount, fees, solver, and estimated time |
 | `create_order` | Submit a cross-chain swap order using amounts from a prior quote |
 | `get_order_status` | Get the current status of an order by ID |
 | `get_all_user_orders` | List all orders for a wallet address, with optional chain and status filters |
@@ -31,8 +31,8 @@ The server is hosted and publicly available. No local setup or API key required 
 
 | Network | MCP URL |
 |---|---|
-| Mainnet | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
-| Testnet | `https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+| Mainnet | `https://mcp.garden.finance/mainnet/mcp` |
+| Testnet | `https://mcp.garden.finance/testnet/mcp` |
 
 ---
 
@@ -44,16 +44,16 @@ The server is hosted and publicly available. No local setup or API key required 
 <Tabs>
   <Tab title="CLI (recommended)">
 
-Run one command per network — Claude Code adds the server to your global config automatically:
+Run one command per network. Claude Code adds the server to your global config automatically:
 
 ```bash
 # Mainnet
 claude mcp add --transport http garden-mainnet \
-  https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp
+  https://mcp.garden.finance/mainnet/mcp
 
 # Testnet
 claude mcp add --transport http garden-testnet \
-  https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp
+  https://mcp.garden.finance/testnet/mcp
 ```
 
   </Tab>
@@ -66,11 +66,11 @@ Add to `.claude/settings.json` (project-level) or `~/.claude/settings.json` (glo
   "mcpServers": {
     "garden-mainnet": {
       "type": "http",
-      "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+      "url": "https://mcp.garden.finance/mainnet/mcp"
     },
     "garden-testnet": {
       "type": "http",
-      "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+      "url": "https://mcp.garden.finance/testnet/mcp"
     }
   }
 }
@@ -108,11 +108,11 @@ You should see `garden-mainnet` and `garden-testnet` listed as connected servers
       "mcpServers": {
         "garden-mainnet": {
           "type": "http",
-          "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "url": "https://mcp.garden.finance/mainnet/mcp"
         },
         "garden-testnet": {
           "type": "http",
-          "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "url": "https://mcp.garden.finance/testnet/mcp"
         }
       }
     }
@@ -141,7 +141,7 @@ You should see `garden-mainnet` and `garden-testnet` listed as connected servers
     |---|---|
     | Name | `garden-mainnet` |
     | Type | `HTTP` |
-    | URL | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+    | URL | `https://mcp.garden.finance/mainnet/mcp` |
   </Step>
   <Step title="Save and verify">
     Click **Save**. Cursor will connect and display the available Garden tools.
@@ -157,10 +157,10 @@ Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project-local):
 {
   "mcpServers": {
     "garden-mainnet": {
-      "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+      "url": "https://mcp.garden.finance/mainnet/mcp"
     },
     "garden-testnet": {
-      "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+      "url": "https://mcp.garden.finance/testnet/mcp"
     }
   }
 }
@@ -184,10 +184,10 @@ Restart Cursor after saving.
     {
       "mcpServers": {
         "garden-mainnet": {
-          "serverUrl": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "serverUrl": "https://mcp.garden.finance/mainnet/mcp"
         },
         "garden-testnet": {
-          "serverUrl": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "serverUrl": "https://mcp.garden.finance/testnet/mcp"
         }
       }
     }
@@ -212,7 +212,7 @@ Restart Cursor after saving.
     | Field | Value |
     |---|---|
     | Name | `Garden Finance` |
-    | URL | `https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp` |
+    | URL | `https://mcp.garden.finance/mainnet/mcp` |
   </Step>
   <Step title="Enable and verify">
     Toggle the server on. Start a new conversation and verify that Garden tools appear when you mention swapping assets.
@@ -235,15 +235,15 @@ Restart Cursor after saving.
     ```toml
     [[mcp_servers]]
     name = "garden-mainnet"
-    url  = "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    url  = "https://mcp.garden.finance/mainnet/mcp"
 
     [[mcp_servers]]
     name = "garden-testnet"
-    url  = "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+    url  = "https://mcp.garden.finance/testnet/mcp"
     ```
   </Step>
   <Step title="Verify the connection">
-    Run `codex` and ask it to list available tools — the Garden tools (`get_quote`, `create_order`, etc.) should appear.
+    Run `codex` and ask it to list available tools. The Garden tools (`get_quote`, `create_order`, etc.) should appear.
   </Step>
 </Steps>
 
@@ -260,10 +260,10 @@ Restart Cursor after saving.
     {
       "mcpServers": {
         "garden-mainnet": {
-          "url": "https://mainnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "url": "https://mcp.garden.finance/mainnet/mcp"
         },
         "garden-testnet": {
-          "url": "https://testnet-eq28f5912wbhjad5b5zpyikt.garden-staging.dealpulley.com/mcp"
+          "url": "https://mcp.garden.finance/testnet/mcp"
         }
       }
     }
@@ -289,8 +289,8 @@ If you want to self-host the MCP server (for custom App IDs, private deployments
 **Prerequisites:** [Bun](https://bun.sh) v1.x
 
 ```bash
-git clone https://github.com/gardenfi/garden-agent
-cd garden-agent/garden-mcp
+git clone https://github.com/gardenfi/garden-mcp
+cd garden-mcp
 bun install
 
 # Mainnet
@@ -316,7 +316,7 @@ claude mcp add --transport http garden-local http://localhost:3000/mcp
 **Prerequisites:** [Docker](https://docs.docker.com/get-docker/)
 
 ```bash
-cd garden-agent/garden-mcp
+cd garden-mcp
 docker compose up --build
 ```
 
@@ -334,8 +334,8 @@ claude mcp add --transport http garden-testnet http://localhost:3002/mcp
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `BASE_URL` | Yes | — | Garden API base URL (`https://api.garden.finance/v2` or testnet equivalent) |
-| `APP_ID` | Yes | — | Your Garden App ID |
+| `BASE_URL` | Yes | None | Garden API base URL |
+| `APP_ID` | Yes | None | Your Garden App ID |
 | `PORT` | No | `3000` | Port to listen on |
 
 Get an App ID from the [Garden Portal](https://portal.garden.finance).
@@ -344,29 +344,43 @@ Get an App ID from the [Garden Portal](https://portal.garden.finance).
 
 ## Deploy on Coolify
 
+The compose file defines two services, `garden-mcp-mainnet` and `garden-mcp-testnet`, so both networks can share a single domain split by path (`/mainnet`, `/testnet`).
+
 <Steps>
   <Step title="Fork the repository">
-    Fork or push `garden-agent/garden-mcp` to GitHub.
+    Fork or push `garden-mcp` to GitHub.
   </Step>
   <Step title="Create a new resource">
     In Coolify: **New Resource → Docker Compose** → connect your repository.
   </Step>
-  <Step title="Set environment variables">
-    | Variable | Value |
-    |---|---|
-    | `BASE_URL` | `https://api.garden.finance/v2` (mainnet) or testnet equivalent |
-    | `APP_ID` | Your Garden App ID |
-    | `PORT` | `3000` |
+  <Step title="Set environment variables per service">
+    | Variable | `garden-mcp-mainnet` | `garden-mcp-testnet` |
+    |---|---|---|
+    | `BASE_URL` | `https://api.garden.finance/v2` | `https://testnet.api.garden.finance/v2` |
+    | `APP_ID` | Your Garden App ID | Your Garden App ID |
   </Step>
   <Step title="Point DNS">
-    Create a DNS record: `mcp.yourdomain.com` → your Coolify service.
+    Create one DNS record: `mcp.yourdomain.com` → your Coolify server.
   </Step>
-  <Step title="Share the URL">
-    Users connect with `claude mcp add --transport http garden https://mcp.yourdomain.com/mcp` — no local setup needed.
+  <Step title="Set a path-based domain on each service">
+    Coolify (Traefik under the hood) can route by path on a single host. Open each service's **Domains** field and set:
+
+    - `garden-mcp-mainnet` → `https://mcp.yourdomain.com/mainnet`
+    - `garden-mcp-testnet` → `https://mcp.yourdomain.com/testnet`
+
+    Traefik strips the path prefix before forwarding, so each container still sees plain `/mcp` and `/health` requests. No code changes needed on the app side. If your Coolify version requires the container port in the domain field, append it (e.g. `https://mcp.yourdomain.com:3000/mainnet`); it only affects internal routing, not the public URL.
+  </Step>
+  <Step title="Share the URLs">
+    Users connect with:
+
+    ```bash
+    claude mcp add --transport http garden-mainnet https://mcp.yourdomain.com/mainnet/mcp
+    claude mcp add --transport http garden-testnet https://mcp.yourdomain.com/testnet/mcp
+    ```
   </Step>
 </Steps>
 
-A health check endpoint at `GET /health` is built in — Coolify uses it to verify the service is running.
+A health check endpoint at `GET /health` is built in. Coolify uses it to verify each service is running.
 
 ---
 

@@ -7,9 +7,42 @@ The **Garden Integration Skill** is a Claude Code skill that adds Bitcoin onramp
 
 Tell Claude Code what you want:
 
-> *"Add Garden Finance to my app"*
-> *"Integrate cross-chain BTC swaps into this DEX"*
-> *"Build a Bitcoin onramp for my wallet"*
+```
+Add Garden Finance to my app
+Integrate cross-chain BTC swaps into this DEX
+Build a Bitcoin onramp for my wallet
+```
+
+---
+
+## Installation
+
+Skills live in `.claude/skills/`, either globally (`~/.claude/skills/`) or scoped to a single project (`.claude/skills/` in the repo root).
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/gardenfi/garden-integration-skill.git
+    ```
+  </Step>
+  <Step title="Copy the skill file">
+    Claude Code picks up any `.md` file dropped into `.claude/skills/` automatically. No config changes needed.
+
+    ```bash
+    mkdir -p .claude/skills
+    cp garden-integration-skill/SKILL.md .claude/skills/garden-integration-skill.md
+    ```
+  </Step>
+  <Step title="Install the bundled scripts (optional)">
+    Only needed if you want the Node.js signing helpers for local testing. Frontend integrations sign through the browser wallet and never touch these.
+
+    ```bash
+    cd garden-integration-skill && bun install
+    ```
+  </Step>
+</Steps>
+
+This skill is for **developers integrating Garden into code**. For end-user swaps ("swap my wBTC to BTC"), use the [Garden Swap Skill](/developers/ai/garden-skill) instead.
 
 ---
 
@@ -23,7 +56,7 @@ Tell Claude Code what you want:
     Uses `@gardenfi/core` with `Garden.fromWallets()` and `garden.createSwap()`. Full server-side order lifecycle management.
   </Card>
   <Card title="Vue / Svelte / Angular" icon="code">
-    Raw REST API — no new wallet dependencies. Works with any framework via direct HTTP calls to Garden's endpoints.
+    Raw REST API, no new wallet dependencies. Works with any framework via direct HTTP calls to Garden's endpoints.
   </Card>
   <Card title="React without wagmi" icon="circle-question">
     Asks whether to add wagmi (full SDK path) or use the raw REST API (no migration needed). You choose.
@@ -37,36 +70,36 @@ Tell Claude Code what you want:
 The skill follows a strict three-phase process. No code is written until you have reviewed and approved the plan.
 
 <Steps>
-  <Step title="Phase 0 — Investigate">
+  <Step title="Phase 0: Investigate">
 
     The skill reads your codebase before proposing anything:
 
-    - **Detects the framework** — React, Node.js, Vue, Svelte, or other
-    - **Identifies the dApp type** — DEX, bridge, wallet, lending, etc.
-    - **Reads the wallet stack** — wagmi, ethers.js, window.ethereum, etc.
-    - **Checks for existing DEX integrations** — searches for an MCP server or official docs for any DEX found
-    - **Finds the bridge asset** — fetches Garden's live asset list and cross-references it with your token config; verifies contract addresses match and makes a live quote call to confirm liquidity before declaring a bridge asset
+    - **Detects the framework**: React, Node.js, Vue, Svelte, or other
+    - **Identifies the dApp type**: DEX, bridge, wallet, lending, etc.
+    - **Reads the wallet stack**: wagmi, ethers.js, window.ethereum, etc.
+    - **Checks for existing DEX integrations**: searches for an MCP server or official docs for any DEX found
+    - **Finds the bridge asset**: fetches Garden's live asset list and cross-references it with your token config; verifies contract addresses match and makes a live quote call to confirm liquidity before declaring a bridge asset
 
   </Step>
-  <Step title="Phase 1 — Present the plan">
+  <Step title="Phase 1: Present the plan">
 
     Before writing a single line of code, the skill presents a complete integration plan that covers:
 
     - What your app currently is and how Garden fits in
     - The bridge asset that connects Garden and your existing tokens
     - The Bitcoin onramp flow (BTC → your app)
-    - Where Bitcoin will appear in your UI — inside the existing swap component or as a separate widget
+    - Where Bitcoin will appear in your UI: inside the existing swap component or as a separate widget
     - Whether to also add wBTC (EVM source) for fast testnet testing (~20 seconds vs ~10 minutes)
     - The reverse offramp flow (any token → BTC) as a follow-up option
 
-    **You must approve the plan before the skill writes any code.** If you have questions, ask — the skill answers and re-confirms before proceeding.
+    **You must approve the plan before the skill writes any code.** If you have questions, ask. The skill answers and re-confirms before proceeding.
 
   </Step>
-  <Step title="Phase 2 — Implement">
+  <Step title="Phase 2: Implement">
 
     Once approved, the skill writes the integration following your existing code style:
 
-    - Uses the wallet library already in your codebase — no second wallet library
+    - Uses the wallet library already in your codebase, no second wallet library
     - Follows your existing config and environment variable patterns
     - Places Garden utilities alongside your existing swap utilities
     - For DEX integrations (Option A): chains Garden and DEX quotes, handles two-legged execution, and leaves all non-BTC token pairs untouched
@@ -79,7 +112,7 @@ The skill follows a strict three-phase process. No code is written until you hav
 
 ## Integration paths
 
-### Path A — React SDK (`@gardenfi/react-hooks`)
+### Path A: React SDK (`@gardenfi/react-hooks`)
 
 For React apps with wagmi. The skill installs dependencies, applies required WASM polyfills, wraps the app with `GardenProvider`, and implements the swap using `useGarden()`.
 
@@ -108,7 +141,7 @@ const order = await swap({
 // order.val is the Bitcoin deposit address
 ```
 
-### Path B — Node.js SDK (`@gardenfi/core`)
+### Path B: Node.js SDK (`@gardenfi/core`)
 
 For server-side applications. The skill sets up `Garden.fromWallets()` with a viem wallet client and calls `garden.createSwap()`.
 
@@ -133,9 +166,9 @@ const result = await garden.createSwap({
 });
 ```
 
-### Path C — Raw REST API
+### Path C: Raw REST API
 
-For Vue, Svelte, Angular, and any other framework. The skill calls Garden's HTTP endpoints directly — no SDK, no new wallet dependencies.
+For Vue, Svelte, Angular, and any other framework. The skill calls Garden's HTTP endpoints directly, no SDK, no new wallet dependencies.
 
 ```typescript
 // 1. Get a quote
@@ -168,9 +201,9 @@ When Garden is embedded inside an existing swap component, the skill implements 
 
 | Source | Destination | Execution |
 |---|---|---|
-| BTC or wBTC | ETH / bridge asset | Garden only — single leg |
+| BTC or wBTC | ETH / bridge asset | Garden only, single leg |
 | BTC or wBTC | Any other DEX token | Garden (BTC → ETH) + DEX (ETH → token) |
-| Any other token | Any other token | Existing DEX path — untouched |
+| Any other token | Any other token | Existing DEX path, untouched |
 
 Quote chaining: Garden quote → `destination.amount` (ETH) → DEX quote (ETH → buyToken) → display final output. The DEX quote is always re-fetched before execution because Garden's settlement takes minutes and the original quote is stale by then.
 
@@ -178,7 +211,7 @@ Quote chaining: Garden quote → `destination.amount` (ETH) → DEX quote (ETH �
 
 ## Order status and polling
 
-The skill implements a complete status model that covers all terminal states — not just success:
+The skill implements a complete status model that covers all terminal states, not just success:
 
 ```typescript
 type OrderPhase =
@@ -196,7 +229,7 @@ type OrderPhase =
 
 ## App ID
 
-All API calls require a Garden App ID sent as the `garden-app-id` header. The skill uses a placeholder and never blocks on it — get your App ID from the [Garden Portal](https://portal.garden.finance) while the integration is being built.
+All API calls require a Garden App ID sent as the `garden-app-id` header. The skill uses a placeholder and never blocks on it. Get your App ID from the [Garden Portal](https://portal.garden.finance) while the integration is being built.
 
 In code, the skill always pulls it from an environment variable:
 
@@ -214,7 +247,31 @@ NEXT_PUBLIC_GARDEN_API_KEY=<your-app-id>  # Next.js React
 |---|---|---|
 | `"No order pair found"` | Token address used as asset ID instead of `id` field | Use only the `id` field from `GET /v2/assets` |
 | `"No quotes available"` | Amount outside min/max, or no solver coverage for the pair | Check `min_amount`/`max_amount`; verify asset pair is active |
+| `"insufficient liquidity"` | Missing required field in the order body | Include `delegate`, `nonce`, `solver_id`, and `slippage` |
+| `"insufficient liquidity"` (fields already correct) | EVM address isn't checksummed | Checksum with `ethers.getAddress()` or viem's `getAddress()` |
 | `"Gas sponsorship is not enabled"` | Called `PATCH ?action=initiate` without sponsorship | Use direct on-chain transactions (approval + initiate) |
+
+---
+
+## Bundled scripts
+
+For Node.js backends or local testing only. Frontend integrations sign through the browser wallet (MetaMask, RainbowKit, etc.) and never touch these directly.
+
+| Script | Purpose | Key env vars |
+|---|---|---|
+| `get-address.ts` | Derive an Ethereum address from a private key | `GARDEN_PRIVATE_KEY` |
+| `btc-get-address.ts` | Derive a Bitcoin P2TR address from a private key | `GARDEN_PRIVATE_KEY`, `GARDEN_NETWORK` |
+| `sign-and-initiate.ts` | Broadcast the EVM approval + initiate transactions | `GARDEN_PRIVATE_KEY`, `ETH_RPC_URL` |
+| `btc-send.ts` | Build and broadcast a P2TR transaction to the deposit address | `GARDEN_PRIVATE_KEY`, `GARDEN_NETWORK` |
+
+Each script reads a Garden create-order JSON response from stdin and writes the result to stdout:
+
+```bash
+curl -s -X POST https://testnet.api.garden.finance/v2/orders \
+  -H "garden-app-id: $GARDEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{...}' | bun run scripts/sign-and-initiate.ts
+```
 
 ---
 
