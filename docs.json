@@ -297,7 +297,7 @@
           },
           {
             "label": "Docs",
-            "href": "https://docs.garden.finance"
+            "href": "https://garden.finance/docs"
           },
           {
             "label": "Audits",
@@ -311,5 +311,10 @@
         ]
       }
     ]
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://garden.finance/docs"
+    }
   }
 }
