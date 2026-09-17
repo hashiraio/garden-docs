@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Garden Docs",
+  "name": "Garden Finance Docs",
   "colors": {
     "primary": "#e36492",
     "light": "#f29Fcd",
@@ -316,5 +316,6 @@
     "metatags": {
       "canonical": "https://garden.finance/docs"
     }
-  }
+  },
+  "description": "API and SDK for integrating native Bitcoin cross-chain swaps in dapps, wallets, and exchanges. Quickstarts, API reference, and contract docs inside."
 }
