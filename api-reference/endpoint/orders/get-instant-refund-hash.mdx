@@ -1,7 +1,20 @@
 ---
 title: 'Instant Refund Hash'
-openapi: 'GET /orders/{order}/instant-refund-hash'
+openapi: 'api-reference/openapi.json POST /instant-refund-hash'
 version: 1.0
---- 
+---
 
-Retrieve the instant refund hash for a specific swap order. This hash can be used to immediately refund an order before the atomic swap's timelock expires.
+import V2Superseded from '/snippets/v2-superseded.mdx';
+
+<V2Superseded />
+
+The hashes to sign for a Bitcoin instant refund — one per UTXO backing the source leg. Use them
+to refund an order before the atomic swap's timelock expires.
+
+Bitcoin only: other chains refund through [Execute HTLC Action](/api-reference/endpoint/orders/patch)
+with `action=refund`.
+
+<Note>
+  This endpoint was previously documented as `GET /orders/{order}/instant-refund-hash`. That form
+  never existed — the implementation has always taken the order id in a `POST` body.
+</Note>

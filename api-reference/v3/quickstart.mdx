@@ -1,0 +1,260 @@
+---
+title: "Quickstart"
+description: "Use Garden's v3 API to create a swap in a single call, submit it on-chain, and track its status."
+---
+
+<Note>
+  This guide uses a testing app ID. Create your own API key at [portal.garden.finance](https://portal.garden.finance).
+</Note>
+
+Starting a swap takes one call. `POST /quote` prices the swap, creates the order, and returns the
+transaction to initiate it on-chain.
+
+<Steps>
+  <Step title="Create Quote">
+    Let's trade 0.0002 WBTC on **Arbitrum Sepolia** for USDC on **Solana Devnet**.
+
+    Set `amount` on the leg you want to fix. Here it is on `source`, so we're spending exactly
+    0.0002 WBTC and the API works out what we receive.
+
+    <Warning>
+      Use `owner` addresses you control on both chains.
+    </Warning>
+
+    ```bash wrap
+    curl --location 'https://testnet.api.garden.finance/v3/quote' \
+        --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "source": {
+                "asset": "arbitrum_sepolia:wbtc",
+                "owner": "0xe62a2b235f7bB86C1122313153824D54E6137e77",
+                "amount": "20000"
+            },
+            "destination": {
+                "asset": "solana_testnet:usdc",
+                "owner": "YH4btvqb4JBWSEJh22MuA231ekpJ5JqbBXQY1apJtKH"
+            },
+            "slippage": 50
+        }'
+    ```
+    ```json Response expandable wrap
+    {
+        "status": "Ok",
+        "result": {
+            "request_id": "e26b544e-0695-4452-8e27-e081a730e123",
+            "quotes": [
+                {
+                    "id": "326e66173dacacfc5a595c975bf6ebc28d931553c8d77c7321f7a3945adbd39a",
+                    "solver_id": "garden-testnet-solver",
+                    "secret_hash": "b32a0523aefaff098ef55799b9a7d1546366a0bc3a3c48c45000d848b056a8e2",
+                    "source_swap_id": "049bb48481264d7e6a929828aebe69f95117fc3fbb94829e80ae62117b6cd9d2",
+                    "destination_swap_id": "e21efa5e46fabbae3a14f3a2dc4233de561b83947eefb2776e4cc936c8f08927",
+                    "source": {
+                        "asset": "arbitrum_sepolia:wbtc",
+                        "amount": "20000",
+                        "display": "0.0002",
+                        "value": "15.265345385185608"
+                    },
+                    "destination": {
+                        "asset": "solana_testnet:usdc",
+                        "amount": "16251402",
+                        "display": "16.251402",
+                        "value": "16.24911116973427668114"
+                    },
+                    "fee": 30,
+                    "fixed_fee": "0.5",
+                    "slippage": 50,
+                    "estimated_time": 20,
+                    "deadline": 1789985317,
+                    "initiate": {
+                        "type": "evm",
+                        "chain_id": 421614,
+                        "approval_transaction": null,
+                        "initiate_transaction": {
+                            "chain_id": 421614,
+                            "to": "0xb5ae9785349186069c48794a763db39ec756b1cf",
+                            "value": "0x0",
+                            "data": "0x97ffc7ae0000000000000000000000001fd1f7b5c6e4e7b9f80a4db17903afd83d3fd31d00000000000000000000000000000000000000000000000000000000000697800000000000000000000000000000000000000000000000000000000000004e20b32a0523aefaff098ef55799b9a7d1546366a0bc3a3c48c45000d848b056a8e2",
+                            "gas_limit": "0x493e0"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    ```
+
+    <Note>
+      `id` is the quote ID and the order ID. Once your initiate is indexed, poll it at
+      [get order](/api-reference/v3/endpoint/orders/get-order-by-id).
+    </Note>
+
+    You may get more than one quote back, one per eligible solver. Pick one and use its
+    `initiate`. The others expire on their own.
+  </Step>
+
+  <Step title="Initiate the Swap">
+    The `initiate` block carries everything you need to fund the source leg. Its shape is
+    discriminated on `type`, which follows the source chain's family.
+
+    <Tabs>
+      <Tab title="EVM">
+        ```json
+        {
+            "type": "evm",
+            "chain_id": 421614,
+            "approval_transaction": null,
+            "initiate_transaction": {
+                "chain_id": 421614,
+                "to": "0xb5ae9785349186069c48794a763db39ec756b1cf",
+                "value": "0x0",
+                "data": "0x97ffc7ae000000000000000000000000...",
+                "gas_limit": "0x493e0"
+            }
+        }
+        ```
+
+        Send `initiate_transaction` as-is. `value`, `data` and `gas_limit` are hex strings.
+
+        `approval_transaction` is `null` above because this wallet had already approved the
+        HTLC. When it isn't null, send it first and wait for it to be mined, or the initiate
+        reverts.
+
+        From a **HyperCore** source you also get `core_to_evm_transfer`. Send that first to
+        bridge to HyperEVM, then the initiate.
+      </Tab>
+      <Tab title="Starknet">
+        ```json
+        {
+            "type": "starknet",
+            "chain_id": "0x534e5f5345504f4c4941",
+            "approval_transaction": {
+                "to": "0x53c5a3ce63691897be7349b55589674b35a0ad30f1...",
+                "selector": "0x219209e083275171774dab1df80982e9df2096516f...",
+                "calldata": ["0x2448040b22b27f5a814756e67da0057...", "0x4e20", "0x0"]
+            },
+            "initiate_transaction": {
+                "to": "0x2448040b22b27f5a814756e67da0057...",
+                "selector": "0x2aed25fcd0101fcece997d93f9d0643dfa3fbd41...",
+                "calldata": ["0x1fd1f7b5c6e4e7b9f80a4db17903afd83d3fd31d", "0x69780", "0x4e20"]
+            }
+        }
+        ```
+
+        Submit both calls together as a **single multicall**. Starknet accounts execute an
+        array of calls in one transaction, so the approval and the initiate settle atomically.
+
+        `approval_transaction` is `null` when the HTLC already has an allowance; send the
+        initiate on its own then.
+      </Tab>
+      <Tab title="Solana">
+        ```json
+        {
+            "type": "solana",
+            "versioned_tx": "AQABA0Zk8t1p7f9xQ0dGVy5uS2h0dGhlIHR4IGJ5dGVz..."
+        }
+        ```
+
+        `versioned_tx` is a base64-encoded `VersionedTransaction`. Decode it, sign, and send.
+
+        It carries a blockhash fetched when the quote was built, so it stays valid for about
+        90 seconds. If you sign later than that, refresh the blockhash first.
+
+        ```ts
+        import { VersionedTransaction } from '@solana/web3.js'
+
+        const tx = VersionedTransaction.deserialize(Buffer.from(versioned_tx, 'base64'))
+        tx.message.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+        tx.sign([wallet])
+        await connection.sendTransaction(tx)
+        ```
+      </Tab>
+      <Tab title="Bitcoin">
+        ```json
+        {
+            "type": "bitcoin",
+            "to": "tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp",
+            "amount": "20000"
+        }
+        ```
+
+        Nothing to sign. Send exactly `amount` satoshis to `to` from the wallet whose pubkey
+        you passed as `owner`. You may use our [faucet](https://testnetbtc.com) on testnet.
+
+      </Tab>
+    </Tabs>
+
+  </Step>
+
+  <Step title="Check Order Status">
+    Poll the order with the same `id`. The order exists once your initiate is on-chain; before
+    that, this call returns 404.
+
+    ```bash wrap
+    curl -X 'GET' \
+    'https://testnet.api.garden.finance/v3/orders/326e66173dacacfc5a595c975bf6ebc28d931553c8d77c7321f7a3945adbd39a' \
+    -H 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+    -H 'accept: application/json'
+    ```
+
+    The swap is complete once both `source_swap` and `destination_swap` have a `redeem_tx_hash`.
+  </Step>
+</Steps>
+
+## Supported chains
+
+Because v3 builds the initiate transaction for you, a swap can start from an **EVM chain,
+Solana, Starknet or Bitcoin**.
+
+Litecoin, Lightning and Spark aren't supported as a v3 source yet. Use
+[v2](/api-reference/quickstart) for those. Any chain can be the destination.
+
+Call [get chains](/api-reference/v3/endpoint/blockchain/get-chains) for the current list.
+
+## Receiving an exact amount
+
+Put `amount` on `destination` instead, and the API works out what to spend:
+
+```json
+{
+    "source": { "asset": "arbitrum_sepolia:wbtc", "owner": "0xe62a..." },
+    "destination": { "asset": "solana_testnet:usdc", "owner": "YH4btv...", "amount": "15000000" },
+    "slippage": 50
+}
+```
+
+```json Response
+{
+    "source": {
+        "asset": "arbitrum_sepolia:wbtc",
+        "amount": "18506",
+        "display": "0.00018506",
+        "value": "14.1250240849122430824"
+    },
+    "destination": {
+        "asset": "solana_testnet:usdc",
+        "amount": "15000000",
+        "display": "15",
+        "value": "14.99788556987355"
+    }
+}
+```
+
+## Indexing your initiate
+
+Swaps are detected automatically within a few seconds. To skip the wait, send us the transaction hash:
+
+```bash wrap
+curl --location 'https://testnet.api.garden.finance/v3/index' \
+    --header 'garden-app-id: f242ea49332293424c96c562a6ef575a819908c878134dcb4fce424dc84ec796' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "id": "326e66173dacacfc5a595c975bf6ebc28d931553c8d77c7321f7a3945adbd39a",
+        "tx_hash": "0xa5a49107fc519f018558776ebd0f5a2d1118cc8a598cb18f7f6aaabbdd39598e"
+    }'
+```
+
+## Checking a price without creating an order
+
+[Get estimate](/api-reference/v3/endpoint/estimate) prices a route without creating anything.

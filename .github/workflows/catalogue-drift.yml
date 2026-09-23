@@ -1,0 +1,30 @@
+# The catalogue-derived enums in the OpenAPI specs drive the playground's dropdowns. They are
+# generated from the live catalogue, so they go stale silently whenever a chain or asset ships.
+# Both environments are checked: the catalogue is shared with v2, so mainnet is readable even
+# though v3 is not routed there yet.
+# This fails when the spec and the API disagree; `scripts/sync_catalogue.py --env <env>` fixes it.
+name: catalogue drift
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays, 06:00 UTC
+  pull_request:
+    paths:
+      - "api-reference/openapi-v3.json"
+      - "scripts/sync_catalogue.py"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [testnet, mainnet]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare the spec against the live catalogue
+        run: python3 scripts/sync_catalogue.py --env ${{ matrix.environment }} --check
