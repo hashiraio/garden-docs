@@ -181,7 +181,7 @@
           "chain": {
             "$ref": "#/components/schemas/Chain"
           },
-          "name":{
+          "name": {
             "type": "string",
             "example": "Arbitrum"
           },
@@ -512,7 +512,7 @@
           }
         }
       },
-      "SourceAccount":{
+      "SourceAccount": {
         "type": "object",
         "required": [
           "owner",
@@ -562,10 +562,10 @@
         "title": "status",
         "description": "The status of the order.",
         "enum": [
-          "not-initiated", 
-          "in-progress", 
-          "completed", 
-          "expired", 
+          "not-initiated",
+          "in-progress",
+          "completed",
+          "expired",
           "refunded"
         ]
       },
@@ -1615,33 +1615,6 @@
     }
   },
   "paths": {
-    "/orders/{order}/instant-refund-hash": {
-      "get": {
-        "summary": "Get instant refund hash for the given swap.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "order",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Swap with the given ID.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InstantRefundHashResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/quote": {
       "get": {
         "description": "Get quote for the given asset pair.",
@@ -2331,6 +2304,53 @@
                       "token_address": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
                     }
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instant-refund-hash": {
+      "post": {
+        "summary": "Get instant refund hash for the given swap.",
+        "description": "The hashes to sign for a Bitcoin instant refund - one per UTXO backing the source leg.\n\nBitcoin only: other chains refund through `PATCH /orders/{order}?action=refund`.\n\nPreviously documented as `GET /orders/{order}/instant-refund-hash`, which never existed - the implementation has always taken the order id in a POST body.",
+        "operationId": "postInstantRefundHash",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "order_id"
+                ],
+                "properties": {
+                  "order_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "One hash per UTXO, in input order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstantRefundHashResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown order, or its source leg is not a Bitcoin swap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
