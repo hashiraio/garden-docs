@@ -8,7 +8,6 @@
     "dark": "#e36492"
   },
   "favicon": "/favicon.svg",
-  "openapi": "api-reference/openapi.json",
   "contextual": {
     "options": [
       "copy",
@@ -198,47 +197,107 @@
       },
       {
         "tab": "API Reference",
-        "groups": [
+        "versions": [
           {
-            "group": "Get Started",
-            "pages": [
-              "api-reference/quickstart"
+            "version": "v3",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "api-reference/v3/quickstart",
+                  "api-reference/setup"
+                ]
+              },
+              {
+                "group": "Quotes",
+                "pages": [
+                  "api-reference/v3/endpoint/create-quote",
+                  "api-reference/v3/endpoint/estimate",
+                  "api-reference/v3/endpoint/get-quote-by-id",
+                  "api-reference/v3/endpoint/index-initiate"
+                ]
+              },
+              {
+                "group": "Orders",
+                "pages": [
+                  "api-reference/v3/endpoint/orders/get-order-by-id",
+                  "api-reference/v3/endpoint/orders/get-orders",
+                  "api-reference/v3/endpoint/orders/instant-refund-hash",
+                  "api-reference/v3/endpoint/orders/patch"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "pages": [
+                  "api-reference/v3/endpoint/blockchain/get-chains",
+                  "api-reference/v3/endpoint/blockchain/get-assets",
+                  "api-reference/v3/endpoint/blockchain/get-policy",
+                  "api-reference/v3/endpoint/blockchain/get-liquidity",
+                  "api-reference/v3/endpoint/blockchain/get-schema",
+                  "api-reference/v3/endpoint/blockchain/get-schemas"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "pages": [
+                  "api-reference/v3/endpoint/monitoring/get-health",
+                  "api-reference/v3/endpoint/monitoring/get-volume",
+                  "api-reference/v3/endpoint/monitoring/get-fees"
+                ]
+              },
+              {
+                "group": "Affiliate",
+                "pages": [
+                  "api-reference/v3/endpoint/affiliate/get-earnings"
+                ]
+              }
             ]
           },
           {
-            "group": "Orders",
-            "pages": [
-              "api-reference/endpoint/get-quote",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-orders",
-              "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-instant-refund-hash",
-              "api-reference/endpoint/orders/patch"
-            ]
-          },
-          {
-            "group": "Assets & Routes",
-            "pages": [
-              "api-reference/endpoint/blockchain/get-chains",
-              "api-reference/endpoint/blockchain/get-assets",
-              "api-reference/endpoint/blockchain/get-policy",
-              "api-reference/endpoint/blockchain/get-liquidity",
-              "api-reference/endpoint/blockchain/get-schema",
-              "api-reference/endpoint/blockchain/get-schemas"
-            ]
-          },
-          {
-            "group": "Monitoring",
-            "pages": [
-              "api-reference/endpoint/get-health",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
-            ]
-          },
-          {
-            "group": "Affiliate",
-            "pages": [
-              "api-reference/endpoint/affiliate/get-earnings"
+            "version": "v2",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "api-reference/quickstart"
+                ]
+              },
+              {
+                "group": "Orders",
+                "pages": [
+                  "api-reference/endpoint/get-quote",
+                  "api-reference/endpoint/orders/get-order-by-id",
+                  "api-reference/endpoint/orders/get-orders",
+                  "api-reference/endpoint/orders/create-order",
+                  "api-reference/endpoint/orders/get-instant-refund-hash",
+                  "api-reference/endpoint/orders/patch"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "pages": [
+                  "api-reference/endpoint/blockchain/get-chains",
+                  "api-reference/endpoint/blockchain/get-assets",
+                  "api-reference/endpoint/blockchain/get-policy",
+                  "api-reference/endpoint/blockchain/get-liquidity",
+                  "api-reference/endpoint/blockchain/get-schema",
+                  "api-reference/endpoint/blockchain/get-schemas"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "pages": [
+                  "api-reference/endpoint/get-health",
+                  "api-reference/endpoint/get-volume",
+                  "api-reference/endpoint/get-fees"
+                ]
+              },
+              {
+                "group": "Affiliate",
+                "pages": [
+                  "api-reference/endpoint/affiliate/get-earnings"
+                ]
+              }
             ]
           }
         ]

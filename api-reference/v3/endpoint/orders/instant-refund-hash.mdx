@@ -1,0 +1,9 @@
+---
+title: 'Instant Refund Hash'
+openapi: 'api-reference/openapi-v3.json POST /instant-refund-hash'
+---
+
+Retrieve the instant refund hashes for a Bitcoin swap order, one per UTXO. These can be used to
+refund an order immediately, before the atomic swap's timelock expires.
+
+Submit the signatures with [refund order](./patch) using `action=instant-refund`.

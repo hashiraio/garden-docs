@@ -1,0 +1,10 @@
+---
+title: 'Refund Order'
+openapi: 'api-reference/openapi-v3.json PATCH /orders/{order}'
+---
+
+Refund a swap order whose source leg was funded but never completed.
+
+The action is selected with the `action` query parameter. Use `refund` once the atomic swap's
+timelock has expired, or `instant-refund` on a Bitcoin order to refund before it expires,
+submitting the signatures from [instant refund hash](./instant-refund-hash).

@@ -1,0 +1,2418 @@
+{
+  "openapi": "3.1.0",
+  "x-mcp": {
+    "enabled": true
+  },
+  "info": {
+    "title": "Garden API",
+    "version": "3.0.0",
+    "description": "API specification for Garden v3.\n\n`POST /quote` prices a swap and creates the order in a single call, returning the transaction to initiate it on-chain.\n\nOrders, assets, chains, schemas, liquidity and policy are served under `/v3`.\n\nA swap can start from an EVM chain, Solana, Starknet or Bitcoin. Any chain can be the destination."
+  },
+  "servers": [
+    {
+      "url": "https://{environment}.garden.finance/v3",
+      "variables": {
+        "environment": {
+          "default": "api",
+          "enum": [
+            "api",
+            "testnet.api"
+          ]
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "garden-app-id": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "garden-app-id": {
+        "type": "apiKey",
+        "name": "garden-app-id",
+        "in": "header",
+        "description": "If you do not yet have an app ID, please follow these [steps](/api-reference/setup)."
+      }
+    },
+    "schemas": {
+      "HTLCSchemaName": {
+        "type": "string",
+        "title": "htlc",
+        "enum": [
+          "evm:htlc_erc20",
+          "evm:htlc",
+          "solana:htlc",
+          "starknet:htlc_erc20",
+          "solana:htlc_spltoken"
+        ]
+      },
+      "TokenSchemaName": {
+        "type": "string",
+        "title": "token",
+        "enum": [
+          "evm:erc20",
+          "starknet:erc20"
+        ]
+      },
+      "SchemaName": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/HTLCSchemaName"
+          },
+          {
+            "$ref": "#/components/schemas/TokenSchemaName"
+          }
+        ]
+      },
+      "Chain": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "description": "Mainnet",
+            "enum": [
+              "arbitrum",
+              "ethereum",
+              "bitcoin",
+              "arc",
+              "base",
+              "bnbchain",
+              "hypercore",
+              "hyperevm",
+              "ink",
+              "lightning",
+              "litecoin",
+              "robinhood",
+              "solana",
+              "spark",
+              "starknet",
+              "tempo"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "description": "Testnet",
+            "enum": [
+              "arbitrum_sepolia",
+              "alpen_signet",
+              "alpen_testnet",
+              "arc_testnet",
+              "base_sepolia",
+              "bitcoin_testnet",
+              "bnbchain_testnet",
+              "citrea_testnet",
+              "ethereum_sepolia",
+              "hypercore_testnet",
+              "hyperevm_testnet",
+              "ink_sepolia",
+              "lightning_regtest",
+              "litecoin_testnet",
+              "monad_testnet",
+              "robinhood_testnet",
+              "solana_testnet",
+              "spark_regtest",
+              "starknet_sepolia",
+              "tempo_testnet",
+              "tron_shasta",
+              "xrpl_testnet"
+            ]
+          }
+        ]
+      },
+      "ChainWithId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "description": "Mainnet",
+            "enum": [
+              "evm:42161",
+              "evm:1",
+              "bitcoin",
+              "evm:1337",
+              "evm:4217",
+              "evm:4663",
+              "evm:5042",
+              "evm:56",
+              "evm:57073",
+              "evm:8453",
+              "evm:999",
+              "lightning",
+              "litecoin",
+              "solana:101",
+              "spark",
+              "starknet:23448594291968334"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "description": "Testnet",
+            "enum": [
+              "evm:421614",
+              "alpen_signet",
+              "bitcoin",
+              "evm:10143",
+              "evm:11155111",
+              "evm:42431",
+              "evm:46630",
+              "evm:5042002",
+              "evm:5115",
+              "evm:763373",
+              "evm:8150",
+              "evm:84532",
+              "evm:97",
+              "evm:998",
+              "lightning_regtest",
+              "litecoin",
+              "solana:103",
+              "spark",
+              "starknet:393402133025997798000961",
+              "tron:2494104990",
+              "xrpl"
+            ]
+          }
+        ]
+      },
+      "ChainWithAssets": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ChainVerbose"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "assets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetVerbose"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ChainVerbose": {
+        "type": "object",
+        "title": "Chain Information",
+        "properties": {
+          "chain": {
+            "$ref": "#/components/schemas/Chain"
+          },
+          "name": {
+            "type": "string",
+            "example": "Arbitrum"
+          },
+          "id": {
+            "$ref": "#/components/schemas/ChainWithId"
+          },
+          "native_asset_id": {
+            "type": "string",
+            "example": "arbitrum:eth"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "explorer_url": {
+            "type": "string"
+          },
+          "confirmation_target": {
+            "type": "integer"
+          },
+          "source_timelock": {
+            "type": "string"
+          },
+          "destination_timelock": {
+            "type": "string"
+          },
+          "supported_htlc_schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HTLCSchemaName"
+            }
+          },
+          "supported_token_schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenSchemaName"
+            }
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "`false` for a legacy chain that is no longer supported. The default listing returns only active chains."
+          }
+        }
+      },
+      "AffiliateFeeAsset": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "description": "Mainnet",
+            "enum": [
+              "base:usdc",
+              "base:cbbtc",
+              "ethereum:usdc",
+              "ethereum:cbbtc"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "description": "Testnet",
+            "enum": [
+              "arbitrum_sepolia:usdc",
+              "base_sepolia:usdc",
+              "citrea_testnet:usdc",
+              "citrea_testnet:cbbtc",
+              "ethereum_sepolia:usdc",
+              "monad_testnet:usdc",
+              "monad_testnet:cbbtc"
+            ]
+          }
+        ]
+      },
+      "AffiliateEarningsItem": {
+        "type": "object",
+        "properties": {
+          "total_earnings": {
+            "type": "string",
+            "description": "Total earnings in asset units for the affiliate."
+          },
+          "total_earnings_usd": {
+            "type": "string",
+            "description": "Total earnings in USD for the mentioned asset for the affiliate."
+          },
+          "affiliate": {
+            "type": "string",
+            "description": "The address that will receive the earnings."
+          },
+          "asset": {
+            "$ref": "#/components/schemas/AffiliateFeeAsset"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Contract address for the affiliate fee asset."
+          },
+          "claim_amount": {
+            "type": "string",
+            "description": "Amount available for claiming in asset units. Only included if the affiliate has not yet claimed their earnings."
+          },
+          "claim_amount_usd": {
+            "type": "string",
+            "description": "Amount available for claiming in USD. Only included if the affiliate has not yet claimed their earnings."
+          },
+          "claim_signature": {
+            "type": "string",
+            "description": "Signature for claiming earnings. Only included if the affiliate has not yet claimed their earnings."
+          },
+          "claim_contract": {
+            "type": "string",
+            "description": "Contract address for claiming earnings. Only included if the affiliate has not yet claimed their earnings."
+          }
+        },
+        "required": [
+          "total_earnings",
+          "total_earnings_usd",
+          "affiliate",
+          "asset",
+          "token_address"
+        ]
+      },
+      "AffiliateEarningsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "required": [
+              "result"
+            ],
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AffiliateEarningsItem"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Asset": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "description": "Mainnet",
+            "enum": [
+              "arbitrum:wbtc",
+              "ethereum:wbtc",
+              "arc:usdc",
+              "base:cbbtc",
+              "base:cbltc",
+              "base:usdc",
+              "bitcoin:btc",
+              "bnbchain:btcb",
+              "ethereum:cbbtc",
+              "ethereum:usdc",
+              "ethereum:usdt",
+              "hypercore:usdc",
+              "hypercore:usdc_perps",
+              "hyperevm:ubtc",
+              "ink:kbtc",
+              "lightning:btc",
+              "litecoin:ltc",
+              "robinhood:cbbtc",
+              "robinhood:usdg",
+              "solana:cash",
+              "solana:cbbtc",
+              "solana:sol",
+              "solana:usdc",
+              "spark:btc",
+              "starknet:strkbtc",
+              "starknet:wbtc",
+              "tempo:pathusd",
+              "tempo:usdce"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "description": "Testnet",
+            "enum": [
+              "arbitrum_sepolia:wbtc",
+              "ethereum_sepolia:wbtc",
+              "alpen_signet:btc",
+              "alpen_testnet:sbtc",
+              "alpen_testnet:usdc",
+              "arbitrum_sepolia:ibtc",
+              "arbitrum_sepolia:seed",
+              "arbitrum_sepolia:usdc",
+              "arbitrum_sepolia:usdc2",
+              "arc_testnet:usdc",
+              "base_sepolia:cbltc",
+              "base_sepolia:cbxrp",
+              "base_sepolia:ibtc",
+              "base_sepolia:usdc",
+              "base_sepolia:usdt",
+              "base_sepolia:wbtc",
+              "bitcoin_testnet:btc",
+              "bnbchain_testnet:wbtc",
+              "citrea_testnet:cbbtc",
+              "citrea_testnet:cbtc",
+              "citrea_testnet:usdc",
+              "citrea_testnet:usdt",
+              "citrea_testnet:wbtc",
+              "citrea_testnet:wcbtc",
+              "ethereum_sepolia:eth",
+              "ethereum_sepolia:usdc",
+              "hypercore_testnet:usdc",
+              "hypercore_testnet:usdc_perps",
+              "hyperevm_testnet:usdc",
+              "ink_sepolia:usdc",
+              "lightning_regtest:btc",
+              "litecoin_testnet:ltc",
+              "monad_testnet:cbbtc",
+              "monad_testnet:usdc",
+              "robinhood_testnet:amzn",
+              "solana_testnet:cash",
+              "solana_testnet:cbbtc",
+              "solana_testnet:sol",
+              "solana_testnet:usdc",
+              "spark_regtest:btc",
+              "starknet_sepolia:strkbtc",
+              "starknet_sepolia:wbtc",
+              "tempo_testnet:alphausd",
+              "tempo_testnet:pathusd",
+              "tempo_testnet:usdce",
+              "tron_shasta:usdt",
+              "tron_shasta:wbtc",
+              "xrpl_testnet:xrp"
+            ]
+          }
+        ]
+      },
+      "AssetName": {
+        "oneOf": [
+          {
+            "type": "string",
+            "title": "mainnet",
+            "description": "Mainnet",
+            "enum": [
+              "Wrapped Bitcoin:WBTC",
+              "Binance Bitcoin:BTCB",
+              "Bitcoin:BTC",
+              "Bridged USDC:USDC.e",
+              "CASH:CASH",
+              "Coinbase Wrapped Bitcoin:cbBTC",
+              "Coinbase Wrapped Litecoin:cbLTC",
+              "Kraken Bitcoin:kBTC",
+              "Lightning Bitcoin:BTC",
+              "Litecoin:LTC",
+              "Path USD:pathUSD",
+              "Solana:SOL",
+              "Spark:BTC",
+              "Starknet  Bitcoin:strkBTC",
+              "Tether USD:USDT",
+              "USD Coin:USDC",
+              "USD Coin:USDC (Perps)",
+              "USD Global:USDG",
+              "Unit Bitcoin:uBTC"
+            ]
+          },
+          {
+            "type": "string",
+            "title": "testnet",
+            "description": "Testnet",
+            "enum": [
+              "Wrapped Bitcoin:WBTC",
+              "Alpen:BTC",
+              "Amazon",
+              "Arc Testnet:USDC",
+              "Bitcoin:BTC",
+              "CASH:CASH",
+              "Citrea Bitcoin:CBTC",
+              "Coinbase Wrapped Bitcoin:cbBTC",
+              "Coinbase Wrapped Litecoin:cbLTC",
+              "Coinbase Wrapped XRP:cbXRP",
+              "Ethereum:ETH",
+              "Lightning Bitcoin:BTC",
+              "Litecoin",
+              "Seed:SEED",
+              "Signet BTC:sBTC",
+              "Solana:SOL",
+              "Spark Bitcoin:BTC",
+              "Starknet Bitcoin:strkBTC",
+              "Tempo Testnet:AlphaUSD",
+              "Tempo Testnet:PathUSD",
+              "Tempo Testnet:USDC.e",
+              "Tether USD",
+              "Tether USD:USDT",
+              "USD Coin 2:USDC2",
+              "USD Coin:USDC",
+              "USD Coin:USDC (Perps)",
+              "Wrapped Citrea Bitcoin:WCBTC",
+              "XRP",
+              "iBTC:iBTC"
+            ]
+          }
+        ]
+      },
+      "HTLCSchema": {
+        "type": "object",
+        "description": "Always **null** for UTXO-based chains. **Example:** Bitcoin.",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/HTLCSchemaName"
+          }
+        }
+      },
+      "TokenSchema": {
+        "type": "object",
+        "description": "Always **null** for native assets with no address. **Example:** ETH on Ethereum.",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#/components/schemas/TokenSchemaName"
+          }
+        }
+      },
+      "AssetVerbose": {
+        "type": "object",
+        "title": "Asset Information",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "name": {
+            "$ref": "#/components/schemas/AssetName"
+          },
+          "chain": {
+            "$ref": "#/components/schemas/ChainWithId"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "htlc": {
+            "$ref": "#/components/schemas/HTLCSchema"
+          },
+          "token": {
+            "$ref": "#/components/schemas/TokenSchema"
+          },
+          "decimals": {
+            "type": "integer",
+            "example": 8
+          },
+          "min_amount": {
+            "type": "string"
+          },
+          "max_amount": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "example": 1.0
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "`false` for a legacy asset that is no longer supported. The default listing returns only active assets."
+          }
+        }
+      },
+      "OrderStatus": {
+        "type": "string",
+        "title": "status",
+        "description": "The status of the order.",
+        "enum": [
+          "not_initiated",
+          "in_progress",
+          "completed",
+          "expired",
+          "refunded"
+        ]
+      },
+      "Swap": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "description": "Timestamp of order creation.",
+            "type": "string"
+          },
+          "swap_id": {
+            "description": "A unique identifier for the swap.",
+            "type": "string"
+          },
+          "chain": {
+            "$ref": "#/components/schemas/Chain"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "initiator": {
+            "description": "Address transferring funds.",
+            "type": "string"
+          },
+          "redeemer": {
+            "description": "Address receiving funds.",
+            "type": "string"
+          },
+          "delegate": {
+            "description": "Address that performed the swap for the user, if applicable.",
+            "type": "string"
+          },
+          "timelock": {
+            "description": "Timelock for the swap (in block numbers).",
+            "type": "integer"
+          },
+          "filled_amount": {
+            "description": "Amount that has been filled.\n**Default:** \"0\"",
+            "type": "string"
+          },
+          "asset_price": {
+            "description": "Price of the asset during swap.",
+            "type": "integer"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "secret_hash": {
+            "description": "SHA256 of the secret.",
+            "type": "string"
+          },
+          "secret": {
+            "description": "The secret used to lock the funds on-chain.\n**Default:** \"\" *(empty string)*",
+            "type": "string"
+          },
+          "instant_refund_tx": {
+            "description": "**(Optional)** Instant refund transaction bytes. Only available for source swaps on UTXO-based chains. **Example:** Bitcoin.",
+            "type": "string"
+          },
+          "initiate_tx_hash": {
+            "description": "On-chain transaction hash of initiate.\n**Default:** \"\" *(empty string)*",
+            "type": "string"
+          },
+          "redeem_tx_hash": {
+            "description": "On-chain transaction hash of redeem.\n**Default:** \"\" *(empty string)*",
+            "type": "string"
+          },
+          "refund_tx_hash": {
+            "description": "On-chain transaction hash of refund.\n**Default:** \"\" *(empty string)*",
+            "type": "string"
+          },
+          "initiate_block_number": {
+            "description": "Block number of the initiate transaction.\n**Default:** \"0\"",
+            "type": "string"
+          },
+          "redeem_block_number": {
+            "description": "Block number of the redeem transaction.\n**Default:** \"0\"",
+            "type": "string"
+          },
+          "refund_block_number": {
+            "description": "Block number of the refund transaction.\n**Default:** \"0\"",
+            "type": "string"
+          },
+          "required_confirmations": {
+            "description": "Number of confirmations required.",
+            "type": "integer"
+          },
+          "current_confirmations": {
+            "description": "Number of confirmations received so far.\n**Default:** 0",
+            "type": "integer"
+          },
+          "initiate_timestamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "redeem_timestamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "refund_timestamp": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "description": "A unique identifier for the order.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Timestamp of order creation.",
+            "type": "string"
+          },
+          "source_swap": {
+            "$ref": "#/components/schemas/Swap"
+          },
+          "destination_swap": {
+            "$ref": "#/components/schemas/Swap"
+          },
+          "nonce": {
+            "description": "Nonce for the order.",
+            "type": "string"
+          },
+          "deadline": {
+            "description": "Unix timestamp after which the order expires.",
+            "type": "integer"
+          },
+          "affiliate_fees": {
+            "type": "array",
+            "description": "Integrator fees associated with the order.",
+            "items": {
+              "$ref": "#/components/schemas/AffiliateFee"
+            }
+          },
+          "integrator": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "solver_id": {
+            "type": "string"
+          }
+        }
+      },
+      "Liquidity": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "balance": {
+            "type": "string",
+            "example": "3134508350"
+          },
+          "virtual_balance": {
+            "type": "string",
+            "example": "3134508350"
+          },
+          "readable_balance": {
+            "type": "string",
+            "example": "31.34508350"
+          },
+          "fiat_value": {
+            "type": "string",
+            "example": "3709623.9781701067"
+          }
+        }
+      },
+      "AffiliateFee": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "address": {
+            "description": "Address of the affiliate.",
+            "type": "string"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/AffiliateFeeAsset"
+          },
+          "fee": {
+            "type": "integer",
+            "description": "In BIPS (base index points), 100 bips = 1%.",
+            "example": 10
+          }
+        }
+      },
+      "PaginatedOrders": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "total_items": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          }
+        }
+      },
+      "Response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Ok",
+              "Error"
+            ]
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "SolverLiquidity": {
+        "type": "object",
+        "properties": {
+          "solver_id": {
+            "type": "string"
+          },
+          "liquidity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Liquidity"
+            }
+          }
+        }
+      },
+      "LiquidityResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SolverLiquidity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ResponseString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/SchemaName"
+          },
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "SchemaResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/Schema"
+              }
+            }
+          }
+        ]
+      },
+      "SchemasResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Schema"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AssetsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetVerbose"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ChainsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChainWithAssets"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "OrdersResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/PaginatedOrders"
+              }
+            }
+          }
+        ]
+      },
+      "OrderResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "required": [
+              "result"
+            ],
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        ]
+      },
+      "RoutePolicy": {
+        "type": "object",
+        "title": "Route Policy Configuration",
+        "properties": {
+          "default": {
+            "type": "string",
+            "enum": [
+              "open",
+              "closed"
+            ],
+            "default": "open",
+            "description": "Default policy for routes not covered by specific rules."
+          },
+          "isolation_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "ethereum:SEED <-> arbitrum:SEED"
+            ],
+            "description": "Assets in an isolation group can ONLY trade with other assets in the same group."
+          },
+          "blacklist_pairs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "bitcoin:BTC -> starknet:*",
+              "*:USDC -> bitcoin:*"
+            ],
+            "description": "Explicitly forbidden trading pairs using pattern matching."
+          },
+          "whitelist_overrides": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "ethereum:USDC -> bitcoin:BTC"
+            ],
+            "description": "Explicit overrides that bypass other restrictions."
+          }
+        }
+      },
+      "PolicyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/RoutePolicy"
+              }
+            }
+          }
+        ]
+      },
+      "V3Leg": {
+        "type": "object",
+        "description": "One side of the swap.",
+        "required": [
+          "asset"
+        ],
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "Asset id, `chain:symbol`.",
+            "example": "arbitrum_sepolia:wbtc"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true,
+            "description": "Address of the user. **(Optional)** on one leg, where it is resolved from the other."
+          },
+          "delegate": {
+            "type": "string",
+            "nullable": true,
+            "description": "**(Optional)** Executes the swap on behalf of the user. Use this when calling Garden from your own smart contract; provide your contract’s address here."
+          },
+          "amount": {
+            "type": "string",
+            "nullable": true,
+            "description": "Raw asset amount in the smallest unit. Present on exactly one leg: on `source` to spend an exact amount, on `destination` to receive one.",
+            "example": "20000"
+          }
+        }
+      },
+      "V3AffiliateFee": {
+        "type": "object",
+        "required": [
+          "asset",
+          "address",
+          "fee"
+        ],
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "Asset the fee is taken in."
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the affiliate."
+          },
+          "fee": {
+            "type": "integer",
+            "description": "In BIPS (base index points), 100 bips = 1%."
+          }
+        }
+      },
+      "V3QuoteRequest": {
+        "type": "object",
+        "required": [
+          "source",
+          "destination",
+          "slippage"
+        ],
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/V3Leg"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/V3Leg"
+          },
+          "slippage": {
+            "type": "integer",
+            "description": "In BIPS (base index points), 100 bips = 1%.",
+            "example": 50
+          },
+          "affiliate_fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/V3AffiliateFee"
+            },
+            "default": []
+          },
+          "nonce": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "V3QuoteLeg": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "example": "solana_testnet:usdc"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Raw asset amount in the smallest unit (e.g., satoshis for BTC, wei for ETH).",
+            "example": "15082000"
+          },
+          "display": {
+            "type": "string",
+            "description": "Amount after applying decimal places (e.g., 0.01 BTC).",
+            "example": "15.08200000"
+          },
+          "value": {
+            "type": "string",
+            "description": "Fiat value (in USD) equivalent of the displayed amount.",
+            "example": "15.0820"
+          }
+        }
+      },
+      "V3QuoteView": {
+        "type": "object",
+        "description": "A priced quote. A request may return one per solver.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the quote, also used as the order ID."
+          },
+          "solver_id": {
+            "type": "string"
+          },
+          "secret_hash": {
+            "type": "string",
+            "description": "SHA256 of the secret. One per quote."
+          },
+          "source_swap_id": {
+            "type": "string"
+          },
+          "destination_swap_id": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/V3QuoteLeg"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/V3QuoteLeg"
+          },
+          "fee": {
+            "type": "integer",
+            "description": "In BIPS (base index points), where 100 bips = 1%."
+          },
+          "fixed_fee": {
+            "type": "string",
+            "description": "In USD."
+          },
+          "slippage": {
+            "type": "integer",
+            "description": "Slippage defined for this quote."
+          },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated swap time in seconds."
+          },
+          "deadline": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix timestamp after which the quote expires."
+          },
+          "initiate": {
+            "$ref": "#/components/schemas/V3Initiate"
+          }
+        }
+      },
+      "V3PostQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "description": "A unique identifier for the request."
+          },
+          "quotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/V3QuoteView"
+            }
+          }
+        }
+      },
+      "V3QuoteState": {
+        "type": "string",
+        "enum": [
+          "open",
+          "consumed",
+          "expired"
+        ],
+        "description": "The status of the quote. `open` - not yet funded. `consumed` - the source initiate was detected. `expired` - the deadline passed first."
+      },
+      "V3StoredQuoteView": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/V3QuoteView"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "$ref": "#/components/schemas/V3QuoteState"
+              }
+            }
+          }
+        ]
+      },
+      "V3IndexRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "tx_hash"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The quote id returned by `POST /quote`."
+          },
+          "tx_hash": {
+            "type": "string",
+            "description": "Hash of the transaction that funded the source leg."
+          }
+        }
+      },
+      "V3EstimateItem": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/V3QuoteLeg"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/V3QuoteLeg"
+          },
+          "solver_id": {
+            "type": "string"
+          },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated swap time in seconds."
+          },
+          "slippage": {
+            "type": "integer",
+            "description": "Slippage defined for this quote."
+          },
+          "fee": {
+            "type": "integer",
+            "description": "In BIPS (base index points), where 100 bips = 1%."
+          },
+          "fixed_fee": {
+            "type": "string",
+            "description": "In USD."
+          }
+        }
+      },
+      "V3InstantRefundHashRequest": {
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        }
+      },
+      "V3EvmTransaction": {
+        "type": "object",
+        "description": "An EVM transaction to sign and broadcast. Numeric fields are hex strings.",
+        "properties": {
+          "to": {
+            "type": "string",
+            "example": "0xb5ae9785349186069c48794a763db39ec756b1cf"
+          },
+          "value": {
+            "type": "string",
+            "example": "0x0"
+          },
+          "data": {
+            "type": "string",
+            "example": "0x97ffc7ae0000000000000000000000001fd1f7b5c6e4e7b9f80a4db17903afd83d3fd31d"
+          },
+          "gas_limit": {
+            "type": "string",
+            "example": "0x493e0"
+          },
+          "chain_id": {
+            "type": "integer",
+            "example": 421614
+          }
+        }
+      },
+      "V3StarknetCall": {
+        "type": "object",
+        "description": "A Starknet contract call. Submit the approval and initiate calls together as one multicall.",
+        "properties": {
+          "to": {
+            "type": "string",
+            "example": "0x2448040b22b27f5a814756e67da005701e525658b162d4f0343d2e011bc6dad"
+          },
+          "selector": {
+            "type": "string",
+            "example": "0x2aed25fcd0101fcece997d93f9d0643dfa3fbd4118cae16bf7d6cd533577c28"
+          },
+          "calldata": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "V3InitiateEvm": {
+        "type": "object",
+        "title": "evm",
+        "required": [
+          "type",
+          "chain_id",
+          "initiate_transaction"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "evm"
+            ]
+          },
+          "chain_id": {
+            "type": "integer",
+            "example": 421614
+          },
+          "approval_transaction": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/V3EvmTransaction"
+              }
+            ],
+            "nullable": true,
+            "description": "Can be `null`, if the source asset is native or the user has already given approval."
+          },
+          "initiate_transaction": {
+            "$ref": "#/components/schemas/V3EvmTransaction"
+          },
+          "core_to_evm_transfer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/V3EvmTransaction"
+              }
+            ],
+            "description": "Present only for a HyperCore source: bridge to HyperEVM with this transaction first, then send the initiate."
+          }
+        }
+      },
+      "V3InitiateStarknet": {
+        "type": "object",
+        "title": "starknet",
+        "required": [
+          "type",
+          "chain_id",
+          "initiate_transaction"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "starknet"
+            ]
+          },
+          "chain_id": {
+            "type": "string",
+            "example": "0x534e5f5345504f4c4941"
+          },
+          "approval_transaction": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/V3StarknetCall"
+              }
+            ],
+            "nullable": true,
+            "description": "Can be `null`, if user has already given approval."
+          },
+          "initiate_transaction": {
+            "$ref": "#/components/schemas/V3StarknetCall"
+          }
+        }
+      },
+      "V3InitiateSolana": {
+        "type": "object",
+        "title": "solana",
+        "required": [
+          "type",
+          "versioned_tx"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "solana"
+            ]
+          },
+          "versioned_tx": {
+            "type": "string",
+            "description": "A base64-encoded `VersionedTransaction`. Refresh the blockhash before signing."
+          }
+        }
+      },
+      "V3InitiateBitcoin": {
+        "type": "object",
+        "title": "bitcoin",
+        "required": [
+          "type",
+          "to",
+          "amount"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "bitcoin"
+            ]
+          },
+          "to": {
+            "type": "string",
+            "description": "The address of the recipient. Send `amount` to it.",
+            "example": "tb1ptt49v22dcst7mquwfsmcu2t56xjg07whtcgufvhjuj5zu89y6q0qn8fvfp"
+          },
+          "amount": {
+            "type": "string",
+            "description": "The amount to be sent.",
+            "example": "20000"
+          }
+        }
+      },
+      "V3Initiate": {
+        "description": "Everything needed to fund the source leg. The body is chain-specific, following the source chain's family.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/V3InitiateEvm"
+          },
+          {
+            "$ref": "#/components/schemas/V3InitiateStarknet"
+          },
+          {
+            "$ref": "#/components/schemas/V3InitiateSolana"
+          },
+          {
+            "$ref": "#/components/schemas/V3InitiateBitcoin"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "evm": "#/components/schemas/V3InitiateEvm",
+            "starknet": "#/components/schemas/V3InitiateStarknet",
+            "solana": "#/components/schemas/V3InitiateSolana",
+            "bitcoin": "#/components/schemas/V3InitiateBitcoin"
+          }
+        }
+      },
+      "RefundActionRequest": {
+        "type": "object",
+        "title": "Refund"
+      },
+      "InstantRefundActionRequest": {
+        "type": "object",
+        "title": "Instant Refund",
+        "properties": {
+          "signatures": {
+            "type": "array",
+            "description": "A Schnorr signature generated by the initiator over the instant refund hash obtained from the [instant refund hash endpoint](./instant-refund-hash). This signature represents the initiator’s partial spend authorization for the Taproot script controlling the initiator's UTXO. Submitting this signature allows the solver to later provide its own Schnorr signature to fully satisfy the Taproot instant refund leaf and broadcast the refund transaction instantly, without requiring further initiator interaction.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "0x1234567890123456789012345678901234567890123456789012345678901234"
+            ]
+          }
+        },
+        "required": [
+          "signatures"
+        ]
+      },
+      "ActionResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Response"
+          },
+          {
+            "type": "object",
+            "required": [
+              "result"
+            ],
+            "properties": {
+              "result": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/orders": {
+      "get": {
+        "summary": "Get all orders.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "address",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by an address."
+          },
+          {
+            "in": "query",
+            "name": "tx_hash",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by a transaction hash."
+          },
+          {
+            "in": "query",
+            "name": "from_chain",
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Filter orders by the source chain."
+          },
+          {
+            "in": "query",
+            "name": "to_chain",
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Filter orders by the destination chain."
+          },
+          {
+            "in": "query",
+            "name": "from_owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by the source owner. Comma-separated for multiple values.",
+            "example": "0x123...,0x456..."
+          },
+          {
+            "in": "query",
+            "name": "to_owner",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by the destination owner. Comma-separated for multiple values.",
+            "example": "0x789...,0xabc..."
+          },
+          {
+            "in": "query",
+            "name": "solver_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by a solver ID. Comma-separated for multiple values.",
+            "example": "solver1,solver2"
+          },
+          {
+            "in": "query",
+            "name": "integrator",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by an integrator. Comma-separated for multiple values.",
+            "example": "integrator1,integrator2"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "**(Optional)** Page number.",
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "**(Optional)** Number of items per page.",
+            "example": 10
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Filter orders by status. Comma-separated string with allowed values: not_initiated, in_progress, completed, expired, refunded.",
+            "example": "in_progress,completed"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{order}": {
+      "get": {
+        "summary": "Get matched order by ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with order details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update swap by doing an action.",
+        "tags": [
+          "Swaps"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "required": true,
+            "description": "The HTLC action to execute on the order.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "refund",
+                "instant-refund"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/RefundActionRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/InstantRefundActionRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Executed action successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assets": {
+      "get": {
+        "summary": "Get all the supported assets on the given chain.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            },
+            "description": "**(Optional)** Asset filter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of assets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chains": {
+      "get": {
+        "summary": "Get all the supported chains and assets.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Asset"
+            },
+            "description": "**(Optional)** Asset filter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with supported chains and assets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChainsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liquidity": {
+      "get": {
+        "summary": "Get all the available liquidity.",
+        "responses": {
+          "200": {
+            "description": "Array of solver-wise liquidity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiquidityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schemas": {
+      "get": {
+        "summary": "Get all supported contract schemas.",
+        "responses": {
+          "200": {
+            "description": "The ABI for EVM, Starknet contracts and IDL for Solana contracts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemasResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schemas/{name}": {
+      "get": {
+        "summary": "Get contract schema.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SchemaName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The ABI for EVM contracts or IDL for Solana contracts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/policy": {
+      "get": {
+        "summary": "Get route policy configuration.",
+        "responses": {
+          "200": {
+            "description": "Route policy configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyResponse"
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": {
+                    "default": "open",
+                    "isolation_groups": [
+                      "ethereum:SEED <-> arbitrum:SEED"
+                    ],
+                    "blacklist_pairs": [
+                      "bitcoin:BTC -> starknet:*"
+                    ],
+                    "whitelist_overrides": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Get server health.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Server is healthy.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": "Online"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Server is unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Error"
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "Error",
+                  "error": "Server unavailable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/volume": {
+      "get": {
+        "summary": "Get swap volume.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter statistics by specific source blockchain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total swap volume.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fees": {
+      "get": {
+        "summary": "Get swap fees.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific source chain."
+          },
+          {
+            "in": "query",
+            "name": "destination_chain",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Chain"
+            },
+            "description": "**(Optional)** Chain identifier to filter stats by specific destination chain."
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "**(Optional)** Address to filter stats by specific address.",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the start time.",
+            "example": 1704067200
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "**(Optional)** Unix timestamp marking the end time.",
+            "example": 1704153600
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total swap fees.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseString"
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": "2668122"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/earnings": {
+      "get": {
+        "summary": "Get affiliate earnings.",
+        "responses": {
+          "200": {
+            "description": "List of affiliate earnings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AffiliateEarningsResponse"
+                },
+                "example": {
+                  "status": "Ok",
+                  "result": [
+                    {
+                      "total_earnings": "15075000000",
+                      "total_earnings_usd": "15075",
+                      "affiliate": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                      "asset": "ethereum:usdc",
+                      "token_address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+                      "claim_amount": "5075000000",
+                      "claim_amount_usd": "5075",
+                      "claim_signature": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b",
+                      "claim_contract": "0x5EbEC4D8DA437b2BAD656D43d40fE412bA5D217a"
+                    },
+                    {
+                      "total_earnings": "30000000",
+                      "total_earnings_usd": "30000",
+                      "affiliate": "0x004Cc75ACF4132Fc08cB6a252E767804F303F729",
+                      "asset": "ethereum:cbbtc",
+                      "token_address": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quote": {
+      "post": {
+        "summary": "Create quote.",
+        "description": "Price a swap and create the order in a single call.\n\nSet `amount` on the leg you want to fix: on `source` to spend an exact amount, or on `destination` to receive one. The other side is returned in the response, along with the `initiate` transaction.",
+        "operationId": "postQuoteV3",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V3QuoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/V3PostQuoteResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request, or the route cannot be priced.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid `garden-app-id`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quote/{id}": {
+      "get": {
+        "summary": "Get quote by ID.",
+        "description": "The quote's state and the terms it was priced at. See `GET /orders/{order}` for settlement.",
+        "operationId": "getQuoteByIdV3",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quote id from `POST /quote`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with quote details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/V3StoredQuoteView"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Quote not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/index": {
+      "post": {
+        "summary": "Index initiate transaction.",
+        "description": "Submit the transaction hash of your initiate so the swap is picked up immediately. Optional, as swaps are detected automatically.",
+        "operationId": "postIndexV3",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V3IndexRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted for indexing."
+          },
+          "400": {
+            "description": "Malformed request, or the transaction does not fund this quote.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid `garden-app-id`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estimate": {
+      "get": {
+        "summary": "Get swap estimate.",
+        "description": "Get a price for a route without creating an order.",
+        "operationId": "getEstimateV3",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "arbitrum_sepolia:wbtc"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "solana_testnet:usdc"
+          },
+          {
+            "name": "from_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Source amount in base units. Pass this or `to_amount`.",
+            "example": "20000"
+          },
+          {
+            "name": "to_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Destination amount in base units. Pass this or `from_amount`.",
+            "example": "15000000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimate information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/V3EstimateItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No order pair found for this route.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instant-refund-hash": {
+      "post": {
+        "summary": "Get instant refund hash for the given swap.",
+        "description": "The hashes to sign for a Bitcoin instant refund, one per UTXO backing the source leg. Bitcoin only.\n\nSubmit the signatures with `PATCH /orders/{order}?action=instant-refund`.",
+        "operationId": "postInstantRefundHashV3",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V3InstantRefundHashRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "One hash per UTXO, in input order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "Ok"
+                      ]
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ResponseString"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown order, or its source leg is not a Bitcoin swap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
