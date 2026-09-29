@@ -1,0 +1,38 @@
+---
+title: "Providers"
+description: "Understand how providers compete to execute a swap, and how Garden fits among them"
+---
+
+<div style={{ backgroundColor: "rgba(46, 160, 67, 0.14)", borderLeft: "3px solid #2ea043", borderRadius: "0 6px 6px 0", padding: "0.75rem 1rem", margin: "1rem 0" }}>
+
+Providers are the systems that can execute a swap. When you ask for a price, every provider that supports the pair answers with its own quote—its own rate, its own fees, and its own deadline—and you choose the one you prefer.
+
+Garden is one of those providers. A swap Garden wins settles through the [Garden protocol](./core-concepts/atomic-swaps), with the [solvers](./core-concepts/solvers) and [auctions](./core-concepts/auctions) described in this section. A swap another provider wins settles on that provider's own terms.
+
+## Who are the providers?
+
+| Provider | Description |
+|----------|-------------|
+| **`Garden`** | The Garden protocol, settling through atomic swaps. |
+| **`Flashnet`** | Deposit-based routing across supported chains. |
+| **`SwapKit`** | Aggregated liquidity across its own provider network. |
+
+A provider only answers when it supports the pair you asked for, so the number of quotes changes from one swap to the next.
+
+## What differs between providers?
+
+Each provider decides how it executes, which affects what you see on a quote.
+
+| | What it means |
+|---|---|
+| **Rate** | How much you receive for what you send. |
+| **Fees** | What the provider charges, shown separately on every quote. |
+| **Speed** | How long the swap is expected to take. |
+| **Deadline** | How long you have to send your funds before the quote lapses. |
+| **Steps** | What you do to complete the swap. Sending to a deposit address and signing a transaction are both common. |
+
+<Note>
+    Deadlines are set by the provider, not by Garden, and some are short. Check the deadline on your quote before you begin.
+</Note>
+
+</div>
