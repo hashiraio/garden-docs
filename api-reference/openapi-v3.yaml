@@ -94,49 +94,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Registry'
-              example:
-                updated_at: '2026-08-19T09:00:00Z'
-                chains:
-                - id: base
-                  name: Base
-                  vm_type: evm
-                  chain_id: '8453'
-                  explorer_url: https://basescan.org
-                  logo_url: https://cdn.garden.finance/chains/base.svg
-                  disabled: false
-                  assets:
-                  - id: base:eth
-                    token:
-                      type: native
-                    symbol: ETH
-                    name: Ether
-                    decimals: 18
-                    logo_url: https://cdn.garden.finance/assets/eth.svg
-                    disabled: false
-                  - id: base:usdc
-                    token:
-                      type: contract
-                      address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-                    symbol: USDC
-                    name: USD Coin
-                    decimals: 6
-                    logo_url: https://cdn.garden.finance/assets/usdc.svg
-                    disabled: false
-                - id: bitcoin
-                  name: Bitcoin
-                  vm_type: bvm
-                  explorer_url: https://mempool.space
-                  logo_url: https://cdn.garden.finance/chains/bitcoin.svg
-                  disabled: false
-                  assets:
-                  - id: bitcoin:btc
-                    token:
-                      type: native
-                    symbol: BTC
-                    name: Bitcoin
-                    decimals: 8
-                    logo_url: https://cdn.garden.finance/chains/bitcoin.svg
-                    disabled: false
         '401':
           $ref: '#/components/responses/InvalidKey'
         '429':
@@ -156,6 +113,10 @@ paths:
         required: false
         schema:
           type: string
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
         description: Pairs that sell this asset.
         example: bitcoin:btc
       - name: buy_asset
@@ -163,8 +124,12 @@ paths:
         required: false
         schema:
           type: string
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
         description: Pairs that buy this asset.
-        example: base:usdc
+        example: ethereum:usdc
       responses:
         '200':
           description: OK
@@ -185,15 +150,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Routes'
-              example:
-                updated_at: '2026-08-19T09:00:00Z'
-                routes:
-                - sell_asset: bitcoin:btc
-                  buy_asset: base:usdc
-                  min_sell_amount: '50000'
-                  max_sell_amount: '100000000'
-                - sell_asset: bitcoin:btc
-                  buy_asset: base:eth
         '400':
           description: Neither `sell_asset` nor `buy_asset` was given.
           content:
@@ -224,13 +180,21 @@ paths:
         required: true
         schema:
           type: string
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
         example: bitcoin:btc
       - name: buy_asset
         in: query
         required: true
         schema:
           type: string
-        example: base:usdc
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
+        example: ethereum:usdc
       - name: amount
         in: query
         required: true
@@ -247,6 +211,9 @@ paths:
         required: true
         schema:
           type: string
+          enum:
+          - exact_in
+          - exact_out
         description: '`exact_in` or `exact_out`. Treat as open — accept values not listed
 
           here.
@@ -313,29 +280,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Estimates'
-              example:
-                estimates:
-                - provider: swapkit
-                  sell_asset: bitcoin:btc
-                  sell_amount: '10000000'
-                  buy_asset: base:usdc
-                  buy_amount: '9950000'
-                  min_buy_amount: '9850000'
-                  estimated_seconds: 600
-                  fees:
-                  - type: network
-                    asset: bitcoin:btc
-                    amount: '2000'
-                    amount_usd: '1.30'
-                  price:
-                    sell_usd: '650.00'
-                    buy_usd: '649.35'
-                    impact_bps: -10
-                  warnings: []
-                provider_errors:
-                - provider: flashnet
-                  code: no_route
-                  message: No route for this pair.
         '400':
           description: A parameter is missing or malformed.
           content:
@@ -388,17 +332,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/QuoteRequest'
-            example:
-              sell_asset: bitcoin:btc
-              buy_asset: base:usdc
-              amount: '10000000'
-              trade_type: exact_in
-              sell_address: bc1qexampleaddress
-              buy_address: 0xexampleaddress
-              slippage_bps: 100
-              allow_providers:
-              - swapkit
-              - flashnet
       responses:
         '200':
           description: 'OK. `quotes` is empty when every provider declined, and
@@ -415,36 +348,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Quotes'
-              example:
-                quotes:
-                - id: ord_01JABCDEFGHJKMNPQRSTVWXYZ
-                  provider: flashnet
-                  created_at: '2026-08-19T09:01:00Z'
-                  deposit_by: '2026-08-19T09:03:00Z'
-                  sell_asset: bitcoin:btc
-                  sell_amount: '10000000'
-                  buy_asset: base:usdc
-                  buy_amount: '9950000'
-                  min_buy_amount: '9850000'
-                  estimated_seconds: 600
-                  steps:
-                  - id: initiate
-                    kind: deposit
-                    action: Send BTC
-                    description: Send 0.1 BTC to the deposit address.
-                    deposit:
-                      chain: bitcoin
-                      address: bc1qdepositaddress
-                      amount: '10000000'
-                  fees:
-                  - type: network
-                    asset: bitcoin:btc
-                    amount: '2000'
-                    amount_usd: '1.30'
-                provider_errors:
-                - provider: swapkit
-                  code: no_route
-                  message: No route for this pair.
         '400':
           description: A field is missing or malformed.
           content:
@@ -620,8 +523,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SubmitRequest'
-            example:
-              tx_hash: abc123def4567890
       responses:
         '200':
           description: 'OK. The order as it now stands. `state` may still read
@@ -747,12 +648,20 @@ components:
       properties:
         sell_asset:
           type: string
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
           examples:
           - bitcoin:btc
         buy_asset:
           type: string
+          enum:
+          - bitcoin:btc
+          - ethereum:usdc
+          - ethereum:wbtc
           examples:
-          - base:usdc
+          - ethereum:usdc
         amount:
           type: string
           description: 'Base units. The sell amount for `exact_in`, the buy amount for
@@ -764,15 +673,22 @@ components:
           - '10000000'
         trade_type:
           type: string
+          enum:
+          - exact_in
+          - exact_out
           description: '`exact_in` or `exact_out`. Treat as open.'
           examples:
           - exact_in
         sell_address:
           type: string
           description: Where the user sends from, on the source chain.
+          examples:
+          - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
         buy_address:
           type: string
           description: Where the user receives, on the destination chain.
+          examples:
+          - '0x000000000000000000000000000000000000dEaD'
         slippage_bps:
           type: integer
           default: 100
@@ -829,12 +745,8 @@ components:
             `POST /orders/{id}/submit`, and poll `GET /orders/{id}` with it.
 
             '
-          examples:
-          - ord_01JABCDEFGHJKMNPQRSTVWXYZ
         provider:
           type: string
-          examples:
-          - flashnet
         created_at:
           type: string
           format: date-time
@@ -927,12 +839,8 @@ components:
           description: 'The same identifier `POST /quote` returned. It never changes.
 
             '
-          examples:
-          - ord_01JABCDEFGHJKMNPQRSTVWXYZ
         provider:
           type: string
-          examples:
-          - flashnet
         state:
           type: string
           description: '`awaiting_user` — a step is listed. Act on it.
@@ -951,8 +859,6 @@ components:
             Treat as open. There is no `expired`.
 
             '
-          examples:
-          - awaiting_provider
         created_at:
           type: string
           format: date-time
@@ -982,8 +888,6 @@ components:
             properties:
               tx_hash:
                 type: string
-                examples:
-                - abc123def4567890
               amount:
                 type: string
                 description: Base units.
@@ -1063,8 +967,6 @@ components:
             its own step with its own `action`.
 
             '
-          examples:
-          - initiate
         kind:
           type: string
           description: '`deposit`, `transaction` or `signature`. It selects the payload field
@@ -1074,13 +976,9 @@ components:
             as open.
 
             '
-          examples:
-          - deposit
         action:
           type: string
           description: Button text.
-          examples:
-          - Send BTC
         description:
           type: string
           description: Longer text for the user.
@@ -1094,18 +992,12 @@ components:
             chain:
               type: string
               description: The `id` of a chain in `GET /registry`.
-              examples:
-              - bitcoin
             address:
               type: string
               description: Send the funds here. Safe to fund from anywhere.
-              examples:
-              - bc1qdepositaddress
             amount:
               type: string
               description: Base units. Send exactly this.
-              examples:
-              - '10000000'
             memo:
               type: string
               description: 'Attach it to the transaction where the chain supports one. A
@@ -1122,8 +1014,6 @@ components:
             chain:
               type: string
               description: The `id` of a chain in `GET /registry`.
-              examples:
-              - base
           description: 'The payload to sign, in the native shape of the chain. EVM carries
 
             `to`, `value`, `data` and gas.
@@ -1170,17 +1060,11 @@ components:
             never in `/registry` or `/routes`.
 
             '
-          examples:
-          - swapkit
         sell_asset:
           type: string
-          examples:
-          - bitcoin:btc
         sell_amount:
           type: string
           description: Base units. What the user sends.
-          examples:
-          - '10000000'
         max_sell_amount:
           type: string
           description: 'Largest `sell_amount` accepted for this price. Present only for
@@ -1190,13 +1074,9 @@ components:
             '
         buy_asset:
           type: string
-          examples:
-          - base:usdc
         buy_amount:
           type: string
           description: Base units. The expected output.
-          examples:
-          - '9950000'
         min_buy_amount:
           type: string
           description: 'Base units. The floor, after slippage. This is the ranking key, and
@@ -1204,8 +1084,6 @@ components:
             the number to show on a confirmation screen.
 
             '
-          examples:
-          - '9850000'
         estimated_seconds:
           type: integer
           description: 'How long the provider expects the swap to take. Absent when the
@@ -1213,8 +1091,6 @@ components:
             provider reports no duration.
 
             '
-          examples:
-          - 600
         fees:
           type: array
           items:
@@ -1239,8 +1115,6 @@ components:
             open — accept values not listed here.
 
             '
-          examples:
-          - network
         asset:
           type: string
           description: 'A fee has its own asset. A cross-chain swap pays on both chains, so one
@@ -1248,13 +1122,9 @@ components:
             number cannot hold the total.
 
             '
-          examples:
-          - bitcoin:btc
         amount:
           type: string
           description: Base units of `asset`.
-          examples:
-          - '2000'
         amount_usd:
           type: string
           description: 'The fee in US dollars, from the same prices as `Price`. Absent when
@@ -1262,24 +1132,16 @@ components:
             nothing prices `asset`.
 
             '
-          examples:
-          - '1.30'
     Price:
       type: object
       properties:
         sell_usd:
           type: string
-          examples:
-          - '650.00'
         buy_usd:
           type: string
-          examples:
-          - '649.35'
         impact_bps:
           type: integer
           description: Price impact in basis points. Negative is a loss.
-          examples:
-          - -10
     Warning:
       type: object
       required:
@@ -1295,8 +1157,6 @@ components:
             accept values not listed here.
 
             '
-          examples:
-          - high_price_impact
         message:
           type: string
           description: Ready to show to a user.
@@ -1309,8 +1169,6 @@ components:
       properties:
         provider:
           type: string
-          examples:
-          - flashnet
         code:
           type: string
           description: '`no_route`, `amount_below_minimum`, `amount_above_maximum`,
@@ -1320,8 +1178,6 @@ components:
             `provider_error`. Treat as open.
 
             '
-          examples:
-          - no_route
         message:
           type: string
     Routes:
@@ -1346,22 +1202,14 @@ components:
       properties:
         sell_asset:
           type: string
-          examples:
-          - bitcoin:btc
         buy_asset:
           type: string
-          examples:
-          - base:usdc
         min_sell_amount:
           type: string
           description: Smallest `sell_amount` any provider accepts, in base units.
-          examples:
-          - '50000'
         max_sell_amount:
           type: string
           description: Largest `sell_amount` any provider accepts, in base units.
-          examples:
-          - '100000000'
     Registry:
       type: object
       required:
@@ -1388,13 +1236,9 @@ components:
         id:
           type: string
           description: The chain identifier. Opaque — do not parse.
-          examples:
-          - base
         name:
           type: string
           description: Display name.
-          examples:
-          - Base
         vm_type:
           type: string
           description: 'How to read a chain-native payload. One of `evm`, `svm`, `bvm`,
@@ -1402,8 +1246,6 @@ components:
             `spark`. Treat as open — accept values not listed here.
 
             '
-          examples:
-          - evm
         chain_id:
           type: string
           description: 'Chain identifier, in decimal. Present only for chains that have one,
@@ -1411,8 +1253,6 @@ components:
             such as an EVM chain. Absent for Bitcoin.
 
             '
-          examples:
-          - '8453'
         explorer_url:
           type: string
           format: uri
@@ -1421,8 +1261,6 @@ components:
             `/tx/{hash}` or `/address/{address}`.
 
             '
-          examples:
-          - https://basescan.org
         logo_url:
           type:
           - string
@@ -1445,9 +1283,6 @@ components:
             chain logo as a badge.
 
             '
-          examples:
-          - https://cdn.garden.finance/chains/base.svg
-          - null
         disabled:
           type: boolean
           description: '`true` means the chain is halted. Every asset on it reports
@@ -1457,8 +1292,6 @@ components:
             order still resolves.
 
             '
-          examples:
-          - false
         assets:
           type: array
           items:
@@ -1478,8 +1311,6 @@ components:
             Treat as open — accept values not listed here.
 
             '
-          examples:
-          - contract
         address:
           type: string
           description: 'The address in the chain''s native format. Present only when `type` is
@@ -1487,8 +1318,6 @@ components:
             `contract`.
 
             '
-          examples:
-          - '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
     Asset:
       type: object
       required:
@@ -1504,23 +1333,14 @@ components:
           description: '`<chain>:<symbol>`, lowercase. Opaque — do not parse. Stable forever.
 
             '
-          examples:
-          - base:usdc
-          - bitcoin:btc
         token:
           $ref: '#/components/schemas/TokenRef'
         symbol:
           type: string
-          examples:
-          - USDC
         name:
           type: string
-          examples:
-          - USD Coin
         decimals:
           type: integer
-          examples:
-          - 6
         logo_url:
           type:
           - string
@@ -1538,9 +1358,6 @@ components:
             user sees.
 
             '
-          examples:
-          - https://cdn.garden.finance/assets/base-usdc.svg
-          - null
         disabled:
           type: boolean
           description: '`true` means the asset is no longer offered for a new swap. It is
@@ -1550,8 +1367,6 @@ components:
             orders still resolve. Hide it from a picker.
 
             '
-          examples:
-          - false
     Error:
       type: object
       required:
@@ -1571,18 +1386,12 @@ components:
                 `message`. Treat as open — accept values not listed here.
 
                 '
-              examples:
-              - invalid_request
             message:
               type: string
               description: For a person. Never parse it.
-              examples:
-              - Give at least one of sell_asset or buy_asset.
             retryable:
               type: boolean
               description: Whether the same request can succeed later.
-              examples:
-              - false
             details:
               type: object
               additionalProperties: true
