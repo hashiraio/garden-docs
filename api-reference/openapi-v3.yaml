@@ -18,7 +18,7 @@ info:
 
     order has been reported at nineteen digits. Read `decimals` from
 
-    `GET /v3/registry`.
+    `GET /registry`.
 
 
     **An asset id is `<chain>:<symbol>`, lowercase.** `bitcoin:btc`,
@@ -47,7 +47,7 @@ info:
     know yet" is the true statement.
 
 
-    **Changes inside `/v3` are additive.** A field can be added. Nothing is
+    **Changes are additive.** A field can be added. Nothing is
 
     removed, renamed, or given a new meaning. Ignore what you do not recognise.
 
@@ -65,7 +65,7 @@ tags:
 security:
 - garden-app-id: []
 paths:
-  /v3/registry:
+  /registry:
     get:
       operationId: getRegistry
       tags:
@@ -141,7 +141,7 @@ paths:
           $ref: '#/components/responses/InvalidKey'
         '429':
           $ref: '#/components/responses/RateLimited'
-  /v3/routes:
+  /routes:
     get:
       operationId: getRoutes
       tags:
@@ -209,7 +209,7 @@ paths:
           $ref: '#/components/responses/InvalidKey'
         '429':
           $ref: '#/components/responses/RateLimited'
-  /v3/estimate:
+  /estimate:
     get:
       operationId: getEstimate
       tags:
@@ -353,7 +353,7 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '502':
           $ref: '#/components/responses/ProviderUnavailable'
-  /v3/quote:
+  /quote:
     post:
       operationId: createQuote
       tags:
@@ -473,7 +473,7 @@ paths:
           $ref: '#/components/responses/RateLimited'
         '502':
           $ref: '#/components/responses/ProviderUnavailable'
-  /v3/orders:
+  /orders:
     get:
       operationId: listOrders
       tags:
@@ -534,7 +534,7 @@ paths:
                   retryable: false
         '429':
           $ref: '#/components/responses/RateLimited'
-  /v3/orders/{order_id}:
+  /orders/{order_id}:
     get:
       operationId: getOrder
       tags:
@@ -599,7 +599,7 @@ paths:
                   retryable: false
         '429':
           $ref: '#/components/responses/RateLimited'
-  /v3/orders/{order_id}/submit:
+  /orders/{order_id}/submit:
     post:
       operationId: submitDeposit
       tags:
@@ -798,7 +798,7 @@ components:
           type: array
           description: 'One quote for each provider that built one. Ranked as in
 
-            `/v3/estimate`.
+            `/estimate`.
 
             '
           items:
@@ -826,7 +826,7 @@ components:
           type: string
           description: 'Stable for the life of the swap. Send it to
 
-            `POST /v3/orders/{id}/submit`, and poll `GET /v3/orders/{id}` with it.
+            `POST /orders/{id}/submit`, and poll `GET /orders/{id}` with it.
 
             '
           examples:
@@ -877,7 +877,7 @@ components:
           type: array
           description: 'What the user must do to start the swap. Whatever comes after appears
 
-            on the order, from `GET /v3/orders/{id}`.
+            on the order, from `GET /orders/{id}`.
 
             '
           items:
@@ -924,7 +924,7 @@ components:
       properties:
         id:
           type: string
-          description: 'The same identifier `POST /v3/quote` returned. It never changes.
+          description: 'The same identifier `POST /quote` returned. It never changes.
 
             '
           examples:
@@ -1069,7 +1069,7 @@ components:
           type: string
           description: '`deposit`, `transaction` or `signature`. It selects the payload field
 
-            below, and the field you send to `/v3/orders/{order_id}/submit`. Treat
+            below, and the field you send to `/orders/{order_id}/submit`. Treat
 
             as open.
 
@@ -1093,7 +1093,7 @@ components:
           properties:
             chain:
               type: string
-              description: The `id` of a chain in `GET /v3/registry`.
+              description: The `id` of a chain in `GET /registry`.
               examples:
               - bitcoin
             address:
@@ -1121,7 +1121,7 @@ components:
           properties:
             chain:
               type: string
-              description: The `id` of a chain in `GET /v3/registry`.
+              description: The `id` of a chain in `GET /registry`.
               examples:
               - base
           description: 'The payload to sign, in the native shape of the chain. EVM carries
@@ -1167,7 +1167,7 @@ components:
           type: string
           description: 'The provider that produced this price. Provider names appear here and
 
-            never in `/v3/registry` or `/v3/routes`.
+            never in `/registry` or `/routes`.
 
             '
           examples:
