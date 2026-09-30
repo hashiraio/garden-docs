@@ -71,9 +71,15 @@ paths:
       tags:
       - Discovery
       summary: List supported chains and assets
-      security:
-      - {}
-      - garden-app-id: []
+      security: []
+      parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: Optional. Send your app ID to include the chains and assets
+          private to your app. An invalid app ID is refused with `401`.
       responses:
         '200':
           description: OK
@@ -104,10 +110,15 @@ paths:
       tags:
       - Discovery
       summary: List routable pairs for an asset
-      security:
-      - {}
-      - garden-app-id: []
+      security: []
       parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: Optional. Send your app ID to include the chains and assets
+          private to your app. An invalid app ID is refused with `401`.
       - name: sell_asset
         in: query
         required: false
@@ -171,10 +182,15 @@ paths:
       tags:
       - Quoting
       summary: Price a swap across every provider
-      security:
-      - {}
-      - garden-app-id: []
+      security: []
       parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: Optional. Send your app ID to include the chains and assets
+          private to your app. An invalid app ID is refused with `401`.
       - name: sell_asset
         in: query
         required: true
@@ -228,6 +244,7 @@ paths:
           default: 100
           minimum: 0
           maximum: 10000
+        description: Basis points, where 100 is 1%.
       - name: allow_providers
         in: query
         required: false
@@ -682,18 +699,15 @@ components:
         sell_address:
           type: string
           description: Where the user sends from, on the source chain.
-          examples:
-          - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
         buy_address:
           type: string
           description: Where the user receives, on the destination chain.
-          examples:
-          - '0x000000000000000000000000000000000000dEaD'
         slippage_bps:
           type: integer
           default: 100
           minimum: 0
           maximum: 10000
+          description: Basis points, where 100 is 1%.
         allow_providers:
           type: array
           items:

@@ -24,7 +24,7 @@ A derived minimum is computed from the provider's own quote, so it reflects your
 
 ## Choosing a slippage value
 
-A higher `slippage_bps` widens the gap between `buy_amount` and `min_buy_amount`, and a lower one narrows it.
+`slippage_bps` is in basis points, where 100 is 1%. The default is 100. A higher value widens the gap between `buy_amount` and `min_buy_amount`, and a lower one narrows it.
 
 Some providers limit how much slippage they accept. A provider that cannot work with your value returns no quote and appears in `provider_errors` instead.
 
