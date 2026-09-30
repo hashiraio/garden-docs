@@ -123,16 +123,23 @@
             "group": "Get Started",
             "pages": [
               "developers/overview",
-              "developers/supported-chains",
-              "developers/supported-routes",
-              "developers/affiliate-fees"
+              "developers/supported-chains"
             ]
           },
           {
             "group": "API",
             "pages": [
-              "developers/api/overview",
-              "developers/api/1click"
+              {
+                "group": "Protocol API",
+                "pages": [
+                  "developers/api/overview",
+                  "developers/api/1click",
+                  "developers/supported-routes",
+                  "developers/affiliate-fees",
+                  "developers/core/order-lifecycle",
+                  "developers/core/sessions"
+                ]
+              }
             ]
           },
           {
@@ -153,13 +160,6 @@
                   "developers/sdk/nodejs/quickstart"
                 ]
               }
-            ]
-          },
-          {
-            "group": "Core Concepts",
-            "pages": [
-              "developers/core/order-lifecycle",
-              "developers/core/sessions"
             ]
           },
           {
