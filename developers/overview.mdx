@@ -10,14 +10,31 @@ follow the quickstart — most integrators are up and running in under 30 minute
 
 ## Choose your integration path
 
-<CardGroup cols={2}>
-  <Card title="API" icon="webhook" href="/developers/api/overview">
+<Tabs>
+  <Tab title="API">
+
     You control the full flow.
-  </Card>
-  <Card title="SDK" icon="code" href="/developers/sdk/overview">
+
+    <CardGroup cols={2}>
+      <Card title="Protocol API" icon="webhook" href="/developers/api/overview">
+        Swap through the Garden protocol.
+      </Card>
+      <Card title="Routing API" icon="route" href="/developers/api/routing">
+        Get a quote from every provider at once.
+      </Card>
+    </CardGroup>
+
+  </Tab>
+  <Tab title="SDK">
+
     Most of the integration is already handled for you.
-  </Card>
-</CardGroup>
+
+    <Card title="SDK" icon="code" href="/developers/sdk/overview">
+      TypeScript packages for React and Node.js.
+    </Card>
+
+  </Tab>
+</Tabs>
 
 ---
 
