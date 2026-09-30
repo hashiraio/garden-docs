@@ -1,10 +1,10 @@
 ---
-title: "Routing Order Lifecycle"
+title: "Aggregator Order Lifecycle"
 sidebarTitle: "Order Lifecycle"
-description: "Understand the steps and states an order goes through on the Routing API"
+description: "Understand the steps and states an order goes through on the Aggregator API"
 ---
 
-Every quote from the [Routing API](/developers/api/routing) is also an order. Its `id` stays the same from the quote to the end of the swap, and the steps your user takes depend on the provider that issued it.
+Every quote from the [Aggregator API](/developers/api/aggregator) is also an order. Its `id` stays the same from the quote to the end of the swap, and the steps your user takes depend on the provider that issued it.
 
 ## Steps
 
@@ -32,7 +32,7 @@ Use `action` as the button text. Treat `id` and `kind` as open, since new values
 
 ## Order states
 
-After the user acts, report the transaction with [Submit Deposit](/api-reference/endpoint/routing/submit), then track the order with [Order](/api-reference/endpoint/routing/order-by-id).
+After the user acts, report the transaction with [Submit Deposit](/api-reference/endpoint/aggregator/submit), then track the order with [Order](/api-reference/endpoint/aggregator/order-by-id).
 
 | State | Description | Action |
 |-------|-------------|--------|

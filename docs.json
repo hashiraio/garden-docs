@@ -141,13 +141,13 @@
                 ]
               },
               {
-                "group": "Routing API",
+                "group": "Aggregator API",
                 "pages": [
-                  "developers/api/routing",
+                  "developers/api/aggregator",
                   "developers/slippage",
                   "developers/deadlines",
                   "developers/core/provider-errors",
-                  "developers/core/routing-lifecycle"
+                  "developers/core/aggregator-lifecycle"
                 ]
               }
             ]
@@ -221,31 +221,31 @@
             ]
           },
           {
-            "group": "Routing API",
+            "group": "Aggregator API",
             "pages": [
               {
                 "group": "Quotes",
                 "expanded": true,
                 "pages": [
-                  "api-reference/endpoint/routing/estimate",
-                  "api-reference/endpoint/routing/quote"
+                  "api-reference/endpoint/aggregator/estimate",
+                  "api-reference/endpoint/aggregator/quote"
                 ]
               },
               {
                 "group": "Assets & Routes",
                 "expanded": true,
                 "pages": [
-                  "api-reference/endpoint/routing/registry",
-                  "api-reference/endpoint/routing/routes"
+                  "api-reference/endpoint/aggregator/registry",
+                  "api-reference/endpoint/aggregator/routes"
                 ]
               },
               {
                 "group": "Orders",
                 "expanded": true,
                 "pages": [
-                  "api-reference/endpoint/routing/orders",
-                  "api-reference/endpoint/routing/order-by-id",
-                  "api-reference/endpoint/routing/submit"
+                  "api-reference/endpoint/aggregator/orders",
+                  "api-reference/endpoint/aggregator/order-by-id",
+                  "api-reference/endpoint/aggregator/submit"
                 ]
               }
             ]

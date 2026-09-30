@@ -3,7 +3,7 @@ title: "Slippage"
 description: "Understand what the minimum on a quote means, and how slippage sets it"
 ---
 
-Every quote from the [Routing API](/developers/api/routing) carries two amounts for what your user receives: `buy_amount`, the amount expected at the time of quoting, and `min_buy_amount`, the least the provider expects to deliver. The gap between them is your slippage tolerance.
+Every quote from the [Aggregator API](/developers/api/aggregator) carries two amounts for what your user receives: `buy_amount`, the amount expected at the time of quoting, and `min_buy_amount`, the least the provider expects to deliver. The gap between them is your slippage tolerance.
 
 ## What the minimum means
 
@@ -31,7 +31,7 @@ Some providers limit how much slippage they accept. A provider that cannot work 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/aggregator/quote">
     Every field a quote returns.
   </Card>
   <Card title="Deadlines" icon="clock" href="/developers/deadlines">

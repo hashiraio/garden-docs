@@ -1,7 +1,7 @@
 # Generated from garden-aggregator-specs/openapi.yaml.
 # Two changes: operation descriptions stripped (the page body carries one
 # line instead, matching openapi.json), and the testnet server removed
-# because the Routing API is mainnet only.
+# because the Aggregator API is mainnet only.
 openapi: 3.1.0
 info:
   title: garden-aggregator

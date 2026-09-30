@@ -1,19 +1,19 @@
 ---
-title: "Routing API"
+title: "Aggregator API"
 description: "Get a quote from every provider that can fill a swap, in a single request"
 sidebarTitle: "Overview"
 ---
 
-The **Routing API** returns a quote from every provider that supports your pair, including the Garden protocol. Start with an estimate, which needs no credentials:
+The **Aggregator API** returns a quote from every provider that supports your pair, including the Garden protocol. Start with an estimate, which needs no credentials:
 
-<Card title="Estimate" icon="scale-balanced" href="/api-reference/endpoint/routing/estimate">
+<Card title="Estimate" icon="scale-balanced" href="/api-reference/endpoint/aggregator/estimate">
     Price a swap across every provider without an app ID.
 </Card>
 
 Once you know what a route costs, request a quote and follow the steps it returns:
 
 <CardGroup cols={2}>
-    <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+    <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/aggregator/quote">
         Build an executable order from each provider.
     </Card>
     <Card title="Providers" icon="users" href="/home/fundamentals/providers">
@@ -22,5 +22,5 @@ Once you know what a route costs, request a quote and follow the steps it return
 </CardGroup>
 
 <Note>
-    The Routing API is available on mainnet only.
+    The Aggregator API is available on mainnet only.
 </Note>

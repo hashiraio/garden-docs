@@ -3,7 +3,7 @@ title: "Provider Errors"
 description: "Understand why a provider may not return a quote, and how to handle it"
 ---
 
-A request to the [Routing API](/developers/api/routing) asks every provider at once. Some return a quote and some do not. Each provider that does not is listed in `provider_errors`, alongside the quotes that did arrive.
+A request to the [Aggregator API](/developers/api/aggregator) asks every provider at once. Some return a quote and some do not. Each provider that does not is listed in `provider_errors`, alongside the quotes that did arrive.
 
 ```json
 {
@@ -59,7 +59,7 @@ The provider could not answer.
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/aggregator/quote">
     Every field a quote returns.
   </Card>
   <Card title="Providers" icon="users" href="/home/fundamentals/providers">
