@@ -1,0 +1,39 @@
+---
+title: "How Garden Routes a Swap"
+description: "Understand what happens between asking for a swap and choosing how it executes"
+---
+
+When you ask Garden for a swap, every [provider](./providers) that supports the pair answers with a quote. You compare what each one offers and pick the one you want, and that provider executes your swap.
+
+Garden is one of those providers. The pages in this section describe the Garden protocol - how a swap settles when you choose Garden. Choose another provider and it settles on that provider's own terms.
+
+## What happens when you swap
+
+<Steps>
+  <Step title="You describe the swap">
+    The assets you are sending and receiving, and the amount.
+  </Step>
+
+  <Step title="Providers answer">
+    Every provider that supports the pair returns a quote, with its own rate, fees, and deadline.
+  </Step>
+
+  <Step title="You choose">
+    Compare the quotes and pick one.
+  </Step>
+
+  <Step title="The provider executes">
+    Each quote comes with the steps you follow to complete the swap.
+  </Step>
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Providers" icon="users" href="./providers">
+    Who can execute a swap, and what differs between them.
+  </Card>
+  <Card title="Atomic swaps" icon="right-left" href="./core-concepts/atomic-swaps">
+    How a swap settles when Garden is the provider.
+  </Card>
+</CardGroup>
