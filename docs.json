@@ -139,6 +139,16 @@
                   "developers/core/order-lifecycle",
                   "developers/core/sessions"
                 ]
+              },
+              {
+                "group": "Routing API",
+                "pages": [
+                  "developers/api/routing",
+                  "developers/slippage",
+                  "developers/deadlines",
+                  "developers/core/provider-errors",
+                  "developers/core/routing-lifecycle"
+                ]
               }
             ]
           },

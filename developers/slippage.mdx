@@ -1,0 +1,40 @@
+---
+title: "Slippage"
+description: "Understand what the minimum on a quote means, and how slippage sets it"
+---
+
+Every quote from the [Routing API](/developers/api/routing) carries two amounts for what your user receives: `buy_amount`, the amount expected at the time of quoting, and `min_buy_amount`, the least the provider expects to deliver. The gap between them is your slippage tolerance.
+
+## What the minimum means
+
+`min_buy_amount` is an estimate, not a guarantee. Treat it as the expected worst case, not a promise you can hold a provider to.
+
+It reaches you two ways, and a quote does not distinguish between them:
+
+| | How the minimum is set |
+|---|---|
+| **Published** | The provider committed to a minimum and returned it. |
+| **Derived** | The provider published no minimum, so it is calculated from `buy_amount` less your slippage. |
+
+A derived minimum is computed from the provider's own quote, so it reflects your tolerance rather than any commitment.
+
+<Warning>
+  Do not present `min_buy_amount` to a user as an amount they are guaranteed to receive.
+</Warning>
+
+## Choosing a slippage value
+
+A higher `slippage_bps` widens the gap between `buy_amount` and `min_buy_amount`, and a lower one narrows it.
+
+Some providers limit how much slippage they accept. A provider that cannot work with your value returns no quote and appears in `provider_errors` instead.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+    Every field a quote returns.
+  </Card>
+  <Card title="Deadlines" icon="clock" href="/developers/deadlines">
+    How long you have to send funds after a quote.
+  </Card>
+</CardGroup>

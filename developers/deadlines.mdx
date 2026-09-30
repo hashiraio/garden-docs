@@ -1,0 +1,19 @@
+---
+title: "Deadlines"
+description: "Understand how long you have to send funds after a quote"
+---
+
+Every quote from the [Routing API](/developers/api/routing) carries `deposit_by`, the time by which the funds must be sent.
+
+This is set by the provider that issued the quote, not by Garden, and it varies from one provider to the next. Some are short. Read `deposit_by` from the quote rather than assuming a duration, and do not start a wallet flow your user cannot finish inside it.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+    Every field a quote returns.
+  </Card>
+  <Card title="Providers" icon="users" href="/home/fundamentals/providers">
+    Who can execute a swap, and what differs between them.
+  </Card>
+</CardGroup>

@@ -1,0 +1,68 @@
+---
+title: "Provider Errors"
+description: "Understand why a provider may not return a quote, and how to handle it"
+---
+
+A request to the [Routing API](/developers/api/routing) asks every provider at once. Some return a quote and some do not. Each provider that does not is listed in `provider_errors`, alongside the quotes that did arrive.
+
+```json
+{
+  "quotes": [ ... ],
+  "provider_errors": [
+    {
+      "provider": "swapkit",
+      "code": "no_route",
+      "message": "no route for this pair"
+    }
+  ]
+}
+```
+
+A response with some quotes and some errors is a normal response. Show the quotes you have.
+
+## Error codes
+
+Branch on `code`, never on `message`. Treat `code` as open, since new codes may be added.
+
+### Declined
+
+The provider answered, but cannot fill this request.
+
+| Code | Description |
+|------|-------------|
+| **`no_route`** | The provider does not support this pair. |
+| **`amount_below_minimum`** | The amount is below the provider's minimum. |
+| **`amount_above_maximum`** | The amount is above the provider's maximum. |
+| **`unsupported_trade_type`** | The provider does not support this `trade_type`. |
+
+For an amount error, `message` states the provider's limit.
+
+### Failed
+
+The provider could not answer.
+
+| Code | Description |
+|------|-------------|
+| **`timeout`** | The provider did not answer in time. |
+| **`rate_limited`** | The provider is limiting requests. |
+| **`provider_error`** | The provider returned an error. |
+
+## When no quotes arrive
+
+| Result | Response |
+|--------|----------|
+| At least one provider declined | `200` with an empty `quotes` list. The pair or amount is not supported right now. |
+| Every provider failed | `502` with the code `provider_unavailable`. Retry shortly. |
+| `allow_providers` and `exclude_providers` left no provider to ask | `200` with empty `quotes` and `provider_errors` lists. |
+| `allow_providers` names no provider the API runs | `400` with the code `invalid_request`. |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quote" icon="file-invoice-dollar" href="/api-reference/endpoint/routing/quote">
+    Every field a quote returns.
+  </Card>
+  <Card title="Providers" icon="users" href="/home/fundamentals/providers">
+    Who can execute a swap, and what differs between them.
+  </Card>
+</CardGroup>
