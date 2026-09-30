@@ -8,7 +8,10 @@
     "dark": "#e36492"
   },
   "favicon": "/favicon.svg",
-  "openapi": "api-reference/openapi.json",
+  "openapi": [
+    "api-reference/openapi.json",
+    "api-reference/openapi-v3.yaml"
+  ],
   "contextual": {
     "options": [
       "copy",
@@ -208,39 +211,78 @@
             ]
           },
           {
-            "group": "Orders",
+            "group": "Routing API",
             "pages": [
-              "api-reference/endpoint/get-quote",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-orders",
-              "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-instant-refund-hash",
-              "api-reference/endpoint/orders/patch"
+              {
+                "group": "Quotes",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/routing/estimate",
+                  "api-reference/endpoint/routing/quote"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/routing/registry",
+                  "api-reference/endpoint/routing/routes"
+                ]
+              },
+              {
+                "group": "Orders",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/routing/orders",
+                  "api-reference/endpoint/routing/order-by-id",
+                  "api-reference/endpoint/routing/submit"
+                ]
+              }
             ]
           },
           {
-            "group": "Assets & Routes",
+            "group": "Protocol API",
             "pages": [
-              "api-reference/endpoint/blockchain/get-chains",
-              "api-reference/endpoint/blockchain/get-assets",
-              "api-reference/endpoint/blockchain/get-policy",
-              "api-reference/endpoint/blockchain/get-liquidity",
-              "api-reference/endpoint/blockchain/get-schema",
-              "api-reference/endpoint/blockchain/get-schemas"
-            ]
-          },
-          {
-            "group": "Monitoring",
-            "pages": [
-              "api-reference/endpoint/get-health",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
-            ]
-          },
-          {
-            "group": "Affiliate",
-            "pages": [
-              "api-reference/endpoint/affiliate/get-earnings"
+              {
+                "group": "Orders",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/get-quote",
+                  "api-reference/endpoint/orders/get-order-by-id",
+                  "api-reference/endpoint/orders/get-orders",
+                  "api-reference/endpoint/orders/create-order",
+                  "api-reference/endpoint/orders/get-instant-refund-hash",
+                  "api-reference/endpoint/orders/patch"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/blockchain/get-chains",
+                  "api-reference/endpoint/blockchain/get-assets",
+                  "api-reference/endpoint/blockchain/get-policy",
+                  "api-reference/endpoint/blockchain/get-liquidity",
+                  "api-reference/endpoint/blockchain/get-schema",
+                  "api-reference/endpoint/blockchain/get-schemas"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/get-health",
+                  "api-reference/endpoint/get-volume",
+                  "api-reference/endpoint/get-fees"
+                ]
+              },
+              {
+                "group": "Affiliate",
+                "expanded": true,
+                "pages": [
+                  "api-reference/endpoint/affiliate/get-earnings"
+                ]
+              }
             ]
           }
         ]
