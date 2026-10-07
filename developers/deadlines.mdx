@@ -3,9 +3,9 @@ title: "Deadlines"
 description: "Understand how long you have to send funds after a quote"
 ---
 
-Every quote from the [Aggregator API](/developers/api/aggregator) carries `deposit_by`, the time by which the funds must be sent.
+Every quote from the [Aggregator API](/developers/api/aggregator) carries `deposit_by`, the time before which the deposit should be sent. A later deposit is still accepted and repriced.
 
-This is set by the provider that issued the quote, not by Garden, and it varies from one provider to the next. Some are short. Read `deposit_by` from the quote rather than assuming a duration, and do not start a wallet flow your user cannot finish inside it.
+This is set by the provider that issued the quote, and it varies from one provider to the next. Some are short. If the provider sets none, it is 5 minutes after the quote. Read `deposit_by` from the quote rather than assuming a duration, and do not start a wallet flow your user cannot finish inside it.
 
 ## Next steps
 

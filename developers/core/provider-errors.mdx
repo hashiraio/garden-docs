@@ -34,8 +34,11 @@ The provider answered, but cannot fill this request.
 | **`amount_below_minimum`** | The amount is below the provider's minimum. |
 | **`amount_above_maximum`** | The amount is above the provider's maximum. |
 | **`unsupported_trade_type`** | The provider does not support this `trade_type`. |
+| **`unsupported_slippage`** | The provider does not accept this `slippage_bps`. |
+| **`insufficient_balance`** | The sell address cannot cover the amount and its network fee. |
+| **`invalid_request`** | The provider rejected the request, for example an address it does not accept. `message` says why. |
 
-For an amount error, `message` states the provider's limit.
+For an amount error, `message` states the provider's limit when the provider gives one.
 
 ### Failed
 
@@ -53,7 +56,7 @@ The provider could not answer.
 |--------|----------|
 | At least one provider declined | `200` with an empty `quotes` list. The pair or amount is not supported right now. |
 | Every provider failed | `502` with the code `provider_unavailable`. Retry shortly. |
-| `allow_providers` and `exclude_providers` left no provider to ask | `200` with empty `quotes` and `provider_errors` lists. |
+| `allow_providers` and `exclude_providers` left no provider to ask | `400` with the code `invalid_request`. |
 | `allow_providers` names no provider the API runs | `400` with the code `invalid_request`. |
 
 ## Next steps

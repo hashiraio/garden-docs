@@ -4,7 +4,7 @@ sidebarTitle: "Order Lifecycle"
 description: "Understand the steps and states an order goes through on the Aggregator API"
 ---
 
-Every quote from the [Aggregator API](/developers/api/aggregator) is also an order. Its `id` stays the same from the quote to the end of the swap, and the steps your user takes depend on the provider that issued it.
+A quote from the [Aggregator API](/developers/api/aggregator) becomes an order when you submit its deposit, or when the deposit is detected. Its `id` stays the same from the quote to the end of the swap, and the steps your user takes depend on the provider that issued it.
 
 ## Steps
 
@@ -12,6 +12,7 @@ A quote carries `steps`, the actions the user must take to start the swap. Compl
 
 | Step | Description |
 |------|-------------|
+| **`core_to_evm_transfer`** | Move the funds from HyperCore to HyperEVM. Only when selling from HyperCore. |
 | **`approve`** | Allow the provider's contract to spend the token. Some providers ask for this before the swap. |
 | **`initiate`** | Send the funds that start the swap. |
 
