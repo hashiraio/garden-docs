@@ -253,6 +253,270 @@
             ]
           }
         ]
+      },
+      {
+        "language": "es",
+        "navbar": {
+          "links": [
+            {
+              "label": "Soporte",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Abrir app",
+            "href": "https://app.garden.finance/es"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "Aplicación",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/es/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/es/stake"
+                }
+              ]
+            },
+            {
+              "header": "Recursos",
+              "items": [
+                {
+                  "label": "Blog",
+                  "href": "https://garden.finance/es/blog"
+                },
+                {
+                  "label": "Docs",
+                  "href": "https://garden.finance/docs/es"
+                },
+                {
+                  "label": "Auditorías",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "Kit de prensa",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
+          {
+            "tab": "Inicio",
+            "pages": [
+              "es/index"
+            ]
+          },
+          {
+            "tab": "Primeros pasos",
+            "href": "https://garden.finance/docs/home/about"
+          },
+          {
+            "tab": "Desarrolladores",
+            "href": "https://garden.finance/docs/developers/overview"
+          },
+          {
+            "tab": "Contratos",
+            "href": "https://garden.finance/docs/contracts/overview"
+          },
+          {
+            "tab": "Referencia de la API",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "Registro de cambios",
+            "href": "https://garden.finance/docs/changelog"
+          }
+        ]
+      },
+      {
+        "language": "ru",
+        "navbar": {
+          "links": [
+            {
+              "label": "Поддержка",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Запустить приложение",
+            "href": "https://app.garden.finance/ru"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "Приложение",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/ru/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/ru/stake"
+                }
+              ]
+            },
+            {
+              "header": "Ресурсы",
+              "items": [
+                {
+                  "label": "Блог",
+                  "href": "https://garden.finance/ru/blog"
+                },
+                {
+                  "label": "Документация",
+                  "href": "https://garden.finance/docs/ru"
+                },
+                {
+                  "label": "Аудиты",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "Медиакит",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
+          {
+            "tab": "Главная",
+            "pages": [
+              "ru/index"
+            ]
+          },
+          {
+            "tab": "Начало работы",
+            "href": "https://garden.finance/docs/home/about"
+          },
+          {
+            "tab": "Разработчики",
+            "href": "https://garden.finance/docs/developers/overview"
+          },
+          {
+            "tab": "Контракты",
+            "href": "https://garden.finance/docs/contracts/overview"
+          },
+          {
+            "tab": "Справочник API",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "Журнал изменений",
+            "href": "https://garden.finance/docs/changelog"
+          }
+        ]
+      },
+      {
+        "language": "zh",
+        "navbar": {
+          "links": [
+            {
+              "label": "支持",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "启动应用",
+            "href": "https://app.garden.finance/zh"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "应用",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/zh/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/zh/stake"
+                }
+              ]
+            },
+            {
+              "header": "资源",
+              "items": [
+                {
+                  "label": "博客",
+                  "href": "https://garden.finance/zh/blog"
+                },
+                {
+                  "label": "文档",
+                  "href": "https://garden.finance/docs/zh"
+                },
+                {
+                  "label": "审计",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "媒体资料包",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
+          {
+            "tab": "首页",
+            "pages": [
+              "zh/index"
+            ]
+          },
+          {
+            "tab": "入门",
+            "href": "https://garden.finance/docs/home/about"
+          },
+          {
+            "tab": "开发者",
+            "href": "https://garden.finance/docs/developers/overview"
+          },
+          {
+            "tab": "合约",
+            "href": "https://garden.finance/docs/contracts/overview"
+          },
+          {
+            "tab": "API 参考",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "更新日志",
+            "href": "https://garden.finance/docs/changelog"
+          }
+        ]
       }
     ]
   },
@@ -350,11 +614,6 @@
       "permanent": false
     },
     {
-      "source": "/es",
-      "destination": "/",
-      "permanent": false
-    },
-    {
       "source": "/ru/api-reference/:slug*",
       "destination": "/api-reference/:slug*",
       "permanent": false
@@ -380,11 +639,6 @@
       "permanent": false
     },
     {
-      "source": "/ru",
-      "destination": "/",
-      "permanent": false
-    },
-    {
       "source": "/zh/api-reference/:slug*",
       "destination": "/api-reference/:slug*",
       "permanent": false
@@ -407,11 +661,6 @@
     {
       "source": "/zh/home/:slug*",
       "destination": "/home/:slug*",
-      "permanent": false
-    },
-    {
-      "source": "/zh",
-      "destination": "/",
       "permanent": false
     }
   ]
