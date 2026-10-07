@@ -1,0 +1,235 @@
+---
+title: "Cómo intercambiar activos EVM entre cadenas"
+description: "Guía paso a paso para mover Wrapped Bitcoin (WBTC) entre Ethereum, Arbitrum y otras redes compatibles con Garden Finance"
+---
+
+# Cómo intercambiar WBTC entre cadenas
+
+Mueve tus Wrapped Bitcoin (WBTC) entre distintas redes blockchain. Garden Finance permite transferencias fluidas entre cadenas sin que tengas que desenvolverlos primero a Bitcoin.
+
+<Info>
+Esta guía explica cómo transferir **WBTC entre distintas redes**, por ejemplo de Ethereum a Arbitrum, de Arbitrum a Ethereum o a otras cadenas compatibles. El proceso suele completarse en menos de 30 segundos.
+</Info>
+
+## Redes compatibles
+
+Garden Finance admite WBTC en varias redes:
+
+<CardGroup cols={2}>
+  <Card title="Ethereum" icon="ethereum">
+    **WBTC en mainnet**  
+    La más consolidada, con la mayor liquidez  
+    Comisiones de gas más altas, pero máxima compatibilidad con DeFi
+  </Card>
+  <Card title="Arbitrum" icon="triangle">
+    **WBTC en capa 2**  
+    Comisiones más bajas y transacciones más rápidas  
+    Ecosistema DeFi en crecimiento
+  </Card>
+</CardGroup>
+
+## Qué necesitas
+
+<Steps>
+  <Step title="Requisitos de la wallet">
+    - **Wallet EVM**: MetaMask, Coinbase Wallet u otra wallet compatible con EVM
+    - **Red de origen**: WBTC en la blockchain desde la que lo mueves
+    - **Red de destino**: tokens de gas para la red de destino (si hace falta)
+  </Step>
+  <Step title="Activos en la red">
+    - Tokens WBTC en la red de origen
+    - Comisiones de gas para aprobar la transacción (ETH en Ethereum, ARB en Arbitrum)
+  </Step>
+</Steps>
+
+## Rutas habituales entre cadenas
+
+### De Ethereum a Arbitrum
+
+Mover WBTC de Ethereum a Arbitrum para reducir los costos de transacción.
+
+<Steps>
+  <Step title="Conecta la wallet">
+    1. Visita [Garden Finance](https://app.garden.finance/es)
+    2. Conecta tu wallet EVM que contiene WBTC en Ethereum
+    3. Asegúrate de que tu wallet esté conectada a la red de Ethereum
+  </Step>
+
+  <Step title="Configura el intercambio entre cadenas">
+    1. **Sección Enviar**: selecciona **WBTC en Ethereum**
+    2. **Sección Recibir**: selecciona **WBTC en Arbitrum**
+    3. Introduce la cantidad que quieres transferir
+    4. La interfaz te mostrará la dirección de recepción (la misma que tu dirección de envío, en otra red)
+  </Step>
+
+  <Step title="Revisa los detalles de la transferencia">
+    - **Origen**: WBTC en Ethereum
+    - **Destino**: WBTC en Arbitrum  
+    - **Tasa**: debería ser aproximadamente 1:1 (menos comisiones)
+    - **Costo de gas**: comisiones de gas de Ethereum para la aprobación
+    - **Tiempo de finalización**: normalmente menos de 30 segundos
+  </Step>
+
+  <Step title="Ejecuta la transferencia">
+    1. Haz clic en **Intercambiar** para iniciar la transferencia
+    2. Aprueba la transacción de WBTC en tu wallet
+    3. Paga las comisiones de gas de Ethereum
+    4. Sigue el progreso en la interfaz de Garden
+  </Step>
+
+  <Step title="Verifica la recepción">
+    1. Cambia tu wallet a la red de Arbitrum
+    2. Comprueba que los WBTC aparecen en tu wallet en Arbitrum
+    3. Ya puedes usar WBTC en protocolos DeFi de Arbitrum
+  </Step>
+</Steps>
+
+### De Arbitrum a Ethereum
+
+Mover WBTC de Arbitrum de vuelta a la mainnet de Ethereum.
+
+<Steps>
+  <Step title="Configuración">
+    1. Conecta tu wallet a Garden Finance
+    2. Cambia tu wallet a la red de Arbitrum
+    3. Asegúrate de tener WBTC en Arbitrum y suficiente ARB para el gas
+  </Step>
+
+  <Step title="Configura el intercambio inverso">
+    1. **Enviar**: WBTC en Arbitrum
+    2. **Recibir**: WBTC en Ethereum
+    3. Introduce la cantidad que quieres transferir
+  </Step>
+
+  <Step title="Completa la transferencia">
+    1. Aprueba la transacción (comisiones de gas bajas en Arbitrum)
+    2. Espera a que se complete
+    3. Cambia tu wallet a Ethereum para ver los WBTC recibidos
+  </Step>
+</Steps>
+
+## ¿Por qué mover WBTC entre cadenas?
+
+<CardGroup cols={2}>
+  <Card title="Optimización de costos" icon="dollar-sign">
+    **Comisiones más bajas**: pásate a Arbitrum para realizar transacciones DeFi más baratas  
+    **Operaciones agrupadas**: realiza varias operaciones en la capa 2 y después vuelve a la mainnet
+  </Card>
+  <Card title="Acceso a ecosistemas" icon="network-wired">
+    **Distintos protocolos DeFi**: accede a oportunidades únicas en cada red  
+    **Arbitraje de liquidez**: aprovecha las diferencias de precio entre cadenas
+  </Card>
+</CardGroup>
+
+## Comparación de redes
+
+| Aspecto | Ethereum | Arbitrum |
+|--------|----------|----------|
+| **Comisiones de gas** | Altas en momentos de congestión | Muy bajas |
+| **Velocidad de las transacciones** | 12-15 segundos | 1-2 segundos |
+| **Ecosistema DeFi** | El más maduro | En rápido crecimiento |
+| **Seguridad** | La más alta (capa 1) | Hereda la seguridad de Ethereum |
+| **Liquidez de WBTC** | La más alta | Buena y en crecimiento |
+
+## Estrategias avanzadas
+
+### Arbitraje DeFi
+1. **Sigue las tasas**: vigila las diferencias de tasas entre redes
+2. **Mueve capital**: transfiere WBTC a la red con mejores oportunidades
+3. **Ejecuta tu estrategia**: participa en farming, préstamos o trading
+4. **Recupera los beneficios**: devuelve las ganancias a tu red preferida
+
+### Gestión de costos
+1. **Agrupa transacciones**: acumula transacciones en Arbitrum
+2. **Elige bien el momento**: haz los movimientos cuando el gas de Ethereum esté bajo
+3. **Planifica las comisiones**: ten en cuenta los costos de gas al calcular tus beneficios
+
+## Consideraciones de seguridad
+
+<Info>
+**Misma dirección**: tus WBTC aparecerán en la misma dirección de wallet en la red de destino. Los intercambios atómicos de Garden garantizan transferencias seguras entre cadenas.
+</Info>
+
+<Warning>
+**Verificación de la red**: comprueba siempre que estás en la red correcta antes de iniciar transferencias. Enviar a una red equivocada puede provocar una pérdida permanente.
+</Warning>
+
+<Note>
+**Requisitos de gas**: asegúrate de tener tokens de gas tanto en la red de origen como en la de destino para disfrutar de la mejor experiencia.
+</Note>
+
+## Comisiones y tiempos
+
+### Estructura de comisiones
+- **Gas en la red de origen**: pagas el gas en la red desde la que envías
+- **Comisión del protocolo Garden**: un pequeño porcentaje por el servicio entre cadenas  
+- **Sin comisiones de puente duplicadas**: transferencia directa entre cadenas sin saltos por varios puentes
+
+### Tiempos previstos
+- **Aprobación**: confirmación inmediata en la wallet
+- **Procesamiento**: tiempo de finalización habitual de 30 segundos
+- **Finalidad**: disponibilidad casi instantánea en la red de destino
+
+## Solución de problemas habituales
+
+### Transacción bloqueada
+- **Comprueba la red**: asegúrate de que la wallet esté en la red de origen correcta
+- **Precio del gas**: aumenta el precio del gas si la transacción está pendiente
+- **Cancela y vuelve a intentarlo**: cancela la transacción bloqueada y vuelve a intentarlo con más gas
+
+### Red equivocada
+- **Prevención**: comprueba bien la red seleccionada antes de confirmar
+- **Recuperación**: si enviaste a una red equivocada, ponte en contacto de inmediato con el soporte de Garden
+- **Verificación**: verifica siempre la red de destino en la interfaz de Garden
+
+### Saldo insuficiente
+- **Tokens de gas**: asegúrate de tener ETH (Ethereum) o ARB (Arbitrum) para el gas
+- **Saldo de WBTC**: comprueba que tienes suficientes WBTC más un pequeño margen por precisión
+- **Reserva para comisiones**: guarda algunos tokens de gas para futuras transacciones
+
+## Después de tu transferencia entre cadenas
+
+<Steps>
+  <Step title="Verifica la recepción">
+    Cambia tu wallet a la red de destino y confirma que han llegado los WBTC
+  </Step>
+  <Step title="Actualiza tu portafolio">
+    Tus herramientas de seguimiento de portafolio deberían reflejar la nueva red
+  </Step>
+  <Step title="Explora oportunidades">
+    Investiga los protocolos DeFi disponibles en tu nueva red
+  </Step>
+</Steps>
+
+## Casos de uso populares
+
+### Pasarse a Arbitrum
+- **DeFi farming**: comisiones más bajas para estrategias de yield farming
+- **Trading activo**: transacciones más baratas para operar con frecuencia
+- **Experimentación**: prueba estrategias con costos de gas más bajos
+
+### Pasarse a Ethereum
+- **DeFi de primera línea**: acceso a los protocolos más consolidados
+- **Máxima liquidez**: los mayores pools de liquidez y volumen de trading
+- **Acceso a nuevos protocolos**: muchos protocolos se lanzan primero en Ethereum
+
+## Guías relacionadas
+
+<CardGroup cols={2}>
+  <Card title="BTC a WBTC" icon="bitcoin" href="/es/home/resources/guides/swap/btc-wbtc">
+    Envuelve Bitcoin para obtener WBTC y hacer transferencias entre cadenas
+  </Card>
+  <Card title="WBTC a BTC" icon="arrows-rotate" href="/es/home/resources/guides/swap/wbtc-btc">
+    Desenvuelve WBTC para volver a tener Bitcoin nativo
+  </Card>
+</CardGroup>
+
+## ¿Necesitas ayuda?
+
+- **Soporte en Discord**: únete a nuestra [comunidad](https://discord.gg/B7RczEFuJ5) para obtener ayuda
+- **Problemas técnicos**: escribe al [soporte en Discord](https://discord.gg/B7RczEFuJ5)
+- **Documentación**: consulta nuestra [documentación para desarrolladores](/es/developers/overview) para conocer los detalles de integración
+
+<Info>
+Las transferencias de WBTC entre cadenas abren nuevas oportunidades DeFi en distintas redes. Verifica siempre la compatibilidad de la red antes de interactuar con nuevos protocolos.
+</Info> 

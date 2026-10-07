@@ -1,0 +1,45 @@
+---
+title: "Solvers"
+description: "Descubre cómo actúan los solvers como creadores de mercado en el protocolo Garden para ejecutar las intenciones de los usuarios de forma eficiente"
+---
+
+Los solvers son los creadores de mercado del protocolo Garden y se encargan de que las [intenciones](./intents) de los usuarios se ejecuten de forma eficiente y segura. Al aprovechar diversas fuentes de liquidez (on-chain, off-chain y flujos de órdenes privados), los solvers tienen incentivos para optimizar cada transacción para los usuarios y ofrecer cotizaciones competitivas.
+
+Los solvers resuelven desafíos clave de los sistemas descentralizados. Mejoran el acceso a la liquidez al permitir que el protocolo utilice la liquidez DeFi existente en lugar de fragmentarla con pools propios. Para los usuarios, los solvers ofrecen [ventajas](./intents#¿por-qué-elegimos-las-intenciones) como mejores precios, resistencia al MEV y más probabilidades de que la transacción alcance la finalidad, lo que hace que el sistema sea más eficiente y fácil de usar.
+
+## ¿Cómo funcionan los solvers?
+
+<Steps>
+  <Step title="Reciben intenciones">
+    Los solvers reciben las intenciones de los usuarios a través del [libro de órdenes](./auctions), con el detalle de los resultados deseados, como los activos, las cadenas y los importes.
+  </Step>
+  <Step title="Evalúan la liquidez">
+    Los solvers evalúan las fuentes de liquidez disponibles e identifican la ruta más eficiente para ejecutar la intención.
+  </Step>
+  <Step title="Compiten por la mejor cotización">
+    Cada solver envía su mejor cotización al libro de órdenes, que selecciona la opción más competitiva para ofrecer al usuario el mejor precio.
+  </Step>
+  <Step title="Ejecutan la intención">
+    Una vez elegidos, los solvers ejecutan la intención del usuario con sus herramientas y su liquidez.
+  </Step>
+</Steps>
+
+## ¿Cómo convertirte en solver?
+
+Para convertirte en solver, necesitas lo siguiente:
+
+<CardGroup cols={1}>
+  <Card icon="coins" title="Requisitos de staking">
+    Los solvers deben hacer staking de **210 000 SEED** como garantía. Este stake alinea a los solvers con los objetivos de la red y sirve de salvaguarda frente a la deshonestidad o la ineficiencia.
+  </Card>
+  <Card icon="server" title="Infraestructura técnica">
+    Los solvers deben poder ejecutar bots de arbitraje, gestionar la liquidez y mantener una disponibilidad operativa 24/7 para atender las exigencias de la ejecución de intenciones.
+  </Card>
+  <Card icon="arrows-rotate" title="Gestión de la liquidez">
+    Para ejecutar intenciones de forma eficiente, es imprescindible contar con liquidez suficiente y con herramientas para reequilibrar los activos.
+  </Card>
+</CardGroup>
+
+<Note>
+  Por favor, completa este [formulario](https://docs.google.com/forms/d/e/1FAIpQLSfZcxgttWipkOwygbkBrjU0H0nFD_EUNpH9eu0c-lKPEpbPHA/viewform) para incorporarte como solver y nuestro equipo se pondrá en contacto contigo en breve.
+</Note>

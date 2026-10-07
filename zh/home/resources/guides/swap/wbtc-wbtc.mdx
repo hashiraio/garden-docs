@@ -1,0 +1,235 @@
+---
+title: "如何跨链兑换 EVM 资产"
+description: "使用 Garden Finance 在 Ethereum、Arbitrum 及其他支持的网络之间转移 Wrapped Bitcoin（WBTC）的分步指南"
+---
+
+# 如何跨链兑换 WBTC
+
+在不同的区块链网络之间转移你的 Wrapped Bitcoin（WBTC）。Garden Finance 支持无缝的跨链转移，你无需先将其解封装为 Bitcoin。
+
+<Info>
+本指南介绍如何**在不同网络之间转移 WBTC**，例如从 Ethereum 到 Arbitrum、从 Arbitrum 到 Ethereum，或转移到其他支持的链。整个过程通常在 30 秒内完成。
+</Info>
+
+## 支持的网络
+
+Garden Finance 支持多个网络上的 WBTC：
+
+<CardGroup cols={2}>
+  <Card title="Ethereum" icon="ethereum">
+    **主网 WBTC**  
+    最成熟，流动性最高  
+    gas 费较高，但 DeFi 兼容性最强
+  </Card>
+  <Card title="Arbitrum" icon="triangle">
+    **Layer 2 WBTC**  
+    手续费更低，交易更快  
+    DeFi 生态系统不断发展
+  </Card>
+</CardGroup>
+
+## 准备工作
+
+<Steps>
+  <Step title="钱包要求">
+    - **EVM 钱包**：MetaMask、Coinbase Wallet 或其他 EVM 兼容钱包
+    - **源网络**：你要转出的区块链上的 WBTC
+    - **目标网络**：目标网络的 gas 代币（如有需要）
+  </Step>
+  <Step title="网络资产">
+    - 源网络上的 WBTC 代币
+    - 用于批准交易的 gas 费（Ethereum 上为 ETH，Arbitrum 上为 ARB）
+  </Step>
+</Steps>
+
+## 常见跨链路线
+
+### 从 Ethereum 到 Arbitrum
+
+将 WBTC 从 Ethereum 转移到 Arbitrum，以降低交易成本。
+
+<Steps>
+  <Step title="连接钱包">
+    1. 访问 [Garden Finance](https://app.garden.finance/zh)
+    2. 连接持有 Ethereum 上 WBTC 的 EVM 钱包
+    3. 确保你的钱包已连接到 Ethereum 网络
+  </Step>
+
+  <Step title="设置跨链兑换">
+    1. **发送区域**：选择 **Ethereum 上的 WBTC**
+    2. **接收区域**：选择 **Arbitrum 上的 WBTC**
+    3. 输入你想转移的数量
+    4. 界面会显示接收地址（与你的发送地址相同，只是位于不同网络上）
+  </Step>
+
+  <Step title="查看转移详情">
+    - **来源**：Ethereum 上的 WBTC
+    - **目标**：Arbitrum 上的 WBTC  
+    - **汇率**：应约为 1:1（扣除手续费后）
+    - **gas 成本**：批准交易所需的 Ethereum gas 费
+    - **完成时间**：通常在 30 秒内
+  </Step>
+
+  <Step title="执行转移">
+    1. 点击**兑换**发起转移
+    2. 在钱包中批准 WBTC 交易
+    3. 支付 Ethereum gas 费
+    4. 在 Garden 界面上关注进度
+  </Step>
+
+  <Step title="确认到账">
+    1. 将你的钱包切换到 Arbitrum 网络
+    2. 检查 WBTC 是否已出现在你 Arbitrum 上的钱包中
+    3. 现在你可以在 Arbitrum DeFi 协议中使用 WBTC 了
+  </Step>
+</Steps>
+
+### 从 Arbitrum 到 Ethereum
+
+将 WBTC 从 Arbitrum 转回 Ethereum 主网。
+
+<Steps>
+  <Step title="准备">
+    1. 将你的钱包连接到 Garden Finance
+    2. 将你的钱包切换到 Arbitrum 网络
+    3. 确保你在 Arbitrum 上持有 WBTC，并有足够的 ARB 支付 gas 费
+  </Step>
+
+  <Step title="设置反向兑换">
+    1. **发送**：Arbitrum 上的 WBTC
+    2. **接收**：Ethereum 上的 WBTC
+    3. 输入转移数量
+  </Step>
+
+  <Step title="完成转移">
+    1. 批准交易（Arbitrum gas 费很低）
+    2. 等待完成
+    3. 将钱包切换到 Ethereum，查看收到的 WBTC
+  </Step>
+</Steps>
+
+## 为什么要跨链转移 WBTC？
+
+<CardGroup cols={2}>
+  <Card title="成本优化" icon="dollar-sign">
+    **更低的手续费**：转移到 Arbitrum，享受更便宜的 DeFi 交易  
+    **批量操作**：在 L2 上执行多项操作后再返回主网
+  </Card>
+  <Card title="生态系统访问" icon="network-wired">
+    **不同的 DeFi 协议**：获取每个网络上独有的机会  
+    **流动性套利**：利用不同链之间的价格差异
+  </Card>
+</CardGroup>
+
+## 网络对比
+
+| 方面 | Ethereum | Arbitrum |
+|--------|----------|----------|
+| **gas 费** | 拥堵时较高 | 非常低 |
+| **交易速度** | 12-15 秒 | 1-2 秒 |
+| **DeFi 生态系统** | 最成熟 | 快速发展 |
+| **安全性** | 最高（Layer 1） | 继承 Ethereum 的安全性 |
+| **WBTC 流动性** | 最高 | 良好且不断增长 |
+
+## 进阶策略
+
+### DeFi 套利
+1. **关注汇率**：留意不同网络之间的汇率差异
+2. **转移资金**：将 WBTC 转移到机会更好的网络
+3. **执行策略**：参与流动性挖矿、借贷或交易
+4. **转回收益**：将收益转回你偏好的网络
+
+### 成本管理
+1. **批量交易**：在 Arbitrum 上集中进行交易
+2. **把握时机**：在 Ethereum gas 费较低时进行转移
+3. **规划费用**：在计算收益时将 gas 成本考虑在内
+
+## 安全注意事项
+
+<Info>
+**相同地址**：你的 WBTC 将出现在目标网络上的同一钱包地址中。Garden 的原子交换可确保跨链转移的安全。
+</Info>
+
+<Warning>
+**核对网络**：在发起转移之前，请务必确认你处于正确的网络。发送到错误的网络可能导致资金永久丢失。
+</Warning>
+
+<Note>
+**gas 要求**：确保你在源网络和目标网络上都持有 gas 代币，以获得最佳体验。
+</Note>
+
+## 手续费与时间
+
+### 手续费结构
+- **源网络 gas 费**：在你转出资产的网络上支付 gas 费
+- **Garden 协议手续费**：跨链服务收取的较小比例手续费  
+- **无重复跨链桥手续费**：直接跨链转移，无需经过多个跨链桥
+
+### 预计时间
+- **批准**：钱包即时确认
+- **处理**：通常 30 秒完成
+- **最终确认**：在目标网络上几乎即时可用
+
+## 常见问题排查
+
+### 交易卡住
+- **检查网络**：确保钱包处于正确的源网络
+- **gas 价格**：如果交易处于待处理状态，请提高 gas 价格
+- **取消并重试**：取消卡住的交易，并以更高的 gas 价格重试
+
+### 选错网络
+- **预防**：确认之前仔细核对所选网络
+- **找回**：如果发送到了错误的网络，请立即联系 Garden 支持团队
+- **核对**：始终在 Garden 界面中核对目标网络
+
+### 余额不足
+- **gas 代币**：确保你持有用于支付 gas 费的 ETH（Ethereum）或 ARB（Arbitrum）
+- **WBTC 余额**：确认你持有足够的 WBTC，并为精度预留少量余量
+- **预留手续费**：保留一些 gas 代币以备后续交易
+
+## 完成跨链转移后
+
+<Steps>
+  <Step title="确认到账">
+    将你的钱包切换到目标网络，确认 WBTC 已到账
+  </Step>
+  <Step title="更新投资组合">
+    你的投资组合追踪工具应会显示资产所在的新网络
+  </Step>
+  <Step title="探索机会">
+    研究你所在新网络上可用的 DeFi 协议
+  </Step>
+</Steps>
+
+## 热门使用场景
+
+### 转移到 Arbitrum
+- **DeFi 挖矿**：以更低的手续费执行流动性挖矿策略
+- **活跃交易**：频繁交易的成本更低
+- **策略试验**：以更低的 gas 成本测试策略
+
+### 转移到 Ethereum
+- **蓝筹 DeFi**：访问最成熟的协议
+- **最大流动性**：最大的流动性池和交易量
+- **新协议访问**：许多协议会率先在 Ethereum 上推出
+
+## 相关指南
+
+<CardGroup cols={2}>
+  <Card title="BTC 兑换 WBTC" icon="bitcoin" href="/zh/home/resources/guides/swap/btc-wbtc">
+    封装 Bitcoin 以获得 WBTC，用于跨链转移
+  </Card>
+  <Card title="WBTC 兑换 BTC" icon="arrows-rotate" href="/zh/home/resources/guides/swap/wbtc-btc">
+    将 WBTC 解封装回原生 Bitcoin
+  </Card>
+</CardGroup>
+
+## 需要帮助？
+
+- **Discord 支持**：加入我们的[社区](https://discord.gg/B7RczEFuJ5)寻求帮助
+- **技术问题**：前往 [Discord 获取支持](https://discord.gg/B7RczEFuJ5)
+- **文档**：查看我们的[开发者文档](/zh/developers/overview)，了解集成详情
+
+<Info>
+跨链 WBTC 转移为你开启了不同网络上的新 DeFi 机会。在与新协议交互之前，请务必确认网络兼容性。
+</Info>

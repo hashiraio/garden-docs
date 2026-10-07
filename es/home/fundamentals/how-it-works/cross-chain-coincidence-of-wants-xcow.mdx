@@ -1,0 +1,50 @@
+---
+title: "Coincidencia de necesidades entre cadenas (xCoW)"
+description: "Garden empareja intenciones complementarias para optimizar las operaciones entre cadenas y reducir la dependencia de la liquidez externa"
+---
+
+El mecanismo xCoW de Garden se basa en el concepto de coincidencia de necesidades (CoW, por sus siglas en inglés), introducido por CoW Swap para entornos de una sola cadena y ampliado al ámbito entre cadenas, de forma similar a Across Protocol. Lo que distingue a Garden es su capacidad para integrar cadenas de prueba de trabajo (PoW) como Bitcoin, superando los desafíos de construir interoperabilidad sin necesidad de confianza en estas redes. Al permitir el emparejamiento fluido de intenciones complementarias, Garden reduce la dependencia de la liquidez externa, optimiza los precios y mejora la eficiencia de las transacciones en múltiples cadenas.
+
+## Tipos de escenarios xCoW
+
+### Emparejamiento simple entre usuarios
+
+<Frame>
+  <img src="/images/xcow-simple.png" alt="Emparejamiento xCoW simple entre usuarios" />
+</Frame>
+
+xCoW empareja directamente a usuarios con intenciones complementarias. Por ejemplo, si un usuario quiere intercambiar Bitcoin (BTC) por USDC y otro quiere intercambiar USDC por BTC, xCoW los conecta de forma peer-to-peer, lo que elimina intermediarios y mejora los precios y la velocidad de ejecución.
+
+### Anillos de traders (más de 2 participantes)
+
+<Frame>
+  <img src="/images/xcow-multi.png" alt="Anillos de trading con varios participantes" />
+</Frame>
+
+Para intenciones con tres o más participantes, xCoW crea anillos de trading. Estas liquidaciones interconectadas optimizan el uso de la liquidez y reducen los costos, lo que permite ejecutar de forma eficiente, entre varios usuarios y cadenas, operaciones que de otro modo dependerían de pools de liquidez fragmentados.
+
+### Eventos CoW intermedios
+
+<Frame>
+  <img src="/images/xcow-intermediate.png" alt="Eventos CoW intermedios" />
+</Frame>
+
+Cuando las operaciones requieren activos intermedios, xCoW empareja las intenciones que se solapan para mejorar la ejecución. Por ejemplo:
+
+- Un usuario intercambia Bitcoin (BTC) por Shiba Inu (SHIB).
+- Otro intercambia Bonk (BONK) por Bitcoin (BTC).
+
+Ambas operaciones pasan por USDC como intermediario:
+
+- BTC → **USDC** → SHIB
+- BONK → **USDC** → BTC
+
+En este caso, xCoW empareja directamente entre los usuarios la parte BTC ↔ USDC, lo que minimiza el deslizamiento y mejora los precios de ambas operaciones.
+
+### Agrupación
+
+<Frame>
+  <img src="/images/xcow-batching.png" alt="Agrupación de transacciones" />
+</Frame>
+
+xCoW admite la agrupación de transacciones para reducir los costos de gas. Varias transacciones se agrupan y se envían on-chain como una sola operación, lo que reduce el costo de gas por transacción. Este mecanismo garantiza la eficiencia de costos a gran escala, sobre todo en escenarios de operaciones de alto volumen. 

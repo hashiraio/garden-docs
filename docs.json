@@ -322,7 +322,70 @@
           },
           {
             "tab": "Primeros pasos",
-            "href": "https://garden.finance/docs/home/about"
+            "groups": [
+              {
+                "group": "Fundamentos",
+                "pages": [
+                  "es/home/about",
+                  {
+                    "group": "Conceptos clave",
+                    "pages": [
+                      "es/home/fundamentals/core-concepts/intents",
+                      "es/home/fundamentals/core-concepts/atomic-swaps",
+                      "es/home/fundamentals/core-concepts/solvers",
+                      "es/home/fundamentals/core-concepts/stakers",
+                      "es/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "Cómo funciona",
+                    "pages": [
+                      "es/home/fundamentals/how-it-works/intent-flow",
+                      "es/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Ventajas",
+                    "pages": [
+                      "es/home/fundamentals/benefits/overview",
+                      "es/home/fundamentals/benefits/no-custody-risk",
+                      "es/home/fundamentals/benefits/broad-chain-coverage",
+                      "es/home/fundamentals/benefits/better-prices",
+                      "es/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Gobernanza",
+                "pages": [
+                  "es/home/governance",
+                  "es/home/governance/governance-process",
+                  "es/home/governance/tokenomics",
+                  "es/home/governance/gardener-pass",
+                  "es/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Recursos",
+                "pages": [
+                  {
+                    "group": "Guías",
+                    "pages": [
+                      "es/home/resources/guides/swap/btc-wbtc",
+                      "es/home/resources/guides/swap/wbtc-btc",
+                      "es/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Cumplimiento",
+                "pages": [
+                  "es/home/compliance/address_screening"
+                ]
+              }
+            ]
           },
           {
             "tab": "Desarrolladores",
@@ -410,7 +473,70 @@
           },
           {
             "tab": "Начало работы",
-            "href": "https://garden.finance/docs/home/about"
+            "groups": [
+              {
+                "group": "Основы",
+                "pages": [
+                  "ru/home/about",
+                  {
+                    "group": "Ключевые понятия",
+                    "pages": [
+                      "ru/home/fundamentals/core-concepts/intents",
+                      "ru/home/fundamentals/core-concepts/atomic-swaps",
+                      "ru/home/fundamentals/core-concepts/solvers",
+                      "ru/home/fundamentals/core-concepts/stakers",
+                      "ru/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "Как это работает",
+                    "pages": [
+                      "ru/home/fundamentals/how-it-works/intent-flow",
+                      "ru/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Преимущества",
+                    "pages": [
+                      "ru/home/fundamentals/benefits/overview",
+                      "ru/home/fundamentals/benefits/no-custody-risk",
+                      "ru/home/fundamentals/benefits/broad-chain-coverage",
+                      "ru/home/fundamentals/benefits/better-prices",
+                      "ru/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Управление",
+                "pages": [
+                  "ru/home/governance",
+                  "ru/home/governance/governance-process",
+                  "ru/home/governance/tokenomics",
+                  "ru/home/governance/gardener-pass",
+                  "ru/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Ресурсы",
+                "pages": [
+                  {
+                    "group": "Руководства",
+                    "pages": [
+                      "ru/home/resources/guides/swap/btc-wbtc",
+                      "ru/home/resources/guides/swap/wbtc-btc",
+                      "ru/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Соответствие требованиям",
+                "pages": [
+                  "ru/home/compliance/address_screening"
+                ]
+              }
+            ]
           },
           {
             "tab": "Разработчики",
@@ -498,7 +624,70 @@
           },
           {
             "tab": "入门",
-            "href": "https://garden.finance/docs/home/about"
+            "groups": [
+              {
+                "group": "基础知识",
+                "pages": [
+                  "zh/home/about",
+                  {
+                    "group": "核心概念",
+                    "pages": [
+                      "zh/home/fundamentals/core-concepts/intents",
+                      "zh/home/fundamentals/core-concepts/atomic-swaps",
+                      "zh/home/fundamentals/core-concepts/solvers",
+                      "zh/home/fundamentals/core-concepts/stakers",
+                      "zh/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "工作原理",
+                    "pages": [
+                      "zh/home/fundamentals/how-it-works/intent-flow",
+                      "zh/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "优势",
+                    "pages": [
+                      "zh/home/fundamentals/benefits/overview",
+                      "zh/home/fundamentals/benefits/no-custody-risk",
+                      "zh/home/fundamentals/benefits/broad-chain-coverage",
+                      "zh/home/fundamentals/benefits/better-prices",
+                      "zh/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "治理",
+                "pages": [
+                  "zh/home/governance",
+                  "zh/home/governance/governance-process",
+                  "zh/home/governance/tokenomics",
+                  "zh/home/governance/gardener-pass",
+                  "zh/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "资源",
+                "pages": [
+                  {
+                    "group": "指南",
+                    "pages": [
+                      "zh/home/resources/guides/swap/btc-wbtc",
+                      "zh/home/resources/guides/swap/wbtc-btc",
+                      "zh/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "合规",
+                "pages": [
+                  "zh/home/compliance/address_screening"
+                ]
+              }
+            ]
           },
           {
             "tab": "开发者",
@@ -609,11 +798,6 @@
       "permanent": false
     },
     {
-      "source": "/es/home/:slug*",
-      "destination": "/home/:slug*",
-      "permanent": false
-    },
-    {
       "source": "/ru/api-reference/:slug*",
       "destination": "/api-reference/:slug*",
       "permanent": false
@@ -634,11 +818,6 @@
       "permanent": false
     },
     {
-      "source": "/ru/home/:slug*",
-      "destination": "/home/:slug*",
-      "permanent": false
-    },
-    {
       "source": "/zh/api-reference/:slug*",
       "destination": "/api-reference/:slug*",
       "permanent": false
@@ -656,11 +835,6 @@
     {
       "source": "/zh/developers/:slug*",
       "destination": "/developers/:slug*",
-      "permanent": false
-    },
-    {
-      "source": "/zh/home/:slug*",
-      "destination": "/home/:slug*",
       "permanent": false
     }
   ]
