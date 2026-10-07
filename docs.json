@@ -37,216 +37,221 @@
         }
       ]
     },
-    "tabs": [
+    "languages": [
       {
-        "tab": "Home",
-        "pages": [
-          "index"
-        ]
-      },
-      {
-        "tab": "Get Started",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "Fundamentals",
+            "tab": "Home",
             "pages": [
-              "home/about",
+              "index"
+            ]
+          },
+          {
+            "tab": "Get Started",
+            "groups": [
+              {
+                "group": "Fundamentals",
+                "pages": [
+                  "home/about",
+                  {
+                    "group": "Core Concepts",
+                    "pages": [
+                      "home/fundamentals/core-concepts/intents",
+                      "home/fundamentals/core-concepts/atomic-swaps",
+                      "home/fundamentals/core-concepts/solvers",
+                      "home/fundamentals/core-concepts/stakers",
+                      "home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "How It Works",
+                    "pages": [
+                      "home/fundamentals/how-it-works/intent-flow",
+                      "home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Benefits",
+                    "pages": [
+                      "home/fundamentals/benefits/overview",
+                      "home/fundamentals/benefits/no-custody-risk",
+                      "home/fundamentals/benefits/broad-chain-coverage",
+                      "home/fundamentals/benefits/better-prices",
+                      "home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Governance",
+                "pages": [
+                  "home/governance",
+                  "home/governance/governance-process",
+                  "home/governance/tokenomics",
+                  "home/governance/gardener-pass",
+                  "home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Resources",
+                "pages": [
+                  {
+                    "group": "Guides",
+                    "pages": [
+                      "home/resources/guides/swap/btc-wbtc",
+                      "home/resources/guides/swap/wbtc-btc",
+                      "home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Compliance",
+                "pages": [
+                  "home/compliance/address_screening"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Developers",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "developers/overview",
+                  "developers/supported-chains",
+                  "developers/supported-routes",
+                  "developers/affiliate-fees"
+                ]
+              },
+              {
+                "group": "API",
+                "pages": [
+                  "developers/api/overview",
+                  "developers/api/1click"
+                ]
+              },
+              {
+                "group": "SDK",
+                "pages": [
+                  "developers/sdk/overview",
+                  {
+                    "group": "React",
+                    "pages": [
+                      "developers/sdk/react/setup",
+                      "developers/sdk/react/quickstart"
+                    ]
+                  },
+                  {
+                    "group": "NodeJS",
+                    "pages": [
+                      "developers/sdk/nodejs/setup",
+                      "developers/sdk/nodejs/quickstart"
+                    ]
+                  }
+                ]
+              },
               {
                 "group": "Core Concepts",
                 "pages": [
-                  "home/fundamentals/core-concepts/intents",
-                  "home/fundamentals/core-concepts/atomic-swaps",
-                  "home/fundamentals/core-concepts/solvers",
-                  "home/fundamentals/core-concepts/stakers",
-                  "home/fundamentals/core-concepts/auctions"
+                  "developers/core/order-lifecycle",
+                  "developers/core/sessions"
                 ]
               },
               {
-                "group": "How It Works",
+                "group": "Developer Guides",
                 "pages": [
-                  "home/fundamentals/how-it-works/intent-flow",
-                  "home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                  "developers/guides/cookbook",
+                  "developers/guides/sdk"
                 ]
               },
               {
-                "group": "Benefits",
+                "group": "Testing",
                 "pages": [
-                  "home/fundamentals/benefits/overview",
-                  "home/fundamentals/benefits/no-custody-risk",
-                  "home/fundamentals/benefits/broad-chain-coverage",
-                  "home/fundamentals/benefits/better-prices",
-                  "home/fundamentals/benefits/free-option-protection"
+                  "developers/localnet"
                 ]
               }
             ]
           },
           {
-            "group": "Governance",
-            "pages": [
-              "home/governance",
-              "home/governance/governance-process",
-              "home/governance/tokenomics",
-              "home/governance/gardener-pass",
-              "home/governance/snapshot"
-            ]
-          },
-          {
-            "group": "Resources",
-            "pages": [
+            "tab": "Contracts",
+            "groups": [
               {
-                "group": "Guides",
+                "group": "Get Started",
                 "pages": [
-                  "home/resources/guides/swap/btc-wbtc",
-                  "home/resources/guides/swap/wbtc-btc",
-                  "home/resources/guides/swap/wbtc-wbtc"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Compliance",
-            "pages": [
-              "home/compliance/address_screening"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Developers",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "developers/overview",
-              "developers/supported-chains",
-              "developers/supported-routes",
-              "developers/affiliate-fees"
-            ]
-          },
-          {
-            "group": "API",
-            "pages": [
-              "developers/api/overview",
-              "developers/api/1click"
-            ]
-          },
-          {
-            "group": "SDK",
-            "pages": [
-              "developers/sdk/overview",
-              {
-                "group": "React",
-                "pages": [
-                  "developers/sdk/react/setup",
-                  "developers/sdk/react/quickstart"
+                  "contracts/overview"
                 ]
               },
               {
-                "group": "NodeJS",
+                "group": "Contracts",
                 "pages": [
-                  "developers/sdk/nodejs/setup",
-                  "developers/sdk/nodejs/quickstart"
+                  "contracts/bitcoin",
+                  "contracts/litecoin",
+                  "contracts/evm",
+                  "contracts/hypercore",
+                  "contracts/tron",
+                  "contracts/solana",
+                  "contracts/starknet",
+                  "contracts/sui"
                 ]
               }
             ]
           },
           {
-            "group": "Core Concepts",
-            "pages": [
-              "developers/core/order-lifecycle",
-              "developers/core/sessions"
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "api-reference/quickstart"
+                ]
+              },
+              {
+                "group": "Orders",
+                "pages": [
+                  "api-reference/endpoint/get-quote",
+                  "api-reference/endpoint/orders/get-order-by-id",
+                  "api-reference/endpoint/orders/get-orders",
+                  "api-reference/endpoint/orders/create-order",
+                  "api-reference/endpoint/orders/get-instant-refund-hash",
+                  "api-reference/endpoint/orders/patch"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "pages": [
+                  "api-reference/endpoint/blockchain/get-chains",
+                  "api-reference/endpoint/blockchain/get-assets",
+                  "api-reference/endpoint/blockchain/get-policy",
+                  "api-reference/endpoint/blockchain/get-liquidity",
+                  "api-reference/endpoint/blockchain/get-schema",
+                  "api-reference/endpoint/blockchain/get-schemas"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "pages": [
+                  "api-reference/endpoint/get-health",
+                  "api-reference/endpoint/get-volume",
+                  "api-reference/endpoint/get-fees"
+                ]
+              },
+              {
+                "group": "Affiliate",
+                "pages": [
+                  "api-reference/endpoint/affiliate/get-earnings"
+                ]
+              }
             ]
           },
           {
-            "group": "Developer Guides",
+            "tab": "Changelog",
             "pages": [
-              "developers/guides/cookbook",
-              "developers/guides/sdk"
-            ]
-          },
-          {
-            "group": "Testing",
-            "pages": [
-              "developers/localnet"
+              "changelog"
             ]
           }
-        ]
-      },
-      {
-        "tab": "Contracts",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "contracts/overview"
-            ]
-          },
-          {
-            "group": "Contracts",
-            "pages": [
-              "contracts/bitcoin",
-              "contracts/litecoin",
-              "contracts/evm",
-              "contracts/hypercore",
-              "contracts/tron",
-              "contracts/solana",
-              "contracts/starknet",
-              "contracts/sui"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "api-reference/quickstart"
-            ]
-          },
-          {
-            "group": "Orders",
-            "pages": [
-              "api-reference/endpoint/get-quote",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-orders",
-              "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-instant-refund-hash",
-              "api-reference/endpoint/orders/patch"
-            ]
-          },
-          {
-            "group": "Assets & Routes",
-            "pages": [
-              "api-reference/endpoint/blockchain/get-chains",
-              "api-reference/endpoint/blockchain/get-assets",
-              "api-reference/endpoint/blockchain/get-policy",
-              "api-reference/endpoint/blockchain/get-liquidity",
-              "api-reference/endpoint/blockchain/get-schema",
-              "api-reference/endpoint/blockchain/get-schemas"
-            ]
-          },
-          {
-            "group": "Monitoring",
-            "pages": [
-              "api-reference/endpoint/get-health",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
-            ]
-          },
-          {
-            "group": "Affiliate",
-            "pages": [
-              "api-reference/endpoint/affiliate/get-earnings"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Changelog",
-        "pages": [
-          "changelog"
         ]
       }
     ]

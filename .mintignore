@@ -1,0 +1,5 @@
+# Contributor and agent files, not docs pages
+AGENTS.md
+CLAUDE.md
+i18n/
+scripts/
