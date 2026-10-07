@@ -10,12 +10,21 @@
 // back to English instead of returning a 404. Translating a page removes its
 // redirect. Redirects written by hand are kept as long as they aren't of that
 // shape.
+//
+// Navigation: each language's entry in navigation.languages is built from the
+// English navigation, keeping only translated pages and translating tab and
+// group names with the labels in i18n/<lang>.json (which also holds that
+// language's navbar and footer). A tab with no translated page links to the
+// English docs. A language with no translated page is left out of the switcher.
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const LANGUAGES = ["es", "ru", "zh"];
+const SITE_URL = "https://garden.finance/docs";
+const LABEL_KEYS = ["tab", "group", "anchor", "dropdown"];
+const CHILD_KEYS = ["tabs", "groups", "pages", "anchors", "dropdowns"];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOCS_JSON = path.join(ROOT, "docs.json");
@@ -75,6 +84,52 @@ function buildRedirects(englishPages, translated, existing = []) {
   return [...manual, ...generated];
 }
 
+const firstPage = (node) =>
+  typeof node === "string" ? node : CHILD_KEYS.flatMap((k) => node[k] ?? []).map(firstPage).find(Boolean);
+
+// Copy of an English navigation node with only translated pages and translated
+// labels, or null when nothing under it is translated.
+function localizeNode(node, lang, done, labels, missing) {
+  if (typeof node === "string") return done.has(node) ? `${lang}/${node}` : null;
+  const out = { ...node };
+  let hasChildren = false;
+  for (const key of CHILD_KEYS) {
+    if (!node[key]) continue;
+    out[key] = node[key].map((child) => localizeNode(child, lang, done, labels, missing)).filter(Boolean);
+    if (out[key].length) hasChildren = true;
+    else delete out[key];
+  }
+  if (!hasChildren) return null;
+  translateLabels(out, labels, missing);
+  return out;
+}
+
+function translateLabels(node, labels, missing) {
+  for (const key of LABEL_KEYS) {
+    if (node[key] === undefined) continue;
+    if (labels[node[key]] === undefined) missing.add(node[key]);
+    else node[key] = labels[node[key]];
+  }
+}
+
+function buildLanguage(lang, english, done) {
+  const { labels = {}, ...settings } = JSON.parse(fs.readFileSync(path.join(ROOT, "i18n", `${lang}.json`), "utf8"));
+  const missing = new Set();
+  const tabs = english.tabs.map((tab) => {
+    const localized = localizeNode(tab, lang, done, labels, missing);
+    if (localized) return localized;
+    const page = firstPage(tab);
+    const link = { tab: tab.tab, href: page === "index" ? SITE_URL : `${SITE_URL}/${page}` };
+    translateLabels(link, labels, missing);
+    return link;
+  });
+  if (missing.size) {
+    throw new Error(`i18n/${lang}.json is missing labels for: ${[...missing].map((l) => JSON.stringify(l)).join(", ")}`);
+  }
+  if (!tabs.some((tab) => !tab.href)) return null;
+  return { language: lang, ...settings, tabs };
+}
+
 const englishPages = listPages(ROOT);
 const englishSet = new Set(englishPages);
 const translated = {};
@@ -89,6 +144,12 @@ for (const lang of LANGUAGES) {
 
 const original = fs.readFileSync(DOCS_JSON, "utf8");
 const docs = JSON.parse(original);
+
+const english = docs.navigation.languages.find((l) => l.language === "en");
+docs.navigation.languages = [
+  english,
+  ...LANGUAGES.map((lang) => buildLanguage(lang, english, translated[lang])).filter(Boolean),
+];
 
 const redirects = buildRedirects(englishPages, translated, docs.redirects);
 if (redirects.length) docs.redirects = redirects;
