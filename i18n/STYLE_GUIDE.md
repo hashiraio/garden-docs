@@ -15,7 +15,7 @@ Each language mirrors the English file tree under its own folder.
 
 - **Same file names and folders as English.** Never rename or translate a file path.
 - **Partial coverage is fine.** A page without a translation falls back to English through a generated redirect.
-- **Don't hand-edit `navigation.languages` (except `en`) or `redirects` in `docs.json`.** `node scripts/i18n-sync.mjs` generates them. Translated nav labels, navbar and footer live in `i18n/<lang>.json`.
+- **Don't hand-edit `navigation.languages` (except `en`) or `redirects` in `docs.json`.** `node i18n/i18n-sync.mjs` generates them. Translated nav labels, navbar and footer live in `i18n/<lang>.json`.
 
 ## Golden rules
 
@@ -162,7 +162,7 @@ Typography follows each language's native rules.
 ## Adding or updating a translation
 
 1. Copy the English file to the same path under `es/`, `ru/` or `zh/`, then translate it following this guide.
-2. Run `node scripts/i18n-sync.mjs`. It adds the page to that language's navigation and removes its English-fallback redirect.
+2. Run `node i18n/i18n-sync.mjs`. It adds the page to that language's navigation and removes its English-fallback redirect.
 3. Preview with `mint dev`, open `/es/<page>` and click every link and anchor.
 4. Open a PR and request review from a native speaker of each language you changed.
 
@@ -180,4 +180,4 @@ Run through this for every translation change.
 - [ ] Register matches the language column (tú, вы, 你)
 - [ ] es has `¿…?`; zh has full-width punctuation and spaces around Latin text; ru has ё
 - [ ] Numbers and dates follow the Formatting table
-- [ ] `node scripts/i18n-sync.mjs` was run and `docs.json` is committed
+- [ ] `node i18n/i18n-sync.mjs` was run and `docs.json` is committed

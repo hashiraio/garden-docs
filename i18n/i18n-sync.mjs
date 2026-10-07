@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Regenerates the translation-dependent parts of docs.json.
 //
-//   node scripts/i18n-sync.mjs           update docs.json
-//   node scripts/i18n-sync.mjs --check   exit 1 if docs.json is out of date
+//   node i18n/i18n-sync.mjs           update docs.json
+//   node i18n/i18n-sync.mjs --check   exit 1 if docs.json is out of date
 //
 // Redirects: every English page without a translation gets a temporary (307)
 // redirect from /<lang>/<page> to /<page> (or one /<lang>/<folder>/:slug*
@@ -28,7 +28,7 @@ const CHILD_KEYS = ["tabs", "groups", "pages", "anchors", "dropdowns"];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOCS_JSON = path.join(ROOT, "docs.json");
-const SKIP_DIRS = new Set(["node_modules", "snippets", "scripts", "i18n", ...LANGUAGES]);
+const SKIP_DIRS = new Set(["node_modules", "snippets", "i18n", ...LANGUAGES]);
 
 // Page paths (relative, no extension) of every .mdx file under dir.
 function listPages(dir, prefix = "") {
@@ -160,7 +160,7 @@ const changed = output !== original;
 
 if (process.argv.includes("--check")) {
   if (changed) {
-    console.error("docs.json is out of date. Run: node scripts/i18n-sync.mjs");
+    console.error("docs.json is out of date. Run: node i18n/i18n-sync.mjs");
     process.exit(1);
   }
   console.log("docs.json is up to date.");
