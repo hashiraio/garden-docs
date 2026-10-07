@@ -322,5 +322,97 @@
       "canonical": "https://garden.finance/docs"
     }
   },
-  "description": "API and SDK for integrating native Bitcoin cross-chain swaps in dapps, wallets, and exchanges. Quickstarts, API reference, and contract docs inside."
+  "description": "API and SDK for integrating native Bitcoin cross-chain swaps in dapps, wallets, and exchanges. Quickstarts, API reference, and contract docs inside.",
+  "redirects": [
+    {
+      "source": "/es/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/es/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es/home/:slug*",
+      "destination": "/home/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/ru/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/ru/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/home/:slug*",
+      "destination": "/home/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/zh/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/zh/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/home/:slug*",
+      "destination": "/home/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
 }
