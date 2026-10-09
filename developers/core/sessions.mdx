@@ -25,7 +25,7 @@ Atomic swaps on the Bitcoin network require funds to be locked and redeemed from
 
 ### Secrets management
 
-The session securely generates and manages the cryptographic secrets required for atomic swaps. Using the P-256 key, Garden derives the secret and secret hash for each transaction:
+The session securely generates and manages the cryptographic secrets required for atomic swaps. Using the P-256 key, the Garden protocol derives the secret and secret hash for each transaction:
 
 - The **secret** is the hash of the EIP-712 signature
 - The **secret hash** is the double hash of the signature
@@ -57,7 +57,7 @@ Key security benefits include:
 - **User control**: Users retain full ownership of their assets throughout the entire swap process
 - **Unique secrets**: Secrets are generated per transaction, ensuring they are unique and valid only for the specific swap
 - **Browser isolation**: Keys are stored securely in IndexedDB with same-origin policy protection
-- **No custody risk**: Garden never holds user funds or private keys
+- **No custody risk**: The Garden protocol never holds user funds or private keys
 - **Cryptographic integrity**: All operations use proven cryptographic methods for maximum security
 
 ## Integration considerations

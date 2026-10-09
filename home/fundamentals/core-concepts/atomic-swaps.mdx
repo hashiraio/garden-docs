@@ -1,11 +1,11 @@
 ---
 title: "Atomic Swaps"
-description: "Garden uses atomic swaps for trustless cross-chain settlements"
+description: "The Garden protocol uses atomic swaps for trustless cross-chain settlements"
 ---
 
 Atomic swaps are trustless peer-to-peer swaps that are used for settlement between user and the solver chosen to implement their intent. The atomic nature of these swaps comes from the fact that they are designed in a way to either complete the swap or not do it at all, there is no intermediate state. As a result, users and solvers don't lose control of their asset at any point of the swap process. Traditional bridges require you to give up control of your asset during the bridging process to the custodian (WBTC), intermediary network (Threshold, Thorchain), or a multisig (Avalanche bridge).
 
-Garden uses **Hash Time Locked Contracts** (HTLCs) to implement atomic swaps. As the name suggests, they are used to enforce time-bound conditions for transferring assets between two parties. They require the receiver of a transaction to acknowledge receiving the payment by generating a cryptographic proof within a certain timeframe. This proof is a response to a cryptographic challenge embedded in the contract, typically involving a hash function. If the receiver fails to provide the correct proof within the specified time, the transaction is automatically reversed, returning the assets to the sender. This is better explained with an example and flow chart.
+The Garden protocol uses **Hash Time Locked Contracts** (HTLCs) to implement atomic swaps. As the name suggests, they are used to enforce time-bound conditions for transferring assets between two parties. They require the receiver of a transaction to acknowledge receiving the payment by generating a cryptographic proof within a certain timeframe. This proof is a response to a cryptographic challenge embedded in the contract, typically involving a hash function. If the receiver fails to provide the correct proof within the specified time, the transaction is automatically reversed, returning the assets to the sender. This is better explained with an example and flow chart.
 
 ## How do atomic swaps work?
 
@@ -20,7 +20,7 @@ Let's take our case, user gives an intent to swap. The auction house selects a s
 3. User (client UI) verifies the amount deposited by the solver and, if correct, opens the vault to collect asset B on chain B.
 4. Solver can now collect asset A from the user's vault on chain A; the swap is complete.
 
-This is what we call a happy flow where everything runs as expected. In the next section, failure scenarios in this system and Garden's safeguards against them will be explained.
+This is what we call a happy flow where everything runs as expected. In the next section, failure scenarios in this system and the Garden protocol's safeguards against them will be explained.
 
 ## Scenarios and safeguards
 

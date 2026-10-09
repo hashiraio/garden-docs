@@ -1,0 +1,57 @@
+---
+title: "Aggregator Order Lifecycle"
+sidebarTitle: "Order Lifecycle"
+description: "Understand the steps and states an order goes through on the Aggregator API"
+---
+
+A quote from the [Aggregator API](/developers/api/aggregator) becomes an order when you submit its deposit, or when the deposit is detected. Its `id` stays the same from the quote to the end of the swap, and the steps your user takes depend on the provider that issued it.
+
+## Steps
+
+A quote carries `steps`, the actions the user must take to start the swap. Complete them in order.
+
+| Step | Description |
+|------|-------------|
+| **`core_to_evm_transfer`** | Move the funds from HyperCore to HyperEVM. Only when selling from HyperCore. |
+| **`approve`** | Allow the provider's contract to spend the token. Some providers ask for this before the swap. |
+| **`initiate`** | Send the funds that start the swap. |
+
+Later steps, such as `redeem` or `refund`, appear on the order when they become possible.
+
+Each step has a `kind`, which tells you what the user does:
+
+| Kind | Action |
+|------|--------|
+| **`deposit`** | Send exactly `amount` to `address`. Attach `memo` when one is given. |
+| **`transaction`** | Sign and send the transaction in `data`. |
+
+Use `action` as the button text. Treat `id` and `kind` as open, since new values may be added.
+
+<Warning>
+  A deposit that needs a `memo` and is sent without one cannot be recovered.
+</Warning>
+
+## Order states
+
+After the user acts, report the transaction with [Submit Deposit](/api-reference/endpoint/aggregator/submit), then track the order with [Order](/api-reference/endpoint/aggregator/order-by-id).
+
+| State | Description | Action |
+|-------|-------------|--------|
+| **`awaiting_user`** | A step is listed on the order. | The user completes the step. |
+| **`awaiting_provider`** | The provider is working. | -- |
+| **`completed`** | The user received the funds. | -- |
+| **`refunded`** | The funds were returned to the user. | -- |
+| **`failed`** | The provider stopped, and the funds were not returned. | Contact support. |
+
+`completed`, `refunded` and `failed` are final. Treat `state` as open, since new values may be added.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Provider Errors" icon="triangle-exclamation" href="/developers/core/provider-errors">
+    Why a provider may not return a quote.
+  </Card>
+  <Card title="Slippage" icon="scale-balanced" href="/developers/slippage">
+    What the minimum on a quote means.
+  </Card>
+</CardGroup>

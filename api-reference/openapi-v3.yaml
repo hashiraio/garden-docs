@@ -1,0 +1,1517 @@
+# Built from garden-aggregator-specs/openapi.yaml, plus what garden-aggregator
+# sends that the spec does not list yet.
+# Differences from the spec:
+# - Paths have no /v3 prefix.
+# - Operation descriptions are stripped. Each page carries one line, as in openapi.json.
+# - The testnet server is removed. The Aggregator API is mainnet only.
+# - "Treat as open" is stated once in the intro, not on each field.
+# - Where the spec and garden-aggregator disagree, this file follows garden-aggregator.
+openapi: 3.1.0
+info:
+  title: garden-aggregator
+  version: 3.0.0
+  description: 'Cross-chain swap aggregation over several bridge providers.
+
+
+    ## Before you start
+
+
+    **Amounts are strings, in base units.** `"10000000"` is 0.1 BTC at eight
+
+    decimals. Never a number — a float loses precision above 2^53, and a real
+
+    order has been reported at nineteen digits. Read `decimals` from
+
+    `GET /registry`.
+
+
+    **An asset id is `<chain>:<symbol>`, lowercase.** `bitcoin:btc`,
+
+    `base:usdc`. An id is added or removed. It is never reassigned to a
+
+    different asset.
+
+
+    **Times are RFC 3339, in UTC.** `2026-08-21T09:04:00Z`.
+
+
+    **Every listed value is open.** A `state`, a `kind`, a fee `type`, an error
+
+    `code` — treat each as a string and handle a value this document does not
+
+    list. New providers add values, and a client that switches exhaustively on
+
+    them breaks when one does.
+
+
+    **A field is absent when there is none.** It is not present and null. The
+
+    exceptions are `received` and `last_verified_at` on an order, null until there is
+
+    something to report, and `logo_url`, null when there is no image.
+
+
+    **Changes are additive.** A field can be added. Nothing is
+
+    removed, renamed, or given a new meaning. Ignore what you do not recognise.
+
+    '
+servers:
+- url: https://api.garden.finance
+  description: Production
+tags:
+- name: Discovery
+  description: What the service supports. Cacheable, and no provider is named.
+- name: Quoting
+  description: Prices, and turning a price into an executable order.
+- name: Orders
+  description: Reporting what the user did, and tracking the result.
+security:
+- garden-app-id: []
+paths:
+  /registry:
+    get:
+      operationId: getRegistry
+      tags:
+      - Discovery
+      summary: List supported chains and assets.
+      security: []
+      parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: If you do not yet have an app ID, please follow these [steps](/api-reference/setup).
+      responses:
+        '200':
+          description: Object with supported chains and assets.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              description: '`public, max-age=3600` when called anonymously.
+
+                `private, max-age=3600` when called with a key.
+
+                '
+            Vary:
+              schema:
+                type: string
+              description: '`garden-app-id`. The body differs per integrator.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registry'
+              example:
+                updated_at: '2026-08-19T09:00:00Z'
+                chains:
+                - id: base
+                  name: Base
+                  vm_type: evm
+                  chain_id: '8453'
+                  explorer_url: https://basescan.org
+                  logo_url: https://cdn.garden.finance/chains/base.svg
+                  disabled: false
+                  assets:
+                  - id: base:eth
+                    token:
+                      type: native
+                    symbol: ETH
+                    name: Ether
+                    decimals: 18
+                    logo_url: https://cdn.garden.finance/assets/eth.svg
+                    disabled: false
+                  - id: base:usdc
+                    token:
+                      type: contract
+                      address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                    symbol: USDC
+                    name: USD Coin
+                    decimals: 6
+                    logo_url: https://cdn.garden.finance/assets/usdc.svg
+                    disabled: false
+                - id: bitcoin
+                  name: Bitcoin
+                  vm_type: bvm
+                  explorer_url: https://mempool.space
+                  logo_url: https://cdn.garden.finance/chains/bitcoin.svg
+                  disabled: false
+                  assets:
+                  - id: bitcoin:btc
+                    token:
+                      type: native
+                    symbol: BTC
+                    name: Bitcoin
+                    decimals: 8
+                    logo_url: https://cdn.garden.finance/chains/bitcoin.svg
+                    disabled: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/NotReady'
+  /routes:
+    get:
+      operationId: getRoutes
+      tags:
+      - Discovery
+      summary: List routable pairs for an asset.
+      security: []
+      parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: If you do not yet have an app ID, please follow these [steps](/api-reference/setup).
+      - name: sell_asset
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Pairs that sell this asset.
+        example: bitcoin:btc
+      - name: buy_asset
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Pairs that buy this asset.
+        example: ethereum:usdc
+      responses:
+        '200':
+          description: List of routable pairs.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              description: '`public, max-age=300` when called anonymously.
+
+                `private, max-age=300` when called with a key.
+
+                '
+            Vary:
+              schema:
+                type: string
+              description: '`garden-app-id`. The body differs per integrator.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routes'
+              example:
+                updated_at: '2026-08-19T09:00:00Z'
+                routes:
+                - sell_asset: bitcoin:btc
+                  buy_asset: base:usdc
+                  min_sell_amount: '50000'
+                  max_sell_amount: '100000000'
+                - sell_asset: bitcoin:btc
+                  buy_asset: base:eth
+        '400':
+          description: Neither `sell_asset` nor `buy_asset` was given.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: invalid_request
+                  message: Give at least one of sell_asset or buy_asset.
+                  retryable: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/NotReady'
+  /estimate:
+    get:
+      operationId: getEstimate
+      tags:
+      - Quoting
+      summary: Price a swap across every provider.
+      security: []
+      parameters:
+      - name: garden-app-id
+        in: header
+        required: false
+        schema:
+          type: string
+        description: If you do not yet have an app ID, please follow these [steps](/api-reference/setup).
+      - name: sell_asset
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The asset the user sends.
+        example: bitcoin:btc
+      - name: buy_asset
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The asset the user receives. Must differ from `sell_asset`.
+        example: ethereum:usdc
+      - name: amount
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Base units, in plain digits, with no sign and no leading zero. The sell amount for `exact_in`, the buy amount for `exact_out`.
+        example: '10000000'
+      - name: trade_type
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - exact_in
+          - exact_out
+        description: '`exact_in` or `exact_out`.'
+        example: exact_in
+      - name: slippage_bps
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 10
+          maximum: 10000
+        description: Basis points, where 100 is 1%. A value below 10 is a `400`.
+      - name: allow_providers
+        in: query
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Comma separated. Ask only these providers.
+      - name: exclude_providers
+        in: query
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Comma separated. Ask every provider except these. If the two lists together leave no provider, the request is a `400`.
+      responses:
+        '200':
+          description: List of estimates.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              description: '`public, max-age=5` when called anonymously.
+
+                `private, max-age=5` when called with a key.
+
+                '
+            Vary:
+              schema:
+                type: string
+              description: '`garden-app-id`. The body differs per integrator.'
+            X-Request-Id:
+              schema:
+                type: string
+              description: 'Correlation for logs and support. An estimate carries no
+
+                identifier of its own.
+
+                '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimates'
+              example:
+                estimates:
+                - provider: swapkit
+                  sell_asset: bitcoin:btc
+                  sell_amount: '10000000'
+                  buy_asset: base:usdc
+                  buy_amount: '9950000'
+                  min_buy_amount: '9850000'
+                  estimated_seconds: 600
+                  fees:
+                  - type: network
+                    asset: bitcoin:btc
+                    amount: '2000'
+                    amount_usd: '1.30'
+                  price:
+                    sell_usd: '650.00'
+                    buy_usd: '649.35'
+                    impact_bps: -10
+                  warnings: []
+                provider_errors:
+                - provider: flashnet
+                  code: no_route
+                  message: no route for this pair
+        '400':
+          description: A parameter is missing or malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: invalid_request
+                  message: trade_type is required.
+                  retryable: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          $ref: '#/components/responses/ProviderUnavailable'
+        '503':
+          $ref: '#/components/responses/NotReady'
+  /quote:
+    post:
+      operationId: createQuote
+      tags:
+      - Quoting
+      summary: Build an executable order from each provider.
+      security:
+      - garden-app-id: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'A UUID you generate for this request. Retrying with the same key and body
+          returns the same quotes, without asking the providers again. Using the same key
+          with a different body returns `409`.
+
+
+          After a `502`, retry with the same key. A provider that was too slow the first
+          time may have finished its quote by then, and the retry returns it. If none
+          did, the providers are asked again.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteRequest'
+      responses:
+        '200':
+          description: List of quotes.
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: Correlation for logs and support.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotes'
+              example:
+                quotes:
+                - id: ord_3f9a1c2b4d5e6f708192a3b4c5d6e7f8
+                  provider: flashnet
+                  created_at: '2026-08-19T09:01:00Z'
+                  deposit_by: '2026-08-19T09:03:00Z'
+                  sell_asset: bitcoin:btc
+                  sell_amount: '10000000'
+                  buy_asset: base:usdc
+                  buy_amount: '9950000'
+                  min_buy_amount: '9850000'
+                  estimated_seconds: 600
+                  steps:
+                  - id: initiate
+                    kind: deposit
+                    action: Send BTC
+                    description: Send 0.1 BTC to the deposit address.
+                    deposit:
+                      chain: bitcoin
+                      address: bc1qdepositaddress
+                      amount: '10000000'
+                  fees:
+                  - type: network
+                    asset: bitcoin:btc
+                    amount: '2000'
+                    amount_usd: '1.30'
+                  warnings: []
+                provider_errors:
+                - provider: swapkit
+                  code: no_route
+                  message: no route for this pair
+        '400':
+          description: A field is missing or malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: invalid_request
+                  message: sell_address is required.
+                  retryable: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: The same `Idempotency-Key` arrived with a different body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: idempotency_key_reuse
+                  message: The same idempotency key arrived with a different body.
+                  retryable: false
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          $ref: '#/components/responses/ProviderUnavailable'
+        '503':
+          $ref: '#/components/responses/NotReady'
+  /orders:
+    get:
+      operationId: listOrders
+      tags:
+      - Orders
+      summary: List the orders of an integrator.
+      security:
+      - garden-app-id: []
+      parameters:
+      - name: tx_hash
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Return the orders that this transaction funded. Case is ignored.
+        example: abc123def4567890
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The `next_cursor` of the previous page. Opaque — do not build one.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+        description: Number of orders per page.
+      responses:
+        '200':
+          description: List of orders.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              description: Always `no-store`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders'
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '403':
+          description: A publishable key was used.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: secret_key_required
+                  message: This endpoint requires a secret key.
+                  retryable: false
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /orders/{order_id}:
+    get:
+      operationId: getOrder
+      tags:
+      - Orders
+      summary: Read an order.
+      security:
+      - garden-app-id: []
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ord_01JABCDEFGHJKMNPQRSTVWXYZ
+      - name: wait
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 25
+        description: Seconds to hold the request until the order changes. Omit it, or send `0`, to return at once. Values above 25 count as 25. The order is returned either way. Compare `updated_at` to tell whether it changed.
+        example: 25
+      responses:
+        '200':
+          description: Object with order details.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              description: 'Always `no-store`. An order is specific to one user and changes
+
+                while the swap runs.
+
+                '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: '`wait` is not a whole number.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: invalid_request
+                  message: 'Failed to deserialize query string: wait: invalid digit found in string'
+                  retryable: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '404':
+          description: No such order, or its deposit has not been submitted yet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: not_found
+                  message: No order exists with that id.
+                  retryable: false
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The service could not read or save the order. Retry shortly.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: provider_unavailable
+                  message: Every provider failed. Retry shortly.
+                  retryable: true
+        '503':
+          $ref: '#/components/responses/NotReady'
+  /orders/{order_id}/submit:
+    post:
+      operationId: submitDeposit
+      tags:
+      - Orders
+      summary: Report the transaction that funded the swap.
+      security:
+      - garden-app-id: []
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ord_01JABCDEFGHJKMNPQRSTVWXYZ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitRequest'
+      responses:
+        '200':
+          description: Object with order details. `state` may still read `awaiting_provider` until the provider confirms.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: The body is malformed, or `tx_hash` is missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: invalid_request
+                  message: tx_hash is required.
+                  retryable: false
+        '401':
+          $ref: '#/components/responses/InvalidKey'
+        '404':
+          description: No such order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: not_found
+                  message: No order exists with that id.
+                  retryable: false
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: '`tx_already_claimed`: the transaction is already attached to another order.
+            `tx_mismatch`: this order already tracks a different transaction.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: tx_already_claimed
+                  message: This transaction is already attached to another order.
+                  retryable: false
+        '422':
+          description: The provider refused this transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: provider_rejected
+                  message: The provider does not recognise this transaction.
+                  retryable: false
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The service could not read or save the order. Retry shortly.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  code: provider_unavailable
+                  message: Every provider failed. Retry shortly.
+                  retryable: true
+        '503':
+          $ref: '#/components/responses/NotReady'
+components:
+  securitySchemes:
+    garden-app-id:
+      type: apiKey
+      in: header
+      name: garden-app-id
+      description: If you do not yet have an app ID, please follow these [steps](/api-reference/setup).
+  responses:
+    InvalidKey:
+      description: The `garden-app-id` header is not a valid key, or is missing on an endpoint that needs one.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: invalid_key
+              message: Send a valid key in the garden-app-id header.
+              retryable: false
+    MethodNotAllowed:
+      description: The endpoint does not accept this method.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: method_not_allowed
+              message: That method is not allowed here.
+              retryable: false
+    NotReady:
+      description: The service is temporarily unable to answer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: not_ready
+              message: The service is temporarily unable to answer. Retry shortly.
+              retryable: true
+    ProviderUnavailable:
+      description: Every provider asked failed, and none answered.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: provider_unavailable
+              message: Every provider failed. Retry shortly.
+              retryable: true
+    RateLimited:
+      description: Too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: rate_limited
+              message: Too many requests. Retry after 30 seconds.
+              retryable: true
+  schemas:
+    SubmitRequest:
+      type: object
+      required:
+      - tx_hash
+      properties:
+        tx_hash:
+          type: string
+          description: 'The transaction that funded the source side. Case is ignored.
+
+            '
+          examples:
+          - abc123def4567890
+        amount:
+          type: string
+          description: The amount you sent, in base units.
+    QuoteRequest:
+      type: object
+      required:
+      - sell_asset
+      - buy_asset
+      - amount
+      - trade_type
+      - sell_address
+      - buy_address
+      properties:
+        sell_asset:
+          type: string
+          description: The asset the user sends.
+          examples:
+          - bitcoin:btc
+        buy_asset:
+          type: string
+          description: The asset the user receives. Must differ from `sell_asset`.
+          examples:
+          - ethereum:usdc
+        amount:
+          type: string
+          description: Base units, in plain digits, with no sign and no leading zero. The sell amount for `exact_in`, the buy amount for `exact_out`.
+          examples:
+          - '10000000'
+        trade_type:
+          type: string
+          enum:
+          - exact_in
+          - exact_out
+          description: '`exact_in` or `exact_out`.'
+          examples:
+          - exact_in
+        sell_address:
+          type: string
+          description: Where the user sends from, on the source chain. It must be a valid address on that chain, or the request is a `400`. A Bitcoin address is a mainnet address. An EVM address in mixed case must carry its EIP-55 checksum.
+        buy_address:
+          type: string
+          description: Where the user receives, on the destination chain. The same check as `sell_address` applies.
+        slippage_bps:
+          type: integer
+          default: 100
+          minimum: 10
+          maximum: 10000
+          description: Basis points, where 100 is 1%. A value below 10 is a `400`.
+        allow_providers:
+          type: array
+          items:
+            type: string
+          description: Ask only these providers.
+        exclude_providers:
+          type: array
+          items:
+            type: string
+          description: Ask every provider except these. If the two lists together leave no provider, the request is a `400`, and the `Idempotency-Key` is not spent.
+    Quotes:
+      type: object
+      required:
+      - quotes
+      - provider_errors
+      properties:
+        quotes:
+          type: array
+          description: One quote for each provider that built one. Ranked as in `/estimate`. Empty when every provider declined, and `provider_errors` says why.
+          items:
+            $ref: '#/components/schemas/Quote'
+        provider_errors:
+          type: array
+          description: One entry for each provider that did not produce a quote.
+            Empty when every provider answered.
+          items:
+            $ref: '#/components/schemas/ProviderError'
+    Quote:
+      type: object
+      required:
+      - id
+      - provider
+      - created_at
+      - deposit_by
+      - sell_asset
+      - sell_amount
+      - buy_asset
+      - buy_amount
+      - min_buy_amount
+      - steps
+      - fees
+      - warnings
+      properties:
+        id:
+          type: string
+          description: 'Stable for the life of the swap. Send it to
+
+            `POST /orders/{id}/submit`, then poll `GET /orders/{id}` with it.
+
+            '
+        provider:
+          type: string
+          description: The provider that produced this price. Provider names appear
+            here and never in `/registry` or `/routes`.
+        created_at:
+          type: string
+          format: date-time
+        deposit_by:
+          type: string
+          format: date-time
+          description: The time before which the deposit should be sent. A later deposit is still accepted and repriced.
+        sell_asset:
+          type: string
+        sell_amount:
+          type: string
+          description: Base units. What the user sends.
+        max_sell_amount:
+          type: string
+          description: 'Largest `sell_amount` accepted for this price. Present only for
+
+            `exact_out`.
+
+            '
+        buy_asset:
+          type: string
+        buy_amount:
+          type: string
+          description: Base units. The expected output.
+        min_buy_amount:
+          type: string
+          description: Base units. The floor, after slippage. On `exact_out`, it is `buy_amount`, or a minimum the provider published. This is the ranking key, and the number to show on a confirmation screen.
+        estimated_seconds:
+          type: integer
+          description: How long the provider expects the swap to take. Absent when
+            the provider reports no duration.
+        steps:
+          type: array
+          description: 'What the user must do to start the swap. Whatever comes after appears
+
+            on the order, from `GET /orders/{id}`.
+
+            '
+          items:
+            $ref: '#/components/schemas/Step'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warning'
+        price:
+          $ref: '#/components/schemas/Price'
+    Orders:
+      type: object
+      required:
+      - orders
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        next_cursor:
+          type: string
+          description: 'Pass as `cursor` for the next page. Absent on the last page.
+
+            '
+    Order:
+      type: object
+      required:
+      - id
+      - provider
+      - state
+      - created_at
+      - updated_at
+      - sell_asset
+      - sell_amount
+      - buy_asset
+      - buy_amount
+      - min_buy_amount
+      - deposits
+      - received
+      - steps
+      - fees
+      - warnings
+      - last_verified_at
+      properties:
+        id:
+          type: string
+          description: 'The same identifier `POST /quote` returned. It never changes.
+
+            '
+        provider:
+          type: string
+          description: The provider filling this swap. Provider names appear here
+            and never in `/registry` or `/routes`.
+        state:
+          type: string
+          description: '`awaiting_user` — a step is listed. Act on it.
+          
+            `awaiting_provider` — nothing to do. Wait.
+          
+            `completed` — terminal. The user received the funds.
+          
+            `refunded` — terminal. The funds came back.
+          
+            `failed` — terminal. The provider stopped and the funds did not come
+          
+            back. Rare, and it needs an operator. There is no `expired`.'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          description: When the order last changed.
+        sell_asset:
+          type: string
+        sell_amount:
+          type: string
+          description: Base units. What the provider accepted as the input.
+        buy_asset:
+          type: string
+        buy_amount:
+          type: string
+          description: Base units. The expected output, at the live price.
+        min_buy_amount:
+          type: string
+          description: Base units. The floor, after slippage. On `exact_out`, it is `buy_amount`, or a minimum the provider published.
+        deposits:
+          type: array
+          items:
+            type: object
+            required:
+            - tx_hash
+            - at
+            properties:
+              tx_hash:
+                type: string
+                description: The transaction that funded the source side. Case is
+                  ignored.
+              amount:
+                type: string
+                description: Base units.
+              at:
+                type: string
+                format: date-time
+                description: 'When the service recorded this deposit. Not the block time.
+
+                  '
+        received:
+          type:
+          - object
+          - 'null'
+          required:
+          - amount
+          - tx
+          properties:
+            amount:
+              type: string
+              description: Base units. A refund is smaller than the deposit — it pays its own network
+                fee.
+            tx:
+              type: string
+        estimated_seconds:
+          type: integer
+          description: How long the provider expects the swap to take. Absent when
+            the provider reports no duration.
+        steps:
+          type: array
+          description: 'What the user must do now. Empty while the provider is working. A
+
+            redeem or a clawback appears here when it becomes possible.
+
+            '
+          items:
+            $ref: '#/components/schemas/Step'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warning'
+        price:
+          $ref: '#/components/schemas/Price'
+        failure:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+              description: Stable identifier for the failure. Branch on this, never on `message`.
+            message:
+              type: string
+              description: For a person. Never parse it.
+            refund_failed:
+              type: boolean
+        last_verified_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the service last read this order from the provider. `null` until the first read.
+    Step:
+      type: object
+      required:
+      - id
+      - kind
+      - action
+      properties:
+        id:
+          type: string
+          description: '`core_to_evm_transfer`, `approve`, `initiate`, `redeem`, `refund` or `clawback`. An id can repeat,
+            as with two token approvals. Each repeat is its own step with its own `action`.'
+        kind:
+          type: string
+          description: '`deposit`, `transaction` or `signature`. It selects the payload field below.'
+        action:
+          type: string
+          description: Button text.
+        description:
+          type: string
+          description: Longer text for the user.
+        deposit:
+          type: object
+          description: Present when `kind` is `deposit`.
+          required:
+          - chain
+          - address
+          - amount
+          properties:
+            chain:
+              type: string
+              description: The `id` of a chain in `GET /registry`.
+            address:
+              type: string
+              description: Send the funds here. Safe to fund from anywhere.
+            amount:
+              type: string
+              description: Base units. Send exactly this.
+            memo:
+              type: string
+              description: 'Attach it to the transaction where the chain supports one. A
+
+                deposit that needs a memo and lacks it is not recoverable.
+
+                '
+        data:
+          type: object
+          required:
+          - chain
+          additionalProperties: true
+          properties:
+            chain:
+              type: string
+              description: The `id` of a chain in `GET /registry`.
+          description: 'Present when `kind` is `transaction`. The payload to sign, in the native shape of the chain. EVM carries
+
+            `to`, `value`, `data` and gas.
+
+            '
+    Estimates:
+      type: object
+      required:
+      - estimates
+      - provider_errors
+      properties:
+        estimates:
+          type: array
+          description: Ranked by `min_buy_amount`, largest first. Empty when every provider declined, and `provider_errors` says why.
+          items:
+            $ref: '#/components/schemas/Estimate'
+        provider_errors:
+          type: array
+          description: 'One entry for each provider that did not produce an estimate. Empty
+
+            when every provider answered.
+
+            '
+          items:
+            $ref: '#/components/schemas/ProviderError'
+    Estimate:
+      type: object
+      required:
+      - provider
+      - sell_asset
+      - sell_amount
+      - buy_asset
+      - buy_amount
+      - min_buy_amount
+      - fees
+      - warnings
+      properties:
+        provider:
+          type: string
+          description: 'The provider that produced this price. Provider names appear here and
+
+            never in `/registry` or `/routes`.
+
+            '
+        sell_asset:
+          type: string
+        sell_amount:
+          type: string
+          description: Base units. What the user sends.
+        max_sell_amount:
+          type: string
+          description: 'Largest `sell_amount` accepted for this price. Present only for
+
+            `exact_out`.
+
+            '
+        buy_asset:
+          type: string
+        buy_amount:
+          type: string
+          description: Base units. The expected output.
+        min_buy_amount:
+          type: string
+          description: Base units. The floor, after slippage. On `exact_out`, it is `buy_amount`, or a minimum the provider published. This is the ranking key, and the number to show on a confirmation screen.
+        estimated_seconds:
+          type: integer
+          description: 'How long the provider expects the swap to take. Absent when the
+
+            provider reports no duration.
+
+            '
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        price:
+          $ref: '#/components/schemas/Price'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warning'
+    Fee:
+      type: object
+      required:
+      - type
+      - asset
+      - amount
+      properties:
+        type:
+          type: string
+          description: '`network`, `provider`, `integrator`, `protocol` or `tax`. A SwapKit fee keeps SwapKit''s own type: `inbound`, `outbound`, `liquidity`, `affiliate` or `service`.'
+        asset:
+          type: string
+          description: 'A fee has its own asset. A cross-chain swap pays on both chains, so one
+
+            number cannot hold the total.
+
+            '
+        amount:
+          type: string
+          description: Base units of `asset`.
+        amount_usd:
+          type: string
+          description: 'The fee in US dollars, from the same prices as `Price`. Absent when
+
+            nothing prices `asset`.
+
+            '
+    Price:
+      type: object
+      properties:
+        sell_usd:
+          type: string
+        buy_usd:
+          type: string
+        impact_bps:
+          type: integer
+          description: Price impact in basis points. Negative is a loss.
+    Warning:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'On an estimate: `high_price_impact`, `high_slippage` or
+            `long_duration`. On an order: `late_deposit_risk`. On either: `incomplete_fees`,
+            a provider fee is missing from `fees`, so the listed fees are not the full cost.'
+        message:
+          type: string
+          description: Ready to show to a user.
+    ProviderError:
+      type: object
+      required:
+      - provider
+      - code
+      - message
+      properties:
+        provider:
+          type: string
+          description: The provider that failed.
+        code:
+          type: string
+          description: '`no_route`, `amount_below_minimum`, `amount_above_maximum`,
+            `unsupported_trade_type`, `unsupported_slippage`, `insufficient_balance`,
+            `invalid_request`, `timeout`, `rate_limited` or `provider_error`.'
+        message:
+          type: string
+          description: For a person. Never parse it.
+    Routes:
+      type: object
+      required:
+      - updated_at
+      - routes
+      properties:
+        updated_at:
+          type: string
+          format: date-time
+          description: When the routes last changed, not when this was built.
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+    Route:
+      type: object
+      required:
+      - sell_asset
+      - buy_asset
+      properties:
+        sell_asset:
+          type: string
+        buy_asset:
+          type: string
+        min_sell_amount:
+          type: string
+          description: Smallest `sell_amount` any provider accepts, in base units.
+        max_sell_amount:
+          type: string
+          description: Largest `sell_amount` any provider accepts, in base units.
+    Registry:
+      type: object
+      required:
+      - updated_at
+      - chains
+      properties:
+        updated_at:
+          type: string
+          format: date-time
+          description: When the registry last changed, not when this was built.
+        chains:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chain'
+    Chain:
+      type: object
+      required:
+      - id
+      - name
+      - vm_type
+      - disabled
+      - logo_url
+      - assets
+      properties:
+        id:
+          type: string
+          description: The chain identifier. Opaque — do not parse.
+        name:
+          type: string
+          description: Display name.
+        vm_type:
+          type: string
+          description: 'How to read a chain-native payload. One of `evm`, `svm`, `bvm` or `spark`.'
+        chain_id:
+          type: string
+          description: 'Chain identifier, in decimal. Present only for chains that have one,
+
+            such as an EVM chain. Absent for Bitcoin.
+
+            '
+        explorer_url:
+          type: string
+          format: uri
+          description: 'Base address of a block explorer. Append your own path, such as
+
+            `/tx/{hash}` or `/address/{address}`.
+
+            '
+        logo_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 'Square image for the chain. `null` when we have none.
+
+
+            An asset carries its own `logo_url`, and the two are usually
+
+            different. They match only where a chain is named after its own
+
+            asset, as with Bitcoin. On a rollup they differ — the chain wears its
+
+            own mark while the native asset wears Ether''s.
+
+
+            A client renders both at once, typically the asset logo with the
+
+            chain logo as a badge.
+
+            '
+        disabled:
+          type: boolean
+          description: '`true` means the chain is halted. Every asset on it reports
+
+            `disabled: true` as well. The chain stays listed, so an existing
+
+            order still resolves.
+
+            '
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+    TokenRef:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: '`native` for a chain''s own asset, such as BTC or ETH. `contract` for
+          
+            an asset deployed on the chain.'
+        address:
+          type: string
+          description: 'The address in the chain''s native format. Present only when `type` is
+
+            `contract`.
+
+            '
+    Asset:
+      type: object
+      required:
+      - id
+      - token
+      - symbol
+      - name
+      - decimals
+      - disabled
+      - logo_url
+      properties:
+        id:
+          type: string
+          description: '`<chain>:<symbol>`, lowercase. Opaque — do not parse. Stable forever.
+
+            '
+        token:
+          $ref: '#/components/schemas/TokenRef'
+        symbol:
+          type: string
+        name:
+          type: string
+          description: Display name.
+        decimals:
+          type: integer
+        logo_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 'Square image for the asset. `null` when we have none.
+
+
+            We serve this because we curated the list — the artwork describes a
+
+            thing we chose to offer. Without it every integrator builds its own
+
+            mapping, they disagree, and some show blanks on the first screen a
+
+            user sees.
+
+            '
+        disabled:
+          type: boolean
+          description: '`true` means the asset is no longer offered for a new swap. It is
+
+            also `true` whenever its chain is halted. It stays listed so existing
+
+            orders still resolve. Hide it from a picker.
+
+            '
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - retryable
+          properties:
+            code:
+              type: string
+              description: 'Stable identifier for the failure. Branch on this, never on
+              
+                `message`.'
+            message:
+              type: string
+              description: For a person. Never parse it.
+            retryable:
+              type: boolean
+              description: Whether the same request can succeed later.
+            details:
+              type: object
+              additionalProperties: true
+              description: 'Extra context for this `code`. The shape depends on the code, so
+
+                read it only after branching on `code`. Absent for most errors.
+
+                '
