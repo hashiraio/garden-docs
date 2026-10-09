@@ -1,0 +1,50 @@
+---
+title: "质押者"
+description: "质押者通过质押代币和对 solver 的治理来支持 Garden 协议"
+---
+
+质押是用户参与 Garden 协议的入口，有助于协议的去中心化、效率和问责。通过质押 **SEED 代币**，质押者可以投票支持值得信赖的 [solver](./solvers) 来执行意图，并根据这些 solver 的表现赚取奖励。这一体系激励长期[投入](https://dune.com/garden_finance/gardenfinance#stake-your-seed)，平衡 solver 的选择，并有助于维护协议的公平性和可靠性。
+
+## 如何运作？
+
+<Steps>
+  <Step title="质押 SEED 代币">
+    任何持有至少 **2,100 枚 SEED** 代币的人都有资格[质押](https://app.garden.finance/zh/stake/)。质押数量必须是 2,100 枚 SEED 的倍数。质押者将 **SEED 代币**存入协议，并锁定所选的时长。锁定期越长，质押加成系数越高，票数和潜在奖励也会随之增加。请参阅[此教程](/zh/home/resources/guides/stake/stake-seed)，了解质押的分步说明。
+    
+    <Tip>
+    如果你希望最大化质押收益，永久质押 21,000 枚 SEED 即可铸造 [Gardener Pass](/zh/home/governance/gardener-pass)。这是一枚专属 NFT，可解锁更高的奖励、治理权和可交易性。
+    </Tip>
+    
+    <Frame>
+      <img src="/images/staking.png" alt="质押加成系数与奖励体系" />
+    </Frame>
+  </Step>
+  
+  <Step title="为 solver 投票">
+    质押者根据表现指标和预期 APY，将自己的票数分配给特定的 solver。Solver 处理意图的能力与其获得的票数成正比。
+  </Step>
+  
+  <Step title="赚取 Bitcoin 奖励">
+    质押者根据自己的投票权重分享 solver 的手续费。质押奖励每周以 **Bitcoin** 发放。质押加成系数确保投入时间越长，APY 越高，从而促进协议的稳定。
+  </Step>
+  
+  <Step title="维护问责">
+    如果 solver 失职或有恶意行为，为其投票的质押者将受到轻微惩罚，从而确保问责，并随着时间推移提升 solver 的可靠性。
+  </Step>
+</Steps>
+
+## 为什么质押者很重要？
+
+质押者在 Garden 协议中并不一定是被动的参与者，他们有动力去：
+
+<CardGroup cols={1}>
+  <Card title="维护 solver 问责" icon="shield-check">
+    维护 solver 之间的问责，因为质押者只会投票给能够结算所有分配意图（完成率）且不出现停机（速度）的 solver。
+  </Card>
+  <Card title="防止 solver 垄断" icon="scale-balanced">
+    消除 solver 垄断，因为质押者奖励会根据某个 solver 的投票集中度进行调整。追求更高回报的质押者有动力将票数分散给获票较少的 solver，从而确保生态系统的平衡与公平。
+  </Card>
+  <Card title="淘汰不活跃的 solver" icon="user-xmark">
+    淘汰陈旧且无法正常运行的 solver，因为质押者的每周奖励与 solver 的交易量挂钩。如果 solver 无法正常运行，质押者将得不到任何奖励，并会将投票转给活跃的 solver。
+  </Card>
+</CardGroup>

@@ -1,0 +1,174 @@
+---
+title: "Cómo intercambiar BTC por cualquier activo EVM"
+description: "Guía paso a paso para intercambiar Bitcoin por Wrapped Bitcoin (WBTC) en Ethereum / Arbitrum con Garden"
+---
+
+Convierte tu Bitcoin nativo en Wrapped Bitcoin (WBTC) en las redes de Ethereum o Arbitrum. WBTC mantiene una paridad 1:1 con Bitcoin y se puede usar en protocolos DeFi. El flujo es el mismo para intercambiar BTC por cualquier activo basado en EVM.
+
+<Info>
+Esta guía explica cómo intercambiar **Bitcoin (BTC)** por **Wrapped Bitcoin (WBTC)** en Ethereum o Arbitrum. El proceso tarda unos 30 segundos en completarse.
+</Info>
+
+## Qué necesitas
+
+<Steps>
+  <Step title="Wallets">
+    - **Wallet EVM**: MetaMask, Coinbase Wallet u otra wallet compatible con EVM
+    - **Wallet de Bitcoin**: opcional (puedes intercambiar sin conectarla)
+  </Step>
+  <Step title="Activos">
+    - Bitcoin (BTC) en tu wallet de Bitcoin o listo para enviarlo manualmente
+  </Step>
+</Steps>
+
+## Método 1: con la wallet de Bitcoin conectada (recomendado)
+
+Este es el método más sencillo, ya que Garden gestiona la transacción de Bitcoin por ti.
+
+<Steps>
+  <Step title="Conecta las wallets">
+    1. Visita [Garden Finance](https://app.garden.finance/es)
+    2. Haz clic en **Conectar** y conecta tu **wallet EVM**
+    3. Haz clic en **Conectar la wallet de Bitcoin** y conecta tu wallet de Bitcoin
+
+    <Frame>
+      <img src="/images/swap/connect wallet.png" alt="Conectar las wallets a Garden" />
+    </Frame>
+  </Step>
+
+  <Step title="Configura tu intercambio">
+    1. En la sección **Enviar**, selecciona **Bitcoin (BTC)**
+    2. En la sección **Recibir**, selecciona **WBTC** y elige la red que prefieras:
+       - **Ethereum**: para usarlo en protocolos DeFi de Ethereum
+       - **Arbitrum**: para comisiones más bajas y transacciones más rápidas
+    3. Introduce la cantidad de BTC que quieres intercambiar
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-2.png" alt="Configurar el intercambio de BTC por WBTC" />
+    </Frame>
+  </Step>
+
+  <Step title="Revisa y confirma">
+    1. Revisa los detalles del intercambio:
+       - **Tasa de cambio**: tasa actual de BTC a WBTC
+       - **Comisiones**: comisiones de red y comisiones del protocolo Garden
+       - **Tiempo estimado de finalización**: normalmente menos de 30 segundos
+    2. Haz clic en **Intercambiar** para continuar
+  </Step>
+
+  <Step title="Aprueba las transacciones">
+    1. **Wallet EVM**: primero, aprueba la transacción en tu wallet EVM
+    2. **Wallet de Bitcoin**: después, aprueba y envía la transacción de Bitcoin
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-3.png" alt="Aprobar las transacciones" />
+    </Frame>
+  </Step>
+
+  <Step title="Sigue el progreso">
+    Mantén abierta la pestaña del navegador mientras se procesa el intercambio. Verás actualizaciones en tiempo real y recibirás una notificación cuando se complete.
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-4.png" alt="Intercambio en curso" />
+    </Frame>
+  </Step>
+</Steps>
+
+## Método 2: transferencia manual de Bitcoin
+
+Si prefieres no conectar tu wallet de Bitcoin, puedes enviar Bitcoin manualmente.
+
+<Steps>
+  <Step title="Conecta solo la wallet EVM">
+    1. Visita [Garden Finance](https://app.garden.finance/es)
+    2. Conecta solo tu **wallet EVM** (omite la conexión de la wallet de Bitcoin)
+  </Step>
+
+  <Step title="Indica la dirección de reembolso">
+    1. Introduce manualmente tu **dirección de reembolso** de Bitcoin
+    2. Es la dirección a la que se devolverán tus BTC si el intercambio falla
+    3. **Comprueba bien esta dirección**: los fondos enviados a direcciones incorrectas no se pueden recuperar
+
+    <Frame>
+      <img src="/images/swap/swap_screen_without_btc_connection.png" alt="Introducir la dirección de reembolso de Bitcoin" />
+    </Frame>
+  </Step>
+
+  <Step title="Crea la orden de intercambio">
+    1. Configura tu intercambio (BTC por WBTC)
+    2. Introduce la cantidad y haz clic en **Intercambiar**
+    3. Aprueba la transacción en tu wallet EVM
+  </Step>
+
+  <Step title="Envía Bitcoin manualmente">
+    1. Copia la **dirección de depósito** de Bitcoin que se muestra en la página del intercambio
+    2. Envía la **cantidad exacta de BTC** desde tu wallet de Bitcoin a esta dirección
+    3. **Importante**: envía exactamente la cantidad indicada; enviar más o menos puede causar problemas
+
+    <Frame>
+      <img src="/images/swap/swap_in_awaiting_deposit_btc_manual.png" alt="Depósito manual de Bitcoin" />
+    </Frame>
+  </Step>
+
+  <Step title="Espera a que se complete">
+    Sigue el progreso del intercambio en la página. El intercambio se completará cuando el solver reciba tu Bitcoin.
+
+    <Frame>
+      <img src="/images/swap/swap_successful.png" alt="Intercambio completado" />
+    </Frame>
+  </Step>
+</Steps>
+
+## Conoce WBTC
+
+<CardGroup cols={2}>
+  <Card title="¿Qué es WBTC?" icon="bitcoin">
+    **Wrapped Bitcoin** es un token ERC-20 respaldado 1:1 por Bitcoin que permite usar BTC en protocolos DeFi de Ethereum.
+  </Card>
+  <Card title="Casos de uso" icon="coins">
+    **Integración con DeFi**: usa WBTC en protocolos de préstamo, DEX, yield farming y otras aplicaciones DeFi.
+  </Card>
+</CardGroup>
+
+## Opciones de red
+
+### Ethereum
+- **Ventajas**: el mayor ecosistema DeFi y la mayor liquidez
+- **Desventajas**: comisiones de gas más altas
+- **Ideal para**: intercambios grandes y máxima compatibilidad con DeFi
+
+### Arbitrum  
+- **Ventajas**: comisiones más bajas y transacciones más rápidas
+- **Desventajas**: ecosistema más pequeño que el de Ethereum
+- **Ideal para**: intercambios más pequeños y transacciones económicas
+
+## Notas importantes
+
+<Warning>
+**Cantidades exactas**: cuando envíes Bitcoin manualmente, envía siempre la cantidad exacta indicada. Enviar más o menos de la cantidad especificada puede causar retrasos o requerir intervención manual.
+</Warning>
+
+<Info>
+**Seguridad**: Garden usa intercambios atómicos, por lo que tu Bitcoin nunca está en riesgo. Si el intercambio falla, tus BTC se reembolsarán automáticamente a la dirección que indicaste.
+</Info>
+
+<Note>
+**Usuarios nuevos**: la primera transacción puede tardar algo más debido a las confirmaciones de la blockchain. Los intercambios posteriores en la misma sesión son más rápidos.
+</Note>
+
+## Próximos pasos
+
+Cuando recibas tus WBTC:
+
+- **WBTC en Ethereum**: puedes usarlos de inmediato en protocolos DeFi de Ethereum
+- **WBTC en Arbitrum**: puedes usarlos en protocolos DeFi de Arbitrum o llevarlos a otras redes mediante un puente
+- **Consulta tus activos**: los WBTC aparecerán en tu wallet EVM en la red seleccionada
+
+## ¿Necesitas ayuda?
+
+- **Preguntas**: únete a nuestra [comunidad de Discord](https://discord.gg/B7RczEFuJ5)
+- **Problemas técnicos**: escribe al [soporte en Discord](https://discord.gg/B7RczEFuJ5)
+
+<Info>
+¿Quieres hacer el intercambio inverso? Consulta nuestra guía sobre [cómo intercambiar WBTC por BTC](/es/home/resources/guides/swap/wbtc-btc).
+</Info> 

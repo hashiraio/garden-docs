@@ -1,0 +1,31 @@
+---
+title: "更优价格"
+description: "Garden 借助链上和链下流动性，提供无可比拟的兑换价格"
+---
+
+传统跨链桥通常依赖 AMM 来完成兑换，使用户承受取决于流动性池深度的滑点。对于同类资产之间的兑换（例如 BTC 与 WBTC 或 cbBTC 之间），这种方式尤其低效。
+
+Garden 基于意图的架构消除了这种低效。[Solver](/zh/home/fundamentals/core-concepts/solvers) 可以灵活地给出报价，并利用链上和链下流动性竞争成交用户意图。
+
+用户不仅在发起兑换时就能获得有竞争力的价格，还有机会以更优的价格完成结算。借助点对点撮合以及 [xCoW](/zh/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow) 等先进的结算机制，Garden 会在执行过程中动态优化兑换。
+
+<Tip>
+用户发起兑换时，会看到一个有保证的最低报价。而在结算过程中，Garden 的价格优化能力可能会带来更优的价格。
+</Tip>
+
+## 价格优化如何实现
+
+<CardGroup cols={2}>
+  <Card title="接入私有流动性" icon="lock">
+    Solver 可以利用公共 DEX 无法获取的私有链下流动性来源
+  </Card>
+  <Card title="点对点撮合" icon="handshake">
+    在具有互补意图的用户之间直接撮合，省去中间方手续费
+  </Card>
+  <Card title="xCoW 优化" icon="arrow-trend-up">
+    先进的需求巧合撮合可减少滑点并改善执行效果
+  </Card>
+  <Card title="竞争性拍卖" icon="gavel">
+    Solver 通过拍卖机制竞争提供最优价格
+  </Card>
+</CardGroup>

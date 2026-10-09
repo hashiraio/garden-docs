@@ -1,0 +1,43 @@
+---
+title: "Intenciones"
+description: "El enfoque de Garden basado en intenciones amplía los límites de las interacciones entre cadenas"
+---
+
+Las intenciones ofrecen un enfoque centrado fundamentalmente en el usuario para las interacciones on-chain. En lugar de firmar una transacción sin procesar (una secuencia rígida de instrucciones legibles por máquina que dicta qué acciones realizar, como ocurre en plataformas como Uniswap o Aave), los usuarios definen un objetivo general, o "intención", y firman eso en su lugar. Esta intención recoge el resultado deseado en un mensaje estructurado. En Garden, esto significa especificar parámetros como los activos, las cadenas y los importes del intercambio.
+
+<Frame>
+  <img src="/images/transaction-requirements.png" alt="Requisitos de una intención frente a los de una transacción" />
+</Frame>
+
+Al abstraer los pasos detallados, las intenciones acercan la interacción a los objetivos deseados, lo que hace que el proceso sea intuitivo y eficiente a la vez. Este enfoque se adopta cada vez más como estándar en el sector: Across usa puentes basados en intenciones y CoW Protocol aplica intenciones al trading en DEX.
+
+## ¿Por qué elegimos las intenciones?
+
+Las intenciones aportan flexibilidad, seguridad y eficiencia a las interacciones on-chain:
+
+<CardGroup cols={2}>
+  <Card title="Más liquidez" icon="droplet">
+    Las intenciones permiten a los solvers recurrir a cualquier liquidez on-chain/off-chain, incluidos flujos de órdenes privados, lo que **aumenta la liquidez accesible** en comparación con los métodos convencionales.
+  </Card>
+  <Card title="Emparejamiento directo entre usuarios" icon="handshake">
+    Los solvers pueden **emparejar a los usuarios directamente** entre sí, lo que puede ofrecer mejores precios sin depender únicamente de pools de liquidez externos.
+  </Card>
+  <Card title="Protección frente al MEV" icon="shield">
+    Las intenciones **protegen a los usuarios de los bots de MEV** y de las vulnerabilidades del mempool público, ya que operan en un entorno seguro y cerrado.
+  </Card>
+  <Card title="Experiencia sin gas" icon="gas-pump">
+    Los usuarios pueden ejecutar órdenes entre cadenas sin necesidad de tener el token de gas nativo, como ETH, lo que hace que las interacciones entre cadenas sean **fluidas y sin gas**.
+  </Card>
+  <Card title="Pago por resultados" icon="medal">
+    Los usuarios solo **pagan por las ejecuciones exitosas**, lo que elimina el gasto inútil en comisiones.
+  </Card>
+  <Card title="Eficiencia de costos" icon="coins">
+    Las intenciones permiten a los solvers agrupar varias órdenes, lo que **reduce los costos de ejecución** y traslada el ahorro a los usuarios mediante mejores cotizaciones.
+  </Card>
+  <Card title="Sin custodios" icon="lock-open">
+    **Eliminan la necesidad de custodios** (centralizados o descentralizados), lo que mitiga los riesgos de liquidez y refuerza el carácter sin necesidad de confianza del sistema.
+  </Card>
+  <Card title="Ejecución competitiva" icon="trophy">
+    Varios solvers **compiten para ejecutar tu intención**, lo que impulsa la innovación en las estrategias de ejecución y garantiza que obtengas **el mejor precio y la mayor velocidad posibles** gracias a las fuerzas del mercado.
+  </Card>
+</CardGroup>

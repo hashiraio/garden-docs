@@ -1,0 +1,124 @@
+---
+title: "Flujo de intenciones"
+description: "Descubre el flujo técnico completo de cómo se procesan las intenciones de los usuarios en el protocolo Garden"
+---
+
+<Frame>
+  <img src="/images/garden protocol.png" alt="Resumen de la arquitectura del protocolo Garden" />
+</Frame>
+
+Ahora que conocemos todos los actores y módulos del sistema, veamos en detalle, desde un punto de vista técnico, cómo encajan entre sí.
+
+Esta es una representación simplificada del proceso:
+
+<Steps>
+  <Step title="Creación de la intención">
+    El usuario solicita una cotización → Firma la intención → Envía la intención al libro de órdenes
+  </Step>
+  <Step title="Selección del solver">
+    El libro de órdenes selecciona un solver → El solver inicia la liquidación
+  </Step>
+  <Step title="Liquidación del usuario">
+    El usuario inicia la transacción → El solver ejecuta en la cadena de destino
+  </Step>
+  <Step title="Finalización">
+    El usuario canjea los fondos → El solver completa la liquidación
+  </Step>
+</Steps>
+
+A continuación, se detalla cada paso del proceso.
+
+## Creación de una intención
+
+<CardGroup cols={1}>
+  <Card title="Solicitar cotización" icon="calculator">
+    El usuario inicia el proceso solicitando una **cotización** para el intercambio que desea. La cotización incluye detalles como el activo de entrada, el activo de salida, las cadenas implicadas y los importes deseados.
+  </Card>
+  <Card title="Aceptar la cotización" icon="signature">
+    El usuario recibe la cotización y debe **aceptarla** creando un **mensaje de intención firmado.**
+  </Card>
+  <Card title="Crear la intención" icon="list-check">
+    Esta intención firmada representa el objetivo del usuario e incluye parámetros como los activos, las cadenas, los importes y los datos de vencimiento.
+  </Card>
+</CardGroup>
+
+## Selección del solver en el libro de órdenes
+
+Una vez que el usuario firma la intención, se envía al **libro de órdenes**, un sistema descentralizado en el que los solvers compiten para ejecutar la intención.
+
+### Proceso de subasta:
+
+<Steps>
+  <Step title="Envío de cotizaciones">
+    Todos los solvers envían sus cotizaciones según los parámetros de la intención.
+  </Step>
+  
+  <Step title="Determinación de la mejor cotización">
+    Se determina la **mejor cotización** (el precio más bajo o la mayor eficiencia).
+  </Step>
+  
+  <Step title="Resolución de empates">
+    Los solvers con una **puntuación de staker más alta** que la del solver con la mejor cotización disponen de un margen de 5 segundos para igualar la cotización.
+    
+    - **Ninguna aceptación:** gana el solver con la mejor cotización.
+    - **Una aceptación:** gana el solver que acepta.
+    - **Varias aceptaciones:** gana el solver con la puntuación de staker más alta.
+  </Step>
+  
+  <Step title="Confirmación del solver">
+    Una vez seleccionado, el solver se prepara para ejecutar el intercambio.
+  </Step>
+</Steps>
+
+## Liquidación: ejecución del lado del usuario
+
+<Steps>
+  <Step title="Inicio de la liquidación">
+    El proceso de liquidación comienza una vez que se confirma el solver seleccionado.
+  </Step>
+  
+  <Step title="Iniciación por parte del usuario">
+    El usuario debe **iniciar la liquidación** creando un **mensaje de transacción firmado** para la intención.
+  </Step>
+  
+  <Step title="Transmisión por el relayer">
+    El mensaje firmado se envía a un **relayer**, que lo transmite a la blockchain.
+  </Step>
+  
+  <Step title="Procesamiento on-chain">
+    La transacción se procesa on-chain y los fondos del usuario se bloquean o se transfieren al contrato o a la wallet correspondiente.
+  </Step>
+  
+  <Step title="Confirmación">
+    Una vez que la transacción alcanza el número necesario de confirmaciones en la blockchain, la liquidación pasa al lado del solver.
+  </Step>
+</Steps>
+
+## Liquidación: ejecución del lado del solver
+
+<Steps>
+  <Step title="Recepción de la confirmación">
+    Al recibir la confirmación de la transacción del lado del usuario, el solver inicia la transacción correspondiente por su parte.
+  </Step>
+  
+  <Step title="Ejecución en el destino">
+    En este paso, el solver bloquea fondos en la cadena de destino, reservados para el usuario.
+  </Step>
+  
+  <Step title="Confirmación del solver">
+    La transacción del solver también pasa por un proceso de confirmación en la cadena de destino para garantizar la seguridad y la fiabilidad.
+  </Step>
+</Steps>
+
+## Canje
+
+<Steps>
+  <Step title="Disponibilidad de los activos">
+    Una vez que la transacción del solver alcanza las confirmaciones necesarias:
+    - El usuario puede canjear los fondos en el destino revelando el prehash del intercambio.
+  </Step>
+  
+  <Step title="Canje del solver">
+    Una vez que el usuario revela el prehash, el solver puede recibir los fondos en la cadena de origen, lo que completa el intercambio.
+  </Step>
+</Steps>

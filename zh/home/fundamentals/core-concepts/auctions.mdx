@@ -1,0 +1,69 @@
+---
+title: "拍卖"
+description: "Garden 的拍卖系统选出 solver 来高效执行用户意图"
+---
+
+拍卖流程会确定一个 solver 来执行用户意图，例如完成一笔兑换。Garden 的拍卖系统确保意图能够以有竞争力的价格高效完成。
+
+Garden 利用 **solver 评分**兼顾竞争与公平，构建了这样一个体系：solver 有动力优化自身表现，同时对其质押者负责。
+
+## Solver 评分
+
+Solver 评分综合了执行效率和投票权，用于确定 solver 在拍卖过程中的优先级。其计算方式如下：
+
+**特定链 C 的结算评分：**
+
+$$
+\text{Settlement Score}_{C} = \frac{\text{Average Settlement Time}_{C} - \text{Solver's Settlement Time}_{C}}{\text{Standard Deviation}_{C}}
+$$
+
+**所有链的加权结算评分：**
+
+$$
+\text{Weight}_{C} = \frac{\text{Solver Settlements}_{C}}{\text{Total Solver Settlements}}
+$$
+
+$$
+\text{Settlement Score} = e^{\left(\sum_{C} \left(\text{Weight}_{C} \times \text{Settlement Score}_{C}\right)\right)}
+$$
+
+**最终 solver 评分：**
+
+$$
+\text{Solver Score} = \left(\frac{\text{Total Volume on Garden} \times \text{Stake Against Solver}}{\text{Volume Filled by Solver} \times \text{Total Staked Amount}}\right) \times \text{Settlement Score}
+$$
+
+<Note>
+评分大于 1 的 solver 在拍卖中享有优先权。Solver 评分会在每次拍卖前重新计算。
+</Note>
+
+## 一场典型的拍卖如何进行？
+
+1. 所有 solver 针对某个意图向订单簿提交报价。每个报价都注明了该 solver 为完成该意图所提出的执行价格。
+2. 订单簿找出报价最优（即报价最低）的 solver。
+3. **质押者评分**高于最佳报价 solver 的其他 solver，有 5 秒的时间窗口来接受该最佳报价。这一机制确保获得质押者更多支持的 solver 有机会优先获得意图。
+4. 结果取决于接受期内的参与情况：
+
+### 拍卖结果
+
+<AccordionGroup>
+  <Accordion title="无人接受">
+    提供最佳报价的 solver 赢得拍卖并成交该订单。
+  </Accordion>
+  
+  <Accordion title="一个 solver 接受">
+    接受报价的 solver 获得该订单。
+    
+    <Frame>
+      <img src="/images/solver_one_select.png" alt="单个 solver 选择" />
+    </Frame>
+  </Accordion>
+  
+  <Accordion title="多个 solver 接受">
+    在接受最佳报价的 solver 中，**质押者评分**最高的 solver 赢得拍卖并成交该订单。
+    
+    <Frame>
+      <img src="/images/solver_multiple_select.png" alt="多个 solver 选择" />
+    </Frame>
+  </Accordion>
+</AccordionGroup>

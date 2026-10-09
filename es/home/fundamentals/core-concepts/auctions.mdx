@@ -1,0 +1,69 @@
+---
+title: "Subastas"
+description: "El sistema de subastas de Garden selecciona a los solvers que ejecutan las intenciones de los usuarios de forma eficiente"
+---
+
+El proceso de subasta identifica al solver que ejecutará las intenciones de los usuarios, como realizar un intercambio. El sistema de subastas de Garden garantiza que las intenciones se ejecuten de forma eficiente y a precios competitivos.
+
+Garden equilibra la competencia y la equidad mediante las **puntuaciones de los solvers**, lo que crea un sistema en el que los solvers tienen incentivos para optimizar su rendimiento sin dejar de rendir cuentas ante sus stakers.
+
+## Puntuación del solver
+
+La puntuación del solver combina la eficiencia de rendimiento y el poder de voto para determinar la prioridad de un solver en el proceso de subasta. Se calcula así:
+
+**Puntuación de liquidación para una cadena específica C:**
+
+$$
+\text{Settlement Score}_{C} = \frac{\text{Average Settlement Time}_{C} - \text{Solver's Settlement Time}_{C}}{\text{Standard Deviation}_{C}}
+$$
+
+**Puntuación de liquidación ponderada en todas las cadenas:**
+
+$$
+\text{Weight}_{C} = \frac{\text{Solver Settlements}_{C}}{\text{Total Solver Settlements}}
+$$
+
+$$
+\text{Settlement Score} = e^{\left(\sum_{C} \left(\text{Weight}_{C} \times \text{Settlement Score}_{C}\right)\right)}
+$$
+
+**Puntuación final del solver:**
+
+$$
+\text{Solver Score} = \left(\frac{\text{Total Volume on Garden} \times \text{Stake Against Solver}}{\text{Volume Filled by Solver} \times \text{Total Staked Amount}}\right) \times \text{Settlement Score}
+$$
+
+<Note>
+Los solvers con una puntuación superior a 1 tienen prioridad en la subasta. Las puntuaciones de los solvers se calculan antes de cada subasta.
+</Note>
+
+## ¿Cómo funciona una subasta típica?
+
+1. Todos los solvers envían sus cotizaciones para una intención determinada al libro de órdenes. Cada cotización especifica el precio de ejecución que propone el solver para ejecutar la intención.
+2. El libro de órdenes identifica al solver con el mejor precio (es decir, la cotización más baja).
+3. Los solvers con una **puntuación de staker** superior a la del solver con la mejor cotización disponen de un margen de 5 segundos para aceptar la mejor cotización. Este mecanismo garantiza que los solvers con mayor respaldo de los stakers tengan la oportunidad de quedarse primero con las intenciones.
+4. El resultado depende de la participación durante el periodo de aceptación:
+
+### Resultados de la subasta
+
+<AccordionGroup>
+  <Accordion title="Nadie acepta">
+    El solver con la mejor cotización gana la subasta y ejecuta la orden.
+  </Accordion>
+  
+  <Accordion title="Un solver acepta">
+    El solver que acepta la cotización se queda con la orden.
+    
+    <Frame>
+      <img src="/images/solver_one_select.png" alt="Selección de un solo solver" />
+    </Frame>
+  </Accordion>
+  
+  <Accordion title="Varios solvers aceptan">
+    Entre los solvers que aceptan la mejor cotización, el que tiene la **puntuación de staker** más alta gana la subasta y ejecuta la orden.
+    
+    <Frame>
+      <img src="/images/solver_multiple_select.png" alt="Selección entre varios solvers" />
+    </Frame>
+  </Accordion>
+</AccordionGroup> 

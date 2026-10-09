@@ -1,0 +1,174 @@
+---
+title: "如何将 BTC 兑换为任意 EVM 资产"
+description: "使用 Garden 将 Bitcoin 兑换为 Ethereum / Arbitrum 上的 Wrapped Bitcoin（WBTC）的分步指南"
+---
+
+将你的原生 Bitcoin 转换为 Ethereum 或 Arbitrum 网络上的 Wrapped Bitcoin（WBTC）。WBTC 与 Bitcoin 保持 1:1 锚定，可用于 DeFi 协议。将 BTC 兑换为任何基于 EVM 的资产，流程都是相同的。
+
+<Info>
+本指南介绍如何将 **Bitcoin（BTC）** 兑换为 Ethereum 或 Arbitrum 上的 **Wrapped Bitcoin（WBTC）**。整个过程大约需要 30 秒。
+</Info>
+
+## 准备工作
+
+<Steps>
+  <Step title="钱包">
+    - **EVM 钱包**：MetaMask、Coinbase Wallet 或其他 EVM 兼容钱包
+    - **Bitcoin 钱包**：可选（无需连接也可以兑换）
+  </Step>
+  <Step title="资产">
+    - 存放在你 Bitcoin 钱包中或准备手动发送的 Bitcoin（BTC）
+  </Step>
+</Steps>
+
+## 方法 1：连接 Bitcoin 钱包（推荐）
+
+这是最简单的方法，因为 Garden 会为你处理 Bitcoin 交易。
+
+<Steps>
+  <Step title="连接钱包">
+    1. 访问 [Garden Finance](https://app.garden.finance/zh)
+    2. 点击**连接钱包**，连接你的 **EVM 钱包**
+    3. 点击**连接 Bitcoin 钱包**，连接你的 Bitcoin 钱包
+
+    <Frame>
+      <img src="/images/swap/connect wallet.png" alt="将钱包连接到 Garden" />
+    </Frame>
+  </Step>
+
+  <Step title="设置兑换">
+    1. 在**发送**区域，选择 **Bitcoin（BTC）**
+    2. 在**接收**区域，选择 **WBTC**，并选择你偏好的网络：
+       - **Ethereum**：用于 Ethereum DeFi 协议
+       - **Arbitrum**：手续费更低，交易更快
+    3. 输入你想兑换的 BTC 数量
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-2.png" alt="设置 BTC 兑换 WBTC" />
+    </Frame>
+  </Step>
+
+  <Step title="查看并确认">
+    1. 查看兑换详情：
+       - **汇率**：当前 BTC 兑 WBTC 的汇率
+       - **手续费**：网络手续费和 Garden 协议手续费
+       - **预计完成时间**：通常在 30 秒内
+    2. 点击**兑换**继续
+  </Step>
+
+  <Step title="批准交易">
+    1. **EVM 钱包**：首先，在你的 EVM 钱包中批准交易
+    2. **Bitcoin 钱包**：然后批准并发送 Bitcoin 交易
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-3.png" alt="批准交易" />
+    </Frame>
+  </Step>
+
+  <Step title="关注进度">
+    兑换处理期间，请保持浏览器标签页处于打开状态。你会看到实时进度更新，并在兑换完成时收到通知。
+
+    <Frame>
+      <img src="/images/swap/btc-to-any-4.png" alt="兑换进行中" />
+    </Frame>
+  </Step>
+</Steps>
+
+## 方法 2：手动转账 Bitcoin
+
+如果你不想连接 Bitcoin 钱包，可以手动发送 Bitcoin。
+
+<Steps>
+  <Step title="仅连接 EVM 钱包">
+    1. 访问 [Garden Finance](https://app.garden.finance/zh)
+    2. 仅连接你的 **EVM 钱包**（跳过 Bitcoin 钱包连接）
+  </Step>
+
+  <Step title="设置退款地址">
+    1. 手动输入你的 **Bitcoin 退款地址**
+    2. 如果兑换失败，你的 BTC 将退回到此地址
+    3. **请仔细核对此地址**：填错的地址无法找回资金
+
+    <Frame>
+      <img src="/images/swap/swap_screen_without_btc_connection.png" alt="输入 Bitcoin 退款地址" />
+    </Frame>
+  </Step>
+
+  <Step title="创建兑换订单">
+    1. 设置你的兑换（BTC 兑换 WBTC）
+    2. 输入数量，然后点击**兑换**
+    3. 在你的 EVM 钱包中批准交易
+  </Step>
+
+  <Step title="手动发送 Bitcoin">
+    1. 复制兑换页面上显示的 **Bitcoin 充值地址**
+    2. 从你的 Bitcoin 钱包向该地址发送**准确数量的 BTC**
+    3. **重要**：请发送页面显示的准确数量，多发或少发都可能导致问题
+
+    <Frame>
+      <img src="/images/swap/swap_in_awaiting_deposit_btc_manual.png" alt="手动充值 Bitcoin" />
+    </Frame>
+  </Step>
+
+  <Step title="等待完成">
+    在页面上关注兑换进度。Solver 收到你的 Bitcoin 后，兑换即会完成。
+
+    <Frame>
+      <img src="/images/swap/swap_successful.png" alt="兑换成功" />
+    </Frame>
+  </Step>
+</Steps>
+
+## 了解 WBTC
+
+<CardGroup cols={2}>
+  <Card title="什么是 WBTC？" icon="bitcoin">
+    **Wrapped Bitcoin** 是一种由 Bitcoin 1:1 支持的 ERC-20 代币，让 BTC 能够在 Ethereum DeFi 协议中使用。
+  </Card>
+  <Card title="使用场景" icon="coins">
+    **DeFi 集成**：在借贷协议、DEX、流动性挖矿及其他 DeFi 应用中使用 WBTC。
+  </Card>
+</CardGroup>
+
+## 网络选择
+
+### Ethereum
+- **优点**：最大的 DeFi 生态系统，流动性最高
+- **缺点**：gas 费较高
+- **适合**：大额兑换，追求最强的 DeFi 兼容性
+
+### Arbitrum  
+- **优点**：手续费更低，交易更快
+- **缺点**：生态系统规模小于 Ethereum
+- **适合**：小额兑换，追求高性价比的交易
+
+## 重要说明
+
+<Warning>
+**准确数量**：手动发送 Bitcoin 时，请始终发送页面显示的准确数量。多于或少于指定数量都可能导致延迟，或需要人工介入处理。
+</Warning>
+
+<Info>
+**安全性**：Garden 使用原子交换，这意味着你的 Bitcoin 永远不会面临风险。如果兑换失败，你的 BTC 将自动退回到你指定的地址。
+</Info>
+
+<Note>
+**首次使用**：由于需要区块链确认，第一笔交易可能会稍慢一些。同一会话中的后续兑换会更快。
+</Note>
+
+## 后续步骤
+
+收到 WBTC 后：
+
+- **Ethereum WBTC**：可立即在 Ethereum DeFi 协议中使用
+- **Arbitrum WBTC**：可在 Arbitrum DeFi 协议中使用，或跨链转移到其他网络
+- **追踪你的资产**：WBTC 将显示在所选网络上的 EVM 钱包中
+
+## 需要帮助？
+
+- **问题咨询**：加入我们的 [Discord 社区](https://discord.gg/B7RczEFuJ5)
+- **技术问题**：前往 [Discord 获取支持](https://discord.gg/B7RczEFuJ5)
+
+<Info>
+想要兑换回来？请查看我们的[如何将 WBTC 兑换为 BTC](/zh/home/resources/guides/swap/wbtc-btc) 指南。
+</Info>

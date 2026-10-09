@@ -1,0 +1,124 @@
+---
+title: "意图流程"
+description: "了解 Garden 协议处理用户意图的完整技术流程"
+---
+
+<Frame>
+  <img src="/images/garden protocol.png" alt="Garden 协议架构概览" />
+</Frame>
+
+既然我们已经了解了系统中的所有参与者和模块，下面就从技术角度详细看看它们是如何协同运作的。
+
+以下是该流程的简化示意：
+
+<Steps>
+  <Step title="创建意图">
+    用户请求报价 → 签署意图 → 将意图提交至订单簿
+  </Step>
+  <Step title="选择 solver">
+    订单簿选出 solver → solver 开始结算
+  </Step>
+  <Step title="用户端结算">
+    用户发起交易 → solver 在目标链上执行
+  </Step>
+  <Step title="完成">
+    用户赎回资金 → solver 完成结算
+  </Step>
+</Steps>
+
+下面详细介绍该流程的每个步骤。
+
+## 创建意图
+
+<CardGroup cols={1}>
+  <Card title="请求报价" icon="calculator">
+    用户首先为想要进行的兑换请求**报价**。报价包含输入资产、输出资产、涉及的链以及期望金额等详细信息。
+  </Card>
+  <Card title="接受报价" icon="signature">
+    用户收到报价后，必须通过创建一条**已签名的意图消息**来**接受报价**。
+  </Card>
+  <Card title="创建意图" icon="list-check">
+    这条已签名的意图代表了用户的目标，包含资产、链、金额和过期信息等参数。
+  </Card>
+</CardGroup>
+
+## 在订单簿中选择 solver
+
+用户签署意图后，该意图会被提交至**订单簿**。订单簿是一个去中心化系统，solver 在其中竞争成交该意图。
+
+### 拍卖流程
+
+<Steps>
+  <Step title="提交报价">
+    所有 solver 根据意图的参数提交各自的报价。
+  </Step>
+  
+  <Step title="确定最佳报价">
+    确定**最佳报价**（价格最低或效率最高）。
+  </Step>
+  
+  <Step title="打破平局">
+    **质押者评分**高于最佳报价 solver 的其他 solver，有 5 秒的时间窗口来匹配该报价。
+    
+    - **无人接受**：最佳报价 solver 胜出。
+    - **一个 solver 接受**：接受报价的 solver 胜出。
+    - **多个 solver 接受**：质押者评分最高的 solver 胜出。
+  </Step>
+  
+  <Step title="Solver 确认">
+    选定 solver 后，该 solver 开始准备执行兑换。
+  </Step>
+</Steps>
+
+## 结算：用户端执行
+
+<Steps>
+  <Step title="开始结算">
+    选定的 solver 确认后，结算流程随即开始。
+  </Step>
+  
+  <Step title="用户发起">
+    用户必须为该意图创建一条**已签名的交易消息**，以**发起结算**。
+  </Step>
+  
+  <Step title="中继器广播">
+    已签名的消息会被提交给**中继器**，由中继器将其广播到区块链上。
+  </Step>
+  
+  <Step title="链上处理">
+    交易在链上处理，用户的资金被锁定在相应的合约中，或转入相应的钱包。
+  </Step>
+  
+  <Step title="确认">
+    交易获得所需数量的区块链确认后，结算将推进到 solver 端。
+  </Step>
+</Steps>
+
+## 结算：solver 端执行
+
+<Steps>
+  <Step title="收到确认">
+    Solver 在收到用户端交易的确认后，会在自己一端发起对应的交易。
+  </Step>
+  
+  <Step title="在目标链上执行">
+    这一步中，solver 在目标链上锁定专为该用户预留的资金。
+  </Step>
+  
+  <Step title="Solver 确认">
+    Solver 的交易同样会在目标链上经历确认过程，以确保安全性和可靠性。
+  </Step>
+</Steps>
+
+## 赎回
+
+<Steps>
+  <Step title="资产可用">
+    Solver 的交易获得所需确认后：
+    - 用户可以通过公开兑换的原像，在目标链上赎回资金。
+  </Step>
+  
+  <Step title="Solver 赎回">
+    用户公开原像后，solver 即可在源链上收取资金，从而完成兑换。
+  </Step>
+</Steps>
