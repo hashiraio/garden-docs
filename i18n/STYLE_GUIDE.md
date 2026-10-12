@@ -59,7 +59,7 @@ Brand, product, chain and token names are never translated, in any language, Chi
 
 | Category | Examples |
 | --- | --- |
-| Brand and products | Garden, Gardener Pass, Garden Explorer |
+| Brand and products | Garden, Gardener Pass (and the short "Pass"), Garden Explorer |
 | Product names in navigation | Swap, Stake, Explorer, Faucet |
 | Chains and ecosystems | Bitcoin, Ethereum, Arbitrum, Base, Solana, Starknet, Sui, Tron, Litecoin, Lightning, EVM |
 | Tokens and tickers | BTC, WBTC, cbBTC, ETH, USDC, SEED |
@@ -87,7 +87,7 @@ Use these exact terms. Anything else is drift to fix.
 | auction | subasta | аукцион | 拍卖 |
 | quote | cotización | котировка | 报价 |
 | settlement / settle | liquidación / liquidar | расчёт / провести расчёт | 结算 |
-| relayer | relayer | релейер | 中继器 |
+| relayer | relayer | релейер | relayer |
 | chain | cadena | блокчейн | 链 |
 | network (mainnet / testnet) | red | сеть | 网络 |
 | cross-chain | entre cadenas | кросс-чейн | 跨链 |
@@ -119,9 +119,13 @@ Use these exact terms. Anything else is drift to fix.
 | free option | opción gratuita | бесплатный опцион | 免费期权 |
 | coincidence of wants | coincidencia de necesidades | совпадение потребностей | 需求巧合 |
 | address screening | verificación de direcciones | проверка адресов | 地址筛查 |
+| support (a chain, a feature) | es compatible con / permite / dar soporte a | поддерживать | 支持 |
+| Act N (program phase) | Acto N | Акт N | 第 N 幕 |
 
 - **Chain vs network.** Chain is the blockchain an asset lives on. Network is mainnet versus testnet.
 - **Deposit in Chinese.** `充值` is the app's word for topping up a deposit address. In protocol prose about locking funds in an HTLC, use `存入`. Never `存款` (bank savings).
+- **Spanish "support".** Use `es compatible con` for what exists ("es compatible con WBTC"), `permite` for what something enables, and `dar soporte a` for the noun sense. Never `admitir` ("to admit") or `soportar` ("to put up with"). `soporte` alone stays correct for customer support.
+- **The short "Pass".** When English shortens Gardener Pass to "the pass", keep it as `Pass` in every language: es `el Pass`, ru `Pass`, zh `Pass`. Don't translate it as a common noun (пропуск).
 - **Spanish "wallet".** The app keeps "wallet" in Spanish; the docs do the same (`tu wallet`), not "billetera".
 
 ## Voice and register
@@ -132,7 +136,7 @@ Each language addresses the reader one way, everywhere in the docs.
 | --- | --- | --- | --- |
 | Address the reader as | tú | вы (lowercase "ваш" mid-sentence) | 你 (not 您) |
 | Instructions | tú imperative: "Conecta", "Selecciona" | вы imperative: "Подключите", "Выберите" | 请 + verb, or plain verb in steps: "连接钱包" |
-| Headings | sentence case, noun phrase or question | sentence case | short phrase, no trailing punctuation |
+| Headings | sentence case, noun phrase or question | sentence case | short phrase; no trailing period, but keep `？` on questions |
 | "Please" | only where English has it | "Пожалуйста" only where English has it | 请 freely; it's neutral politeness |
 
 - **Tone is plain and calm.** No hype the English doesn't have, and no exclamation marks unless the English uses one.

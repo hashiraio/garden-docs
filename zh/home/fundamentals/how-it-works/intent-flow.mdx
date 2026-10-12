@@ -81,8 +81,8 @@ description: "了解 Garden 协议处理用户意图的完整技术流程"
     用户必须为该意图创建一条**已签名的交易消息**，以**发起结算**。
   </Step>
   
-  <Step title="中继器广播">
-    已签名的消息会被提交给**中继器**，由中继器将其广播到区块链上。
+  <Step title="Relayer 广播">
+    已签名的消息会被提交给 **relayer**，由 relayer 将其广播到区块链上。
   </Step>
   
   <Step title="链上处理">
@@ -105,7 +105,7 @@ description: "了解 Garden 协议处理用户意图的完整技术流程"
     这一步中，solver 在目标链上锁定专为该用户预留的资金。
   </Step>
   
-  <Step title="Solver 确认">
+  <Step title="Solver 交易确认">
     Solver 的交易同样会在目标链上经历确认过程，以确保安全性和可靠性。
   </Step>
 </Steps>
