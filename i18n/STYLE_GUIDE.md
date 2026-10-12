@@ -160,7 +160,7 @@ Typography follows each language's native rules.
 - **Spanish:** opening `¿` and `¡` on every question and exclamation, including headings. Accents always.
 - **Russian:** guillemets «» for quoted names, a spaced em dash " — ", hyphenated compounds for Latin-prefixed nouns ("EVM-кошелёк", "QR-код"). Write ё where it belongs (кошелёк, расчёт).
 - **Chinese:** full-width punctuation `，。：；？！（）` in Chinese text. One space between Chinese and any Latin word or number ("你的 Bitcoin", "48 小时", "SEED 代币"), but no space next to full-width punctuation. Use `枚` as the measure word for token amounts.
-- **Casing:** sentence case for headings and card titles in every language. Never English-style Title Case in translations.
+- **Casing:** sentence case for headings, card and step titles, and bold run-in labels, in every language, English included. Capitalize only the first word and proper nouns: brand, product, chain and token names (`Bitcoin`, `WBTC`, `DeFi`, `Garden`) keep their capitals, everything else is lowercase. Capitalize the first word after a colon ("Method 1: With Bitcoin wallet connected"). "Fees and Costs" is Title Case; "Fees and costs" is sentence case.
 - **Bold and italics** stay on the same words they cover in English.
 
 ## Adding or updating a translation
