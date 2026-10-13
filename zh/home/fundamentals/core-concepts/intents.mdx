@@ -1,0 +1,43 @@
+---
+title: "意图"
+description: "Garden 基于意图的方法不断拓展跨链交互的边界"
+---
+
+意图为链上交互提供了一种从根本上以用户为中心的方式。用户不再签署原始交易（一串规定具体操作、供机器读取的固定指令，就像在 Uniswap 或 Aave 等平台上那样），而是定义一个总体目标，即“意图”，并签署这个意图。意图以结构化消息的形式封装了期望的结果。对 Garden 而言，这意味着为兑换指定资产、链和金额等参数。
+
+<Frame>
+  <img src="/images/transaction-requirements.png" alt="意图与交易的要求对比" />
+</Frame>
+
+通过将细粒度的步骤抽象出来，意图让交互与期望目标更加贴合，使整个过程既直观又高效。这种方式正日益成为行业标准，例如 Across 采用基于意图的跨链方式，CoW Protocol 则将意图用于 DEX 交易。
+
+## 为什么选择意图？
+
+意图为链上交互带来了灵活性、安全性和效率：
+
+<CardGroup cols={2}>
+  <Card title="更强的流动性" icon="droplet">
+    意图让 solver 能够利用任何链上或链下流动性，包括私有订单流，与传统方式相比**提升了可用流动性**。
+  </Card>
+  <Card title="用户直接撮合" icon="handshake">
+    Solver 可以**在用户之间直接撮合**，无需完全依赖外部流动性池，从而有可能提供更优的价格。
+  </Card>
+  <Card title="MEV 防护" icon="shield">
+    意图在安全、封闭的环境中运行，**保护用户免受 MEV** 机器人和公共内存池漏洞的影响。
+  </Card>
+  <Card title="免 gas 费体验" icon="gas-pump">
+    用户无需持有 ETH 等原生 gas 代币，即可跨链执行订单，让跨链交互**无缝且免 gas 费**。
+  </Card>
+  <Card title="按成功付费" icon="medal">
+    用户只需**为成功的执行付费**，避免了手续费的浪费。
+  </Card>
+  <Card title="成本效率" icon="coins">
+    意图让 solver 能够批量处理多个订单，**降低执行成本**，并通过更优的报价将节省的成本让利给用户。
+  </Card>
+  <Card title="无需托管方" icon="lock-open">
+    意图**消除了对托管方的需求**（无论是中心化还是去中心化的托管方），降低了流动性风险，并增强了系统的无需信任性。
+  </Card>
+  <Card title="竞争性执行" icon="trophy">
+    多个 solver **竞争完成你的意图**，推动执行策略不断创新，并通过市场力量确保你获得**尽可能好的价格和速度**。
+  </Card>
+</CardGroup>

@@ -1,0 +1,50 @@
+---
+title: "跨链需求巧合（xCoW）"
+description: "Garden 撮合互补的意图，以优化跨链交易并减少对外部流动性的依赖"
+---
+
+Garden 的 xCoW 机制建立在需求巧合（CoW）这一概念之上。该概念由 CoW Swap 率先在单链环境中实践，后来被扩展到跨链领域，与 Across Protocol 类似。Garden 的独特之处在于，它能够集成 Bitcoin 等工作量证明（PoW）链，克服在这类网络上构建无需信任的互操作性所面临的挑战。通过无缝撮合互补的意图，Garden 减少了对外部流动性的依赖，优化了定价，并提升了跨多条链的交易效率。
+
+## xCoW 场景类型
+
+### 简单的用户间撮合
+
+<Frame>
+  <img src="/images/xcow-simple.png" alt="简单的 xCoW 用户间撮合" />
+</Frame>
+
+xCoW 直接撮合具有互补意图的用户。例如，如果一位用户想将 Bitcoin（BTC）兑换为 USDC，而另一位用户想将 USDC 兑换为 BTC，xCoW 会以点对点的方式将他们连接起来，省去中间方，同时改善定价并提升执行速度。
+
+### 交易环（超过 2 个参与者）
+
+<Frame>
+  <img src="/images/xcow-multi.png" alt="多参与者交易环" />
+</Frame>
+
+对于涉及三个或更多参与者的意图，xCoW 会构建交易环。这些相互关联的结算可以优化流动性的使用并降低成本，使原本可能依赖分散流动性池的交易，能够在多个用户和多条链之间高效执行。
+
+### 中间资产 CoW 事件
+
+<Frame>
+  <img src="/images/xcow-intermediate.png" alt="中间资产 CoW 事件" />
+</Frame>
+
+当交易需要经过中间资产时，xCoW 会撮合存在重叠的意图来改善执行效果。例如：
+
+- 一位用户将 Bitcoin（BTC）兑换为 Shiba Inu（SHIB）。
+- 另一位用户将 Bonk（BONK）兑换为 Bitcoin（BTC）。
+
+这两笔交易都以 USDC 作为中间资产：
+
+- BTC → **USDC** → SHIB
+- BONK → **USDC** → BTC
+
+在这种情况下，xCoW 会在用户之间直接撮合 BTC ↔ USDC 这一部分，从而将滑点降至最低，并改善两笔交易的定价。
+
+### 批量处理
+
+<Frame>
+  <img src="/images/xcow-batching.png" alt="交易批量处理" />
+</Frame>
+
+xCoW 支持批量处理，以降低 gas 费用。多笔交易会被合并，并作为单次操作提交到链上，从而降低每笔交易的 gas 费用。这一机制可确保大规模场景下的成本效率，尤其适用于高交易量的场景。

@@ -1,0 +1,13 @@
+---
+title: "Verificación de direcciones"
+description: "Resumen del proceso de supervisión de riesgos de Garden"
+---
+
+Garden es un protocolo sin permisos para intercambios peer-to-peer de Bitcoin y otros activos a través de una red de solvers. El protocolo no custodia fondos y cualquiera puede participar en él como solver.
+
+Garden integra las API de verificación de **TRM Labs, ZeroShadow, Bybit** y **Binance** para fomentar un uso responsable e impedir que entidades sancionadas interactúen con el protocolo.
+
+- Las direcciones de wallet que se conectan a la interfaz de Garden se verifican automáticamente a través de las API integradas.
+- Si se identifica que una dirección está sancionada, la función de intercambio se desactiva.
+- Cuando un intercambio incluye depósitos de Bitcoin, también se verifica la dirección que realiza el depósito. Si queda marcada, se indica a los solvers que no inicien el intercambio. Además, el usuario puede obtener el reembolso de su Bitcoin una vez que el intercambio vence.
+- Las órdenes enviadas mediante integraciones de terceros que usan el SDK o las API de Garden siguen el mismo proceso de verificación.

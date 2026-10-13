@@ -1,0 +1,160 @@
+---
+title: "如何将任意 EVM 资产兑换为 BTC"
+description: "使用 Garden Finance 将 Wrapped Bitcoin（WBTC）兑换回原生 Bitcoin 的分步指南"
+---
+
+将你的 Wrapped Bitcoin（WBTC）转换回原生 Bitcoin。这一过程会将你在 Ethereum 或 Arbitrum 网络上的 WBTC“解封装”，并以原生 Bitcoin 的形式返还给你。
+
+<Info>
+本指南介绍如何将 **Wrapped Bitcoin（WBTC）** 兑换为 **Bitcoin（BTC）**。整个过程通常在 30 秒内完成。
+</Info>
+
+## 准备工作
+
+<Steps>
+  <Step title="钱包">
+    - **EVM 钱包**：MetaMask、Coinbase Wallet 或其他持有 WBTC 的 EVM 兼容钱包
+    - **Bitcoin 钱包**：可选（你可以手动提供 Bitcoin 地址）
+  </Step>
+  <Step title="资产">
+    - Ethereum 或 Arbitrum 上的 WBTC 代币
+    - 少量 ETH 或 ARB，用于支付批准交易所需的 gas 费
+  </Step>
+</Steps>
+
+## 方法 1：连接 Bitcoin 钱包（推荐）
+
+此方法会自动处理用于接收解封装后 Bitcoin 的 Bitcoin 地址。
+
+<Steps>
+  <Step title="连接两个钱包">
+    1. 访问 [Garden Finance](https://app.garden.finance/zh)
+    2. 点击**连接钱包**，连接持有 WBTC 的 **EVM 钱包**
+    3. 点击**连接 Bitcoin 钱包**，连接你的 Bitcoin 钱包
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-1.png" alt="将钱包连接到 Garden" />
+    </Frame>
+  </Step>
+
+  <Step title="设置兑换">
+    1. 在**发送**区域，选择 **WBTC**，并选择你的 WBTC 所在的网络：
+       - **Ethereum**：如果你的 WBTC 在 Ethereum 主网上
+       - **Arbitrum**：如果你的 WBTC 在 Arbitrum 上
+    2. 在**接收**区域，选择 **Bitcoin（BTC）**
+    3. 输入你想转换为 BTC 的 WBTC 数量
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-2.png" alt="设置 WBTC 兑换 BTC" />
+    </Frame>
+  </Step>
+
+  <Step title="查看兑换详情">
+    1. 查看转换详情：
+       - **汇率**：当前 WBTC 兑 BTC 的汇率（应接近 1:1）
+       - **网络手续费**：EVM 交易的 gas 费
+       - **Garden 手续费**：本次兑换的协议手续费
+       - **接收地址**：你已连接的 Bitcoin 钱包地址
+    2. 准备就绪后，点击**兑换**
+  </Step>
+
+  <Step title="批准交易">
+    1. 你的 EVM 钱包会提示你批准 WBTC 转账
+    2. 确认交易并支付 gas 费
+    3. 等待交易在区块链上得到确认
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-3.png" alt="批准 WBTC 交易" />
+    </Frame>
+  </Step>
+
+  <Step title="接收 Bitcoin">
+    关注兑换进度。完成后，你将在已连接的 Bitcoin 钱包中收到原生 Bitcoin。
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-4.png" alt="WBTC 成功兑换为 BTC" />
+    </Frame>
+  </Step>
+</Steps>
+
+## 方法 2：手动填写 Bitcoin 地址
+
+如果你不想连接 Bitcoin 钱包，可以手动提供 Bitcoin 地址。
+
+<Steps>
+  <Step title="仅连接 EVM 钱包">
+    1. 访问 [Garden Finance](https://app.garden.finance/zh)
+    2. 连接持有 WBTC 的 **EVM 钱包**
+    3. 跳过连接 Bitcoin 钱包
+  </Step>
+
+  <Step title="提供 Bitcoin 地址">
+    1. 在**接收**区域，选择 **Bitcoin（BTC）**
+    2. 手动输入你的 **Bitcoin 接收地址**
+    3. **请仔细核对此地址**：填错的地址无法找回资金
+    4. 确保该地址属于你所控制的钱包
+  </Step>
+
+  <Step title="完成兑换">
+    1. 设置兑换数量并查看详情
+    2. 点击**兑换**，并在 EVM 钱包中批准 WBTC 交易
+    3. 等待交易确认和兑换完成
+  </Step>
+</Steps>
+
+## 安全保障
+
+<Info>
+**原子交换**：Garden 采用原子交换技术，这意味着交易要么完全完成，要么完全失败。你的 WBTC 永远不会在未收到 Bitcoin 的情况下丢失。
+</Info>
+
+<Warning>
+**地址核对**：请务必仔细核对你的 Bitcoin 接收地址。Garden 无法找回发送到错误地址的资金。
+</Warning>
+
+<Note>
+**网络确认**：Bitcoin 交易需要区块链确认。虽然 Garden 的处理速度很快，但根据网络状况，Bitcoin 的最终确认可能需要 10-60 分钟。
+</Note>
+
+## 手续费与成本
+
+| 手续费类型 | 说明 | 常见金额 |
+|----------|-------------|----------------|
+| **gas 费** | EVM 网络交易成本 | 因网络拥堵程度而异 |
+| **Garden 协议手续费** | 原子交换的服务手续费 | 较小比例 |
+| **网络价差** | 基于市场的价格差异 | 通常很小 |
+
+## 故障排除
+
+### 交易待处理
+- **检查 gas 费**：确保你设置了足够的 gas 价格
+- **网络拥堵**：等待网络状况好转
+- **钱包问题**：尝试断开并重新连接钱包
+
+### 收到的金额不正确
+- **滑点**：交易过程中市场价格可能发生变化
+- **手续费**：最终金额已扣除手续费
+- **联系支持**：如果金额看起来不正确，请加入 Discord 寻求帮助
+
+## 兑换完成后
+
+收到 Bitcoin 后：
+
+- **确认到账**：检查 Bitcoin 是否已到达你指定的钱包
+- **安全**：如果不打算频繁交易，可以考虑将 Bitcoin 转入冷钱包
+
+## 相关指南
+
+<CardGroup cols={2}>
+  <Card title="BTC 兑换 WBTC" icon="bitcoin" href="/zh/home/resources/guides/swap/btc-wbtc">
+    想再次封装 Bitcoin？了解如何将 BTC 转换回 WBTC
+  </Card>
+  <Card title="跨链 WBTC" icon="network-wired" href="/zh/home/resources/guides/swap/wbtc-wbtc">
+    在不同的区块链网络之间转移 WBTC
+  </Card>
+</CardGroup>
+
+## 需要帮助？
+
+- **问题咨询**：加入我们的 [Discord 社区](https://discord.gg/B7RczEFuJ5)
+- **技术支持**：前往 [Discord 获取支持](https://discord.gg/B7RczEFuJ5)

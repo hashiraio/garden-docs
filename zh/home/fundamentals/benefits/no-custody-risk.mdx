@@ -1,0 +1,51 @@
+---
+title: "无托管风险"
+description: "Garden 通过点对点原子交换消除托管风险"
+---
+
+许多跨链方案要求你将资产的控制权交给中间方，形式可能是多签钱包、验证者网络或受信任的中间方。这些风险早有大量记录：
+
+<CardGroup cols={2}>
+  <Card title="中心化托管" icon="building-columns">
+    6 亿美元的 Ronin Bridge 漏洞攻击等黑客事件，以及交易所倒闭事件（如 Mt. Gox、FTX），都凸显了将资金托付给第三方可能带来的灾难性风险。
+  </Card>
+  <Card title="去中心化托管" icon="network-wired">
+    即便是依赖多方计算（MPC）或流动性池的去中心化方案也无法幸免，例如 Nomad Bridge（被盗 1.9 亿美元）以及 Wormhole 的智能合约漏洞（被盗 3.25 亿美元）。
+  </Card>
+</CardGroup>
+
+<Warning>
+这些例子表明，共享托管模式（即便是那些自称“自托管”的模式）都可能让用户面临重大风险。
+</Warning>
+
+## Garden 如何消除托管风险
+
+Garden 的方法确保用户在整个跨链过程中始终完全掌控自己的资产，从而消除了这一类风险。Garden 或任何中间方在任何时候都不会获得托管权。以下说明在意图流程的每一步中，用户如何始终保有托管权：
+
+<Steps>
+  <Step title="创建意图">
+    用户意图经过加密签名后广播，不会转移托管权。在这一阶段，资金无需离开用户的钱包。
+  </Step>
+  
+  <Step title="Solver 拍卖">
+    这一阶段不存在托管风险，因为 solver 选择过程中不涉及资金。
+  </Step>
+  
+  <Step title="结算">
+    选定 solver 后，用户将资金锁定在源链上的哈希时间锁定合约（HTLC）中。HTLC 利用加密哈希和时间锁来执行有条件的资产转移。这可以确保：
+    
+    - 只有在满足兑换条件时，资金才能被合法所有者领取
+    - 如果时间锁到期仍未结算，资金将自动退还给用户
+  </Step>
+  
+  <Step title="赎回">
+    用户使用加密秘密值在目标链上赎回资金。这可以保证：
+    
+    - Solver 只有在履行其在目标链上的义务后，才能领取源链上的资金
+    - 同步执行可防止托管权在任何时候转移给中间方
+  </Step>
+</Steps>
+
+<Note>
+更多详情，请参阅[原子交换](/zh/home/fundamentals/core-concepts/atomic-swaps)和[意图流程](/zh/home/fundamentals/how-it-works/intent-flow)。
+</Note>

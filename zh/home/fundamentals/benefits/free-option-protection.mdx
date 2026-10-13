@@ -1,0 +1,32 @@
+---
+title: "免费期权保护"
+description: "Garden 通过其激励结构防范免费期权问题"
+---
+
+[原子交换](/zh/home/fundamentals/core-concepts/atomic-swaps)中的**免费期权问题**是指，一方利用市场行情，根据价格变动决定完成还是放弃兑换，从而使交易对手方处于不利地位。这些情况在[场景与保障措施](/zh/home/fundamentals/core-concepts/atomic-swaps#场景与保障措施)中有详细说明。
+
+Garden 通过内置机制应对这一挑战，确保参与者之间的公平和问责。
+
+## Solver 保障措施
+
+<CardGroup cols={1}>
+  <Card title="交易成功保障" icon="shield">
+    如果 solver 在用户存入资金后未能在其一方发起存入，该 solver 及其对应的质押者将被罚没。罚没的金额将补偿给用户。
+  </Card>
+  <Card title="问责机制" icon="users">
+    这一惩罚直接遏制了 solver 的不当行为，并确保质押者会对 solver 进行问责，因为质押者随时可以将投票转给其他 solver。
+  </Card>
+  <Card title="表现评分" icon="chart-line">
+    结算速度已被纳入 solver 评分[公式](/zh/home/fundamentals/core-concepts/auctions)，从而降低不可靠的 solver 在未来赢得意图的可能性。
+  </Card>
+</CardGroup>
+
+## 用户保障措施
+
+<Warning>
+如果 solver 在与用户匹配后未能发起资产存入，质押者和 solver 质押的部分 SEED（与交易规模成比例）将被罚没，并补偿给用户。
+</Warning>
+
+<Note>
+质押者从协议中赚取收益并参与协议运营的治理，因此他们有责任确保用户能够顺畅地使用 UI。
+</Note>

@@ -1,0 +1,130 @@
+---
+mode: "custom"
+---
+
+export function openSearch() {
+    document.getElementById("search-bar-entry").click();
+}
+
+<div className="w-full h-96 px-4 flex flex-col items-center justify-center bg-[#e4ebf2] dark:bg-white/5 dark:text-white">
+    <div className="w-full max-w-[400px] sm:max-w-[600px]">
+        <img
+            className="w-full hidden dark:block"
+            src="/logo/dark.svg"
+        />
+        <img
+            className="w-full block dark:hidden"
+            src="/logo/light.svg"
+        />
+    </div>
+    <div className="text-xl mt-2">
+        几分钟内完成 Bitcoin 跨链兑换。
+    </div>
+    <div className="flex items-center w-full max-w-[450px] border border-white/10 ring-1 ring-gray-400/20 rounded-lg mt-10 px-4 py-2" onClick={openSearch}>
+        有问题尽管问……
+    </div>
+    <a className="mt-6" href="/zh/home/about">
+        <div className="inline-flex bg-primary-dark text-white rounded-full px-4 py-1.5 hover:opacity-[0.9]">开始使用 →</div>
+    </a>
+</div>
+
+<div className="max-w-8xl mx-auto my-24 px-4 lg:px-8">
+    <div className="font-semibold text-2xl text-center text-gray-800 dark:text-white mb-2">
+        开始构建
+    </div>
+    <div className="text-lg text-center mb-4">
+        将 Garden 集成到你的应用所需的一切。
+    </div>
+
+    <CardGroup cols={3}>
+        <Card title="SDK 快速入门" icon="book-open" href="/zh/developers/sdk/react/quickstart">
+            30 分钟内为你的应用引入 Bitcoin。
+        </Card>
+        <Card title="API 参考" icon="code-simple" href="/zh/api-reference/quickstart">
+            深入了解我们的 API 端点。
+        </Card>
+        <Card title="示例" icon="grid-round" iconType="solid" href="/zh/developers/guides/cookbook">
+            Garden 集成的实操示例。
+        </Card>
+    </CardGroup>
+
+    <div className="font-semibold text-2xl text-center text-gray-800 dark:text-white mt-20 mb-4">
+        阅读合约
+    </div>
+    <div className="text-lg text-center mb-4">
+        深入了解驱动 Garden 的原子交换合约。
+    </div>
+
+    <div className="grid sm:grid-cols-7 gap-x-4 max-w-[800px] mx-auto">
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/bitcoin">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/btc.svg"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Bitcoin</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/litecoin">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/litecoin.svg"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Litecoin</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/evm">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/ethereum.svg"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">EVM</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/tron">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/tron.png"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Tron</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/solana">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/solana.png"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Solana</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/starknet">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/starknet.svg"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Starknet</div>
+            </a>
+        </a>
+        <a className="my-2 ring-2 ring-transparent rounded-2xl bg-white dark:bg-background-dark border border-gray-950/10 dark:border-white/10 cursor-pointer hover:!border-primary dark:hover:!border-primary-light">
+            <a className="flex flex-col items-center gap-2 px-6 py-4" href="/zh/contracts/sui">
+                <img
+                    className="h-6 w-6"
+                    src="/images/chains/sui.png"
+                    noZoom
+                />
+                <div className="font-semibold text-base text-gray-800 dark:text-white">Sui</div>
+            </a>
+        </a>
+    </div>
+</div>

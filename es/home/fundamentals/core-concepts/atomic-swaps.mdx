@@ -1,0 +1,44 @@
+---
+title: "Intercambios atómicos"
+description: "Garden usa intercambios atómicos para liquidaciones entre cadenas sin necesidad de confianza"
+---
+
+Los intercambios atómicos son intercambios peer-to-peer sin necesidad de confianza que se usan para la liquidación entre el usuario y el solver elegido para ejecutar su intención. El carácter atómico de estos intercambios se debe a que están diseñados para completarse por completo o no realizarse en absoluto: no existe ningún estado intermedio. Como resultado, ni los usuarios ni los solvers pierden el control de sus activos en ningún momento del proceso de intercambio. Los puentes tradicionales exigen que, durante el proceso de puente, cedas el control de tu activo a un custodio (WBTC), a una red intermediaria (Threshold, Thorchain) o a una multifirma (Avalanche bridge).
+
+Garden usa **Hash Time Locked Contracts** (HTLC) para implementar los intercambios atómicos. Como su nombre indica, se usan para imponer condiciones con límite de tiempo en la transferencia de activos entre dos partes. Exigen que el receptor de una transacción confirme la recepción del pago generando una prueba criptográfica dentro de un plazo determinado. Esta prueba es la respuesta a un desafío criptográfico integrado en el contrato, que normalmente implica una función hash. Si el receptor no aporta la prueba correcta dentro del plazo especificado, la transacción se revierte automáticamente y los activos vuelven al remitente. Esto se entiende mejor con un ejemplo y un diagrama de flujo.
+
+## ¿Cómo funcionan los intercambios atómicos?
+
+Tomemos nuestro caso: el usuario expresa una intención de intercambio. La casa de subastas selecciona un solver para ella. Tras ejecutar la intención, el solver y el usuario tienen que liquidar (intercambiar) sus activos.
+
+<Frame>
+  <img src="/images/atomic_swap.png" alt="Proceso de intercambio atómico" />
+</Frame>
+
+1. El usuario deposita el activo A en una bóveda transparente en la cadena A.
+2. El solver comprueba el importe depositado y, si coincide con el importe esperado, deposita el activo B en una bóveda transparente idéntica en la cadena B.
+3. El usuario (la interfaz del cliente) verifica el importe depositado por el solver y, si es correcto, abre la bóveda para recoger el activo B en la cadena B.
+4. El solver ya puede recoger el activo A de la bóveda del usuario en la cadena A; el intercambio se ha completado.
+
+Esto es lo que llamamos un flujo ideal, en el que todo funciona según lo previsto. En la siguiente sección se explican los escenarios de fallo de este sistema y las salvaguardas de Garden frente a ellos.
+
+## Escenarios y salvaguardas
+
+### 1. Se bloquean los activos A y B, pero no se reclama el activo B
+
+<Frame>
+  <img src="/images/fail_s1.png" alt="Escenario de fallo 1" />
+</Frame>
+
+- **Penalización:** a los stakers se les recorta el 1% del valor de la intención.
+- **Resolución para el solver:** reembolso del activo B después de 24 horas, más el SEED recortado como compensación.
+- **Resolución para el usuario:** reembolso del activo A después de 48 horas.
+
+### 2. No se bloquea el activo B
+
+<Frame>
+  <img src="/images/fail_s2.png" alt="Escenario de fallo 2" />
+</Frame>
+
+- **Penalización:** al solver y a los stakers se les recorta el 0,5% del valor de la intención.
+- **Resolución para el usuario:** reembolso del activo A después de 48 horas, más el SEED recortado como compensación. 

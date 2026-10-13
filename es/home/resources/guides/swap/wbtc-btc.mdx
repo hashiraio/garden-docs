@@ -1,0 +1,160 @@
+---
+title: "Cómo intercambiar cualquier activo EVM por BTC"
+description: "Guía paso a paso para volver a intercambiar Wrapped Bitcoin (WBTC) por Bitcoin nativo con Garden Finance"
+---
+
+Vuelve a convertir tu Wrapped Bitcoin (WBTC) en Bitcoin nativo. Este proceso "desenvuelve" tus WBTC de las redes de Ethereum o Arbitrum y te los devuelve como Bitcoin nativo.
+
+<Info>
+Esta guía explica cómo intercambiar **Wrapped Bitcoin (WBTC)** por **Bitcoin (BTC)**. El proceso suele completarse en menos de 30 segundos.
+</Info>
+
+## Qué necesitas
+
+<Steps>
+  <Step title="Wallets">
+    - **Wallet EVM**: MetaMask, Coinbase Wallet u otra wallet compatible con EVM que contenga WBTC
+    - **Wallet de Bitcoin**: opcional (puedes indicar una dirección de Bitcoin manualmente)
+  </Step>
+  <Step title="Activos">
+    - Tokens WBTC en Ethereum o Arbitrum
+    - Una pequeña cantidad de ETH o ARB para pagar las comisiones de gas de la aprobación de la transacción
+  </Step>
+</Steps>
+
+## Método 1: con la wallet de Bitcoin conectada (recomendado)
+
+Este método gestiona automáticamente la dirección de Bitcoin en la que recibirás tu Bitcoin desenvuelto.
+
+<Steps>
+  <Step title="Conecta ambas wallets">
+    1. Visita [Garden Finance](https://app.garden.finance/es)
+    2. Haz clic en **Conectar** y conecta tu **wallet EVM** que contiene WBTC
+    3. Haz clic en **Conectar la wallet de Bitcoin** y conecta tu wallet de Bitcoin
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-1.png" alt="Conectar las wallets a Garden" />
+    </Frame>
+  </Step>
+
+  <Step title="Configura tu intercambio">
+    1. En la sección **Enviar**, selecciona **WBTC** y elige la red en la que están tus WBTC:
+       - **Ethereum**: si tus WBTC están en la mainnet de Ethereum
+       - **Arbitrum**: si tus WBTC están en Arbitrum
+    2. En la sección **Recibir**, selecciona **Bitcoin (BTC)**
+    3. Introduce la cantidad de WBTC que quieres convertir en BTC
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-2.png" alt="Configurar el intercambio de WBTC por BTC" />
+    </Frame>
+  </Step>
+
+  <Step title="Revisa los detalles del intercambio">
+    1. Revisa los detalles de la conversión:
+       - **Tasa de cambio**: tasa actual de WBTC a BTC (debería ser cercana a 1:1)
+       - **Comisiones de red**: comisiones de gas de la transacción EVM
+       - **Comisiones de Garden**: comisiones del protocolo por el intercambio
+       - **Dirección de recepción**: la dirección de tu wallet de Bitcoin conectada
+    2. Haz clic en **Intercambiar** cuando quieras continuar
+  </Step>
+
+  <Step title="Aprueba la transacción">
+    1. Tu wallet EVM te pedirá que apruebes la transferencia de WBTC
+    2. Confirma la transacción y paga las comisiones de gas
+    3. Espera a que la transacción se confirme en la blockchain
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-3.png" alt="Aprobar la transacción de WBTC" />
+    </Frame>
+  </Step>
+
+  <Step title="Recibe tu Bitcoin">
+    Sigue el progreso del intercambio. Cuando se complete, recibirás Bitcoin nativo en tu wallet de Bitcoin conectada.
+
+    <Frame>
+      <img src="/images/swap/any-to-btc-4.png" alt="Intercambio de WBTC por BTC completado" />
+    </Frame>
+  </Step>
+</Steps>
+
+## Método 2: dirección de Bitcoin manual
+
+Si prefieres no conectar tu wallet de Bitcoin, puedes indicar una dirección de Bitcoin manualmente.
+
+<Steps>
+  <Step title="Conecta solo la wallet EVM">
+    1. Visita [Garden Finance](https://app.garden.finance/es)
+    2. Conecta tu **wallet EVM** que contiene WBTC
+    3. Omite la conexión de una wallet de Bitcoin
+  </Step>
+
+  <Step title="Indica la dirección de Bitcoin">
+    1. En la sección **Recibir**, selecciona **Bitcoin (BTC)**
+    2. Introduce manualmente tu **dirección de recepción** de Bitcoin
+    3. **Comprueba bien esta dirección**: los fondos enviados a direcciones incorrectas no se pueden recuperar
+    4. Asegúrate de que la dirección pertenece a una wallet que controlas
+  </Step>
+
+  <Step title="Completa el intercambio">
+    1. Configura la cantidad del intercambio y revisa los detalles
+    2. Haz clic en **Intercambiar** y aprueba la transacción de WBTC en tu wallet EVM
+    3. Espera a que se confirme la transacción y se complete el intercambio
+  </Step>
+</Steps>
+
+## Seguridad y protección
+
+<Info>
+**Intercambios atómicos**: Garden usa tecnología de intercambio atómico, lo que significa que la transacción se completa en su totalidad o falla en su totalidad. Tus WBTC nunca corren el riesgo de perderse sin que recibas Bitcoin.
+</Info>
+
+<Warning>
+**Verificación de la dirección**: comprueba siempre tu dirección de recepción de Bitcoin. Garden no puede recuperar fondos enviados a direcciones incorrectas.
+</Warning>
+
+<Note>
+**Confirmación de la red**: las transacciones de Bitcoin requieren confirmaciones en la blockchain. Aunque el proceso de Garden es rápido, la confirmación final de Bitcoin puede tardar entre 10 y 60 minutos según el estado de la red.
+</Note>
+
+## Comisiones y costos
+
+| Tipo de comisión | Descripción | Importe habitual |
+|----------|-------------|----------------|
+| **Comisiones de gas** | Costos de transacción de la red EVM | Varía según la congestión de la red |
+| **Comisión del protocolo Garden** | Comisión por el servicio de intercambio atómico | Un pequeño porcentaje |
+| **Diferencial de la red** | Diferencia de precio según el mercado | Normalmente mínimo |
+
+## Solución de problemas
+
+### Transacción pendiente
+- **Revisa las comisiones de gas**: asegúrate de haber configurado un precio de gas adecuado
+- **Congestión de la red**: espera a que mejore el estado de la red
+- **Problemas con la wallet**: prueba a desconectar y volver a conectar las wallets
+
+### Cantidad recibida incorrecta
+- **Deslizamiento**: los precios de mercado pueden cambiar durante la transacción
+- **Comisiones**: la cantidad final refleja las comisiones descontadas
+- **Pide ayuda al soporte**: únete a Discord para recibir asistencia si las cantidades no parecen correctas
+
+## Después de tu intercambio
+
+Cuando recibas tu Bitcoin:
+
+- **Verifica la recepción**: comprueba que el Bitcoin ha llegado a la wallet que indicaste
+- **Seguridad**: considera mover tu Bitcoin a almacenamiento en frío si no lo estás usando activamente para operar
+
+## Guías relacionadas
+
+<CardGroup cols={2}>
+  <Card title="BTC a WBTC" icon="bitcoin" href="/es/home/resources/guides/swap/btc-wbtc">
+    ¿Quieres volver a envolver Bitcoin? Aprende a convertir BTC de nuevo en WBTC
+  </Card>
+  <Card title="WBTC entre cadenas" icon="network-wired" href="/es/home/resources/guides/swap/wbtc-wbtc">
+    Mueve WBTC entre distintas redes blockchain
+  </Card>
+</CardGroup>
+
+## ¿Necesitas ayuda?
+
+- **Preguntas**: únete a nuestra [comunidad de Discord](https://discord.gg/B7RczEFuJ5)
+- **Soporte técnico**: escribe al [soporte en Discord](https://discord.gg/B7RczEFuJ5)

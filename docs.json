@@ -37,216 +37,674 @@
         }
       ]
     },
-    "tabs": [
+    "languages": [
       {
-        "tab": "Home",
-        "pages": [
-          "index"
-        ]
-      },
-      {
-        "tab": "Get Started",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "Fundamentals",
+            "tab": "Home",
             "pages": [
-              "home/about",
+              "index"
+            ]
+          },
+          {
+            "tab": "Get Started",
+            "groups": [
+              {
+                "group": "Fundamentals",
+                "pages": [
+                  "home/about",
+                  {
+                    "group": "Core Concepts",
+                    "pages": [
+                      "home/fundamentals/core-concepts/intents",
+                      "home/fundamentals/core-concepts/atomic-swaps",
+                      "home/fundamentals/core-concepts/solvers",
+                      "home/fundamentals/core-concepts/stakers",
+                      "home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "How It Works",
+                    "pages": [
+                      "home/fundamentals/how-it-works/intent-flow",
+                      "home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Benefits",
+                    "pages": [
+                      "home/fundamentals/benefits/overview",
+                      "home/fundamentals/benefits/no-custody-risk",
+                      "home/fundamentals/benefits/broad-chain-coverage",
+                      "home/fundamentals/benefits/better-prices",
+                      "home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Governance",
+                "pages": [
+                  "home/governance",
+                  "home/governance/governance-process",
+                  "home/governance/tokenomics",
+                  "home/governance/gardener-pass",
+                  "home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Resources",
+                "pages": [
+                  {
+                    "group": "Guides",
+                    "pages": [
+                      "home/resources/guides/swap/btc-wbtc",
+                      "home/resources/guides/swap/wbtc-btc",
+                      "home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Compliance",
+                "pages": [
+                  "home/compliance/address_screening"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Developers",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "developers/overview",
+                  "developers/supported-chains",
+                  "developers/supported-routes",
+                  "developers/affiliate-fees"
+                ]
+              },
+              {
+                "group": "API",
+                "pages": [
+                  "developers/api/overview",
+                  "developers/api/1click"
+                ]
+              },
+              {
+                "group": "SDK",
+                "pages": [
+                  "developers/sdk/overview",
+                  {
+                    "group": "React",
+                    "pages": [
+                      "developers/sdk/react/setup",
+                      "developers/sdk/react/quickstart"
+                    ]
+                  },
+                  {
+                    "group": "NodeJS",
+                    "pages": [
+                      "developers/sdk/nodejs/setup",
+                      "developers/sdk/nodejs/quickstart"
+                    ]
+                  }
+                ]
+              },
               {
                 "group": "Core Concepts",
                 "pages": [
-                  "home/fundamentals/core-concepts/intents",
-                  "home/fundamentals/core-concepts/atomic-swaps",
-                  "home/fundamentals/core-concepts/solvers",
-                  "home/fundamentals/core-concepts/stakers",
-                  "home/fundamentals/core-concepts/auctions"
+                  "developers/core/order-lifecycle",
+                  "developers/core/sessions"
                 ]
               },
               {
-                "group": "How It Works",
+                "group": "Developer Guides",
                 "pages": [
-                  "home/fundamentals/how-it-works/intent-flow",
-                  "home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                  "developers/guides/cookbook",
+                  "developers/guides/sdk"
                 ]
               },
               {
-                "group": "Benefits",
+                "group": "Testing",
                 "pages": [
-                  "home/fundamentals/benefits/overview",
-                  "home/fundamentals/benefits/no-custody-risk",
-                  "home/fundamentals/benefits/broad-chain-coverage",
-                  "home/fundamentals/benefits/better-prices",
-                  "home/fundamentals/benefits/free-option-protection"
+                  "developers/localnet"
                 ]
               }
             ]
           },
           {
-            "group": "Governance",
-            "pages": [
-              "home/governance",
-              "home/governance/governance-process",
-              "home/governance/tokenomics",
-              "home/governance/gardener-pass",
-              "home/governance/snapshot"
-            ]
-          },
-          {
-            "group": "Resources",
-            "pages": [
+            "tab": "Contracts",
+            "groups": [
               {
-                "group": "Guides",
+                "group": "Get Started",
                 "pages": [
-                  "home/resources/guides/swap/btc-wbtc",
-                  "home/resources/guides/swap/wbtc-btc",
-                  "home/resources/guides/swap/wbtc-wbtc"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Compliance",
-            "pages": [
-              "home/compliance/address_screening"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Developers",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "developers/overview",
-              "developers/supported-chains",
-              "developers/supported-routes",
-              "developers/affiliate-fees"
-            ]
-          },
-          {
-            "group": "API",
-            "pages": [
-              "developers/api/overview",
-              "developers/api/1click"
-            ]
-          },
-          {
-            "group": "SDK",
-            "pages": [
-              "developers/sdk/overview",
-              {
-                "group": "React",
-                "pages": [
-                  "developers/sdk/react/setup",
-                  "developers/sdk/react/quickstart"
+                  "contracts/overview"
                 ]
               },
               {
-                "group": "NodeJS",
+                "group": "Contracts",
                 "pages": [
-                  "developers/sdk/nodejs/setup",
-                  "developers/sdk/nodejs/quickstart"
+                  "contracts/bitcoin",
+                  "contracts/litecoin",
+                  "contracts/evm",
+                  "contracts/hypercore",
+                  "contracts/tron",
+                  "contracts/solana",
+                  "contracts/starknet",
+                  "contracts/sui"
                 ]
               }
             ]
           },
           {
-            "group": "Core Concepts",
-            "pages": [
-              "developers/core/order-lifecycle",
-              "developers/core/sessions"
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "api-reference/quickstart"
+                ]
+              },
+              {
+                "group": "Orders",
+                "pages": [
+                  "api-reference/endpoint/get-quote",
+                  "api-reference/endpoint/orders/get-order-by-id",
+                  "api-reference/endpoint/orders/get-orders",
+                  "api-reference/endpoint/orders/create-order",
+                  "api-reference/endpoint/orders/get-instant-refund-hash",
+                  "api-reference/endpoint/orders/patch"
+                ]
+              },
+              {
+                "group": "Assets & Routes",
+                "pages": [
+                  "api-reference/endpoint/blockchain/get-chains",
+                  "api-reference/endpoint/blockchain/get-assets",
+                  "api-reference/endpoint/blockchain/get-policy",
+                  "api-reference/endpoint/blockchain/get-liquidity",
+                  "api-reference/endpoint/blockchain/get-schema",
+                  "api-reference/endpoint/blockchain/get-schemas"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "pages": [
+                  "api-reference/endpoint/get-health",
+                  "api-reference/endpoint/get-volume",
+                  "api-reference/endpoint/get-fees"
+                ]
+              },
+              {
+                "group": "Affiliate",
+                "pages": [
+                  "api-reference/endpoint/affiliate/get-earnings"
+                ]
+              }
             ]
           },
           {
-            "group": "Developer Guides",
+            "tab": "Changelog",
             "pages": [
-              "developers/guides/cookbook",
-              "developers/guides/sdk"
-            ]
-          },
-          {
-            "group": "Testing",
-            "pages": [
-              "developers/localnet"
+              "changelog"
             ]
           }
         ]
       },
       {
-        "tab": "Contracts",
-        "groups": [
+        "language": "es",
+        "navbar": {
+          "links": [
+            {
+              "label": "Soporte",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Abrir app",
+            "href": "https://app.garden.finance/es"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "Aplicación",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/es/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/es/stake"
+                }
+              ]
+            },
+            {
+              "header": "Recursos",
+              "items": [
+                {
+                  "label": "Blog",
+                  "href": "https://garden.finance/es/blog"
+                },
+                {
+                  "label": "Docs",
+                  "href": "https://garden.finance/docs/es"
+                },
+                {
+                  "label": "Auditorías",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "Kit de prensa",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
           {
-            "group": "Get Started",
+            "tab": "Inicio",
             "pages": [
-              "contracts/overview"
+              "es/index"
             ]
           },
           {
-            "group": "Contracts",
-            "pages": [
-              "contracts/bitcoin",
-              "contracts/litecoin",
-              "contracts/evm",
-              "contracts/hypercore",
-              "contracts/tron",
-              "contracts/solana",
-              "contracts/starknet",
-              "contracts/sui"
+            "tab": "Primeros pasos",
+            "groups": [
+              {
+                "group": "Fundamentos",
+                "pages": [
+                  "es/home/about",
+                  {
+                    "group": "Conceptos clave",
+                    "pages": [
+                      "es/home/fundamentals/core-concepts/intents",
+                      "es/home/fundamentals/core-concepts/atomic-swaps",
+                      "es/home/fundamentals/core-concepts/solvers",
+                      "es/home/fundamentals/core-concepts/stakers",
+                      "es/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "Cómo funciona",
+                    "pages": [
+                      "es/home/fundamentals/how-it-works/intent-flow",
+                      "es/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Ventajas",
+                    "pages": [
+                      "es/home/fundamentals/benefits/overview",
+                      "es/home/fundamentals/benefits/no-custody-risk",
+                      "es/home/fundamentals/benefits/broad-chain-coverage",
+                      "es/home/fundamentals/benefits/better-prices",
+                      "es/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Gobernanza",
+                "pages": [
+                  "es/home/governance",
+                  "es/home/governance/governance-process",
+                  "es/home/governance/tokenomics",
+                  "es/home/governance/gardener-pass",
+                  "es/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Recursos",
+                "pages": [
+                  {
+                    "group": "Guías",
+                    "pages": [
+                      "es/home/resources/guides/swap/btc-wbtc",
+                      "es/home/resources/guides/swap/wbtc-btc",
+                      "es/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Cumplimiento",
+                "pages": [
+                  "es/home/compliance/address_screening"
+                ]
+              }
             ]
+          },
+          {
+            "tab": "Desarrolladores",
+            "href": "https://garden.finance/docs/developers/overview"
+          },
+          {
+            "tab": "Contratos",
+            "href": "https://garden.finance/docs/contracts/overview"
+          },
+          {
+            "tab": "Referencia de la API",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "Registro de cambios",
+            "href": "https://garden.finance/docs/changelog"
           }
         ]
       },
       {
-        "tab": "API Reference",
-        "groups": [
+        "language": "ru",
+        "navbar": {
+          "links": [
+            {
+              "label": "Поддержка",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Запустить приложение",
+            "href": "https://app.garden.finance/ru"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "Приложение",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/ru/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/ru/stake"
+                }
+              ]
+            },
+            {
+              "header": "Ресурсы",
+              "items": [
+                {
+                  "label": "Блог",
+                  "href": "https://garden.finance/ru/blog"
+                },
+                {
+                  "label": "Документация",
+                  "href": "https://garden.finance/docs/ru"
+                },
+                {
+                  "label": "Аудиты",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "Медиакит",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
           {
-            "group": "Get Started",
+            "tab": "Главная",
             "pages": [
-              "api-reference/quickstart"
+              "ru/index"
             ]
           },
           {
-            "group": "Orders",
-            "pages": [
-              "api-reference/endpoint/get-quote",
-              "api-reference/endpoint/orders/get-order-by-id",
-              "api-reference/endpoint/orders/get-orders",
-              "api-reference/endpoint/orders/create-order",
-              "api-reference/endpoint/orders/get-instant-refund-hash",
-              "api-reference/endpoint/orders/patch"
+            "tab": "Начало работы",
+            "groups": [
+              {
+                "group": "Основы",
+                "pages": [
+                  "ru/home/about",
+                  {
+                    "group": "Ключевые понятия",
+                    "pages": [
+                      "ru/home/fundamentals/core-concepts/intents",
+                      "ru/home/fundamentals/core-concepts/atomic-swaps",
+                      "ru/home/fundamentals/core-concepts/solvers",
+                      "ru/home/fundamentals/core-concepts/stakers",
+                      "ru/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "Как это работает",
+                    "pages": [
+                      "ru/home/fundamentals/how-it-works/intent-flow",
+                      "ru/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "Преимущества",
+                    "pages": [
+                      "ru/home/fundamentals/benefits/overview",
+                      "ru/home/fundamentals/benefits/no-custody-risk",
+                      "ru/home/fundamentals/benefits/broad-chain-coverage",
+                      "ru/home/fundamentals/benefits/better-prices",
+                      "ru/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Управление",
+                "pages": [
+                  "ru/home/governance",
+                  "ru/home/governance/governance-process",
+                  "ru/home/governance/tokenomics",
+                  "ru/home/governance/gardener-pass",
+                  "ru/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "Ресурсы",
+                "pages": [
+                  {
+                    "group": "Руководства",
+                    "pages": [
+                      "ru/home/resources/guides/swap/btc-wbtc",
+                      "ru/home/resources/guides/swap/wbtc-btc",
+                      "ru/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Соответствие требованиям",
+                "pages": [
+                  "ru/home/compliance/address_screening"
+                ]
+              }
             ]
           },
           {
-            "group": "Assets & Routes",
-            "pages": [
-              "api-reference/endpoint/blockchain/get-chains",
-              "api-reference/endpoint/blockchain/get-assets",
-              "api-reference/endpoint/blockchain/get-policy",
-              "api-reference/endpoint/blockchain/get-liquidity",
-              "api-reference/endpoint/blockchain/get-schema",
-              "api-reference/endpoint/blockchain/get-schemas"
-            ]
+            "tab": "Разработчики",
+            "href": "https://garden.finance/docs/developers/overview"
           },
           {
-            "group": "Monitoring",
-            "pages": [
-              "api-reference/endpoint/get-health",
-              "api-reference/endpoint/get-volume",
-              "api-reference/endpoint/get-fees"
-            ]
+            "tab": "Контракты",
+            "href": "https://garden.finance/docs/contracts/overview"
           },
           {
-            "group": "Affiliate",
-            "pages": [
-              "api-reference/endpoint/affiliate/get-earnings"
-            ]
+            "tab": "Справочник API",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "Журнал изменений",
+            "href": "https://garden.finance/docs/changelog"
           }
         ]
       },
       {
-        "tab": "Changelog",
-        "pages": [
-          "changelog"
+        "language": "zh",
+        "navbar": {
+          "links": [
+            {
+              "label": "支持",
+              "href": "https://discord.gg/B7RczEFuJ5"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "启动应用",
+            "href": "https://app.garden.finance/zh"
+          }
+        },
+        "footer": {
+          "socials": {
+            "x": "https://x.com/gardenfi",
+            "github": "https://github.com/gardenfi",
+            "discord": "https://discord.gg/B7RczEFuJ5"
+          },
+          "links": [
+            {
+              "header": "应用",
+              "items": [
+                {
+                  "label": "Swap",
+                  "href": "https://app.garden.finance/zh/swap"
+                },
+                {
+                  "label": "Stake",
+                  "href": "https://app.garden.finance/zh/stake"
+                }
+              ]
+            },
+            {
+              "header": "资源",
+              "items": [
+                {
+                  "label": "博客",
+                  "href": "https://garden.finance/zh/blog"
+                },
+                {
+                  "label": "文档",
+                  "href": "https://garden.finance/docs/zh"
+                },
+                {
+                  "label": "审计",
+                  "href": "https://github.com/catalogfi/audits"
+                },
+                {
+                  "label": "媒体资料包",
+                  "href": "https://drive.google.com/drive/folders/1ZRAxs6jwhO6vLkadb9XOG7XqOQ4XLr0t?usp=sharing",
+                  "external": true
+                }
+              ]
+            }
+          ]
+        },
+        "tabs": [
+          {
+            "tab": "首页",
+            "pages": [
+              "zh/index"
+            ]
+          },
+          {
+            "tab": "入门",
+            "groups": [
+              {
+                "group": "基础知识",
+                "pages": [
+                  "zh/home/about",
+                  {
+                    "group": "核心概念",
+                    "pages": [
+                      "zh/home/fundamentals/core-concepts/intents",
+                      "zh/home/fundamentals/core-concepts/atomic-swaps",
+                      "zh/home/fundamentals/core-concepts/solvers",
+                      "zh/home/fundamentals/core-concepts/stakers",
+                      "zh/home/fundamentals/core-concepts/auctions"
+                    ]
+                  },
+                  {
+                    "group": "工作原理",
+                    "pages": [
+                      "zh/home/fundamentals/how-it-works/intent-flow",
+                      "zh/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow"
+                    ]
+                  },
+                  {
+                    "group": "优势",
+                    "pages": [
+                      "zh/home/fundamentals/benefits/overview",
+                      "zh/home/fundamentals/benefits/no-custody-risk",
+                      "zh/home/fundamentals/benefits/broad-chain-coverage",
+                      "zh/home/fundamentals/benefits/better-prices",
+                      "zh/home/fundamentals/benefits/free-option-protection"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "治理",
+                "pages": [
+                  "zh/home/governance",
+                  "zh/home/governance/governance-process",
+                  "zh/home/governance/tokenomics",
+                  "zh/home/governance/gardener-pass",
+                  "zh/home/governance/snapshot"
+                ]
+              },
+              {
+                "group": "资源",
+                "pages": [
+                  {
+                    "group": "指南",
+                    "pages": [
+                      "zh/home/resources/guides/swap/btc-wbtc",
+                      "zh/home/resources/guides/swap/wbtc-btc",
+                      "zh/home/resources/guides/swap/wbtc-wbtc"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "合规",
+                "pages": [
+                  "zh/home/compliance/address_screening"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "开发者",
+            "href": "https://garden.finance/docs/developers/overview"
+          },
+          {
+            "tab": "合约",
+            "href": "https://garden.finance/docs/contracts/overview"
+          },
+          {
+            "tab": "API 参考",
+            "href": "https://garden.finance/docs/api-reference/quickstart"
+          },
+          {
+            "tab": "更新日志",
+            "href": "https://garden.finance/docs/changelog"
+          }
         ]
       }
     ]
@@ -317,5 +775,67 @@
       "canonical": "https://garden.finance/docs"
     }
   },
-  "description": "API and SDK for integrating native Bitcoin cross-chain swaps in dapps, wallets, and exchanges. Quickstarts, API reference, and contract docs inside."
+  "description": "API and SDK for integrating native Bitcoin cross-chain swaps in dapps, wallets, and exchanges. Quickstarts, API reference, and contract docs inside.",
+  "redirects": [
+    {
+      "source": "/es/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/es/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/es/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/ru/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/ru/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/api-reference/:slug*",
+      "destination": "/api-reference/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/changelog",
+      "destination": "/changelog",
+      "permanent": false
+    },
+    {
+      "source": "/zh/contracts/:slug*",
+      "destination": "/contracts/:slug*",
+      "permanent": false
+    },
+    {
+      "source": "/zh/developers/:slug*",
+      "destination": "/developers/:slug*",
+      "permanent": false
+    }
+  ]
 }

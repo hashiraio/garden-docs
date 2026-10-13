@@ -1,0 +1,13 @@
+---
+title: "地址筛查"
+description: "Garden 风险监控流程概览"
+---
+
+Garden 是一个无需许可的协议，通过 solver 网络实现 Bitcoin 及其他资产的点对点兑换。该协议为非托管协议，任何人都可以作为 solver 参与。
+
+Garden 集成了 **TRM Labs、ZeroShadow、Bybit** 和 **Binance** 的筛查 API，以支持合规使用，并防止受制裁实体与协议交互。
+
+- 连接到 Garden 界面的钱包地址会自动通过已集成的 API 进行筛查。
+- 如果某个地址被识别为受制裁地址，兑换功能将被禁用。
+- 当兑换涉及 Bitcoin 充值时，发起充值的地址同样会被筛查。如果被标记，系统会通知 solver 不要发起该兑换，用户可在兑换过期后退款，取回自己的 Bitcoin。
+- 通过 Garden SDK 或 API 的第三方集成提交的订单，也遵循相同的筛查流程。

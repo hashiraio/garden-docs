@@ -1,0 +1,45 @@
+---
+title: "Solver"
+description: "了解 solver 如何作为 Garden 协议中的做市商高效执行用户意图"
+---
+
+Solver 是 Garden 协议的做市商，负责确保用户[意图](./intents)得到高效、安全的执行。通过利用多样化的流动性来源（链上、链下以及私有订单流），solver 有动力为用户优化每一笔交易，提供有竞争力的报价。
+
+Solver 解决了去中心化系统中的关键挑战。它们让协议能够利用现有的 DeFi 流动性，而不是通过原生流动性池将其割裂，从而提升了流动性的可及性。对用户而言，solver 带来了更优定价、抗 MEV 以及更高的交易最终确认概率等[好处](./intents#为什么选择意图？)，让系统更高效、更易用。
+
+## Solver 如何运作？
+
+<Steps>
+  <Step title="接收意图">
+    Solver 通过[订单簿](./auctions)接收用户意图，其中详细说明了资产、链和金额等期望结果。
+  </Step>
+  <Step title="评估流动性">
+    Solver 评估可用的流动性来源，并找出执行该意图最高效的路径。
+  </Step>
+  <Step title="竞争最佳报价">
+    每个 solver 都将自己的最佳报价提交回订单簿，由订单簿选出最具竞争力的选项，为用户争取最优价格。
+  </Step>
+  <Step title="执行意图">
+    一旦被选中，solver 便利用自身的工具和流动性来完成用户的意图。
+  </Step>
+</Steps>
+
+## 如何成为 solver？
+
+要成为 solver，你需要满足以下条件：
+
+<CardGroup cols={1}>
+  <Card icon="coins" title="质押要求">
+    Solver 必须质押 **210,000 枚 SEED** 作为抵押。这笔质押使 solver 与网络的目标保持一致，并可防范不诚实或低效的行为。
+  </Card>
+  <Card icon="server" title="技术基础设施">
+    Solver 应具备运行套利机器人、管理流动性以及保持 24/7 全天候运行的能力，以满足意图执行的需求。
+  </Card>
+  <Card icon="arrows-rotate" title="流动性管理">
+    充足的流动性和资产再平衡工具是高效执行意图的关键。
+  </Card>
+</CardGroup>
+
+<Note>
+  请填写此[表单](https://docs.google.com/forms/d/e/1FAIpQLSfZcxgttWipkOwygbkBrjU0H0nFD_EUNpH9eu0c-lKPEpbPHA/viewform)申请成为 solver，我们的团队会尽快与你联系。
+</Note>

@@ -1,0 +1,32 @@
+---
+title: "Protección contra la opción gratuita"
+description: "Garden protege contra los problemas de la opción gratuita mediante su estructura de incentivos"
+---
+
+El **problema de la opción gratuita** en los [intercambios atómicos](/es/home/fundamentals/core-concepts/atomic-swaps) surge cuando una de las partes aprovecha las condiciones del mercado y decide completar o abandonar un intercambio en función de los movimientos del precio, lo que deja a la contraparte en desventaja. Estos casos se tratan en [escenarios y salvaguardas](/es/home/fundamentals/core-concepts/atomic-swaps#escenarios-y-salvaguardas).
+
+Garden aborda este desafío con mecanismos integrados que garantizan la equidad y la rendición de cuentas de los participantes.
+
+## Salvaguardas para solvers
+
+<CardGroup cols={1}>
+  <Card title="Seguro de éxito de la operación" icon="shield">
+    El solver y sus stakers sufren un recorte si el solver no inicia el depósito de su lado después del depósito del usuario. El importe recortado se entrega al usuario.
+  </Card>
+  <Card title="Mecanismo de rendición de cuentas" icon="users">
+    Esta penalización desincentiva directamente el mal uso por parte de los solvers y garantiza que los stakers les exijan responsabilidades, ya que siempre pueden cambiar su voto a otro solver.
+  </Card>
+  <Card title="Puntuación de rendimiento" icon="chart-line">
+    La velocidad de liquidación ya se tiene en cuenta en la [fórmula](/es/home/fundamentals/core-concepts/auctions) de la puntuación del solver, lo que reduce la capacidad de los solvers poco fiables de ganar futuras intenciones.
+  </Card>
+</CardGroup>
+
+## Salvaguardas para usuarios
+
+<Warning>
+Si un solver no inicia el depósito de su activo después de haber sido emparejado con el usuario, se recorta una parte del stake de SEED de los stakers y del solver (proporcional al tamaño de la operación) y se entrega al usuario.
+</Warning>
+
+<Note>
+Los stakers obtienen rendimiento del protocolo y gobiernan sus operaciones, por lo que son responsables de garantizar que los usuarios interactúen con la interfaz de forma eficaz.
+</Note>

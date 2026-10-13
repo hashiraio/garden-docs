@@ -1,0 +1,39 @@
+---
+title: "Snapshot"
+description: "Garden 使用 Snapshot 实现免 gas 费的治理投票"
+---
+
+<CardGroup cols={2}>
+  <Card title="投票类型" icon="check">
+    单选
+  </Card>
+  <Card title="法定票数" icon="users">
+    6,000 票
+  </Card>
+  <Card title="投票期" icon="clock">
+    7 天
+  </Card>
+  <Card title="Snapshot" icon="globe" href="https://snapshot.box/#/s:gardenfinance.eth">
+    gardenfinance.eth
+  </Card>
+</CardGroup>
+
+## Snapshot 上的角色
+
+Garden 的 Snapshot 体系包含两个关键角色：
+
+<AccordionGroup>
+  <Accordion title="超级管理员">
+    - 管理并监督 Snapshot 空间。
+    - 维护治理流程的公正性。
+  </Accordion>
+  
+  <Accordion title="作者">
+    - 可以创建并提交提案供投票。
+    - 任何拥有超过 500 票的质押者都有资格成为作者。
+  </Accordion>
+</AccordionGroup>
+
+## 投票权
+
+Garden 中的投票权由质押[加成系数](/zh/home/fundamentals/core-concepts/stakers)以及是否持有 Gardener Pass NFT 决定。质押者的投票权会根据其质押加成系数相应提高，以此奖励对协议的长期投入。此外，Gardener Pass NFT 持有者可获得固定的 70 票投票权。

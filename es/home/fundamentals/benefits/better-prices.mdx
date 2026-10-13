@@ -1,0 +1,31 @@
+---
+title: "Mejores precios"
+description: "Garden ofrece tasas inigualables al aprovechar la liquidez on-chain y off-chain"
+---
+
+Los puentes tradicionales suelen depender de AMM para facilitar los intercambios, lo que expone a los usuarios a un deslizamiento que depende de la profundidad de los pools de liquidez. Esto es especialmente ineficiente en los intercambios entre activos equivalentes, como BTC y WBTC o cbBTC.
+
+La arquitectura de Garden basada en intenciones elimina esta ineficiencia. Los [solvers](/es/home/fundamentals/core-concepts/solvers) mantienen flexibilidad en sus cotizaciones y compiten para ejecutar las intenciones de los usuarios usando liquidez on-chain y off-chain.
+
+Los usuarios no solo obtienen un precio competitivo al iniciar el intercambio, sino que también pueden liquidarlo a mejores precios. Gracias al emparejamiento peer-to-peer y a mecanismos de liquidación avanzados como [xCoW](/es/home/fundamentals/how-it-works/cross-chain-coincidence-of-wants-xcow), Garden optimiza dinámicamente los intercambios durante su ejecución.
+
+<Tip>
+Cuando los usuarios inician un intercambio, ven una cotización mínima garantizada. Sin embargo, durante la liquidación, las capacidades de mejora de precio de Garden pueden ofrecer un precio mejor.
+</Tip>
+
+## Cómo funciona la mejora de precio
+
+<CardGroup cols={2}>
+  <Card title="Acceso a liquidez privada" icon="lock">
+    Los solvers pueden recurrir a fuentes privadas de liquidez off-chain que no están disponibles para los DEX públicos
+  </Card>
+  <Card title="Emparejamiento peer-to-peer" icon="handshake">
+    El emparejamiento directo entre usuarios con intenciones complementarias elimina las comisiones de intermediarios
+  </Card>
+  <Card title="Optimización xCoW" icon="arrow-trend-up">
+    El emparejamiento avanzado por coincidencia de necesidades reduce el deslizamiento y mejora la ejecución
+  </Card>
+  <Card title="Subasta competitiva" icon="gavel">
+    Los solvers compiten para ofrecer el mejor precio mediante el mecanismo de subasta
+  </Card>
+</CardGroup>

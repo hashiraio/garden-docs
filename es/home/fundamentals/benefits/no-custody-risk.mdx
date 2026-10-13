@@ -1,0 +1,51 @@
+---
+title: "Sin riesgo de custodia"
+description: "Garden elimina los riesgos de custodia mediante intercambios atómicos peer-to-peer"
+---
+
+Muchas soluciones de puente exigen que cedas el control de tus activos a un intermediario. Puede tratarse de una wallet multifirma, una red de validadores o un intermediario de confianza. Estos riesgos están bien documentados:
+
+<CardGroup cols={2}>
+  <Card title="Custodia centralizada" icon="building-columns">
+    Hackeos como el exploit de 600 millones de dólares del Ronin Bridge o el colapso de exchanges (p. ej., Mt. Gox, FTX) ponen de manifiesto los riesgos catastróficos de confiar los fondos a terceros.
+  </Card>
+  <Card title="Custodia descentralizada" icon="network-wired">
+    Ni siquiera las soluciones descentralizadas basadas en computación multiparte (MPC) o en pools de liquidez son inmunes, como se vio con el Nomad Bridge (hackeo de 190 millones de dólares) o con los errores en los smart contracts de Wormhole (hackeo de 325 millones de dólares).
+  </Card>
+</CardGroup>
+
+<Warning>
+Estos ejemplos muestran cómo los modelos de custodia compartida, incluso los que afirman ser de "autocustodia", pueden exponer a los usuarios a riesgos importantes.
+</Warning>
+
+## Cómo elimina Garden los riesgos de custodia
+
+El enfoque de Garden elimina esta categoría de riesgo al garantizar que los usuarios mantengan el control total de sus activos durante todo el proceso de puente. En ningún momento Garden ni ningún intermediario obtienen la custodia. Así se mantiene la custodia del usuario en cada paso del flujo de intenciones:
+
+<Steps>
+  <Step title="Creación de la intención">
+    Las intenciones de los usuarios se firman criptográficamente y se transmiten sin transferir la custodia. En esta etapa, los fondos no necesitan salir de la wallet del usuario.
+  </Step>
+  
+  <Step title="Subasta de solvers">
+    Aquí no surge ningún riesgo de custodia, ya que los fondos no intervienen en el proceso de selección del solver.
+  </Step>
+  
+  <Step title="Liquidación">
+    Una vez seleccionado un solver, el usuario bloquea sus fondos en un Hash Time Locked Contract (HTLC) en la cadena de origen. Los HTLC imponen transferencias condicionales de activos mediante hashes criptográficos y timelocks. Esto garantiza que:
+    
+    - Solo el propietario legítimo pueda reclamar los fondos cuando se cumplan las condiciones del intercambio
+    - Los fondos se reembolsen automáticamente al usuario si el timelock vence sin que haya liquidación
+  </Step>
+  
+  <Step title="Canje">
+    El usuario canjea sus fondos en la cadena de destino usando un secreto criptográfico. Esto garantiza que:
+    
+    - El solver solo pueda reclamar los fondos en la cadena de origen después de cumplir sus obligaciones en la cadena de destino
+    - La ejecución simultánea impida en todo momento la transferencia de la custodia a intermediarios
+  </Step>
+</Steps>
+
+<Note>
+Para más detalles, consulta [intercambios atómicos](/es/home/fundamentals/core-concepts/atomic-swaps) y [flujo de intenciones](/es/home/fundamentals/how-it-works/intent-flow).
+</Note> 
